@@ -24,15 +24,20 @@ repositories {
 }
 
 dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// ModelMapper : DTO -> Entity OR Entity -> DTO
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.1'
 
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
