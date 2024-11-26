@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    include: secret
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDB103Dialect
+    properties:
+      hibernate:
+        globally_quoted_identifiers: 'true'
+        format_sql: true
+  messages:
+    encoding: UTF-8
+
+logging.level:
+  org.hibernate.SQL: debug
