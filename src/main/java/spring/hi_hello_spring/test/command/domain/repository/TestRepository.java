@@ -11,5 +11,5 @@ public interface TestRepository {
 
     boolean existsById(Long testSeq);
 
-    Test deleteById(Long testSeq);
+    void deleteById(Long testSeq);
 }

@@ -32,6 +32,7 @@ public class TestService {
 
         Test test = testRepository.findById(testSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
+        modelMapper.map(testUpdateReqDTO, test);
 
         return modelMapper.map(test, TestUpdateReqDTO.class);
     }
