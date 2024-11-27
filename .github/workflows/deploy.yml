@@ -71,22 +71,22 @@ jobs:
                   \"embeds\": [
                     {
                       \"title\": \"✅ 빌드 성공 알림\",
-                      \"description\": \"빌드가 성공했어핑! 🎉\\n\\n\",
+                      \"description\": \"빌드가 성공했어핑! 🎉\\n\\n\\n\",
                       \"color\": 3066993,
                       \"fields\": [
                         {
                           \"name\": \"📝 작업 제목\",
-                          \"value\": \"${PR_TITLE}\\n\\n\",
+                          \"value\": \"${PR_TITLE}\\n\\n\\n\",
                           \"inline\": false
                         },
                         {
                           \"name\": \"⏱️ 실행 시간\",
-                          \"value\": \"${DURATION}초\\n\\n\",
+                          \"value\": \"${DURATION}초\\n\\n\\n\",
                           \"inline\": false
                         },
                         {
                           \"name\": \"🔗 디버그 URL\",
-                          \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\\n\\n\",
+                          \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\\n\\n\\n\",
                           \"inline\": false
                         }
                       ]
