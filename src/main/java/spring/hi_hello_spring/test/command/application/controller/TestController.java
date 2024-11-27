@@ -31,7 +31,7 @@ public class TestController {
 
     /* 테스트 데이터 생성 로직 */
     @PostMapping
-    @Operation(summary = "테스트용 데이터 생성", description = "테스트 데이터 생성 로직 입니다.")
+    @Operation(summary = "테스트용 데이터 생성", description = "테스트 데이터 생성 로직입니다.")
     public ApiResponse<?> createTest(@RequestBody TestCreateReqDTO reqDTO){
 
         testService.createTest(reqDTO);
