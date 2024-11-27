@@ -28,6 +28,10 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Record Start Time
+        id: start_time
+        run: echo "START_TIME=$(date +%s)" >> $GITHUB_ENV
+
       - name: Create .env File
         run: |
           echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> .env
@@ -36,6 +40,13 @@ jobs:
 
       - name: Build Vue Project
         run: npm run build
+
+      - name: Calculate Duration
+        id: calculate_duration
+        run: |
+          END_TIME=$(date +%s)
+          DURATION=$((END_TIME - START_TIME))
+          echo "DURATION=$DURATION" >> $GITHUB_ENV
 
       - name: Notify Discord
         run: |
@@ -81,6 +92,11 @@ jobs:
                           {
                             \"name\": \"📝 작업 제목\",
                             \"value\": $SAFE_PR_TITLE,
+                            \"inline\": false
+                          },
+                          {
+                            \"name\": \"⏱️ 소요 시간\",
+                            \"value\": \"${DURATION}초\\n\\n\",
                             \"inline\": false
                           },
                           {
