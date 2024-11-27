@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class TestCreateReqDTO {
-    
-    String content;
+
+    private String content;
 }
