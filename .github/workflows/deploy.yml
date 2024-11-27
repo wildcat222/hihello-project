@@ -8,6 +8,9 @@ on:
   push:
     branches:
       - "develop" # develop 브랜치에 푸시될 때 실행
+  pull_request:
+    types:
+      - closed # PR이 병합될 때 실행
 
 jobs:
   build:
