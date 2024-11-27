@@ -20,36 +20,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node.js 18
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Start Time 기록
-        id: start_time
-        run: echo "START_TIME=$(date +%s)" >> $GITHUB_ENV
-
-      - name: Validate .env
-        run: |
-          if [ ! -f .env ]; then
-            echo "Error: .env file not found!"
-            exit 1
-          fi
-
       - name: Install Dependencies
         run: npm install
 
-      - name: Build Vue Project
-        env:
-          VUE_APP_API_URL: ${{ secrets.VUE_APP_API_URL }}
-        run: npm run build
-
-      - name: Calculate Duration
-        id: calculate_duration
+      - name: Create .env File
         run: |
-          END_TIME=$(date +%s)
-          DURATION=$((END_TIME - START_TIME))
-          echo "DURATION=$DURATION" >> $GITHUB_ENV
+          echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> .env
+          echo "VITE_APP_TITLE=${{ secrets.VITE_APP_TITLE }}" >> .env
+          echo "VITE_STATIC_FILES=${{ secrets.VITE_STATIC_FILES }}" >> .env
+
+      - name: Build Vue Project
+        run: npm run build
 
       - name: Notify Discord
         run: |
@@ -64,15 +50,12 @@ jobs:
           SAFE_PR_TITLE=$(echo "$PR_TITLE" | jq -R .)
 
           # 기본값 설정
-          if [ -z "${DURATION}" ]; then
-            DURATION="알 수 없음"
-          fi
-
+          DURATION=${DURATION:-"알 수 없음"}
           ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
           # Discord Webhook 호출
           send_discord_notification() {
-            local status="$1" # success or failure
+            local status="$1"
             local title=""
             local color=""
             local description=""
@@ -87,7 +70,6 @@ jobs:
               description="빌드가 실패했어핑. 😢\\n\\n"
             fi
 
-            # Discord Webhook 호출
             curl -H "Content-Type: application/json" \
               -d "{
                     \"embeds\": [
@@ -102,11 +84,6 @@ jobs:
                             \"inline\": false
                           },
                           {
-                            \"name\": \"⏱️ 실행 시간\",
-                            \"value\": \"${DURATION}초\\n\\n\",
-                            \"inline\": false
-                          },
-                          {
                             \"name\": \"🔗 디버그 URL\",
                             \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\\n\\n\",
                             \"inline\": false
@@ -118,8 +95,7 @@ jobs:
               ${{ secrets.DISCORD_WEBHOOK_URL }}
           }
 
-          # 빌드 성공 및 실패에 따라 Discord 알림 전송
-          if [ ${{ job.status }} = "success" ]; then
+          if [ "${{ job.status }}" = "success" ]; then
             send_discord_notification "success"
           else
             send_discord_notification "failure"
