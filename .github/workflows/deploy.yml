@@ -7,7 +7,7 @@ permissions:
 on:
   push:
     branches:
-      - "develop" # main 브랜치에 코드가 푸시될 때 실행
+      - "develop" # develop 브랜치에 푸시될 때 실행
 
 jobs:
   build:
@@ -54,82 +54,77 @@ jobs:
           DURATION=$((END_TIME - START_TIME))
           echo "DURATION=$DURATION" >> $GITHUB_ENV
 
-      - name: Notify Discord on Success
-        if: success() # 빌드가 성공했을 때만 실행
+      - name: Notify Discord
         run: |
+          # PR 제목 또는 커밋 메시지 가져오기
           if [ -n "${{ github.event.pull_request.title }}" ]; then
             PR_TITLE="${{ github.event.pull_request.title }}"
           else
             PR_TITLE="${{ github.event.head_commit.message }}"
           fi
-          ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          DURATION=$((DURATION)) # 초 단위 실행 시간
-          curl -H "Content-Type: application/json" \
-            -d "{
-                  \"embeds\": [
-                    {
-                      \"title\": \"✅ 빌드 성공 알림\",
-                      \"description\": \"빌드가 성공했어핑! 🎉\\n\\n\",
-                      \"color\": 3066993,
-                      \"fields\": [
-                        {
-                          \"name\": \"📝 작업 제목\",
-                          \"value\": \"${PR_TITLE}\\n\\n\",
-                          \"inline\": false
-                        },
-                        {
-                          \"name\": \"⏱️ 실행 시간\",
-                          \"value\": \"${DURATION}초\\n\\n\",
-                          \"inline\": false
-                        },
-                        {
-                          \"name\": \"🔗 디버그 URL\",
-                          \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\\n\\n\",
-                          \"inline\": false
-                        }
-                      ]
-                    }
-                  ]
-                }" \
-            ${{ secrets.DISCORD_WEBHOOK_URL }}
 
-      - name: Notify Discord on Failure
-        if: failure() # 빌드가 실패했을 때만 실행
-        run: |
-          if [ -n "${{ github.event.pull_request.title }}" ]; then
-            PR_TITLE="${{ github.event.pull_request.title }}"
-          else
-            PR_TITLE="${{ github.event.head_commit.message }}"
+          # JSON-safe 포맷으로 변환
+          SAFE_PR_TITLE=$(echo "$PR_TITLE" | jq -R .)
+
+          # 기본값 설정
+          if [ -z "${DURATION}" ]; then
+            DURATION="알 수 없음"
           fi
+
           ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          DURATION=$((DURATION)) # 초 단위 실행 시간
-          curl -H "Content-Type: application/json" \
-            -d "{
-                  \"embeds\": [
-                    {
-                      \"title\": \"❌ 빌드 실패 알림\",
-                      \"description\": \"빌드가 실패했어핑. 😢\\n\\n\",
-                      \"color\": 15158332,
-                      \"fields\": [
-                        {
-                          \"name\": \"📝 작업 제목\",
-                          \"value\": \"${PR_TITLE}\\n\\n\",
-                          \"inline\": false
-                        },
-                        {
-                          \"name\": \"⏱️ 실행 시간\",
-                          \"value\": \"${DURATION}초\\n\\n\",
-                          \"inline\": false
-                        },
-                        {
-                          \"name\": \"🔗 디버그 URL\",
-                          \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\\n\\n\",
-                          \"inline\": false
-                        }
-                      ]
-                    }
-                  ]
-                }" \
-            ${{ secrets.DISCORD_WEBHOOK_URL }}
-    
+
+          # Discord Webhook 호출
+          send_discord_notification() {
+            local status="$1" # success or failure
+            local title=""
+            local color=""
+            local description=""
+
+            if [ "$status" = "success" ]; then
+              title="✅ 빌드 성공 알림"
+              color=3066993
+              description="빌드가 성공했어핑! 🎉\\n\\n"
+            else
+              title="❌ 빌드 실패 알림"
+              color=15158332
+              description="빌드가 실패했어핑. 😢\\n\\n"
+            fi
+
+            # Discord Webhook 호출
+            curl -H "Content-Type: application/json" \
+              -d "{
+                    \"embeds\": [
+                      {
+                        \"title\": \"$title\",
+                        \"description\": \"$description\",
+                        \"color\": $color,
+                        \"fields\": [
+                          {
+                            \"name\": \"📝 작업 제목\",
+                            \"value\": $SAFE_PR_TITLE,
+                            \"inline\": false
+                          },
+                          {
+                            \"name\": \"⏱️ 실행 시간\",
+                            \"value\": \"${DURATION}초\\n\\n\",
+                            \"inline\": false
+                          },
+                          {
+                            \"name\": \"🔗 디버그 URL\",
+                            \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\\n\\n\",
+                            \"inline\": false
+                          }
+                        ]
+                      }
+                    ]
+                  }" \
+              ${{ secrets.DISCORD_WEBHOOK_URL }}
+          }
+
+          # 빌드 성공 및 실패에 따라 Discord 알림 전송
+          if [ ${{ job.status }} = "success" ]; then
+            send_discord_notification "success"
+          else
+            send_discord_notification "failure"
+          fi
       
