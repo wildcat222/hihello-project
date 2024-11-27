@@ -14,7 +14,7 @@ public class Test extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long testId;
+    private Long testSeq;
 
     private String content;
 }
