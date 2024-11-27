@@ -45,9 +45,44 @@ jobs:
           S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
         run: ./gradlew clean build -x test
 
+      - name: Calculate Duration
+        id: calculate_duration
+        run: |
+          END_TIME=$(date +%s)
+          DURATION=$((END_TIME - START_TIME))
+          echo "DURATION=$DURATION" >> $GITHUB_ENV
+
       - name: Notify Discord on Success
         if: success() # 빌드가 성공했을 때만 실행
         run: |
+          PR_TITLE=${{ github.event.pull_request.title }}
+          ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          DURATION=$((DURATION)) # 초 단위 실행 시간
           curl -H "Content-Type: application/json" \
-            -d '{"content": "**🎉 빌드 성공!**\n- main 브랜치에 코드가 성공적으로 푸시되었습니다.\n- 빌드가 문제 없이 완료되었습니다. ✅"}' \
-            ${{ secrets.SPRING_PR_ACTION }}
+            -d "{
+                  \"embeds\": [
+                    {
+                      \"title\": \"✅ 빌드 성공 알림\",
+                      \"description\": \"빌드가 성공적으로 완료되었습니다.\",
+                      \"color\": 3066993,
+                      \"fields\": [
+                        {
+                          \"name\": \"📝 PR 제목\",
+                          \"value\": \"${PR_TITLE}\",
+                          \"inline\": false
+                        },
+                        {
+                          \"name\": \"⏱️ 실행 시간\",
+                          \"value\": \"${DURATION}초\",
+                          \"inline\": false
+                        },
+                        {
+                          \"name\": \"🔗 디버그 URL\",
+                          \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\",
+                          \"inline\": false
+                        }
+                      ]
+                    }
+                  ]
+                }" \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}
