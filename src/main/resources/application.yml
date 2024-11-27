@@ -7,8 +7,13 @@ server:
 
 # mysql, jpa ??
 spring:
-  profiles:
-    include: secret
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: jdbc:mariadb://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     show-sql: true
     hibernate:
@@ -26,6 +31,18 @@ spring:
       max-request-size: 10MB
   messages:
     encoding: UTF-8
+
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET_NAME}
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
 
 logging.level:
   org.hibernate.SQL: debug
