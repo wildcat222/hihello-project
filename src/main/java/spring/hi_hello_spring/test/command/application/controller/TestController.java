@@ -49,7 +49,7 @@ public class TestController {
 
     /* 테스트 데이터 삭제 로직 */
     @DeleteMapping("/{testSeq}")
-    @Operation(summary = "테스트용 데이터 삭제", description = "테스트 데이터 삭제 로직 입니다.")
+    @Operation(summary = "테스트용 데이터 삭제", description = "테스트 데이터 삭제 로직입니다.")
     public ApiResponse<?> deleteTest(@PathVariable Long testSeq){
 
         testService.deleteTest(testSeq);
