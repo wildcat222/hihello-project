@@ -71,7 +71,7 @@ jobs:
                   \"embeds\": [
                     {
                       \"title\": \"✅ 빌드 성공 알림\",
-                      \"description\": \"빌드가 성공적으로 완료되었습니다.\",
+                      \"description\": \"빌드가 성공했핑~!\",
                       \"color\": 3066993,
                       \"fields\": [
                         {
