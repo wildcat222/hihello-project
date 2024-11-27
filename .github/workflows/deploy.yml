@@ -71,22 +71,22 @@ jobs:
                   \"embeds\": [
                     {
                       \"title\": \"✅ 빌드 성공 알림\",
-                      \"description\": \"빌드가 성공했핑! 🎉\",
+                      \"description\": \"빌드가 성공했어요! 🎉\\n\\n**아래는 세부 정보입니다:**\\n\",
                       \"color\": 3066993,
                       \"fields\": [
                         {
                           \"name\": \"📝 작업 제목\",
-                          \"value\": \"${PR_TITLE}\",
+                          \"value\": \"${PR_TITLE}\\n\\n\",
                           \"inline\": false
                         },
                         {
                           \"name\": \"⏱️ 실행 시간\",
-                          \"value\": \"${DURATION}초\",
+                          \"value\": \"${DURATION}초\\n\\n\",
                           \"inline\": false
                         },
                         {
                           \"name\": \"🔗 디버그 URL\",
-                          \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\",
+                          \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\\n\\n\",
                           \"inline\": false
                         }
                       ]
@@ -110,22 +110,22 @@ jobs:
                   \"embeds\": [
                     {
                       \"title\": \"❌ 빌드 실패 알림\",
-                      \"description\": \"빌드가 실패했핑. 😢 디버그가 필요하다핑.\",
+                      \"description\": \"빌드가 실패했어요. 😢\\n\\n**아래는 세부 정보입니다:**\\n\",
                       \"color\": 15158332,
                       \"fields\": [
                         {
                           \"name\": \"📝 작업 제목\",
-                          \"value\": \"${PR_TITLE}\",
+                          \"value\": \"${PR_TITLE}\\n\\n\",
                           \"inline\": false
                         },
                         {
                           \"name\": \"⏱️ 실행 시간\",
-                          \"value\": \"${DURATION}초\",
+                          \"value\": \"${DURATION}초\\n\\n\",
                           \"inline\": false
                         },
                         {
                           \"name\": \"🔗 디버그 URL\",
-                          \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\",
+                          \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\\n\\n\",
                           \"inline\": false
                         }
                       ]
@@ -133,4 +133,5 @@ jobs:
                   ]
                 }" \
             ${{ secrets.DISCORD_WEBHOOK_URL }}
+    
       
