@@ -26,6 +26,10 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
+      - name: Start Time 기록
+        id: start_time
+        run: echo "START_TIME=$(date +%s)" >> $GITHUB_ENV
+
       - name: Validate application.yml
         run: |
           if [ ! -f src/main/resources/application.yml ]; then
@@ -55,7 +59,11 @@ jobs:
       - name: Notify Discord on Success
         if: success() # 빌드가 성공했을 때만 실행
         run: |
-          PR_TITLE=${{ github.event.pull_request.title }}
+          if [ -n "${{ github.event.pull_request.title }}" ]; then
+            PR_TITLE="${{ github.event.pull_request.title }}"
+          else
+            PR_TITLE="${{ github.event.head_commit.message }}"
+          fi
           ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           DURATION=$((DURATION)) # 초 단위 실행 시간
           curl -H "Content-Type: application/json" \
@@ -67,7 +75,46 @@ jobs:
                       \"color\": 3066993,
                       \"fields\": [
                         {
-                          \"name\": \"📝 PR 제목\",
+                          \"name\": \"📝 작업 제목\",
+                          \"value\": \"${PR_TITLE}\",
+                          \"inline\": false
+                        },
+                        {
+                          \"name\": \"⏱️ 실행 시간\",
+                          \"value\": \"${DURATION}초\",
+                          \"inline\": false
+                        },
+                        {
+                          \"name\": \"🔗 디버그 URL\",
+                          \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\",
+                          \"inline\": false
+                        }
+                      ]
+                    }
+                  ]
+                }" \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name: Notify Discord on Failure
+        if: failure() # 빌드가 실패했을 때만 실행
+        run: |
+          if [ -n "${{ github.event.pull_request.title }}" ]; then
+            PR_TITLE="${{ github.event.pull_request.title }}"
+          else
+            PR_TITLE="${{ github.event.head_commit.message }}"
+          fi
+          ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          DURATION=$((DURATION)) # 초 단위 실행 시간
+          curl -H "Content-Type: application/json" \
+            -d "{
+                  \"embeds\": [
+                    {
+                      \"title\": \"❌ 빌드 실패 알림\",
+                      \"description\": \"빌드가 실패했습니다. 디버그가 필요합니다.\",
+                      \"color\": 15158332,
+                      \"fields\": [
+                        {
+                          \"name\": \"📝 작업 제목\",
                           \"value\": \"${PR_TITLE}\",
                           \"inline\": false
                         },
