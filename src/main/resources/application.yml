@@ -5,15 +5,15 @@ server:
     encoding:
       charset: UTF-8
 
-# mysql, jpa ??
+# mariaDb, jpa ??
 spring:
   config:
     import: optional:file:.env[.properties]
   datasource:
-    url: jdbc:mariadb://${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}
+    url: ${RDS_DATABASE_URL}
     username: ${RDS_USERNAME}
     password: ${RDS_PASSWORD}
-    driver-class-name: org.mariadb.jdbc.Driver
+    driver-class-name: ${DRIVER_CLASS_NAME}
   jpa:
     show-sql: true
     hibernate:
@@ -31,6 +31,12 @@ spring:
       max-request-size: 10MB
   messages:
     encoding: UTF-8
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: mapper/**/*.xml
+  type-aliases-package: spring.hi_hello_spring.**
 
 cloud:
   aws:
