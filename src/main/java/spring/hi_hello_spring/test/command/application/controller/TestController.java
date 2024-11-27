@@ -40,7 +40,7 @@ public class TestController {
 
     /* 테스트 데이터 수정 로직 */
     @PutMapping("/{testSeq}")
-    @Operation(summary = "테스트용 데이터 수정", description = "테스트 데이터 수정 로직 입니다.")
+    @Operation(summary = "테스트용 데이터 수정", description = "테스트 데이터 수정 로직입니다.")
     public ApiResponse<?> updateTest(@PathVariable Long testSeq, @RequestBody TestUpdateReqDTO reqDTO){
 
         testService.updateTest(testSeq, reqDTO);
