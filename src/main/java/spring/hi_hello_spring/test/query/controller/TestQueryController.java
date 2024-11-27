@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
+import spring.hi_hello_spring.test.query.dto.TestAllQueryDTO;
 import spring.hi_hello_spring.test.query.dto.TestQueryDTO;
 import spring.hi_hello_spring.test.query.service.TestQueryService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/test")
@@ -20,6 +23,15 @@ import spring.hi_hello_spring.test.query.service.TestQueryService;
 public class TestQueryController {
 
     private final TestQueryService testQueryService;
+
+    /* 테스트 데이터 전체 조회 */
+    @GetMapping
+    @Operation(summary = "테스트용 데이터 전체 조회", description = "테스트 데이터 전체 조회 로직 입니다.")
+    public ApiResponse<?> getAllTests(){
+
+        List<TestAllQueryDTO> testAllQueryDTO = testQueryService.getAllTests();
+        return ResponseUtil.successResponse("데이터가 성공적으로 조회되었습니다.", testAllQueryDTO).getBody();
+    }
 
     /* 테스트 데이터 일부 조회*/
     @GetMapping("/{testSeq}")
