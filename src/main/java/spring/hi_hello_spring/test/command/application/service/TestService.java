@@ -35,4 +35,15 @@ public class TestService {
 
         return modelMapper.map(test, TestUpdateReqDTO.class);
     }
+
+    /* Test 데이터 삭제 작업 */
+    @Transactional
+    public boolean deleteTest(Long testSeq){
+        if(testRepository.existsById(testSeq)){
+            testRepository.deleteById(testSeq);
+            return true;
+        }else {
+            throw new CustomException(ErrorCodeType.DATA_NOT_FOUND);
+        }
+    }
 }

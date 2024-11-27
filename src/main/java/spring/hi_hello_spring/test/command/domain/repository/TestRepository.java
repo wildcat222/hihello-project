@@ -8,4 +8,8 @@ public interface TestRepository {
     Test save(Test test);
 
     Optional<Test> findById(Long testSeq);
+
+    boolean existsById(Long testSeq);
+
+    Test deleteById(Long testSeq);
 }
