@@ -71,7 +71,7 @@ jobs:
                   \"embeds\": [
                     {
                       \"title\": \"✅ 빌드 성공 알림\",
-                      \"description\": \"빌드가 성공했핑~!\",
+                      \"description\": \"빌드가 성공했핑! 🎉\",
                       \"color\": 3066993,
                       \"fields\": [
                         {
@@ -110,7 +110,7 @@ jobs:
                   \"embeds\": [
                     {
                       \"title\": \"❌ 빌드 실패 알림\",
-                      \"description\": \"빌드가 실패했습니다. 디버그가 필요합니다.\",
+                      \"description\": \"빌드가 실패했핑. 😢 디버그가 필요하다핑.\",
                       \"color\": 15158332,
                       \"fields\": [
                         {
@@ -133,3 +133,4 @@ jobs:
                   ]
                 }" \
             ${{ secrets.DISCORD_WEBHOOK_URL }}
+      
