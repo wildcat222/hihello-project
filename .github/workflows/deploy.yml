@@ -86,11 +86,11 @@ jobs:
             if [ "$status" = "success" ]; then
               title="✅ 빌드 성공 알림"
               color=3066993
-              description="빌드가 성공했어핑! 🎉\\n\\n"
+              description="빌드에 성공했어핑! 🎉\\n\\n"
             else
               title="❌ 빌드 실패 알림"
               color=15158332
-              description="빌드가 실패했어핑. 😢\\n\\n"
+              description="빌드에 실패했어핑. 😢\\n\\n"
             fi
 
             # Discord Webhook 호출
