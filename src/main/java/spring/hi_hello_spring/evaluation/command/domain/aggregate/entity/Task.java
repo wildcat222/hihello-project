@@ -8,7 +8,7 @@ import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "eval_list")
+@Table(name = "task")
 @NoArgsConstructor
 @Getter
 public class Task extends BaseTimeEntity {

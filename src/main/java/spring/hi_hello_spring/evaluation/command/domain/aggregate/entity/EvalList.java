@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 
 @Entity
-@Table(name = "task_eval")
+@Table(name = "eval_list")
 @NoArgsConstructor
 @Getter
 public class EvalList extends BaseTimeEntity {

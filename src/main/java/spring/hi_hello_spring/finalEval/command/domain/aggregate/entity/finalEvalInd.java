@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "finalEvalInd")
+@Table(name = "final_eval_ind")
 @NoArgsConstructor
 @Getter
 public class finalEvalInd {

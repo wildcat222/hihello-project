@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 
 @Entity
-@Table(name = "finalEval")
+@Table(name = "final_eval")
 @NoArgsConstructor
 @Getter
 public class finalEval extends BaseTimeEntity {
