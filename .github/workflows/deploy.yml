@@ -10,6 +10,7 @@ on:
       - "develop"
     types:
       - opened
+      - reopened
 
 jobs:
   build:
