@@ -1,4 +1,4 @@
-USE hihellodb;
+USE hihello;
 DROP TABLE IF EXISTS `chatbot`;
 DROP TABLE IF EXISTS `chatbot_category`;
 DROP TABLE IF EXISTS `wiki_snapshot`;
@@ -355,11 +355,11 @@ CREATE TABLE `wiki_mod_content` (
 
 CREATE TABLE `file` (
                         `file_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
-                        `planning_seq`   BIGINT   NOT NULL,
-                        `task_seq`   BIGINT   NOT NULL,
-                        `task_submit_seq`   BIGINT   NOT NULL,
-                        `template_seq`   BIGINT   NOT NULL,
-                        `wiki_mod_content_seq`   BIGINT   NOT NULL,
+                        `planning_seq`   BIGINT NULL,
+                        `task_seq`   BIGINT NULL,
+                        `task_submit_seq`   BIGINT NULL,
+                        `template_seq`   BIGINT NULL,
+                        `wiki_mod_content_seq`   BIGINT  NULL,
                         `file_name`   VARCHAR(50)   NOT NULL,
                         `file_url`   VARCHAR(255)   NOT NULL,
                         PRIMARY KEY (`file_seq`),
