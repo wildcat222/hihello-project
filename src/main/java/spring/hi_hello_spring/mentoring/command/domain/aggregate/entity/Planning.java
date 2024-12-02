@@ -19,7 +19,7 @@ public class Planning extends BaseTimeEntity {
 
     private String planningName;
 
-    @Lob // 대량 데이터를 처리하도록 지시
+    @Lob // 대량 데이터를 처리
     @Column(columnDefinition = "TEXT")
     private String planningContent;
 
