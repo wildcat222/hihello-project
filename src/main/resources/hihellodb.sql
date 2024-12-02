@@ -1,5 +1,6 @@
-USE hihellodb;
+USE hihello;
 DROP TABLE IF EXISTS `chatbot`;
+DROP TABLE IF EXISTS `chatbot_category`;
 DROP TABLE IF EXISTS `wiki_snapshot`;
 DROP TABLE IF EXISTS `noti`;
 DROP TABLE IF EXISTS `file`;
@@ -18,13 +19,13 @@ DROP TABLE IF EXISTS `onboarding_status`;
 DROP TABLE IF EXISTS `task_group`;
 DROP TABLE IF EXISTS `quiz_result`;
 DROP TABLE IF EXISTS `quiz`;
-DROP TABLE IF EXISTS `quiz_category`;
 DROP TABLE IF EXISTS `report`;
 DROP TABLE IF EXISTS `planning`;
 DROP TABLE IF EXISTS `mentoring`;
 DROP TABLE IF EXISTS `checklist_status`;
 DROP TABLE IF EXISTS `checklist`;
 DROP TABLE IF EXISTS `template`;
+DROP TABLE IF EXISTS `quiz_category`;
 DROP TABLE IF EXISTS `employee`;
 DROP TABLE IF EXISTS `position`;
 DROP TABLE IF EXISTS `task`;
@@ -54,7 +55,6 @@ CREATE TABLE `position` (
                             PRIMARY KEY (`position_seq`)
 );
 
-
 CREATE TABLE `employee` (
                             `employee_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                             `department_seq`   BIGINT   NOT NULL,
@@ -73,8 +73,17 @@ CREATE TABLE `employee` (
                             CONSTRAINT `FK_department_TO_employee_1` FOREIGN KEY (`department_seq`) REFERENCES `department` (`department_seq`) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+CREATE TABLE `quiz_category` (
+                                 `quiz_category_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
+                                 `quiz_category_name`   VARCHAR(20)   NOT NULL,
+                                 `reg_date`   DATETIME   NOT NULL,
+                                 `mod_date`   DATETIME   NULL,
+                                 PRIMARY KEY(`quiz_category_seq`)
+);
+
 CREATE TABLE `template` (
                             `template_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
+                            `quiz_category_seq` BIGINT NULL,
                             `template_type`   VARCHAR(20)   NOT NULL,
                             `template_check_required_status`   BOOLEAN   NOT NULL,
                             `template_training_type`   VARCHAR(20)   NULL,
@@ -82,13 +91,14 @@ CREATE TABLE `template` (
                             `template_sub`   VARCHAR(50)   NULL,
                             `template_detail`   TEXT   NULL,
                             `template_url`   VARCHAR(255)   NULL,
-                            `template_quiz_category`   VARCHAR(20)   NULL,
                             `template_quiz_qty`   INT   NULL,
                             `template_procedure`   INT   NOT NULL,
                             `template_end_at`   DATETIME   NULL,
                             `reg_date`   DATETIME   NOT NULL,
                             `mod_date`   DATETIME   NULL,
-                            PRIMARY KEY (`template_seq`)
+                            PRIMARY KEY (`template_seq`),
+                            KEY `FK_quiz_category_TO_template_1` (`quiz_category_seq`),
+                            CONSTRAINT `FK_quiz_category_TO_template_1` FOREIGN KEY (`quiz_category_seq`) REFERENCES `quiz_category` (`quiz_category_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE `checklist` (
@@ -154,13 +164,6 @@ CREATE TABLE `report` (
                           CONSTRAINT `FK_mentoring_TO_report_1` FOREIGN KEY (`mentoring_seq`) REFERENCES `mentoring` (`mentoring_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE `quiz_category` (
-                                 `quiz_category_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
-                                 `quiz_category_name`   VARCHAR(20)   NOT NULL,
-                                 `reg_date`   DATETIME   NOT NULL,
-                                 `mod_date`   DATETIME   NULL,
-                                 PRIMARY KEY(`quiz_category_seq`)
-);
 
 CREATE TABLE `quiz` (
                         `quiz_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
@@ -277,7 +280,7 @@ CREATE TABLE `final_eval` (
                               `final_eval_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                               `employee_seq`   BIGINT   NOT NULL,
                               `eval_ind_seq`   BIGINT   NULL,
-                              `final_eval_ind_seq`   BIGINT   NOT NULL,
+                              `final_eval_ind_seq`   BIGINT   NULL,
                               `employee_score`   BIGINT   NOT NULL,
                               `reg_date`   DATETIME   NOT NULL,
                               `mod_date`   DATETIME   NULL,
@@ -352,11 +355,11 @@ CREATE TABLE `wiki_mod_content` (
 
 CREATE TABLE `file` (
                         `file_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
-                        `planning_seq`   BIGINT   NOT NULL,
-                        `task_seq`   BIGINT   NOT NULL,
-                        `task_submit_seq`   BIGINT   NOT NULL,
-                        `template_seq`   BIGINT   NOT NULL,
-                        `wiki_mod_content_seq`   BIGINT   NOT NULL,
+                        `planning_seq`   BIGINT NULL,
+                        `task_seq`   BIGINT NULL,
+                        `task_submit_seq`   BIGINT NULL,
+                        `template_seq`   BIGINT NULL,
+                        `wiki_mod_content_seq`   BIGINT  NULL,
                         `file_name`   VARCHAR(50)   NOT NULL,
                         `file_url`   VARCHAR(255)   NOT NULL,
                         PRIMARY KEY (`file_seq`),
@@ -400,8 +403,17 @@ CREATE TABLE `wiki_snapshot` (
                                  CONSTRAINT `FK_wiki_TO_wiki_snapshot_1` FOREIGN KEY (`wiki_seq`) REFERENCES `wiki` (`wiki_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE `chatbot_category` (
+                                    `chatbot_category_seq`  BIGINT  NOT NULL    AUTO_INCREMENT,
+                                    `chatbot_category_content`  VARCHAR(20) NOT NULL,
+                                    PRIMARY KEY (`chatbot_category_seq`)
+);
+
 CREATE TABLE `chatbot` (
                            `chatbot_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
+                           `chatbot_category_seq`  BIGINT  NOT NULL,
                            `chatbot_data`   VARCHAR(200)   NOT NULL,
-                           PRIMARY KEY (`chatbot_seq`)
+                           PRIMARY KEY (`chatbot_seq`),
+                           KEY `FK_chatbot_category_TO_chatbot_1`  (`chatbot_category_seq`),
+                           CONSTRAINT `FK_chatbot_category_TO_chatbot_1` FOREIGN KEY (`chatbot_category_seq`) REFERENCES `chatbot_category` (`chatbot_category_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
