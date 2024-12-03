@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.hi_hello_spring.employee.query.dto.MenteeAllQueryDTO;
 import spring.hi_hello_spring.employee.query.dto.MenteeDepQueryDTO;
+import spring.hi_hello_spring.employee.query.dto.MentorAllQueryDTO;
 import spring.hi_hello_spring.employee.query.mapper.EmployeeMapper;
 
 import java.util.List;
@@ -26,5 +27,9 @@ public class EmployeeQueryService {
             throw new IllegalArgumentException("해당 부서의 멘티가 존재하지 않습니다");
         }
         return menteeDepQueryDTO;
+    }
+
+    public List<MentorAllQueryDTO> getAllMentor() {
+        return employeeMapper.findAllMentor();
     }
 }
