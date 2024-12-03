@@ -3,7 +3,7 @@ INSERT INTO department (department_name)
 VALUES ('교육팀');
 
 -- Position 데이터 삽입
-INSERT INTO position (position_name)
+INSERT INTO positions (position_name)
 VALUES
     ('멘티'),
     ('멘토'),
@@ -115,11 +115,6 @@ VALUES
     ('온보딩 가이드', 1, NOW()),
     ('직무 교육 매뉴얼', 1, NOW());
 
--- Wiki Mod Content 데이터 삽입
-INSERT INTO wiki_mod_content (wiki_seq, employee_seq, mod_content, reg_date)
-VALUES
-    (1, 5, '{"content": "온보딩 가이드 수정"}', NOW()),
-    (2, 6, '{"content": "직무 교육 매뉴얼 수정"}', NOW());
 
 
 -- Notification 데이터 삽입
@@ -133,3 +128,11 @@ INSERT INTO wiki_snapshot (wiki_seq, wiki_snapshot_ver, wiki_snapshot_content, r
 VALUES
     (1, 1, '온보딩 가이드 초기 버전', NOW()),
     (2, 1, '직무 교육 매뉴얼 초기 버전', NOW());
+
+
+-- Wiki Mod Content 데이터 삽입
+INSERT INTO wiki_mod_content (wiki_seq, employee_seq, wiki_snapshot_seq, mod_content, reg_date)
+VALUES
+    (1, 5, 1, '{"content": "온보딩 가이드 수정"}', NOW()),
+    (2, 6, 1, '{"content": "직무 교육 매뉴얼 수정"}', NOW());
+
