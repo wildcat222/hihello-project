@@ -3,24 +3,23 @@ INSERT INTO department (department_name)
 VALUES ('교육팀');
 
 -- Position 데이터 삽입
-INSERT INTO position (position_name)
+INSERT INTO positions (position_name)
 VALUES
-    ('멘티'),
-    ('멘토'),
-    ('멘토장'),
-    ('담당자');
+    ('팀장'),
+    ('대리'),
+    ('부장'),
+    ('인턴');
 
 -- Employee 데이터 삽입
 INSERT INTO employee (department_seq, position_seq, employee_num, employee_name, employee_phone, employee_email, employee_role, employee_password, reg_date)
 VALUES
-    (1, 1, 'E001', '김멘티1', '010-1111-1111', 'mentee1@company.com', '멘티', 'pass123', NOW()),
-    (1, 1, 'E002', '김멘티2', '010-2222-2222', 'mentee2@company.com', '멘티', 'pass123', NOW()),
-    (1, 1, 'E003', '김멘티3', '010-3333-3333', 'mentee3@company.com', '멘티', 'pass123', NOW()),
-    (1, 1, 'E004', '김멘티4', '010-4444-4444', 'mentee4@company.com', '멘티', 'pass123', NOW()),
-    (1, 2, 'E005', '박멘토1', '010-5555-5555', 'mentor1@company.com', '멘토', 'pass123', NOW()),
-    (1, 2, 'E006', '박멘토2', '010-6666-6666', 'mentor2@company.com', '멘토', 'pass123', NOW()),
-    (1, 3, 'E007', '이멘토장', '010-7777-7777', 'mentorlead@company.com', '멘토장', 'pass123', NOW()),
-    (1, 4, 'E008', '최담당자', '010-8888-8888', 'manager@company.com', '담당자', 'pass123', NOW());
+    (1, 4, 'E001', '김멘티1', '010-1111-1111', 'mentee1@company.com', 'MENTEE', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW()),
+    (1, 4, 'E002', '김멘티2', '010-2222-2222', 'mentee2@company.com', 'MENTEE', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW()),
+    (1, 4, 'E003', '김멘티3', '010-3333-3333', 'mentee3@company.com', 'MENTEE', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW()),
+    (1, 4, 'E004', '김멘티4', '010-4444-4444', 'mentee4@company.com', 'MENTEE', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW()),
+    (1, 2, 'E005', '박멘토1', '010-5555-5555', 'mentor1@company.com', 'MENTOR', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW()),
+    (1, 2, 'E006', '박멘토2', '010-6666-6666', 'mentor2@company.com', 'MENTOR', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW()),
+    (1, 4, 'E008', '최담당자', '010-8888-8888', 'manager@company.com', 'HR', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW());
 
 -- Task 데이터 삽입
 INSERT INTO task (department_seq, task_type, task_content, reg_date)
@@ -97,7 +96,7 @@ VALUES
     (2, 4, FALSE, NOW());
 
 -- Peer Review List 데이터 삽입
-INSERT INTO peer_review_list (peer_review_list_content, peer_review_score, reg_date)
+INSERT INTO peer_review_list (peer_review_list_content, peer_review_list_score, reg_date)
 VALUES
     ('팀워크 평가', 10, NOW()),
     ('의사소통 평가', 8, NOW());
@@ -115,11 +114,6 @@ VALUES
     ('온보딩 가이드', 1, NOW()),
     ('직무 교육 매뉴얼', 1, NOW());
 
--- Wiki Mod Content 데이터 삽입
-INSERT INTO wiki_mod_content (wiki_seq, employee_seq, mod_content, reg_date)
-VALUES
-    (1, 5, '{"content": "온보딩 가이드 수정"}', NOW()),
-    (2, 6, '{"content": "직무 교육 매뉴얼 수정"}', NOW());
 
 
 -- Notification 데이터 삽입
@@ -134,8 +128,9 @@ VALUES
     (1, 1, '온보딩 가이드 초기 버전', NOW()),
     (2, 1, '직무 교육 매뉴얼 초기 버전', NOW());
 
--- Chatbot 데이터 삽입
-INSERT INTO chatbot (chatbot_data)
+
+-- Wiki Mod Content 데이터 삽입
+INSERT INTO wiki_mod_content (wiki_seq, employee_seq, wiki_snapshot_seq, mod_content, reg_date)
 VALUES
-    ('챗봇 데이터 예제1'),
-    ('챗봇 데이터 예제2');
+    (1, 5, 1, '{"content": "온보딩 가이드 수정"}', NOW()),
+    (2, 6, 1, '{"content": "직무 교육 매뉴얼 수정"}', NOW());
