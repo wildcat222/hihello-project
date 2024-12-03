@@ -32,8 +32,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         String refreshToken = tokenService.createRefreshToken(username);
 
         // 응답 헤더에 토큰 추가
-        response.setHeader("Authorization", accessToken);
-        response.setHeader("Refresh-Token", refreshToken);
+        response.setHeader("accessToken", accessToken);
+        response.setHeader("refreshToken", refreshToken);
 
     }
 }
