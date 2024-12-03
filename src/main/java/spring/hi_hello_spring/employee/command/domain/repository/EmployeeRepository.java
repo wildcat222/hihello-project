@@ -5,7 +5,7 @@ import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
 
 import java.util.Optional;
 
-public interface EmployeeRepository extends JpaRepository<Employee, String> {
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
-    Optional<Employee> findByEmployeeNum(String employeeSeq);
+    Optional<Employee> findByEmployeeSeq(Long employeeSeq);
 }
