@@ -5,4 +5,8 @@ import spring.hi_hello_spring.group.command.domain.aggregate.entity.PeerReviewLi
 public interface PeerReviewListRepository {
 
     PeerReviewList save(PeerReviewList peerReviewList);
+
+    boolean existsById(Long peerReviewListSeq);
+
+    void deleteById(Long peerReviewListSeq);
 }

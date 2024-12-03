@@ -37,4 +37,20 @@
         AND
             e.employee_role = "mentee"
     </select>
+
+    <!-- 모든 멘토 데이터를 가져오는 SQL -->
+    <select id="findAllMentor" resultType="MentorAllQueryDTO">
+        SELECT
+            e.employee_name,
+            e.employee_num,
+            d.department_name
+        FROM
+            employee AS e
+        JOIN
+            department AS d
+        ON
+            e.department_seq = d.department_seq
+        WHERE
+            e.employee_role = "mentor"
+    </select>
 </mapper>
