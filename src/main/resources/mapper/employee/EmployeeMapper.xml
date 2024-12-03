@@ -19,4 +19,22 @@
         WHERE
             e.employee_role = "mentee"
     </select>
+
+    <!-- 해당 부서의 멘티를 조회하는 SQL   -->
+    <select id="findMenteeByDep" parameterType="long" resultType="MenteeDepQueryDTO">
+        SELECT
+            e.employee_name,
+            e.employee_num,
+            d.department_name
+        FROM
+            employee AS e
+        JOIN
+            department AS d
+        ON
+            e.department_seq = d.department_seq
+        WHERE
+            e.department_seq = #{departmentSeq}
+        AND
+            e.employee_role = "mentee"
+    </select>
 </mapper>
