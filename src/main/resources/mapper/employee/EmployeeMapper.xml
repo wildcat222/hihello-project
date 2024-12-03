@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.employee.query.mapper.EmployeeMapper">
+
+    <!-- 모든 멘티 데이터를 가져오는 SQL -->
+    <select id="findAllMentee" resultType="MenteeAllQueryDTO">
+        SELECT
+            e.employee_name,
+            e.employee_num,
+            d.department_name
+        FROM
+            employee AS e
+        JOIN
+            department AS d
+        ON
+            e.department_seq = d.department_seq
+        WHERE
+            e.employee_role = "mentee"
+    </select>
+</mapper>
