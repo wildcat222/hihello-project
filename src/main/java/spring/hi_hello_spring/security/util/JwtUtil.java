@@ -108,11 +108,13 @@ public class JwtUtil {
 
     public String generateAccessToken(String username, Authentication authentication) {
 
+        Long expirationTime = (long) 1000 * 60 * 30; // 30분
+
         String accessToken = Jwts.builder()
                 .setSubject(username)
                 .claim("auth", authentication.getAuthorities())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(env.getProperty("token.expiration_time"))))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(key)
                 .compact();
         return accessToken;
@@ -120,10 +122,12 @@ public class JwtUtil {
 
     public String generateRefreshToken(String username) {
 
+        Long expirationTime = (long) 1000 * 60 * 60 * 24 * 7; // 7일
+
         String refreshToken = Jwts.builder()
                 .setSubject(username)
                 .signWith(key)
-                .setExpiration(new java.util.Date(System.currentTimeMillis() + Long.parseLong(env.getProperty("refresh-token.expiration_time")))) // 만료 시간 설정
+                .setExpiration(new java.util.Date(System.currentTimeMillis() + expirationTime)) // 만료 시간 설정
                 .compact();
         return refreshToken;
     }
