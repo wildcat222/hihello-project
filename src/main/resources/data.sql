@@ -97,7 +97,7 @@ VALUES
     (2, 4, FALSE, NOW());
 
 -- Peer Review List 데이터 삽입
-INSERT INTO peer_review_list (peer_review_list_content, peer_review_score, reg_date)
+INSERT INTO peer_review_list (peer_review_list_content, peer_review_list_score, reg_date)
 VALUES
     ('팀워크 평가', 10, NOW()),
     ('의사소통 평가', 8, NOW());
@@ -133,9 +133,3 @@ INSERT INTO wiki_snapshot (wiki_seq, wiki_snapshot_ver, wiki_snapshot_content, r
 VALUES
     (1, 1, '온보딩 가이드 초기 버전', NOW()),
     (2, 1, '직무 교육 매뉴얼 초기 버전', NOW());
-
--- Chatbot 데이터 삽입
-INSERT INTO chatbot (chatbot_data)
-VALUES
-    ('챗봇 데이터 예제1'),
-    ('챗봇 데이터 예제2');
