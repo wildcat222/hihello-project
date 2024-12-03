@@ -1,4 +1,4 @@
-USE hihello;
+#USE hihello;
 DROP TABLE IF EXISTS `chatbot`;
 DROP TABLE IF EXISTS `chatbot_category`;
 DROP TABLE IF EXISTS `noti`;
@@ -50,9 +50,9 @@ CREATE TABLE `task` (
 );
 
 CREATE TABLE `positions` (
-                            `position_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
-                            `position_name`   VARCHAR(20)   NOT NULL,
-                            PRIMARY KEY (`position_seq`)
+                             `position_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
+                             `position_name`   VARCHAR(20)   NOT NULL,
+                             PRIMARY KEY (`position_seq`)
 );
 
 CREATE TABLE `employee` (
@@ -307,7 +307,7 @@ CREATE TABLE `group_member` (
 CREATE TABLE `peer_review_list` (
                                     `peer_review_list_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                                     `peer_review_list_content`   VARCHAR(200)   NOT NULL,
-                                    `peer_review_score`   INT   NOT NULL,
+                                    `peer_review_list_score`   INT   NOT NULL,
                                     `reg_date`   DATETIME   NOT NULL,
                                     `mod_date`   DATETIME   NULL,
                                     PRIMARY KEY (`peer_review_list_seq`)
@@ -406,7 +406,6 @@ CREATE TABLE `noti` (
                         KEY `FK_template_TO_noti_1` (`template_seq`),
                         CONSTRAINT `FK_template_TO_noti_1` FOREIGN KEY (`template_seq`) REFERENCES `template` (`template_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
 
 CREATE TABLE `chatbot_category` (
                                     `chatbot_category_seq`  BIGINT  NOT NULL    AUTO_INCREMENT,
