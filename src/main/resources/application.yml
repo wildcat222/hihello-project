@@ -46,10 +46,6 @@ mybatis:
 
 token:
   secret: ${TOKEN_SECRET}
-  expiration_time: ${TOKEN_EXPIRATION_TIME}
-
-refresh-token:
-  expiration_time: ${REFRESHTOKEN_EXPIRATION_TIME}
 
 cloud:
   aws:

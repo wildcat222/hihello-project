@@ -21,6 +21,7 @@ import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
 import spring.hi_hello_spring.employee.command.domain.repository.EmployeeRepository;
+import spring.hi_hello_spring.security.repository.SecurityRepository;
 
 import java.security.Key;
 import java.util.*;
@@ -35,19 +36,19 @@ public class JwtUtil {
     private final Environment env;
 
     private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
-    private final EmployeeRepository employeeRepository;
+    private final SecurityRepository securityRepository;
 
 
     public JwtUtil(
             @Value("${TOKEN_SECRET}") String secretKey,
             CustomUserDetailsService userDetailsService,
             Environment env,
-            @Qualifier("employeeRepository") EmployeeRepository employeeRepository) {
+            @Qualifier("securityRepository") SecurityRepository securityRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.userDetailsService = userDetailsService;
         this.env = env;
-        this.employeeRepository = employeeRepository;
+        this.securityRepository = securityRepository;
     }
 
     /* Token 검증(Bearer 토큰이 넘어왔고, 우리 사이트의 secret key로 만들어 졌는가, 만료되었는지와 내용이 비어있진 않은지) */
@@ -108,11 +109,13 @@ public class JwtUtil {
 
     public String generateAccessToken(String username, Authentication authentication) {
 
+        Long expirationTime = (long) 1000 * 60 * 30; // 30분
+
         String accessToken = Jwts.builder()
                 .setSubject(username)
                 .claim("auth", authentication.getAuthorities())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(env.getProperty("token.expiration_time"))))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(key)
                 .compact();
         return accessToken;
@@ -120,10 +123,12 @@ public class JwtUtil {
 
     public String generateRefreshToken(String username) {
 
+        Long expirationTime = (long) 1000 * 60 * 60 * 24 * 7; // 7일
+
         String refreshToken = Jwts.builder()
                 .setSubject(username)
                 .signWith(key)
-                .setExpiration(new java.util.Date(System.currentTimeMillis() + Long.parseLong(env.getProperty("refresh-token.expiration_time")))) // 만료 시간 설정
+                .setExpiration(new java.util.Date(System.currentTimeMillis() + expirationTime)) // 만료 시간 설정
                 .compact();
         return refreshToken;
     }
@@ -132,8 +137,8 @@ public class JwtUtil {
     public Optional<String> getToken(HttpServletRequest request, String tokenType) {
 
         String authorizationHeader;
-        if (tokenType.equals("refresh")) authorizationHeader = request.getHeader("Refresh-Token");
-        else authorizationHeader = request.getHeader("accessHeader");
+        if (tokenType.equals("refresh")) authorizationHeader = request.getHeader("refreshToken");
+        else authorizationHeader = request.getHeader("accessToken");
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             return Optional.of(authorizationHeader.substring(7));
@@ -156,7 +161,7 @@ public class JwtUtil {
     public String reIssueAccessToken(String refreshToken) {
         // 리프레시 토큰에서 사용자 ID 추출
         String userId = getUserId(refreshToken);
-        Employee findUser = employeeRepository.findById(userId)
+        Employee findUser = securityRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
 
         // 새로운 액세스 토큰 생성

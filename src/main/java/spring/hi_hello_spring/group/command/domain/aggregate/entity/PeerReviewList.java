@@ -16,7 +16,7 @@ import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 public class PeerReviewList extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long peerReviewListSeq;
 
     private String peerReviewListContent;

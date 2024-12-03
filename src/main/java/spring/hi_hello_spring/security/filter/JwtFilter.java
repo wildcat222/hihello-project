@@ -44,11 +44,11 @@ public class JwtFilter extends OncePerRequestFilter {
             String userId = jwtUtil.getUserId(newAccessToken);
             String newRefreshToken = jwtUtil.generateRefreshToken(userId);
 
-            response.setHeader("Authorization", newAccessToken);
-            response.setHeader("Refresh-Token", newRefreshToken);
+            response.setHeader("accessToken", newAccessToken);
+            response.setHeader("refreshToken", newRefreshToken);
 
-            log.info("Authorization {} ", newAccessToken);
-            log.info("Refresh-Token {} ", newRefreshToken);
+            log.info("accessToken {} ", newAccessToken);
+            log.info("refreshToken {} ", newRefreshToken);
 
             jwtUtil.saveAuthentication(jwtUtil.getUserId(newAccessToken));
 
@@ -60,7 +60,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (accessToken.isPresent()) {
             if (jwtUtil.validateToken(accessToken.get())){
                 jwtUtil.saveAuthentication(jwtUtil.getUserId(accessToken.get()));
-                log.info("Authorization {} ", accessToken.get());
+                log.info("accessToken {} ", accessToken.get());
                 filterChain.doFilter(request, response); // 다음 필터로 요청 전달
                 return;
             }
