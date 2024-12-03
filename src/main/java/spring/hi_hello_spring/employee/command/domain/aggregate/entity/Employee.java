@@ -1,12 +1,11 @@
 package spring.hi_hello_spring.employee.command.domain.aggregate.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
+import spring.hi_hello_spring.common.aggregate.entity.EmployeeRole;
 
 @Entity
 @Table(name="employee")
@@ -30,7 +29,8 @@ public class Employee extends BaseTimeEntity {
 
     private String employeeEmail;
 
-    private String employeeRole;
+    @Enumerated(EnumType.STRING)
+    private EmployeeRole employeeRole = EmployeeRole.MENTEE;
 
     private String employeePassword;
 

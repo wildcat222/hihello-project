@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // 담당자인지 멘토장인지 멘토인지 멘티인지 확인
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority(loginUser.getEmployeeRole())); // 역할
+        grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(loginUser.getEmployeeRole()))); // 역할 -> mentee
         grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(loginUser.getDepartmentSeq()))); // 직급Seq
 
         return new CustomUserDetails(loginUser.getEmployeeSeq(), loginUser.getEmployeeNum(), loginUser.getEmployeePassword(), grantedAuthorities);
