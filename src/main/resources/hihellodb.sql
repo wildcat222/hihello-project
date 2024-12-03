@@ -307,7 +307,7 @@ CREATE TABLE `group_member` (
 CREATE TABLE `peer_review_list` (
                                     `peer_review_list_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                                     `peer_review_list_content`   VARCHAR(200)   NOT NULL,
-                                    `peer_review_score`   INT   NOT NULL,
+                                    `peer_review_list_score`   INT   NOT NULL,
                                     `reg_date`   DATETIME   NOT NULL,
                                     `mod_date`   DATETIME   NULL,
                                     PRIMARY KEY (`peer_review_list_seq`)
