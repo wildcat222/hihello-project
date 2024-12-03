@@ -12,7 +12,7 @@ import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 public class EvalInd extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long evalIndSeq;
 
     private String evalIndContent;
