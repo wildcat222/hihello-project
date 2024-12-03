@@ -6,4 +6,8 @@ import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.EvalInd
 public interface EvalIndRepository {
 
     EvalInd save(EvalInd evalInd);
+
+    boolean existsById(Long evalIndSeq);
+
+    void deleteById(Long evalIndSeq);
 }
