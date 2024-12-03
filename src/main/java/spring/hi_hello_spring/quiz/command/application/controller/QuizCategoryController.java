@@ -10,7 +10,7 @@ import spring.hi_hello_spring.quiz.command.application.dto.QuizCategoryCreateDTO
 import spring.hi_hello_spring.quiz.command.application.service.QuizCategoryService;
 
 @RestController
-@RequestMapping("api/v1/hr/quiz/category")
+@RequestMapping("api/v1/hr/quizCategory")
 @RequiredArgsConstructor
 @Tag(name = "QuizCategory API", description = "퀴즈 카테고리 관련 API")
 public class QuizCategoryController {

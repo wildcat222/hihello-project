@@ -12,7 +12,7 @@ import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 public class Quiz extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long quizSeq;
 
     private Long quizCategorySeq;
@@ -26,4 +26,8 @@ public class Quiz extends BaseTimeEntity {
     @Lob // 대량 데이터를 처리하도록 지시
     @Column(columnDefinition = "TEXT")
     private String quizExplanation;
+
+    public void Category(QuizCategory quizCategory) {
+        this.quizCategorySeq = quizCategory.getQuizCategorySeq();
+    }
 }
