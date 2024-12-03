@@ -14,14 +14,14 @@ import spring.hi_hello_spring.employee.query.service.EmployeeQueryService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/hr")
 @RequiredArgsConstructor
 @Tag(name = "Employee API", description = "사원 관련 API")
 public class EmployeeQueryController {
 
     private final EmployeeQueryService employeeQueryService;
 
-    @GetMapping("/mentees")
+    @GetMapping("/mentee")
     @Operation(summary = "멘티 전체 조회", description = "멘티 전체 조회 로직 입니다.")
     public ApiResponse<?> getAllEmployee() {
 
