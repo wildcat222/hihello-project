@@ -97,7 +97,7 @@ VALUES
     (2, 4, FALSE, NOW());
 
 -- Peer Review List 데이터 삽입
-INSERT INTO peer_review_list (peer_review_list_content, peer_review_score, reg_date)
+INSERT INTO peer_review_list (peer_review_list_content, peer_review_list_score, reg_date)
 VALUES
     ('팀워크 평가', 10, NOW()),
     ('의사소통 평가', 8, NOW());
@@ -129,8 +129,10 @@ VALUES
     (1, 1, '온보딩 가이드 초기 버전', NOW()),
     (2, 1, '직무 교육 매뉴얼 초기 버전', NOW());
 
+
 -- Wiki Mod Content 데이터 삽입
 INSERT INTO wiki_mod_content (wiki_seq, employee_seq, wiki_snapshot_seq, mod_content, reg_date)
 VALUES
     (1, 5, 1, '{"content": "온보딩 가이드 수정"}', NOW()),
     (2, 6, 1, '{"content": "직무 교육 매뉴얼 수정"}', NOW());
+
