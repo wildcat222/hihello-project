@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.evaluation.query.mapper.EvalIndMapper">
+
+    <select id="findAllEvalIndList" resultType="EvalIndAllQueryDTO">
+        SELECT
+            eval_ind_seq,
+            eval_ind_content,
+            eval_ind_score
+        FROM
+            eval_ind
+    </select>
+</mapper>
