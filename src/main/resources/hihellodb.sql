@@ -1,10 +1,10 @@
 USE hihello;
 DROP TABLE IF EXISTS `chatbot`;
 DROP TABLE IF EXISTS `chatbot_category`;
-DROP TABLE IF EXISTS `wiki_snapshot`;
 DROP TABLE IF EXISTS `noti`;
 DROP TABLE IF EXISTS `file`;
 DROP TABLE IF EXISTS `wiki_mod_content`;
+DROP TABLE IF EXISTS `wiki_snapshot`;
 DROP TABLE IF EXISTS `wiki`;
 DROP TABLE IF EXISTS `peer_review`;
 DROP TABLE IF EXISTS `peer_review_list`;
@@ -27,7 +27,7 @@ DROP TABLE IF EXISTS `checklist`;
 DROP TABLE IF EXISTS `template`;
 DROP TABLE IF EXISTS `quiz_category`;
 DROP TABLE IF EXISTS `employee`;
-DROP TABLE IF EXISTS `position`;
+DROP TABLE IF EXISTS `positions`;
 DROP TABLE IF EXISTS `task`;
 DROP TABLE IF EXISTS `department`;
 
@@ -49,7 +49,7 @@ CREATE TABLE `task` (
                         CONSTRAINT `FK_department_TO_task_1` FOREIGN KEY (`department_seq`) REFERENCES `department` (`department_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE `position` (
+CREATE TABLE `positions` (
                             `position_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                             `position_name`   VARCHAR(20)   NOT NULL,
                             PRIMARY KEY (`position_seq`)
@@ -307,7 +307,7 @@ CREATE TABLE `group_member` (
 CREATE TABLE `peer_review_list` (
                                     `peer_review_list_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                                     `peer_review_list_content`   VARCHAR(200)   NOT NULL,
-                                    `peer_review_list_score`   INT   NOT NULL,
+                                    `peer_review_score`   INT   NOT NULL,
                                     `reg_date`   DATETIME   NOT NULL,
                                     `mod_date`   DATETIME   NULL,
                                     PRIMARY KEY (`peer_review_list_seq`)
@@ -340,16 +340,32 @@ CREATE TABLE `wiki` (
                         PRIMARY KEY (`wiki_seq`)
 );
 
+
+CREATE TABLE `wiki_snapshot` (
+                                 `wiki_snapshot_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
+                                 `wiki_seq`   BIGINT   NOT NULL,
+                                 `wiki_snapshot_ver`   INT   NOT NULL,
+                                 `wiki_snapshot_content`   TEXT   NOT NULL,
+                                 `reg_date`   DATETIME   NOT NULL,
+                                 `mod_date`   DATETIME   NULL,
+                                 PRIMARY KEY (`wiki_snapshot_seq`),
+                                 KEY `FK_wiki_TO_wiki_snapshot_1` (`wiki_seq`),
+                                 CONSTRAINT `FK_wiki_TO_wiki_snapshot_1` FOREIGN KEY (`wiki_seq`) REFERENCES `wiki` (`wiki_seq`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE `wiki_mod_content` (
                                     `wiki_mod_content_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                                     `wiki_seq`   BIGINT   NOT NULL,
                                     `employee_seq`   BIGINT   NOT NULL,
+                                    `wiki_snapshot_seq`  BIGINT  NOT NULL,
                                     `mod_content`   JSON   NULL,
                                     `reg_date`   DATETIME   NOT NULL,
                                     `mod_date`   DATETIME   NULL,
                                     PRIMARY KEY (`wiki_mod_content_seq`),
                                     KEY `FK_wiki_TO_wiki_mod_content_1` (`wiki_seq`),
-                                    CONSTRAINT `FK_wiki_TO_wiki_mod_content_1` FOREIGN KEY (`wiki_seq`) REFERENCES `wiki` (`wiki_seq`) ON DELETE CASCADE ON UPDATE CASCADE
+                                    CONSTRAINT `FK_wiki_TO_wiki_mod_content_1` FOREIGN KEY (`wiki_seq`) REFERENCES `wiki` (`wiki_seq`) ON DELETE CASCADE ON UPDATE CASCADE,
+                                    KEY `FK_wiki_snapshot_TO_wiki_mod_content_1` (`wiki_snapshot_seq`),
+                                    CONSTRAINT `FK_wiki_snapshot_TO_wiki_mod_content_1` FOREIGN KEY (`wiki_snapshot_seq`)   REFERENCES  `wiki_snapshot` (`wiki_snapshot_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -391,17 +407,6 @@ CREATE TABLE `noti` (
                         CONSTRAINT `FK_template_TO_noti_1` FOREIGN KEY (`template_seq`) REFERENCES `template` (`template_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE `wiki_snapshot` (
-                                 `wiki_snapshot_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
-                                 `wiki_seq`   BIGINT   NOT NULL,
-                                 `wiki_snapshot_ver`   INT   NOT NULL,
-                                 `wiki_snapshot_content`   TEXT   NOT NULL,
-                                 `reg_date`   DATETIME   NOT NULL,
-                                 `mod_date`   DATETIME   NULL,
-                                 PRIMARY KEY (`wiki_snapshot_seq`),
-                                 KEY `FK_wiki_TO_wiki_snapshot_1` (`wiki_seq`),
-                                 CONSTRAINT `FK_wiki_TO_wiki_snapshot_1` FOREIGN KEY (`wiki_seq`) REFERENCES `wiki` (`wiki_seq`) ON DELETE CASCADE ON UPDATE CASCADE
-);
 
 CREATE TABLE `chatbot_category` (
                                     `chatbot_category_seq`  BIGINT  NOT NULL    AUTO_INCREMENT,
