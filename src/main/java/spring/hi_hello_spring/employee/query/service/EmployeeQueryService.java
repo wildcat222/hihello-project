@@ -14,7 +14,7 @@ public class EmployeeQueryService {
 
     private final EmployeeMapper employeeMapper;
 
-    public List<MenteeAllQueryDTO> getAllEmployee() {
+    public List<MenteeAllQueryDTO> getAllMentee() {
 
         return employeeMapper.findAllMentee();
     }

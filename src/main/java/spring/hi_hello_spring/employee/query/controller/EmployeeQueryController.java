@@ -25,9 +25,9 @@ public class EmployeeQueryController {
 
     @GetMapping("/mentee")
     @Operation(summary = "멘티 전체 조회", description = "멘티 전체 조회 로직 입니다.")
-    public ApiResponse<?> getAllEmployee() {
+    public ApiResponse<?> getAllMentee() {
 
-        List<MenteeAllQueryDTO> menteeAllQueryDTO = employeeQueryService.getAllEmployee();
+        List<MenteeAllQueryDTO> menteeAllQueryDTO = employeeQueryService.getAllMentee();
         return ResponseUtil.successResponse("멘티 전체 조회가 성공적으로 조회되었습니다.", menteeAllQueryDTO).getBody();
     }
 
