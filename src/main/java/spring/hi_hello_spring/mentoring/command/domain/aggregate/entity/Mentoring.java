@@ -1,6 +1,7 @@
 package spring.hi_hello_spring.mentoring.command.domain.aggregate.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
@@ -12,10 +13,16 @@ import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 public class Mentoring extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mentoringSeq;
 
     private Long mentorSeq;
 
     private Long menteeSeq;
+
+    @Builder
+    public Mentoring(Long mentorSeq, Long menteeSeq) {
+        this.mentorSeq = mentorSeq;
+        this.menteeSeq = menteeSeq;
+    }
 }
