@@ -13,13 +13,13 @@ VALUES
 -- Employee 데이터 삽입
 INSERT INTO employee (department_seq, position_seq, employee_num, employee_name, employee_phone, employee_email, employee_role, employee_password, reg_date)
 VALUES
-    (1, 4, 'E001', '김멘티1', '010-1111-1111', 'mentee1@company.com', 'MENTEE', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW()),
-    (1, 4, 'E002', '김멘티2', '010-2222-2222', 'mentee2@company.com', 'MENTEE', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW()),
-    (1, 4, 'E003', '김멘티3', '010-3333-3333', 'mentee3@company.com', 'MENTEE', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW()),
-    (1, 4, 'E004', '김멘티4', '010-4444-4444', 'mentee4@company.com', 'MENTEE', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW()),
-    (1, 2, 'E005', '박멘토1', '010-5555-5555', 'mentor1@company.com', 'MENTOR', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW()),
-    (1, 2, 'E006', '박멘토2', '010-6666-6666', 'mentor2@company.com', 'MENTOR', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW()),
-    (1, 4, 'E008', '최담당자', '010-8888-8888', 'manager@company.com', 'HR', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ', NOW());
+    (1, 4, 'E001', '김멘티1', '010-1111-1111', 'mentee1@company.com', 'MENTEE', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ.', NOW()),
+    (1, 4, 'E002', '김멘티2', '010-2222-2222', 'mentee2@company.com', 'MENTEE', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ.', NOW()),
+    (1, 4, 'E003', '김멘티3', '010-3333-3333', 'mentee3@company.com', 'MENTEE', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ.', NOW()),
+    (1, 4, 'E004', '김멘티4', '010-4444-4444', 'mentee4@company.com', 'MENTEE', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ.', NOW()),
+    (1, 2, 'E005', '박멘토1', '010-5555-5555', 'mentor1@company.com', 'MENTOR', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ.', NOW()),
+    (1, 2, 'E006', '박멘토2', '010-6666-6666', 'mentor2@company.com', 'MENTOR', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ.', NOW()),
+    (1, 4, 'E008', '최담당자', '010-8888-8888', 'manager@company.com', 'HR', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ.', NOW());
 
 -- Task 데이터 삽입
 INSERT INTO task (department_seq, task_type, task_content, reg_date)
