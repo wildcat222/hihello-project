@@ -11,10 +11,15 @@ import lombok.NoArgsConstructor;
 public class GroupMember {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long groupMemberSeq;
 
     private Long taskGroupSeq;
 
     private Long employeeSeq;
+
+    public GroupMember(Long taskGroupSeq, Long employeeSeq) {
+        this.taskGroupSeq = taskGroupSeq;
+        this.employeeSeq = employeeSeq;
+    }
 }
