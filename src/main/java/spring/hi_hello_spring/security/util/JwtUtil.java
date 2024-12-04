@@ -19,9 +19,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
+import spring.hi_hello_spring.common.util.RedisService;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
 import spring.hi_hello_spring.employee.command.domain.repository.EmployeeRepository;
-import spring.hi_hello_spring.security.repository.SecurityRepository;
+import spring.hi_hello_spring.security.service.CustomUserDetailsService;
 
 import java.security.Key;
 import java.util.*;
@@ -34,21 +35,23 @@ public class JwtUtil {
     private final Key key;
     private final CustomUserDetailsService userDetailsService;
     private final Environment env;
+    private final RedisService redisService;
 
     private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
-    private final SecurityRepository securityRepository;
+    private final EmployeeRepository employeeRepository;
 
 
     public JwtUtil(
             @Value("${TOKEN_SECRET}") String secretKey,
             CustomUserDetailsService userDetailsService,
-            Environment env,
-            @Qualifier("securityRepository") SecurityRepository securityRepository) {
+            Environment env, RedisService redisService,
+            @Qualifier("employeeRepository") EmployeeRepository employeeRepository) {
+        this.redisService = redisService;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.userDetailsService = userDetailsService;
         this.env = env;
-        this.securityRepository = securityRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     /* Token 검증(Bearer 토큰이 넘어왔고, 우리 사이트의 secret key로 만들어 졌는가, 만료되었는지와 내용이 비어있진 않은지) */
@@ -74,24 +77,24 @@ public class JwtUtil {
     public Authentication getAuthentication(String token) {
 
         /* 토큰을 들고 왔던 들고 오지 않았던(로그인 시) 동일하게 security 가 관리할 UserDetails 타입을 정의 */
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserId(token));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getEmployeeSeq(token));
 
         /* 토큰에서 claim들 추출 */
         Claims claims = parseClaims(token);
         log.info("넘어온 AccessToken claims 확인: {}", claims);
 
         Collection<? extends GrantedAuthority> authorities = null;
-        if(claims.get("auth") == null) {
+        if (claims.get("auth") == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         } else {
-             /* 클레임에서 권한 정보 가져오기 */
-             authorities =
-                     Arrays.stream(claims.get("auth").toString()
-                                     .replace("[", "")
-                                     .replace("]", "")
-                                     .split(", "))
-                             .map(SimpleGrantedAuthority::new)
-                             .collect(Collectors.toList());
+            /* 클레임에서 권한 정보 가져오기 */
+            authorities =
+                    Arrays.stream(claims.get("auth").toString()
+                                    .replace("[", "")
+                                    .replace("]", "")
+                                    .split(", "))
+                            .map(SimpleGrantedAuthority::new)
+                            .collect(Collectors.toList());
         }
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
@@ -103,16 +106,16 @@ public class JwtUtil {
     }
 
     /* Token 에서 사용자의 id(subject 클레임) 추출 */
-    public String getUserId(String token) {
+    public String getEmployeeSeq(String token) {
         return parseClaims(token).getSubject();
     }
 
-    public String generateAccessToken(String username, Authentication authentication) {
+    public String generateAccessToken(Long employeeSeq, Authentication authentication) {
 
         Long expirationTime = (long) 1000 * 60 * 30; // 30분
 
         String accessToken = Jwts.builder()
-                .setSubject(username)
+                .setSubject(String.valueOf(employeeSeq))
                 .claim("auth", authentication.getAuthorities())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
@@ -121,19 +124,19 @@ public class JwtUtil {
         return accessToken;
     }
 
-    public String generateRefreshToken(String username) {
+    public String generateRefreshToken(Long employeeSeq) {
 
         Long expirationTime = (long) 1000 * 60 * 60 * 24 * 7; // 7일
 
         String refreshToken = Jwts.builder()
-                .setSubject(username)
+                .setSubject(String.valueOf(employeeSeq))
                 .signWith(key)
                 .setExpiration(new java.util.Date(System.currentTimeMillis() + expirationTime)) // 만료 시간 설정
                 .compact();
         return refreshToken;
     }
 
-    // request 에서 리프레시 토큰을 추출
+    // request 에서 refresh token or access token 을 추출
     public Optional<String> getToken(HttpServletRequest request, String tokenType) {
 
         String authorizationHeader;
@@ -159,18 +162,27 @@ public class JwtUtil {
 
     // 엑세스 토큰 재발급
     public String reIssueAccessToken(String refreshToken) {
-        // 리프레시 토큰에서 사용자 ID 추출
-        String userId = getUserId(refreshToken);
-        Employee findUser = securityRepository.findById(userId)
+        // 리프레시 토큰에서 사용자 employeeSeq 추출
+        Long employeeSeq = Long.parseLong(getEmployeeSeq(refreshToken));
+        Employee findUser = employeeRepository.findByEmployeeSeq(employeeSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
 
         // 새로운 액세스 토큰 생성
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(findUser.getEmployeeNum());
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(userDetails, null,
                         authoritiesMapper.mapAuthorities(userDetails.getAuthorities()));
 
-        return generateAccessToken(userId, authentication);
+        return generateAccessToken(employeeSeq, authentication);
     }
+
+    // 생성된 리프레시 토큰 레디스에 저장
+    public void saveRefreshToken(String refreshToken) {
+
+        String employeeSeq = getEmployeeSeq(refreshToken);
+        redisService.saveRefreshToken(employeeSeq, refreshToken);
+    }
+
+    // 재발급된 리프레시 토큰 로테이션
 
 }
