@@ -22,7 +22,6 @@ import spring.hi_hello_spring.security.handler.LoginFailureHandler;
 import spring.hi_hello_spring.security.handler.LoginSuccessHandler;
 import spring.hi_hello_spring.security.service.CustomUserDetailsService;
 import spring.hi_hello_spring.security.util.JwtUtil;
-import spring.hi_hello_spring.security.service.TokenService;
 
 @Configuration
 @EnableWebSecurity
@@ -32,8 +31,6 @@ public class SecurityConfig {
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final CustomUserDetailsService customUserDetailsService;
-//    private final Environment env;
-    private final TokenService tokenService;
     private final JwtUtil jwtUtil;
 
     @Bean
@@ -68,7 +65,7 @@ public class SecurityConfig {
     private Filter getAuthenticationFilter() {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter();
         customAuthenticationFilter.setAuthenticationManager(getAuthenticationManager());
-        customAuthenticationFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler(tokenService));
+        customAuthenticationFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler(jwtUtil));
         customAuthenticationFilter.setAuthenticationFailureHandler(new LoginFailureHandler());
         return customAuthenticationFilter;
     }
