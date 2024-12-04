@@ -92,6 +92,7 @@ CREATE TABLE `template` (
                             `template_detail`   TEXT   NULL,
                             `template_url`   VARCHAR(255)   NULL,
                             `template_quiz_qty`   INT   NULL,
+                            `template_task_round` VARCHAR(10) NULL,
                             `template_procedure`   INT   NOT NULL,
                             `template_end_at`   DATETIME   NULL,
                             `reg_date`   DATETIME   NOT NULL,
