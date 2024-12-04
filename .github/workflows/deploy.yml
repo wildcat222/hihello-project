@@ -76,7 +76,11 @@ jobs:
           echo "DURATION=$DURATION" >> $GITHUB_ENV
 
       - name: Notify Discord
+        if: always()
         run: |
+          echo "Job Status: ${{ job.status }}"
+          DURATION=${DURATION:-"알 수 없음"}
+
           if [ -n "${{ github.event.pull_request.title }}" ]; then
             PR_TITLE="${{ github.event.pull_request.title }}"
           else
@@ -84,10 +88,6 @@ jobs:
           fi
 
           SAFE_PR_TITLE=$(echo "$PR_TITLE" | jq -R .)
-
-          if [ -z "${DURATION}" ]; then
-            DURATION="알 수 없음"
-          fi
 
           ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
@@ -137,7 +137,7 @@ jobs:
               ${{ secrets.DISCORD_WEBHOOK_URL }}
           }
 
-          if [ ${{ job.status }} = "success" ]; then
+          if [ "${{ job.status }}" = "success" ]; then
             send_discord_notification "success"
           else
             send_discord_notification "failure"
