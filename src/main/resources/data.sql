@@ -24,8 +24,8 @@ VALUES
 -- Task 데이터 삽입
 INSERT INTO task (department_seq, task_type, task_content, reg_date)
 VALUES
-    (1, '교육', '온보딩 교육 자료 준비', NOW()),
-    (1, '평가', '직무 교육 평가 준비', NOW());
+    (1, 'PERSONAL', '온보딩 교육 자료 준비', NOW()),
+    (1, 'GROUP', '직무 교육 평가 준비', NOW());
 
 -- Template 데이터 삽입
 INSERT INTO template (template_type, template_check_required_status, template_training_type, template_title, template_sub, template_detail, template_url, template_procedure, reg_date)
