@@ -16,7 +16,7 @@ spring:
     driver-class-name: ${DRIVER_CLASS_NAME}
   data:
     redis:
-      host: localhost
+      host: 127.0.0.1
       port: 6379
       password: ${REDIS-PASSWORD}
   jpa:
