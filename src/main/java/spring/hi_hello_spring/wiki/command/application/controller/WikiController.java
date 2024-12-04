@@ -13,7 +13,7 @@ import spring.hi_hello_spring.wiki.command.application.service.WikiService;
 @RestController
 @RequestMapping("/api/v1/wiki")
 @RequiredArgsConstructor
-@Tag(name = "위키 API", description = "위키 API")
+@Tag(name = "Wiki API", description = "위키 API")
 public class WikiController {
 
     private final WikiService wikiService;
