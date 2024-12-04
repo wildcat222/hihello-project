@@ -17,7 +17,7 @@ public class EmployeeService {
 
         String EmployeeSeq = String.valueOf(CustomUserUtils.getCurrentEmployeeSeq());
 
-        redisService.deleteRefreshToken(EmployeeSeq);
+        redisService.deleteToken(EmployeeSeq);
 
         if (accessToken != null) {
             jwtUtil.saveToken(accessToken);
