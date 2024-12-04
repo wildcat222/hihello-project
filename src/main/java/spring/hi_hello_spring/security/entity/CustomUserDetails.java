@@ -1,4 +1,4 @@
-package spring.hi_hello_spring.security.util;
+package spring.hi_hello_spring.security.entity;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
