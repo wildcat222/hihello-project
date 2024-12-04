@@ -28,10 +28,10 @@ VALUES
     (1, '평가', '직무 교육 평가 준비', NOW());
 
 -- Template 데이터 삽입
-INSERT INTO template (template_type, template_check_required_status, template_training_type, template_title, template_sub, template_detail, template_url, template_procedure, reg_date)
+INSERT INTO template (template_type, template_check_required_status, template_training_type, template_title, template_sub, template_detail, template_url, template_task_round, template_procedure, reg_date)
 VALUES
-    ('온보딩', TRUE, '기본교육', '교육 템플릿1', '교육 템플릿 설명', '온보딩 교육 내용', 'https://example.com', 1, NOW()),
-    ('직무교육', FALSE, '심화교육', '교육 템플릿2', '직무 교육 설명', '직무 교육 내용', 'https://example.com', 2, NOW());
+    ('온보딩', TRUE, '기본교육', '교육 템플릿1', '교육 템플릿 설명', '온보딩 교육 내용', 'https://example.com','3주차', 1, NOW()),
+    ('직무교육', FALSE, '심화교육', '교육 템플릿2', '직무 교육 설명', '직무 교육 내용', 'https://example.com','2주차', 2, NOW());
 
 -- Checklist 데이터 삽입
 INSERT INTO checklist (checklist_content, template_seq)
