@@ -23,7 +23,7 @@ public class TaskQueryService {
     public List<TaskMenteeDetailQueryDTO> getMenteeTaskDetail(Long taskSeq) {
 
         Map<String, Object> params = new HashMap<>();
-        params.put("employee_seq", 5L);
+        params.put("employee_seq", 5L); // 시큐리티Seq 구현되면 변경 예정
         params.put("task_seq", taskSeq);
 
         return taskQueryMapper.findMenteeTaskDetail(params);
