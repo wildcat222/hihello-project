@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
@@ -40,6 +40,24 @@ jobs:
             exit 1
           fi
 
+      - name: Check if current branch is behind `develop`
+        id: check_merge
+        run: |
+          CURRENT_BRANCH="${{ github.head_ref }}"
+          git fetch origin
+          # 현재 작업 중인 브랜치가 `develop`보다 뒤쳐져 있는지 확인
+          if git rev-list --left-only --count origin/develop...origin/${CURRENT_BRANCH} | grep -q '^[1-9]'; then
+            echo "현재 브랜치가 develop보다 뒤쳐져 있습니다. 자동으로 병합합니다."
+            git checkout $CURRENT_BRANCH
+            git merge origin/develop --no-edit
+            # Git 사용자 정보 설정
+            git config --global user.email "github-actions@github.com"
+            git config --global user.name "GitHub Actions"
+            git push origin $CURRENT_BRANCH
+          else
+            echo "현재 브랜치는 이미 최신 상태입니다."
+          fi
+
       - name: Build with Gradle
         env:
           RDS_DATABASE_URL: ${{ secrets.RDS_DATABASE_URL }}
@@ -59,26 +77,22 @@ jobs:
 
       - name: Notify Discord
         run: |
-          # PR 제목 또는 커밋 메시지 가져오기
           if [ -n "${{ github.event.pull_request.title }}" ]; then
             PR_TITLE="${{ github.event.pull_request.title }}"
           else
             PR_TITLE="${{ github.event.head_commit.message }}"
           fi
 
-          # JSON-safe 포맷으로 변환
           SAFE_PR_TITLE=$(echo "$PR_TITLE" | jq -R .)
 
-          # 기본값 설정
           if [ -z "${DURATION}" ]; then
             DURATION="알 수 없음"
           fi
 
           ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-          # Discord Webhook 호출
           send_discord_notification() {
-            local status="$1" # success or failure
+            local status="$1"
             local title=""
             local color=""
             local description=""
@@ -93,7 +107,6 @@ jobs:
               description="빌드에 실패했어핑. 😢\\n\\n"
             fi
 
-            # Discord Webhook 호출
             curl -H "Content-Type: application/json" \
               -d "{
                     \"embeds\": [
@@ -124,10 +137,8 @@ jobs:
               ${{ secrets.DISCORD_WEBHOOK_URL }}
           }
 
-          # 빌드 성공 및 실패에 따라 Discord 알림 전송
           if [ ${{ job.status }} = "success" ]; then
             send_discord_notification "success"
           else
             send_discord_notification "failure"
           fi
-      
