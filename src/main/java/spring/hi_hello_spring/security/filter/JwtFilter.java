@@ -39,9 +39,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         Optional<String> refreshToken = jwtUtil.getToken(request, "refresh");
 
-        if (refreshToken.isPresent() && jwtUtil.validateToken(refreshToken.get())) {
+        if (refreshToken.isPresent() && jwtUtil.validateRefreshToken(refreshToken.get())) {
             String newAccessToken = jwtUtil.reIssueAccessToken(refreshToken.get());
-            Long employeeSeq = Long.parseLong(jwtUtil.getEmployeeSeq(newAccessToken));
+            String employeeSeq = jwtUtil.getEmployeeSeq(newAccessToken);
             String newRefreshToken = jwtUtil.generateRefreshToken(employeeSeq);
 
             response.setHeader("accessToken", newAccessToken);
@@ -54,12 +54,19 @@ public class JwtFilter extends OncePerRequestFilter {
             jwtUtil.saveAuthentication(jwtUtil.getEmployeeSeq(newAccessToken));
 
             filterChain.doFilter(request, response);
+
+            // 재발급된 리프레시 토큰 레디스에 저장 (덮어쓰기)
+            jwtUtil.saveRefreshToken(newRefreshToken);
+
+        } else {
+            // 로그아웃 처리 및 레디스 내 토큰 데이터 삭제
+            return;
         }
 
         Optional<String> accessToken = jwtUtil.getToken(request, "access");
 
         if (accessToken.isPresent()) {
-            if (jwtUtil.validateToken(accessToken.get())){
+            if (jwtUtil.validateAccessToken(accessToken.get())){
                 jwtUtil.saveAuthentication(jwtUtil.getEmployeeSeq(accessToken.get()));
                 log.info("accessToken {} ", accessToken.get());
                 filterChain.doFilter(request, response); // 다음 필터로 요청 전달
@@ -67,7 +74,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
-        // 모든 토큰이 유효하지 않은 경우 401 에러
+        // accessToken 이 유효하지 않은 경우 401 에러
         if (!response.isCommitted()) { // 응답이 커밋되지 않았을 때만 에러 전송
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid tokens");
         }
