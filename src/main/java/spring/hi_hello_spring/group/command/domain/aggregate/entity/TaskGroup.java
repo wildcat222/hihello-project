@@ -18,9 +18,4 @@ public class TaskGroup extends BaseTimeEntity {
     private Long taskSeq;
 
     private Boolean taskGroupActiveStatus = true;
-
-    public TaskGroup(Long taskSeq) {
-        this.taskSeq = taskSeq;
-        this.taskGroupActiveStatus = true;
-    }
 }

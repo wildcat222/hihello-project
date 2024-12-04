@@ -1,6 +1,7 @@
 package spring.hi_hello_spring.wiki.command.domain.aggregate.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
@@ -12,12 +13,18 @@ import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 public class Wiki extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wikiSeq;
 
     private String wikiTitle;
 
-    private int wikiCurrentVar;
+    private int wikiCurrentVer;
 
     private boolean wikiDeletedStatus = false;
+
+    @Builder
+    public Wiki(String wikiTitle, int wikiCurrentVer) {
+        this.wikiTitle = wikiTitle;
+        this.wikiCurrentVer = wikiCurrentVer;
+    }
 }

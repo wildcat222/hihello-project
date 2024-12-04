@@ -19,12 +19,13 @@ public class GroupMatchService {
 
     private final TaskGroupRepository taskGroupRepository;
     private final GroupMemberRepository groupMemberRepository;
+    private final ModelMapper modelMapper;
 
     @Transactional
     public void createMenteeGroup(List<TaskRequestDTO> taskRequestDTO) {
         for (TaskRequestDTO taskRequestDTOs : taskRequestDTO) {
 
-            TaskGroup taskSeq = new TaskGroup(taskRequestDTOs.getTaskSeq());
+            TaskGroup taskSeq = modelMapper.map(taskRequestDTOs, TaskGroup.class);
             taskSeq = taskGroupRepository.save(taskSeq);
 
             for (MemberDTO memberDTO : taskRequestDTOs.getMembers()) {

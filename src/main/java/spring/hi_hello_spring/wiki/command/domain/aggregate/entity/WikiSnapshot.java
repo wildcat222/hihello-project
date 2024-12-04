@@ -12,14 +12,22 @@ import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 public class WikiSnapshot extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long wikiSnapshotSeq;
 
     private Long wikiSeq;
 
-    private int wikiSnapshotVar;
+    private int wikiSnapshotVer;
 
     @Lob // 대량 데이터를 처리하도록 지시
     @Column(columnDefinition = "TEXT")
     private String wikiSnapshotContent;
+
+    public void updateWikiSeq(Long wikiSeq) {
+        this.wikiSeq = wikiSeq;
+    }
+
+    public void updateWikiSnapshotVer(int wikiSnapshotVer) {
+        this.wikiSnapshotVer = wikiSnapshotVer;
+    }
 }
