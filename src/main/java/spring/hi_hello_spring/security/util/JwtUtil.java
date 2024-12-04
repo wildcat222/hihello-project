@@ -57,17 +57,9 @@ public class JwtUtil {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
             return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token {}", e);
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token {}", e);
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token {}", e);
-        } catch (IllegalArgumentException e) {
-            log.info("JWT Token claims empty {}", e);
+        } catch (Exception e) {
+            return false;
         }
-
-        return false;
     }
 
     /* refreshToken 검증(Bearer 토큰이 넘어왔고, 우리 사이트의 secret key로 만들어 졌는가, 만료되었는지와 내용이 비어있진 않은가
@@ -85,32 +77,20 @@ public class JwtUtil {
 
             // 레디스에 저장된 해당 사원이 이전에 발급 받았던 리프레시 토큰 조회
             savedToken = redisService.getRefreshToken(EmployeeSeqInRefreshToken);
-
-            // 저장되어 있던 토큰의 담긴 값
-            String EmployeeSeqInRedisToken = getEmployeeSeq(savedToken);
-
-            if (refreshToken.equals(savedToken) && EmployeeSeqInRefreshToken.equals(EmployeeSeqInRedisToken)) {
-                return true;
+            if (savedToken != null) {
+                // 저장되어 있던 토큰의 담긴 값
+                String EmployeeSeqInRedisToken = getEmployeeSeq(savedToken);
+                if (refreshToken.equals(savedToken) && EmployeeSeqInRefreshToken.equals(EmployeeSeqInRedisToken)) {
+                    return true;
+                }
             }
 
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+        } catch (Exception e) {
             log.info("Invalid JWT Token {}", e);
             // 로그아웃 처리 및 레디스 내의 토큰 삭제
 
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token {}", e);
-            // 로그아웃 처리 및 레디스 내의 토큰 삭제
-
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token {}", e);
-            // 로그아웃 처리 및 레디스 내의 토큰 삭제
-
-        } catch (IllegalArgumentException e) {
-            log.info("JWT Token claims empty {}", e);
-            // 로그아웃 처리 및 레디스 내의 토큰 삭제
-
+            return false;
         }
-
         return false;
     }
 
