@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import spring.hi_hello_spring.security.util.TokenService;
+import spring.hi_hello_spring.security.service.TokenService;
 
 import java.io.IOException;
 
@@ -24,6 +24,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         // 사용자 이름 가져오기
         String username = authentication.getName();
+        log.info(username);
 
         // Access Token 생성
         String accessToken = tokenService.createAccessToken(username, authentication);
@@ -35,5 +36,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         response.setHeader("accessToken", accessToken);
         response.setHeader("refreshToken", refreshToken);
 
+        // 레디스에 리프레시 토큰 저장 // 어느정도 개발 진행 후 활성화
+//        tokenService.saveRefreshToken(refreshToken);
     }
 }

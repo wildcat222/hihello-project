@@ -41,16 +41,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (refreshToken.isPresent() && jwtUtil.validateToken(refreshToken.get())) {
             String newAccessToken = jwtUtil.reIssueAccessToken(refreshToken.get());
-            String userId = jwtUtil.getUserId(newAccessToken);
-            String newRefreshToken = jwtUtil.generateRefreshToken(userId);
+            Long employeeSeq = Long.parseLong(jwtUtil.getEmployeeSeq(newAccessToken));
+            String newRefreshToken = jwtUtil.generateRefreshToken(employeeSeq);
 
             response.setHeader("accessToken", newAccessToken);
             response.setHeader("refreshToken", newRefreshToken);
 
+            // 로그용 코드
             log.info("accessToken {} ", newAccessToken);
             log.info("refreshToken {} ", newRefreshToken);
 
-            jwtUtil.saveAuthentication(jwtUtil.getUserId(newAccessToken));
+            jwtUtil.saveAuthentication(jwtUtil.getEmployeeSeq(newAccessToken));
 
             filterChain.doFilter(request, response);
         }
@@ -59,7 +60,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (accessToken.isPresent()) {
             if (jwtUtil.validateToken(accessToken.get())){
-                jwtUtil.saveAuthentication(jwtUtil.getUserId(accessToken.get()));
+                jwtUtil.saveAuthentication(jwtUtil.getEmployeeSeq(accessToken.get()));
                 log.info("accessToken {} ", accessToken.get());
                 filterChain.doFilter(request, response); // 다음 필터로 요청 전달
                 return;

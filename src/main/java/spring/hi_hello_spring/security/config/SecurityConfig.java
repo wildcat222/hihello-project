@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -17,14 +16,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import spring.hi_hello_spring.security.filter.CustomAuthenticationFilter;
-import spring.hi_hello_spring.security.filter.JwtFilter;
 import spring.hi_hello_spring.security.handler.JwtAccessDeniedHandler;
 import spring.hi_hello_spring.security.handler.JwtAuthenticationEntryPoint;
 import spring.hi_hello_spring.security.handler.LoginFailureHandler;
 import spring.hi_hello_spring.security.handler.LoginSuccessHandler;
-import spring.hi_hello_spring.security.util.CustomUserDetailsService;
+import spring.hi_hello_spring.security.service.CustomUserDetailsService;
 import spring.hi_hello_spring.security.util.JwtUtil;
-import spring.hi_hello_spring.security.util.TokenService;
+import spring.hi_hello_spring.security.service.TokenService;
 
 @Configuration
 @EnableWebSecurity
