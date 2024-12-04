@@ -34,7 +34,6 @@ public class JwtUtil {
 
     private final Key key;
     private final CustomUserDetailsService userDetailsService;
-    private final Environment env;
     private final RedisService redisService;
 
     private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
@@ -43,22 +42,20 @@ public class JwtUtil {
 
     public JwtUtil(
             @Value("${TOKEN_SECRET}") String secretKey,
-            CustomUserDetailsService userDetailsService,
-            Environment env, RedisService redisService,
+            CustomUserDetailsService userDetailsService, RedisService redisService,
             @Qualifier("employeeRepository") EmployeeRepository employeeRepository) {
         this.redisService = redisService;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.userDetailsService = userDetailsService;
-        this.env = env;
         this.employeeRepository = employeeRepository;
     }
 
-    /* Token 검증(Bearer 토큰이 넘어왔고, 우리 사이트의 secret key로 만들어 졌는가, 만료되었는지와 내용이 비어있진 않은지) */
-    public boolean validateToken(String token) {
+    /* accessToken 검증(Bearer 토큰이 넘어왔고, 우리 사이트의 secret key로 만들어 졌는가, 만료되었는지와 내용이 비어있진 않은지) */
+    public boolean validateAccessToken(String accessToken) {
 
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token {}", e);
@@ -68,6 +65,50 @@ public class JwtUtil {
             log.info("Unsupported JWT Token {}", e);
         } catch (IllegalArgumentException e) {
             log.info("JWT Token claims empty {}", e);
+        }
+
+        return false;
+    }
+
+    /* refreshToken 검증(Bearer 토큰이 넘어왔고, 우리 사이트의 secret key로 만들어 졌는가, 만료되었는지와 내용이 비어있진 않은가
+     *  ,레디스에 저장된 토큰과 동일한가, 내부의 담긴 값은 일치하는가) */
+    public boolean validateRefreshToken(String refreshToken) {
+
+        String savedToken = "";
+
+        try {
+            // 1차 검증
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(refreshToken);
+
+            // 요청 토큰이 담고있던 사원Seq
+            String EmployeeSeqInRefreshToken = getEmployeeSeq(refreshToken);
+
+            // 레디스에 저장된 해당 사원이 이전에 발급 받았던 리프레시 토큰 조회
+            savedToken = redisService.getRefreshToken(EmployeeSeqInRefreshToken);
+
+            // 저장되어 있던 토큰의 담긴 값
+            String EmployeeSeqInRedisToken = getEmployeeSeq(savedToken);
+
+            if (refreshToken.equals(savedToken) && EmployeeSeqInRefreshToken.equals(EmployeeSeqInRedisToken)) {
+                return true;
+            }
+
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            log.info("Invalid JWT Token {}", e);
+            // 로그아웃 처리 및 레디스 내의 토큰 삭제
+
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT Token {}", e);
+            // 로그아웃 처리 및 레디스 내의 토큰 삭제
+
+        } catch (UnsupportedJwtException e) {
+            log.info("Unsupported JWT Token {}", e);
+            // 로그아웃 처리 및 레디스 내의 토큰 삭제
+
+        } catch (IllegalArgumentException e) {
+            log.info("JWT Token claims empty {}", e);
+            // 로그아웃 처리 및 레디스 내의 토큰 삭제
+
         }
 
         return false;
@@ -105,14 +146,20 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    /* Token 에서 사용자의 id(subject 클레임) 추출 */
+    /* Token 에서 사용자의 seq(subject 클레임) 추출 */
     public String getEmployeeSeq(String token) {
         return parseClaims(token).getSubject();
     }
 
-    public String generateAccessToken(Long employeeSeq, Authentication authentication) {
+    // accessToken 생성
+    public String generateAccessToken(String employeeNum, Authentication authentication) {
 
+        Employee employee = employeeRepository.findByEmployeeNum(employeeNum)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND)); // 예외 처리 어찌할건지
+
+        Long employeeSeq = employee.getEmployeeSeq();
         long expirationTime = (long) 1000 * 60 * 30; // 30분
+
         Claims claims = Jwts.claims().setSubject(String.valueOf(employeeSeq));
         claims.put("auth", authentication.getAuthorities());
 
@@ -124,7 +171,13 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String generateRefreshToken(Long employeeSeq) {
+    // refreshToken 생성
+    public String generateRefreshToken(String employeeNum) {
+
+        Employee employee = employeeRepository.findByEmployeeNum(employeeNum)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND)); // 예외 처리 어찌할건지
+
+        Long employeeSeq = employee.getEmployeeSeq();
 
         long expirationTime = (long) 1000 * 60 * 60 * 24 * 7; // 7일
         Claims claims = Jwts.claims().setSubject(String.valueOf(employeeSeq));
@@ -132,8 +185,9 @@ public class JwtUtil {
         // 만료 시간 설정
         return Jwts.builder()
                 .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime)) // 만료 시간
                 .signWith(key)
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime)) // 만료 시간 설정
                 .compact();
     }
 
@@ -174,7 +228,7 @@ public class JwtUtil {
                 new UsernamePasswordAuthenticationToken(userDetails, null,
                         authoritiesMapper.mapAuthorities(userDetails.getAuthorities()));
 
-        return generateAccessToken(employeeSeq, authentication);
+        return generateAccessToken(getEmployeeSeq(refreshToken), authentication);
     }
 
     // 생성된 리프레시 토큰 레디스에 저장
@@ -195,7 +249,5 @@ public class JwtUtil {
         long ttl = exp - (System.currentTimeMillis() / 1000);
         redisService.saveRefreshToken(employeeSeq, refreshToken, ttl);
     }
-
-    // 재발급된 리프레시 토큰 로테이션
 
 }
