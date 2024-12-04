@@ -1,5 +1,7 @@
 package spring.hi_hello_spring.common.util;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -10,9 +12,10 @@ public class RedisService {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    // 리프레시 토큰 저장
-    public void saveRefreshToken(String employeeSeq, String refreshToken) {
-        redisTemplate.opsForValue().set(employeeSeq, refreshToken);
+    // 리프레시 토큰을 디코딩하고 Redis 에 TTL 을 설정하여 저장
+    public void saveRefreshToken(String employeeSeq, String refreshToken, Long ttl) {
+        
+        redisTemplate.opsForValue().set(employeeSeq, refreshToken, ttl, java.util.concurrent.TimeUnit.SECONDS);
     }
 
     // 리프레시 토큰 조회
