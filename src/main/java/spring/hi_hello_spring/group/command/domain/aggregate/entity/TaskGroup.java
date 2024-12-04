@@ -12,10 +12,15 @@ import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 public class TaskGroup extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long taskGroupSeq;
 
     private Long taskSeq;
 
     private Boolean taskGroupActiveStatus = true;
+
+    public TaskGroup(Long taskSeq) {
+        this.taskSeq = taskSeq;
+        this.taskGroupActiveStatus = true;
+    }
 }
