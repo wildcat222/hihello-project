@@ -25,7 +25,7 @@ public class GroupMatchController {
 
     @PostMapping("/group")
     @Operation(summary = "멘티 그룹 생성", description = "멘티 그룹 생성 로직입니다.")
-    public ApiResponse<?> createPeerReviewList(@RequestBody TaskRequestWrapper wrapper) {
+    public ApiResponse<?> createGroupMatch(@RequestBody TaskRequestWrapper wrapper) {
 
         groupMatchService.createMenteeGroup(wrapper.getTasks());
         return ResponseUtil.successResponse("멘티 그룹 생성이 성공적으로 등록되었습니다.").getBody();
