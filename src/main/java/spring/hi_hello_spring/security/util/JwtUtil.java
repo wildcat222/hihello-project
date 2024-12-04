@@ -112,28 +112,29 @@ public class JwtUtil {
 
     public String generateAccessToken(Long employeeSeq, Authentication authentication) {
 
-        Long expirationTime = (long) 1000 * 60 * 30; // 30분
+        long expirationTime = (long) 1000 * 60 * 30; // 30분
+        Claims claims = Jwts.claims().setSubject(String.valueOf(employeeSeq));
+        claims.put("auth", authentication.getAuthorities());
 
-        String accessToken = Jwts.builder()
-                .setSubject(String.valueOf(employeeSeq))
-                .claim("auth", authentication.getAuthorities())
+        return Jwts.builder()
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(key)
                 .compact();
-        return accessToken;
     }
 
     public String generateRefreshToken(Long employeeSeq) {
 
-        Long expirationTime = (long) 1000 * 60 * 60 * 24 * 7; // 7일
+        long expirationTime = (long) 1000 * 60 * 60 * 24 * 7; // 7일
+        Claims claims = Jwts.claims().setSubject(String.valueOf(employeeSeq));
 
-        String refreshToken = Jwts.builder()
-                .setSubject(String.valueOf(employeeSeq))
+        // 만료 시간 설정
+        return Jwts.builder()
+                .setClaims(claims)
                 .signWith(key)
-                .setExpiration(new java.util.Date(System.currentTimeMillis() + expirationTime)) // 만료 시간 설정
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime)) // 만료 시간 설정
                 .compact();
-        return refreshToken;
     }
 
     // request 에서 refresh token or access token 을 추출
