@@ -4,10 +4,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
+import spring.hi_hello_spring.evaluation.query.dto.TaskMenteeDetailQueryDTO;
 import spring.hi_hello_spring.evaluation.query.dto.TaskAllListQueryDTO;
 import spring.hi_hello_spring.evaluation.query.service.TaskQueryService;
 
@@ -26,7 +28,7 @@ public class TaskQueryController {
     public ApiResponse<?> getAllTaskList() {
 
         List<TaskAllListQueryDTO> taskAllListQueryDTO = taskQueryService.getHrAllTaskList();
-        return ResponseUtil.successResponse("멘티 전체 조회가 성공적으로 조회되었습니다.", taskAllListQueryDTO).getBody();
+        return ResponseUtil.successResponse("(담당자)멘티의 과제 리스트 전체가 성공적으로 조회되었습니다.", taskAllListQueryDTO).getBody();
     }
 
     @GetMapping("/mentor/task")
@@ -34,6 +36,14 @@ public class TaskQueryController {
     public ApiResponse<?> getAllMentorTaskList() {
 
         List<TaskAllListQueryDTO> taskAllListQueryDTO = taskQueryService.getMentorAllTaskList();
-        return ResponseUtil.successResponse("멘티 전체 조회가 성공적으로 조회되었습니다.", taskAllListQueryDTO).getBody();
+        return ResponseUtil.successResponse("(멘토)멘티의 과제 리스트 전체가 성공적으로 조회되었습니다.", taskAllListQueryDTO).getBody();
+    }
+
+    @GetMapping("mentee/task/{taskSeq}")
+    @Operation(summary = "멘토가 멘티의 과제 상세 조회", description = "멘토가 멘티의 과제를 상세조회하는 기능입니다.")
+    public ApiResponse<?> getMenteeTaskDetail(@PathVariable Long taskSeq) {
+
+        List<TaskMenteeDetailQueryDTO> taskMenteeDetailQueryDTO = taskQueryService.getMenteeTaskDetail(taskSeq);
+        return ResponseUtil.successResponse("멘티의 과제를 성공적으로 조회되었습니다.", taskMenteeDetailQueryDTO).getBody();
     }
 }
