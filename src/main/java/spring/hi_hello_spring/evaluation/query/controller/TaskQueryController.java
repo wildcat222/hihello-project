@@ -12,6 +12,7 @@ import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.employee.query.dto.MenteeAllQueryDTO;
 import spring.hi_hello_spring.evaluation.query.dto.TaskHrAllListQueryDTO;
 import spring.hi_hello_spring.evaluation.query.dto.TaskMenteeDetailQueryDTO;
+import spring.hi_hello_spring.evaluation.query.dto.TaskAllListQueryDTO;
 import spring.hi_hello_spring.evaluation.query.service.TaskQueryService;
 
 import java.util.List;
@@ -25,11 +26,19 @@ public class TaskQueryController {
     private final TaskQueryService taskQueryService;
 
     @GetMapping("/hr/task")
-    @Operation(summary = "과제 리스트 조회", description = "담당자가 조회하는 과제 리스트 조회 기능입니다.")
+    @Operation(summary = "담당자 과제 리스트 조회", description = "담당자가 조회하는 과제 리스트 조회 기능입니다.")
     public ApiResponse<?> getAllTaskList() {
 
-        List<TaskHrAllListQueryDTO> taskHrAllListQueryDTO = taskQueryService.getHrAllTaskList();
-        return ResponseUtil.successResponse("멘티 전체 조회가 성공적으로 조회되었습니다.", taskHrAllListQueryDTO).getBody();
+        List<TaskAllListQueryDTO> taskAllListQueryDTO = taskQueryService.getHrAllTaskList();
+        return ResponseUtil.successResponse("멘티 전체 조회가 성공적으로 조회되었습니다.", taskAllListQueryDTO).getBody();
+    }
+
+    @GetMapping("/mentor/task")
+    @Operation(summary = "멘토 과제 리스트 조회", description = "멘토가 조회하는 과제 리스트 조회 기능입니다.")
+    public ApiResponse<?> getAllMentorTaskList() {
+
+        List<TaskAllListQueryDTO> taskAllListQueryDTO = taskQueryService.getMentorAllTaskList();
+        return ResponseUtil.successResponse("멘티 전체 조회가 성공적으로 조회되었습니다.", taskAllListQueryDTO).getBody();
     }
 
     @GetMapping("mentee/task/{taskSeq}")
