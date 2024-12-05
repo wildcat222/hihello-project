@@ -41,6 +41,7 @@ CREATE TABLE `task` (
                         `task_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                         `department_seq`   BIGINT   NULL,
                         `task_type`   VARCHAR(20)   NOT NULL,
+                        'task_title'    VARCHAR(100)   NOT NULL,
                         `task_content`   TEXT   NOT NULL,
                         `reg_date`   DATETIME   NOT NULL,
                         `mod_date`   DATETIME   NULL,
