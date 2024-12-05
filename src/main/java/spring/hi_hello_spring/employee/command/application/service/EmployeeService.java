@@ -2,11 +2,15 @@ package spring.hi_hello_spring.employee.command.application.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import spring.hi_hello_spring.common.util.CustomUserUtils;
 import spring.hi_hello_spring.common.util.RedisService;
+
+import java.security.Key;
 
 import static spring.hi_hello_spring.common.util.CustomUserUtils.getCurrentEmployeeSeq;
 
@@ -14,16 +18,19 @@ import static spring.hi_hello_spring.common.util.CustomUserUtils.getCurrentEmplo
 @RequiredArgsConstructor
 public class EmployeeService {
 
+    private Key key;
     private final RedisService redisService;
     private final CustomUserUtils customUserUtils;
 
     @Value("${token.secret}")
-    private String key;
+    private String secretKey;
 
     public void logout(String accessToken) {
 
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        key = Keys.hmacShaKeyFor(keyBytes);
         String EmployeeSeq = String.valueOf(getCurrentEmployeeSeq());
-        System.out.println("토큰에서 빼온 시퀀스 = " + EmployeeSeq);
+        accessToken = accessToken.substring(7);
 
         redisService.deleteToken(EmployeeSeq);
 
@@ -41,7 +48,7 @@ public class EmployeeService {
             // 현재 시간과 만료 시간을 비교하여 TTL 계산
             long ttl = exp - (System.currentTimeMillis() / 1000);
 
-            redisService.saveToken(accessToken, EmployeeSeq, ttl);
+            redisService.saveToken(EmployeeSeq + "a", accessToken, ttl);
         }
 
     }
