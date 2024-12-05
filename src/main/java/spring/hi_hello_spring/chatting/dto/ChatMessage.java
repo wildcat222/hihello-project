@@ -1,0 +1,17 @@
+package spring.hi_hello_spring.chatting.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
+public class ChatMessage {
+
+    public enum MessageType{
+        ENTER, TALK
+    }
+    private MessageType type;
+    private String roomId;
+    private String sender;
+    private String message;
+}
