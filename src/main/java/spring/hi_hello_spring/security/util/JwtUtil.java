@@ -100,33 +100,6 @@ public class JwtUtil {
         return false;
     }
 
-    /* 넘어온 AccessToken으로 인증 객체 추출 */
-    public Authentication getAuthentication(String token) {
-
-        /* 토큰을 들고 왔던 들고 오지 않았던(로그인 시) 동일하게 security 가 관리할 UserDetails 타입을 정의 */
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getEmployeeSeq(token));
-
-        /* 토큰에서 claim들 추출 */
-        Claims claims = parseClaims(token);
-        log.info("넘어온 AccessToken claims 확인: {}", claims);
-
-        Collection<? extends GrantedAuthority> authorities = null;
-        if (claims.get("auth") == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
-        } else {
-            /* 클레임에서 권한 정보 가져오기 */
-            authorities =
-                    Arrays.stream(claims.get("auth").toString()
-                                    .replace("[", "")
-                                    .replace("]", "")
-                                    .split(", "))
-                            .map(SimpleGrantedAuthority::new)
-                            .collect(Collectors.toList());
-        }
-
-        return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
-    }
-
     /* Token 에서 Claims 추출 */
     public Claims parseClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
@@ -182,7 +155,7 @@ public class JwtUtil {
 
         String authorizationHeader;
         if (tokenType.equals("refresh")) authorizationHeader = request.getHeader("refreshToken");
-        else authorizationHeader = request.getHeader("accessToken");
+        else authorizationHeader = request.getHeader("Authorization");
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             return Optional.of(authorizationHeader.substring(7));
@@ -191,9 +164,9 @@ public class JwtUtil {
     }
 
     // authentication 저장
-    public void saveAuthentication(String userId) {
-        System.out.println("UserId: " + userId);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+    public void saveAuthentication(String employeeNum) {
+        System.out.println("employeeNum: " + employeeNum);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(employeeNum);
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(userDetails, null,
                         authoritiesMapper.mapAuthorities(userDetails.getAuthorities()));
@@ -218,14 +191,14 @@ public class JwtUtil {
     }
 
     // 생성된 토큰 레디스에 저장
-        public void saveToken(String refreshToken) {
+        public void saveToken(String Token) {
 
-        String employeeSeq = getEmployeeSeq(refreshToken);
+        String employeeSeq = getEmployeeSeq(Token);
         // JWT 디코딩하여 만료 시간 가져오기
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
-                .parseClaimsJws(refreshToken)
+                .parseClaimsJws(Token)
                 .getBody();
 
         // 만료 시간 (exp는 Unix timestamp 형식)
@@ -233,7 +206,7 @@ public class JwtUtil {
 
         // 현재 시간과 만료 시간을 비교하여 TTL 계산
         long ttl = exp - (System.currentTimeMillis() / 1000);
-        redisService.saveToken(employeeSeq, refreshToken, ttl);
+        redisService.saveToken(employeeSeq, Token, ttl);
     }
 
 }
