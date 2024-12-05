@@ -40,10 +40,10 @@ public class TaskQueryController {
     }
 
     @GetMapping("mentee/task/{taskSeq}")
-    @Operation(summary = "멘티 과제 상세 조회", description = "멘티가 본인의 과제를 상세조회하는 기능입니다.")
+    @Operation(summary = "멘토가 멘티의 과제 상세 조회", description = "멘토가 멘티의 과제를 상세조회하는 기능입니다.")
     public ApiResponse<?> getMenteeTaskDetail(@PathVariable Long taskSeq) {
 
         List<TaskMenteeDetailQueryDTO> taskMenteeDetailQueryDTO = taskQueryService.getMenteeTaskDetail(taskSeq);
-        return ResponseUtil.successResponse("멘티 본인의 과제를 성공적으로 조회되었습니다.", taskMenteeDetailQueryDTO).getBody();
+        return ResponseUtil.successResponse("멘티의 과제를 성공적으로 조회되었습니다.", taskMenteeDetailQueryDTO).getBody();
     }
 }
