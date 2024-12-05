@@ -194,4 +194,10 @@ public class WikiService {
         wikiSnapshotRepository.save(wikiSnapshot);
         return wikiSnapshot;
     }
+
+    @Transactional
+    public void deleteWiki(Long wikiSeq) {
+        wikiRepository.deleteById(wikiSeq);
+    }
 }
+
