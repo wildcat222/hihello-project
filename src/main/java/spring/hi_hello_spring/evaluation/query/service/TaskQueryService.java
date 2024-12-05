@@ -2,6 +2,7 @@ package spring.hi_hello_spring.evaluation.query.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import spring.hi_hello_spring.evaluation.query.dto.GroupTaskAllQueryDTO;
 import spring.hi_hello_spring.evaluation.query.dto.TaskAllListQueryDTO;
 import spring.hi_hello_spring.evaluation.query.mapper.TaskQueryMapper;
 
@@ -22,5 +23,11 @@ public class TaskQueryService {
         Long employeeSeq = 3L; // 로그인 기능 완성되면 코드 수정하겠습니다.
 
         return taskQueryMapper.findMentorAllTask(employeeSeq);
+    }
+
+    /* 그룹 과제 제목 리스트 조회 */
+    public List<GroupTaskAllQueryDTO> getGroupTaskTitle() {
+
+        return taskQueryMapper.findGroupTaskTitle();
     }
 }
