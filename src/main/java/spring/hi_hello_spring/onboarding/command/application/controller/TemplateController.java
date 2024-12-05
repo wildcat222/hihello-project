@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
+import spring.hi_hello_spring.onboarding.command.application.dto.TeamplateOrderUpdateDTO;
 import spring.hi_hello_spring.onboarding.command.application.dto.TemplateCreateDTO;
 import spring.hi_hello_spring.onboarding.command.application.service.TemplateService;
 
@@ -36,5 +37,14 @@ public class TemplateController {
 
         templateService.deleteTemplate(templateSeq);
         return ResponseUtil.successResponse("온보딩 스토리보드가 성공적으로 삭제되었습니다.").getBody();
+    }
+
+    /* 온보딩 스토리보드 순서 변경 */
+    @PutMapping("/{templateSeq}")
+    @Operation(summary = "온보딩 스토리 보드 순서 변경", description = "온보딩 스토리 보드 순서 변경 로직입니다.")
+    public ApiResponse<?> updateOrderTemplate(@PathVariable Long templateSeq, TeamplateOrderUpdateDTO updateDTO){
+
+        templateService.updateOrderTemplate(templateSeq, updateDTO);
+        return ResponseUtil.successResponse("온보딩 스토리보드 순서가 성공적으로 수정되었습니다.").getBody();
     }
 }

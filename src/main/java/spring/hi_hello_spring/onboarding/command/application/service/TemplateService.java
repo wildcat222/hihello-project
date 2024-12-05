@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
+import spring.hi_hello_spring.onboarding.command.application.dto.TeamplateOrderUpdateDTO;
 import spring.hi_hello_spring.onboarding.command.application.dto.TemplateCreateDTO;
 import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.Template;
 import spring.hi_hello_spring.onboarding.command.domain.repository.TemplateRepository;
@@ -36,5 +37,16 @@ public class TemplateService {
         }else {
             throw new CustomException(ErrorCodeType.DATA_NOT_FOUND);
         }
+    }
+
+    /* 온보딩 스토리 보드 순서 변경 */
+    @Transactional
+    public TeamplateOrderUpdateDTO updateOrderTemplate(Long templateSeq, TeamplateOrderUpdateDTO updateDTO){
+
+        Template template = templateRepository.findById(templateSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
+        modelMapper.map(updateDTO, template);
+
+        return modelMapper.map(template, TeamplateOrderUpdateDTO.class);
     }
 }
