@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
+import spring.hi_hello_spring.employee.command.application.service.EmployeeService;
 import spring.hi_hello_spring.security.util.JwtUtil;
 
 import java.io.IOException;
@@ -39,9 +40,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         Optional<String> refreshToken = jwtUtil.getToken(request, "refresh");
 
-        if (refreshToken.isPresent() && jwtUtil.validateToken(refreshToken.get())) {
+        if (refreshToken.isPresent() && jwtUtil.validateRefreshToken(refreshToken.get())) {
             String newAccessToken = jwtUtil.reIssueAccessToken(refreshToken.get());
-            Long employeeSeq = Long.parseLong(jwtUtil.getEmployeeSeq(newAccessToken));
+            String employeeSeq = jwtUtil.getEmployeeSeq(newAccessToken);
             String newRefreshToken = jwtUtil.generateRefreshToken(employeeSeq);
 
             response.setHeader("accessToken", newAccessToken);
@@ -51,23 +52,29 @@ public class JwtFilter extends OncePerRequestFilter {
             log.info("accessToken {} ", newAccessToken);
             log.info("refreshToken {} ", newRefreshToken);
 
-            jwtUtil.saveAuthentication(jwtUtil.getEmployeeSeq(newAccessToken));
+            jwtUtil.saveAuthentication(Long.parseLong(jwtUtil.getEmployeeSeq(newAccessToken)));
+
+            // 재발급된 리프레시 토큰 레디스에 저장 (덮어쓰기)
+            jwtUtil.saveToken(newRefreshToken);
 
             filterChain.doFilter(request, response);
+
+            return;
+
         }
 
         Optional<String> accessToken = jwtUtil.getToken(request, "access");
 
         if (accessToken.isPresent()) {
-            if (jwtUtil.validateToken(accessToken.get())){
-                jwtUtil.saveAuthentication(jwtUtil.getEmployeeSeq(accessToken.get()));
-                log.info("accessToken {} ", accessToken.get());
+            if (jwtUtil.validateAccessToken(accessToken.get())){
+                jwtUtil.saveAuthentication(Long.parseLong(jwtUtil.getEmployeeSeq(accessToken.get())));
+//                log.info("accessToken {} ", accessToken.get());
                 filterChain.doFilter(request, response); // 다음 필터로 요청 전달
                 return;
             }
         }
 
-        // 모든 토큰이 유효하지 않은 경우 401 에러
+        // accessToken 이 유효하지 않은 경우 401 에러
         if (!response.isCommitted()) { // 응답이 커밋되지 않았을 때만 에러 전송
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid tokens");
         }

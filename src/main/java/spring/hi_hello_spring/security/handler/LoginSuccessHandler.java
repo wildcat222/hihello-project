@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import spring.hi_hello_spring.security.service.TokenService;
+import spring.hi_hello_spring.security.util.JwtUtil;
 
 import java.io.IOException;
 
@@ -15,7 +15,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final TokenService tokenService;
+    private final JwtUtil jwtUtil;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -27,16 +27,16 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         log.info(username);
 
         // Access Token 생성
-        String accessToken = tokenService.createAccessToken(username, authentication);
+        String accessToken = jwtUtil.generateAccessToken(username, authentication);
 
         // Refresh Token 생성
-        String refreshToken = tokenService.createRefreshToken(username);
+        String refreshToken = jwtUtil.generateRefreshToken(username);
 
         // 응답 헤더에 토큰 추가
         response.setHeader("accessToken", accessToken);
         response.setHeader("refreshToken", refreshToken);
 
         // 레디스에 리프레시 토큰 저장 // 어느정도 개발 진행 후 활성화
-//        tokenService.saveRefreshToken(refreshToken);
+//        jwtUtil.saveToken(refreshToken);
     }
 }
