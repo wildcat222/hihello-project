@@ -28,7 +28,7 @@ public class TaskQueryController {
     public ApiResponse<?> getAllTaskList() {
 
         List<TaskAllListQueryDTO> taskAllListQueryDTO = taskQueryService.getHrAllTaskList();
-        return ResponseUtil.successResponse("멘티 전체 조회가 성공적으로 조회되었습니다.", taskAllListQueryDTO).getBody();
+        return ResponseUtil.successResponse("(담당자)멘티의 과제 리스트 전체가 성공적으로 조회되었습니다.", taskAllListQueryDTO).getBody();
     }
 
     @GetMapping("/mentor/task")
@@ -36,7 +36,7 @@ public class TaskQueryController {
     public ApiResponse<?> getAllMentorTaskList() {
 
         List<TaskAllListQueryDTO> taskAllListQueryDTO = taskQueryService.getMentorAllTaskList();
-        return ResponseUtil.successResponse("멘티 전체 조회가 성공적으로 조회되었습니다.", taskAllListQueryDTO).getBody();
+        return ResponseUtil.successResponse("(멘토)멘티의 과제 리스트 전체가 성공적으로 조회되었습니다.", taskAllListQueryDTO).getBody();
     }
 
     @GetMapping("mentee/task/{taskSeq}")
@@ -44,6 +44,6 @@ public class TaskQueryController {
     public ApiResponse<?> getMenteeTaskDetail(@PathVariable Long taskSeq) {
 
         List<TaskMenteeDetailQueryDTO> taskMenteeDetailQueryDTO = taskQueryService.getMenteeTaskDetail(taskSeq);
-        return ResponseUtil.successResponse("멘티 전체 조회가 성공적으로 조회되었습니다.", taskMenteeDetailQueryDTO).getBody();
+        return ResponseUtil.successResponse("멘티 본인의 과제를 성공적으로 조회되었습니다.", taskMenteeDetailQueryDTO).getBody();
     }
 }
