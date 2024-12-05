@@ -4,4 +4,8 @@ import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.Templat
 
 public interface TemplateRepository {
     Template save(Template template);
+
+    boolean existsById(Long templateSeq);
+
+    void deleteById(Long templateSeq);
 }
