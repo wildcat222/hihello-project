@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
-import spring.hi_hello_spring.employee.query.dto.MenteeAllQueryDTO;
-import spring.hi_hello_spring.evaluation.query.dto.TaskHrAllListQueryDTO;
 import spring.hi_hello_spring.evaluation.query.dto.TaskMenteeDetailQueryDTO;
 import spring.hi_hello_spring.evaluation.query.dto.TaskAllListQueryDTO;
 import spring.hi_hello_spring.evaluation.query.service.TaskQueryService;

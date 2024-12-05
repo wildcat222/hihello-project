@@ -2,7 +2,6 @@ package spring.hi_hello_spring.evaluation.query.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import spring.hi_hello_spring.evaluation.query.dto.TaskHrAllListQueryDTO;
 import spring.hi_hello_spring.evaluation.query.dto.TaskMenteeDetailQueryDTO;
 import spring.hi_hello_spring.evaluation.query.dto.TaskAllListQueryDTO;
 import spring.hi_hello_spring.evaluation.query.mapper.TaskQueryMapper;
@@ -21,7 +20,6 @@ public class TaskQueryService {
         return taskQueryMapper.findHrAllTask();
     }
 
-
     public List<TaskMenteeDetailQueryDTO> getMenteeTaskDetail(Long taskSeq) {
 
         Map<String, Object> params = new HashMap<>();
@@ -29,11 +27,12 @@ public class TaskQueryService {
         params.put("task_seq", taskSeq);
 
         return taskQueryMapper.findMenteeTaskDetail(params);
+    }
 
     public List<TaskAllListQueryDTO> getMentorAllTaskList() {
-
         Long employeeSeq = 3L; // 로그인 기능 완성되면 코드 수정하겠습니다.
-
         return taskQueryMapper.findMentorAllTask(employeeSeq);
     }
 }
+
+
