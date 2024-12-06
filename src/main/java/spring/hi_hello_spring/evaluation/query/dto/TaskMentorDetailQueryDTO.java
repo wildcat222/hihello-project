@@ -6,21 +6,21 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class TaskMenteeDetailQueryDTO {
+public class TaskMentorDetailQueryDTO {
 
     private Long taskSeq;
-    private String templateTitle;
     private String taskType;
+    private String taskTitle;
+    private String taskUrl;
     private Long templateSeq;
     private String taskContent;
-    private String taskUrl;
-    private Long departmentSeq;
-    private String departmentName;
     private String templateTaskRound;
     private LocalDateTime templateEndAt;
+    private List<EvalListQueryDTO> evalList;
 }

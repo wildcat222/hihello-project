@@ -21,7 +21,7 @@ public class EvalList extends BaseTimeEntity {
 
     private String evalListContent;
 
-    private int evalListScore;
+    private Integer evalListScore;
 
     public void updateEvalIndSeq(Long evalIndSeq) {
         this.evalIndSeq = evalIndSeq;
