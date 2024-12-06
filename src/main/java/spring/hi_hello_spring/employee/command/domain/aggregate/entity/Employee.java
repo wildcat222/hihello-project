@@ -3,6 +3,7 @@ package spring.hi_hello_spring.employee.command.domain.aggregate.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 import spring.hi_hello_spring.common.aggregate.entity.EmployeeRole;
 
@@ -10,6 +11,7 @@ import spring.hi_hello_spring.common.aggregate.entity.EmployeeRole;
 @Table(name="employee")
 @NoArgsConstructor
 @Getter
+@SQLDelete(sql = "UPDATE employee SET employee_deleted_status = true, mod_date = NOW() WHERE employee_seq = ?")
 public class Employee extends BaseTimeEntity {
 
     @Id
