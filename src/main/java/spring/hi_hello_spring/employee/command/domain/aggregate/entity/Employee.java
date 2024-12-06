@@ -10,16 +10,16 @@ import spring.hi_hello_spring.common.aggregate.entity.EmployeeRole;
 @Entity
 @Table(name="employee")
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class Employee extends BaseTimeEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long employeeSeq;
 
-    private Long departmentSeq;
+    private Long departmentSeq; // 부서 seq
 
-    private Long positionSeq;
+    private Long positionSeq;   // 직급 seq
 
     private String employeeNum;
 
@@ -30,12 +30,18 @@ public class Employee extends BaseTimeEntity {
     private String employeeEmail;
 
     @Enumerated(EnumType.STRING)
-    private EmployeeRole employeeRole = EmployeeRole.MENTEE;
+    private EmployeeRole employeeRole;  // 역할
 
     private String employeePassword;
 
-    private Boolean employeeDeletedStatus;
+    private Boolean employeeDeletedStatus = false;
 
+
+    public void matchesReq(Long departmentSeq, Long positionSeq, String employeePassword) {
+        this.departmentSeq = departmentSeq;
+        this.positionSeq = positionSeq;
+        this.employeePassword = employeePassword;
+    }
 }
 
 
