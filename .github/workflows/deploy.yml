@@ -11,6 +11,7 @@ on:
     types:
       - opened
       - reopened
+      - synchronize
 
 jobs:
   build:
@@ -38,24 +39,6 @@ jobs:
           if [ ! -f src/main/resources/application.yml ]; then
             echo "Error: application.yml not found!"
             exit 1
-          fi
-
-      - name: Check if current branch is behind `develop`
-        id: check_merge
-        run: |
-          CURRENT_BRANCH="${{ github.head_ref }}"
-          git fetch origin
-          # 현재 작업 중인 브랜치가 `develop`보다 뒤쳐져 있는지 확인
-          if git rev-list --left-only --count origin/develop...origin/${CURRENT_BRANCH} | grep -q '^[1-9]'; then
-            echo "현재 브랜치가 develop보다 뒤쳐져 있습니다. 자동으로 병합합니다."
-            git checkout $CURRENT_BRANCH
-            git merge origin/develop --no-edit
-            # Git 사용자 정보 설정
-            git config --global user.email "github-actions@github.com"
-            git config --global user.name "GitHub Actions"
-            git push origin $CURRENT_BRANCH
-          else
-            echo "현재 브랜치는 이미 최신 상태입니다."
           fi
 
       - name: Build with Gradle

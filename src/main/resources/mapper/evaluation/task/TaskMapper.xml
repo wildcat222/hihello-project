@@ -81,6 +81,18 @@
 
     </select>
 
+    <select id="findGroupTaskTitle" resultType="GroupTaskAllQueryDTO">
+        SELECT
+            task_seq,
+            task_content
+        FROM
+            task
+        WHERE
+            task_type = 'GROUP'
+     </select>
+
+    <select id="findMenteeTaskDetail" parameterType="java.util.Map" resultType="TaskMenteeDetailQueryDTO">
+
     <resultMap id="TaskResultMap" type="TaskMentorDetailQueryDTO">
         <result property="taskSeq" column="task_seq"/>
         <result property="taskType" column="task_type"/>
@@ -96,7 +108,7 @@
             <result property="evalListScore" column="eval_list_score"/>
         </collection>
     </resultMap>
-
+      
     <select id="findMentorTaskDetail" resultMap="TaskResultMap">
         SELECT
         a.task_seq,

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
+import spring.hi_hello_spring.evaluation.query.dto.GroupTaskAllQueryDTO;
 import spring.hi_hello_spring.evaluation.query.dto.TaskMenteeDetailQueryDTO;
 import spring.hi_hello_spring.evaluation.query.dto.TaskMentorDetailQueryDTO;
 import spring.hi_hello_spring.evaluation.query.dto.TaskAllListQueryDTO;
@@ -54,5 +55,13 @@ public class TaskQueryController {
 
         List<TaskMenteeDetailQueryDTO> taskMenteeDetailQueryDTO = taskQueryService.getMenteeTaskDetail(taskSeq);
         return ResponseUtil.successResponse("멘티의 과제를 성공적으로 조회되었습니다.", taskMenteeDetailQueryDTO).getBody();
+    }
+
+    @GetMapping("hr/group/task")
+    @Operation(summary = "그룹 과제 제목 리스트 조회", description = "그룹 과제별 과제 제목 리스트 조회 기능입니다.")
+    public ApiResponse<?> getAllGroupTaskTitle(){
+
+        List<GroupTaskAllQueryDTO> queryDTO = taskQueryService.getGroupTaskTitle();
+        return ResponseUtil.successResponse("그룹 과제 제목 리스트를 성공적으로 조회했습니다.", queryDTO).getBody();
     }
 }
