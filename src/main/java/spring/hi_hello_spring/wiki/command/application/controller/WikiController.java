@@ -40,4 +40,14 @@ public class WikiController {
         wikiService.updateWiki(wikiSeq, employeeSeq, wikiUpdateRequestDTO);
         return ResponseUtil.successResponse("위키가 성공적으로 수정되었습니다.").getBody();
     }
+
+    @DeleteMapping("/{wikiSeq}")
+    @Operation(summary = "위키 삭제", description = "위키 삭제 로직입니다.")
+    public ApiResponse<?> deleteWiki(
+            @PathVariable Long wikiSeq
+    )
+    throws IOException {
+        wikiService.deleteWiki(wikiSeq);
+        return ResponseUtil.successResponse("위키가 성공적으로 삭제되었습니다.").getBody();
+    }
 }

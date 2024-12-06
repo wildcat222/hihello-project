@@ -83,6 +83,16 @@
         )
     </select>
 
+    <select id="findGroupTaskTitle" resultType="GroupTaskAllQueryDTO">
+        SELECT
+            task_seq,
+            task_content
+        FROM
+            task
+        WHERE
+            task_type = 'GROUP'
+     </select>
+
     <select id="findMenteeTaskDetail" parameterType="java.util.Map" resultType="TaskMenteeDetailQueryDTO">
 
         SELECT
@@ -130,6 +140,5 @@
         ON em.mentee_seq = t.employee_seq
         WHERE e.employee_seq = #{employee_seq}
         AND a.task_seq = #{task_seq}
-      
     </select>
 </mapper>
