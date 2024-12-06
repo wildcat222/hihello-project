@@ -14,7 +14,7 @@ import spring.hi_hello_spring.employee.command.application.service.EmployeeServi
 @RestController
 @RequestMapping("api/v1/employee")
 @RequiredArgsConstructor
-@Tag(name = "사원 관련 API")
+@Tag(name = "Employee API")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
