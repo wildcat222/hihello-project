@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import spring.hi_hello_spring.employee.command.application.dto.HR.CreateEmplReqDTO;
+import spring.hi_hello_spring.employee.command.application.dto.hr.CreateEmplReqDTO;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Department;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Position;

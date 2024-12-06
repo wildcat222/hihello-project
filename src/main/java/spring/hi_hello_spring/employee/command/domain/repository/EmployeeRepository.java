@@ -12,4 +12,5 @@ public interface EmployeeRepository{
     Optional<Employee> findByEmployeeSeq(Long employeeSeq);
 
     Employee save(Employee newEmployee);
+
 }

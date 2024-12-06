@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
-import spring.hi_hello_spring.employee.command.application.dto.HR.CreateEmplReqDTO;
+import spring.hi_hello_spring.employee.command.application.dto.hr.CreateEmplReqDTO;
 import spring.hi_hello_spring.employee.command.application.service.HRService;
 
 @RestController
