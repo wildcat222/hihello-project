@@ -42,6 +42,7 @@ CREATE TABLE `task` (
                         `department_seq`   BIGINT   NULL,
                         `task_type`   VARCHAR(20)   NOT NULL,
                         `task_content`   TEXT   NOT NULL,
+                        'task_url'   VARCHAR(255) NULL,
                         `reg_date`   DATETIME   NOT NULL,
                         `mod_date`   DATETIME   NULL,
                         PRIMARY KEY (`task_seq`),
