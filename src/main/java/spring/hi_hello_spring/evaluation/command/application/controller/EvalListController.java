@@ -1,6 +1,7 @@
 package spring.hi_hello_spring.evaluation.command.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import spring.hi_hello_spring.common.response.ApiResponse;
@@ -11,6 +12,7 @@ import spring.hi_hello_spring.evaluation.command.application.service.EvalListSer
 @RestController
 @RequestMapping("/api/v1/eval-ind/{evalIndSeq}/task/{taskSeq}/eval-list")
 @RequiredArgsConstructor
+@Tag(name = "EvalList API", description = "과제 평가 항목 관련 API")
 public class EvalListController {
 
     private final EvalListService evalListService;
