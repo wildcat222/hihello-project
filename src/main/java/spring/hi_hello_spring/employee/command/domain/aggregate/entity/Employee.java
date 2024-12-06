@@ -45,6 +45,10 @@ public class Employee extends BaseTimeEntity {
     public void modifyPwd(String newPwd) {
         this.employeePassword = newPwd;
     }
+
+    public void modifyRole(EmployeeRole employeeRole) {
+        this.employeeRole = employeeRole;
+    }
 }
 
 

@@ -1,9 +1,13 @@
 package spring.hi_hello_spring.employee.command.application.service;
 
+import io.lettuce.core.ScriptOutputType;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import spring.hi_hello_spring.common.aggregate.entity.EmployeeRole;
+import spring.hi_hello_spring.common.exception.CustomException;
+import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.employee.command.application.dto.hr.CreateEmplReqDTO;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Department;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
@@ -33,5 +37,15 @@ public class HRService {
         newEmployee.matchesReq(department.getDepartmentSeq(), position.getPositionSeq(), employeePassword);
 
         employeeRepository.save(newEmployee);
+    }
+
+    public void modifyEmpl(Long employeeSeq, EmployeeRole employeeRole) {
+
+        Employee employee = employeeRepository.findByEmployeeSeq(employeeSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
+
+        employee.modifyRole(employeeRole);
+
+        employeeRepository.save(employee);
     }
 }
