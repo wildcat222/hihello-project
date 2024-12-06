@@ -24,5 +24,5 @@ public class EvalList extends BaseTimeEntity {
 
     private String evalListContent;
 
-    private int evalListScore;
+    private Integer evalListScore;
 }
