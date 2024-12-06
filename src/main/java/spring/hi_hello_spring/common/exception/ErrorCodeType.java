@@ -26,7 +26,7 @@ public enum ErrorCodeType {
     INVALID_VALUE(HttpStatus.BAD_REQUEST, "COMMON_ERROR_003", "유효하지 않은 값입니다."),
     DUPLICATE_DATA(HttpStatus.CONFLICT, "COMMON_ERROR_004", "중복된 값입니다.")
     ;
-
+  
     private final HttpStatus httpStatus;
     private final String code;
     private final String message;
