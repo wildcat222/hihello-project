@@ -1,7 +1,6 @@
 package spring.hi_hello_spring.employee.command.domain.aggregate.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
@@ -41,6 +40,10 @@ public class Employee extends BaseTimeEntity {
         this.departmentSeq = departmentSeq;
         this.positionSeq = positionSeq;
         this.employeePassword = employeePassword;
+    }
+
+    public void modifyPwd(String newPwd) {
+        this.employeePassword = newPwd;
     }
 }
 
