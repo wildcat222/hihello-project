@@ -16,6 +16,5 @@ public interface TaskQueryMapper {
     List<TaskAllListQueryDTO> findMentorAllTask(Long employeeSeq);
     List<TaskMentorDetailQueryDTO> findMentorTaskDetail(Map<String, Object> params);
     List<TaskMenteeDetailQueryDTO> findMenteeTaskDetail(Map<String, Object> params);
-    List<TaskAllListQueryDTO> findMentorAllTask(Long employeeSeq);
     List<GroupTaskAllQueryDTO> findGroupTaskTitle();
 }

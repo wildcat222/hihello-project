@@ -43,6 +43,7 @@ public class TaskQueryService {
         params.put("employee_seq", 2L); // 시큐리티Seq 구현되면 변경 예정
         params.put("task_seq", taskSeq);
         return taskQueryMapper.findMenteeTaskDetail(params);
+    }
 
     /* 그룹 과제 제목 리스트 조회 */
     public List<GroupTaskAllQueryDTO> getGroupTaskTitle() {
@@ -50,6 +51,6 @@ public class TaskQueryService {
         return taskQueryMapper.findGroupTaskTitle();
 
     }
-}
 
+}
 

@@ -42,7 +42,7 @@
         ) t ON e.employee_seq = t.employee_seq
 
     </select>
-  
+
     <select id="findMenteeTaskDetail" parameterType="java.util.Map" resultType="TaskMenteeDetailQueryDTO">
 
         SELECT
@@ -91,7 +91,7 @@
             task_type = 'GROUP'
      </select>
 
-    <select id="findMenteeTaskDetail" parameterType="java.util.Map" resultType="TaskMenteeDetailQueryDTO">
+
 
     <resultMap id="TaskResultMap" type="TaskMentorDetailQueryDTO">
         <result property="taskSeq" column="task_seq"/>
@@ -157,4 +157,5 @@
         AND e.employee_role = "mentor"
         AND a.task_seq = #{task_seq}
     </select>
+
 </mapper>
