@@ -42,7 +42,7 @@ public class JwtUtil {
     public JwtUtil(
             @Value("${TOKEN_SECRET}") String secretKey,
             CustomUserDetailsService userDetailsService, RedisService redisService, EmployeeService employeeService,
-            @Qualifier("employeeRepository") EmployeeRepository employeeRepository) {
+            EmployeeRepository employeeRepository) {
         this.redisService = redisService;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
