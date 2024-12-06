@@ -8,6 +8,7 @@ import spring.hi_hello_spring.common.aggregate.entity.EmployeeRole;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.employee.command.application.dto.hr.CreateEmplReqDTO;
+import spring.hi_hello_spring.employee.command.application.dto.hr.ModifyEmplReqDTO;
 import spring.hi_hello_spring.employee.command.application.service.HRService;
 
 @RestController
@@ -30,9 +31,9 @@ public class HRController {
     @Operation(summary = " 사원 정보 수정", description = "담당자가 사원의 정보를 수정한다.")
     @PutMapping("/user/{employeeSeq}")
     public ApiResponse<?> modifyEmployee(@PathVariable Long employeeSeq,
-                                         @RequestBody EmployeeRole employeeRole) {
+                                         @RequestBody ModifyEmplReqDTO modifyEmplReqDTO) {
 
-        hrService.modifyEmpl(employeeSeq, employeeRole);
+        hrService.modifyEmpl(employeeSeq, modifyEmplReqDTO);
         return ResponseUtil.successResponse("사원 정보가 수정되었습니다.").getBody();
     }
 }

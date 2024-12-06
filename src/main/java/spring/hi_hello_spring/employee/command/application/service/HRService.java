@@ -9,6 +9,7 @@ import spring.hi_hello_spring.common.aggregate.entity.EmployeeRole;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.employee.command.application.dto.hr.CreateEmplReqDTO;
+import spring.hi_hello_spring.employee.command.application.dto.hr.ModifyEmplReqDTO;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Department;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Position;
@@ -39,13 +40,12 @@ public class HRService {
         employeeRepository.save(newEmployee);
     }
 
-    public void modifyEmpl(Long employeeSeq, EmployeeRole employeeRole) {
+    public void modifyEmpl(Long employeeSeq, ModifyEmplReqDTO modifyEmplReqDTO) {
 
         Employee employee = employeeRepository.findByEmployeeSeq(employeeSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
 
-        employee.modifyRole(employeeRole);
-
+        modelMapper.map(modifyEmplReqDTO, employee);
         employeeRepository.save(employee);
     }
 }
