@@ -1,6 +1,7 @@
 package spring.hi_hello_spring.wiki.query.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import spring.hi_hello_spring.wiki.query.dto.WikiHistoryListQueryDTO;
 import spring.hi_hello_spring.wiki.query.dto.WikiListQueryDTO;
 
 import java.util.List;
@@ -9,4 +10,5 @@ import java.util.List;
 public interface WikiMapper {
 
     List<WikiListQueryDTO> findAllWikis();
+    List<WikiHistoryListQueryDTO> findWikiHistories(Long wikiSeq);
 }
