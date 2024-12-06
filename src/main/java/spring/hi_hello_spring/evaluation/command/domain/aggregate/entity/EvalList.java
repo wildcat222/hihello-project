@@ -1,9 +1,6 @@
 package spring.hi_hello_spring.evaluation.command.domain.aggregate.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
@@ -15,7 +12,7 @@ import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 public class EvalList extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long evalListSeq;
 
     private Long taskSeq;
@@ -24,5 +21,13 @@ public class EvalList extends BaseTimeEntity {
 
     private String evalListContent;
 
-    private int evalListScore;
+    private Integer evalListScore;
+
+    public void updateEvalIndSeq(Long evalIndSeq) {
+        this.evalIndSeq = evalIndSeq;
+    }
+
+    public void updateTaskSeq(Long taskSeq) {
+        this.taskSeq = taskSeq;
+    }
 }
