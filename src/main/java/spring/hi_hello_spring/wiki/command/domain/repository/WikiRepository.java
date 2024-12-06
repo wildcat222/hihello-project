@@ -8,4 +8,6 @@ public interface WikiRepository {
 
     Wiki save(Wiki wiki);
     Optional<Wiki> findById(Long wikiSeq);
+
+    void deleteById(Long wikiSeq);
 }

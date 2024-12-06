@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 
 @Entity
 @Table(name = "wiki")
 @NoArgsConstructor
 @Getter
+@SQLDelete(sql = "UPDATE wiki SET wiki_deleted_status = true, mod_date = NOW() WHERE wiki_seq = ?")
 public class Wiki extends BaseTimeEntity {
 
     @Id
