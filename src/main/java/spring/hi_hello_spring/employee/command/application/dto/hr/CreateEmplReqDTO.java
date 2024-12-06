@@ -1,15 +1,12 @@
-package spring.hi_hello_spring.employee.command.application.dto.HR;
+package spring.hi_hello_spring.employee.command.application.dto.hr;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import spring.hi_hello_spring.common.aggregate.entity.EmployeeRole;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
+@ToString
 public class CreateEmplReqDTO {
 
     private String employeeNum;
