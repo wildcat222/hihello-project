@@ -5,7 +5,7 @@ import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.Templat
 import java.util.Optional;
 
 public interface TemplateRepository {
-  
+
     Template save(Template template);
 
     boolean existsById(Long templateSeq);
@@ -13,4 +13,6 @@ public interface TemplateRepository {
     void deleteById(Long templateSeq);
 
     Optional<Template> findById(Long templateSeq);
+
+    Template findByTemplateTaskRound(String templateTaskRound);
 }
