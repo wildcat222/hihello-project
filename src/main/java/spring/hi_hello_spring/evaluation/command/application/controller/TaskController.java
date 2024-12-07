@@ -22,7 +22,7 @@ public class TaskController {
 
     // 과제 등록
     @PostMapping("/task")
-    @Operation(summary = "과제 생성", description = "과제 생성 로직입니다.")
+    @Operation(summary = "과제 생성", description = "과제를 생성하는 기능입니다.")
     public ApiResponse<?> createEvalInd(@RequestBody TaskCreateDTO taskContent) {
 
         taskService.createTask(taskContent);
