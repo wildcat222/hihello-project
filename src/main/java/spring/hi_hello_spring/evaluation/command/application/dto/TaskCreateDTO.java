@@ -14,12 +14,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskCreateDTO {
 
-    private Long departmentSeq;
     private TaskType taskType;
-    private String taskTitle;
+    private Long departmentSeq;
     private String templateTaskRound;
+    private String taskTitle;
     private String taskContent;
-    private String templateUrl;
+    private String taskUrl;
     private List<EvalListCreateDTO> evalIndicators;
 
 
