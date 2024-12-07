@@ -1,11 +1,9 @@
 package spring.hi_hello_spring.employee.command.application.service;
 
-import io.lettuce.core.ScriptOutputType;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import spring.hi_hello_spring.common.aggregate.entity.EmployeeRole;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.employee.command.application.dto.hr.CreateEmplReqDTO;
@@ -47,5 +45,10 @@ public class HRService {
 
         modelMapper.map(modifyEmplReqDTO, employee);
         employeeRepository.save(employee);
+    }
+
+    public void deleteEmpl(Long employeeSeq) {
+
+        employeeRepository.deleteById(employeeSeq);
     }
 }
