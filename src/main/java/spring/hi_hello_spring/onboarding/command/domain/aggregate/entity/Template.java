@@ -40,7 +40,7 @@ public class Template extends BaseTimeEntity {
 
     private String templateTaskRound;
 
-    private Integer templateProcedure;
+    private int templateProcedure;
 
     private LocalDateTime templateEndAt;
 

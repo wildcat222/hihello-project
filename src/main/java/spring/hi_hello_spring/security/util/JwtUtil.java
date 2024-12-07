@@ -1,7 +1,6 @@
 package spring.hi_hello_spring.security.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,12 +9,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
@@ -23,14 +19,12 @@ import spring.hi_hello_spring.common.util.RedisService;
 import spring.hi_hello_spring.employee.command.application.service.EmployeeService;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
 import spring.hi_hello_spring.employee.command.domain.repository.EmployeeRepository;
+import spring.hi_hello_spring.security.entity.CustomUserDetails;
 import spring.hi_hello_spring.security.service.CustomUserDetailsService;
 
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -48,7 +42,7 @@ public class JwtUtil {
     public JwtUtil(
             @Value("${TOKEN_SECRET}") String secretKey,
             CustomUserDetailsService userDetailsService, RedisService redisService, EmployeeService employeeService,
-            @Qualifier("employeeRepository") EmployeeRepository employeeRepository) {
+            EmployeeRepository employeeRepository) {
         this.redisService = redisService;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
@@ -59,6 +53,9 @@ public class JwtUtil {
 
     /* accessToken 검증(Bearer 토큰이 넘어왔고, 우리 사이트의 secret key로 만들어 졌는가, 만료되었는지와 내용이 비어있진 않은지) */
     public boolean validateAccessToken(String accessToken) {
+
+        accessToken = accessToken.replaceAll("\\s+", "");
+        System.out.println("엑세스 토큰 " + accessToken);
 
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
@@ -164,12 +161,12 @@ public class JwtUtil {
     }
 
     // authentication 저장
-    public void saveAuthentication(String employeeNum) {
-        System.out.println("employeeNum: " + employeeNum);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(employeeNum);
+    public void saveAuthentication(Long employeeSeq) {
+        System.out.println("employeeSeq: " + employeeSeq);
+        CustomUserDetails customUserDetails = userDetailsService.loadUserBySeq(employeeSeq);
         Authentication authentication =
-                new UsernamePasswordAuthenticationToken(userDetails, null,
-                        authoritiesMapper.mapAuthorities(userDetails.getAuthorities()));
+                new UsernamePasswordAuthenticationToken(customUserDetails, null,
+                        authoritiesMapper.mapAuthorities(customUserDetails.getAuthorities()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
@@ -182,10 +179,10 @@ public class JwtUtil {
                 .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
 
         // 새로운 액세스 토큰 생성
-        UserDetails userDetails = userDetailsService.loadUserByUsername(findUser.getEmployeeNum());
+        CustomUserDetails customUserDetails = userDetailsService.loadUserByUsername(findUser.getEmployeeNum());
         Authentication authentication =
-                new UsernamePasswordAuthenticationToken(userDetails, null,
-                        authoritiesMapper.mapAuthorities(userDetails.getAuthorities()));
+                new UsernamePasswordAuthenticationToken(customUserDetails, null,
+                        authoritiesMapper.mapAuthorities(customUserDetails.getAuthorities()));
 
         return generateAccessToken(getEmployeeSeq(refreshToken), authentication);
     }

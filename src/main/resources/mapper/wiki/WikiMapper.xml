@@ -27,4 +27,20 @@
             seq = 1 AND w.wiki_deleted_status = false
         ORDER BY latest_mod_date DESC
     </select>
+
+    <!--위키 히스토리를 조회하는 SQL-->
+    <select id="findWikiHistories" resultType="WikiHistoryListQueryDTO">
+        SELECT
+            wm.employee_seq,
+            e.employee_num,
+            e.employee_name,
+            wm.wiki_mod_content_seq,
+            wm.reg_date
+        FROM
+            wiki_mod_content wm
+        JOIN
+            employee e ON wm.employee_seq = e.employee_seq
+        WHERE wm.wiki_seq = #{wiki_seq}
+        ORDER BY reg_date DESC
+    </select>
 </mapper>

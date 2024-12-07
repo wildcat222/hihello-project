@@ -22,10 +22,10 @@ VALUES
     (1, 4, 'E008', '최담당자', '010-8888-8888', 'manager@company.com', 'HR', '$2a$10$vYyPaZ.alZXIOdRdFbNg6urdu6p3tVJlWL2jeHXFIzIsnmrcwRKJ.', NOW());
 
 -- Task 데이터 삽입
-INSERT INTO task (department_seq, task_type, task_title, task_content, reg_date)
+INSERT INTO task (department_seq, task_type, task_title, task_content, task_url, reg_date)
 VALUES
-    (1, 'PERSONAL', '온보딩 참여하기', '온보딩 교육 자료 준비', NOW()),
-    (1, 'GROUP', '직무교육 참여하기', '직무 교육 평가 준비', NOW());
+    (1, 'PERSONAL', '온보딩 참여하기', '온보딩 교육 자료 준비', 'onboarding@url.com' ,NOW()),
+    (1, 'GROUP', '직무교육 참여하기', '직무 교육 평가 준비', 'workedu@url.com',NOW());
 
 -- Template 데이터 삽입
 INSERT INTO template (template_type, template_check_required_status, template_training_type, template_title, template_sub, template_detail, template_url, template_task_round, template_procedure, reg_date)
@@ -72,6 +72,18 @@ VALUES
     (1, '온보딩 퀴즈 질문1', TRUE, '정답 설명1', NOW()),
     (1, '온보딩 퀴즈 질문2', FALSE, '정답 설명2', NOW()),
     (2, '직무 교육 퀴즈 질문1', TRUE, '정답 설명3', NOW());
+
+-- Quiz Result 데이터 삽입
+INSERT INTO quiz_result (quiz_seq, employee_seq, quiz_correct_status, reg_date)
+VALUES
+    -- 온보딩 퀴즈 1번을 맞춘 김멘티1
+    (1, 1, TRUE, NOW()),
+    -- 온보딩 퀴즈 2번을 틀린 김멘티2
+    (2, 2, FALSE, NOW()),
+    -- 직무 교육 퀴즈 1번을 맞춘 김멘티3
+    (3, 3, TRUE, NOW()),
+    -- 온보딩 퀴즈 1번을 틀린 김멘티4
+    (1, 4, FALSE, NOW());
 
 -- Task Group 데이터 삽입
 INSERT INTO task_group (task_seq, task_group_active_status, reg_date)

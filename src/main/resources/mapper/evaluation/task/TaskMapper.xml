@@ -5,6 +5,7 @@
 <mapper namespace="spring.hi_hello_spring.evaluation.query.mapper.TaskQueryMapper">
 
     <select id="findHrAllTask" resultType="TaskAllListQueryDTO">
+
         SELECT
         a.task_seq,
         a.department_seq,
@@ -39,47 +40,122 @@
         FROM onboarding_status os
         JOIN template t ON os.template_seq = t.template_seq
         ) t ON e.employee_seq = t.employee_seq
+
     </select>
 
-    <select id="findMentorAllTask" parameterType="java.lang.Long" resultType="TaskAllListQueryDTO">
+    <select id="findMenteeTaskDetail" parameterType="java.util.Map" resultType="TaskMenteeDetailQueryDTO">
+
         SELECT
         a.task_seq,
-        a.department_seq,
-        d.department_name,
-        e.employee_seq,
-        CASE
-        WHEN a.task_type = 'PERSONER' THEN e.employee_name
-        WHEN a.task_type = 'GROUP' THEN CAST(rt.group_rank AS CHAR)
-        END AS display_name,
-        a.task_content,
+        a.task_title,
+        a.task_type,
         t.template_seq,
-        t.template_task_round
+        a.task_content,
+        a.task_url,
+        d.department_seq,
+        d.department_name,
+        t.template_task_round,
+        t.template_end_at
         FROM task a
-        JOIN department d ON a.department_seq = d.department_seq
-        JOIN employee e ON d.department_seq = e.department_seq
-        LEFT JOIN (
-        SELECT
-        tg.task_seq,
-        tg.task_group_seq,
-        ROW_NUMBER() OVER (
-        PARTITION BY tg.task_seq
-        ORDER BY tg.task_group_seq
-        ) AS group_rank
-        FROM task_group tg
-        WHERE tg.task_group_active_status = 1
-        ) rt ON a.task_seq = rt.task_seq
+        JOIN department d
+        ON a.department_seq = d.department_seq
+        JOIN employee e
+        ON d.department_seq = e.department_seq
         LEFT JOIN (
         SELECT
         os.employee_seq,
         t.template_seq,
-        t.template_task_round
+        t.template_task_round,
+        t.template_end_at
         FROM onboarding_status os
-        JOIN template t ON os.template_seq = t.template_seq
-        ) t ON e.employee_seq = t.employee_seq
-        WHERE a.department_seq = (
+        JOIN template t
+        ON os.template_seq = t.template_seq
+        ) t
+        ON e.employee_seq = t.employee_seq
+        WHERE d.department_seq = (
         SELECT department_seq
         FROM employee
-        WHERE employee_seq = #{employeeSeq}
+        WHERE employee_seq = #{employee_seq}
         )
+        AND a.task_seq = #{task_seq}
+
     </select>
+
+    <select id="findGroupTaskTitle" resultType="GroupTaskAllQueryDTO">
+        SELECT
+            task_seq,
+            task_content
+        FROM
+            task
+        WHERE
+            task_type = 'GROUP'
+     </select>
+
+
+
+    <resultMap id="TaskResultMap" type="TaskMentorDetailQueryDTO">
+        <result property="taskSeq" column="task_seq"/>
+        <result property="taskType" column="task_type"/>
+        <result property="taskTitle" column="task_title"/>
+        <result property="taskContent" column="task_content"/>
+        <result property="taskUrl" column="task_url"/>
+        <result property="templateSeq" column="template_seq"/>
+        <result property="templateTaskRound" column="template_task_round"/>
+        <result property="templateEndAt" column="template_end_at"/>
+        <result property="taskUrl" column="task_url"/>
+        <collection property="evalList" ofType="EvalListQueryDTO">
+            <result property="evalListContent" column="eval_list_content"/>
+            <result property="evalListScore" column="eval_list_score"/>
+        </collection>
+    </resultMap>
+      
+    <select id="findMentorTaskDetail" resultMap="TaskResultMap">
+        SELECT
+        a.task_seq,
+        a.task_type,
+        a.task_title,
+        a.task_url,
+        a.task_content,
+        t.template_seq,
+        t.template_end_at,
+        t.template_task_round,
+        tl.eval_list_content,
+        tl.eval_list_score
+        FROM task a
+        JOIN department d
+        ON a.department_seq = d.department_seq
+        JOIN employee e
+        ON d.department_seq = e.department_seq
+        LEFT JOIN (
+        SELECT
+        m.mentor_seq,
+        m.mentee_seq
+        FROM mentoring m
+        ) mt
+        ON e.employee_seq = mt.mentor_seq
+        LEFT JOIN (
+        SELECT
+        e.employee_seq AS mentee_seq,
+        e.employee_name AS mentee_name
+        FROM employee e
+        ) em
+        ON mt.mentee_seq = em.mentee_seq
+        LEFT JOIN (
+        SELECT
+        os.employee_seq,
+        t.template_seq,
+        t.template_task_round,
+        t.template_end_at
+        FROM onboarding_status os
+        JOIN template t
+        ON os.template_seq = t.template_seq
+        ) t
+        ON em.mentee_seq = t.employee_seq
+        LEFT JOIN eval_list tl
+        ON a.task_seq = tl.task_seq
+        WHERE e.employee_seq = #{employee_seq}
+        AND e.employee_role = "mentor"
+        AND a.task_seq = #{task_seq}
+    </select>
+
 </mapper>

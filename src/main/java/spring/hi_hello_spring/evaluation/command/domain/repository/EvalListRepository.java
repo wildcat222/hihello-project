@@ -7,4 +7,8 @@ import java.util.List;
 public interface EvalListRepository {
 
     Iterable saveAll(Iterable evalIndicators);
+
+    EvalList save(EvalList evalList);
+
+    List<EvalList> findByEvalIndSeq(Long evalIndSeq);
 }

@@ -2,6 +2,7 @@ package spring.hi_hello_spring.wiki.query.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import spring.hi_hello_spring.wiki.query.dto.WikiHistoryListQueryDTO;
 import spring.hi_hello_spring.wiki.query.dto.WikiListQueryDTO;
 import spring.hi_hello_spring.wiki.query.mapper.WikiMapper;
 
@@ -17,4 +18,6 @@ public class WikiQueryService {
     public List<WikiListQueryDTO> getAllWikis() {
         return wikiMapper.findAllWikis();
     }
+
+    public List<WikiHistoryListQueryDTO> getWikiHistories(Long wikiSeq) { return wikiMapper.findWikiHistories(wikiSeq);}
 }
