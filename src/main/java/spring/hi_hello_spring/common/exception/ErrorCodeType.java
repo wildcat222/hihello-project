@@ -25,6 +25,9 @@ public enum ErrorCodeType {
     DATA_NOT_FOUND(HttpStatus.NOT_FOUND, "COMMON_ERROR_002", "데이터가 존재하지 않습니다."),
     INVALID_VALUE(HttpStatus.BAD_REQUEST, "COMMON_ERROR_003", "유효하지 않은 값입니다."),
 
+    // template 관련 오류
+    TEMPLATE_NOT_FOUND(HttpStatus.NOT_FOUND, "TEMPLATE_ERROR_001", "템플릿을 찾을 수 없습니다."),
+
     ;
 
 
