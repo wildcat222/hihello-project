@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@5.5.1/dist/stomp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+</head>
+<body>
+<h1>채팅방</h1>
+
+<div>
+    <label for="message">메시지:</label>
+    <input type="text" id="message" placeholder="메시지를 입력하세요">
+    <button onclick="sendMessage()">전송</button>
+</div>
+
+<div id="chat"></div>
+
+<script type="text/javascript">
+    var stompClient = null;
+
+    // WebSocket 연결
+    function connect() {
+        var socket = new SockJS('http://localhost:8253/ws-stomp'); // WebSocket 서버 URL
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            console.log('Connected: ' + frame);
+            // 메시지 수신 설정
+            stompClient.subscribe('/sub/21', function(messageOutput) { // 여기서 1은 roomId입니다.
+                showMessage(JSON.parse(messageOutput.body).message);
+            });
+        });
+    }
+
+    // 메시지 전송
+    function sendMessage() {
+        var messageContent = document.getElementById("message").value;
+        if (messageContent) {
+            var message = {
+                roomId: 21,  // roomId를 실제 방 ID로 설정
+                userCode: 2,  // 실제 사용자 ID
+                message: messageContent,
+                messageCreatedTime: new Date().toISOString()
+            };
+            stompClient.send("/pub/chat/1/sendMessage", {}, JSON.stringify(message));  // /pub/chat/{roomId}/sendMessage로 메시지 전송
+            document.getElementById("message").value = '';  // 메시지 전송 후 입력창 비우기
+        }
+    }
+
+    // 메시지 표시
+    function showMessage(message) {
+        var chat = document.getElementById("chat");
+        chat.innerHTML += "<p>" + message + "</p>";
+    }
+
+    // 웹페이지 로드 후 연결 시작
+    window.onload = function() {
+        connect();
+    };
+</script>
+</body>
+</html>

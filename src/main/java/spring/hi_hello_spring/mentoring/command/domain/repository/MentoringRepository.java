@@ -5,4 +5,6 @@ import spring.hi_hello_spring.mentoring.command.domain.aggregate.entity.Mentorin
 public interface MentoringRepository {
 
     Mentoring save(Mentoring mentoringGroup);
+    
+    Mentoring findByMentoringSeq(Long mentoringSeq);
 }
