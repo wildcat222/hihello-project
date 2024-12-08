@@ -21,6 +21,13 @@ public class FinalEval extends BaseTimeEntity {
 
     private Long finalEvalIndSeq;
 
-    private Long employeeScore;
-}
     private double employeeScore;
+
+    public void updateEmployeeScore(double finalScore) {
+        this.employeeScore = finalScore;
+    }
+
+    public void updateEmployeeSeq(Long employeeSeq) {
+        this.employeeSeq = employeeSeq;
+    }
+}

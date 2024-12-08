@@ -1,7 +1,12 @@
 package spring.hi_hello_spring.group.command.domain.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import spring.hi_hello_spring.group.command.domain.aggregate.entity.TaskGroup;
 
-public interface TaskGroupRepository extends JpaRepository<TaskGroup, Long> {
+import java.util.Optional;
+
+public interface TaskGroupRepository {
+
+    Optional<TaskGroup> findById(Long taskGroupSeq);
+
+    TaskGroup save(TaskGroup taskSeq);
 }
