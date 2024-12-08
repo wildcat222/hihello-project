@@ -9,10 +9,10 @@ import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 @Table(name = "final_eval")
 @NoArgsConstructor
 @Getter
-public class finalEval extends BaseTimeEntity {
+public class FinalEval extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long finalEvalSeq;
 
     private Long employeeSeq;
@@ -23,3 +23,4 @@ public class finalEval extends BaseTimeEntity {
 
     private Long employeeScore;
 }
+    private double employeeScore;

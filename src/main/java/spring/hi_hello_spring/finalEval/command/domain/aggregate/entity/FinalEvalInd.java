@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "final_eval_ind")
 @NoArgsConstructor
 @Getter
-public class finalEvalInd {
+public class FinalEvalInd {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long finalEvalIndSeq;
 
     private String finalEvalIndName;
