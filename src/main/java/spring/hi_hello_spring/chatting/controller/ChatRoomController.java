@@ -4,8 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import spring.hi_hello_spring.chatting.dto.ChatRoom;
-import spring.hi_hello_spring.chatting.repository.ChatRoomRepository;
 import spring.hi_hello_spring.chatting.serivce.ChatRoomService;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
@@ -16,7 +14,6 @@ import spring.hi_hello_spring.common.response.ResponseUtil;
 public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
-    private final ChatRoomRepository chatRoomRepository;
 
     // 채팅방 생성
     @PostMapping("/room")

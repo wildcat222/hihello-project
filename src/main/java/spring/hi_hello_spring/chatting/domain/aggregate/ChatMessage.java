@@ -13,13 +13,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Setter
-public class ChatMessage extends BaseTimeEntity {
+public class ChatMessage  {
 
     @Id
     private String messageId;
-
     private Long roomId;
     private Long userCode;
     private String message;
-//    private LocalDateTime createdAt;
+    private LocalDateTime createdAt;
 }

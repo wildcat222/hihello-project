@@ -6,10 +6,12 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import java.util.Arrays;
 
 @Configuration
+@EnableMongoRepositories(basePackages = "spring.hi_hello_spring.chatting.domain.repository.mongo")
 public class MongoConfig {
 
     @Bean
@@ -30,5 +32,4 @@ public class MongoConfig {
                 new StringToZonedDateTimeConverter()
         ));
     }
-
 }

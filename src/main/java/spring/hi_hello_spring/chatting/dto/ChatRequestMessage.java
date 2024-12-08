@@ -15,12 +15,15 @@ public class ChatRequestMessage {
 
     private Long userCode;
     private String message;
+    private LocalDateTime createdAt;
 
     @JsonCreator
     public ChatRequestMessage(
             @JsonProperty("userCode") Long userCode,
-            @JsonProperty("message") String message) {
+            @JsonProperty("message") String message,
+            @JsonProperty("createdAt") LocalDateTime createdAt) {
         this.userCode = userCode;
         this.message = message;
+        this.createdAt = createdAt;
     }
 }

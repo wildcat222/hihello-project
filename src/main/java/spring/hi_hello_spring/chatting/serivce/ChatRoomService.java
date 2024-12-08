@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 import spring.hi_hello_spring.chatting.domain.aggregate.ChatMessage;
 import spring.hi_hello_spring.chatting.dto.ChatRequestMessage;
 import spring.hi_hello_spring.chatting.dto.ChatRoom;
-import spring.hi_hello_spring.chatting.repository.ChatMessageRepository;
-import spring.hi_hello_spring.chatting.repository.ChatRoomRepository;
+import spring.hi_hello_spring.chatting.domain.repository.mongo.ChatMessageMongoRepository;
 import spring.hi_hello_spring.mentoring.command.domain.aggregate.entity.Mentoring;
 import spring.hi_hello_spring.mentoring.command.domain.repository.MentoringRepository;
 
@@ -18,8 +17,7 @@ import spring.hi_hello_spring.mentoring.command.domain.repository.MentoringRepos
 public class ChatRoomService {
 
     private final MentoringRepository mentoringRepository;  // Mentoring 엔티티 사용
-    private final ChatRoomRepository chatRoomRepository;
-    private final ChatMessageRepository chatMessageRepository;
+    private final ChatMessageMongoRepository chatMessageMongoRepository;
     private final ModelMapper modelMapper;
 
     // Mentoring을 사용해 채팅방 생성
@@ -33,21 +31,19 @@ public class ChatRoomService {
         chatRoom.setMentorSeq(mentorSeq);
         chatRoom.setMenteeSeq(menteeSeq);
 
-
-        chatRoomRepository.save(chatRoom);  // MongoDB에 채팅방 저장
         System.out.println("새로운 방 생성 됨: " + chatRoom.getRoomId());
     }
 
-//    public void saveChatMessage(Long roomId, ChatRequestMessage message) {
-//        ChatMessage chatMessage = ChatMessage.builder()
-//                .roomId(roomId)
-//                .userCode(message.getUserCode())
-//                .message(message.getMessage())
-////                .createdAt(message.getMessageCreatedTime())
-//                .build();
-//
-//        chatMessageRepository.save(chatMessage);  // MongoDB에 메시지 저장
-//        System.out.println("mongoDB에 채팅 내용 저장 됨: " + chatMessage);
-//    }
+    public void saveChatMessage(Long roomId, ChatRequestMessage requestMessage) {
+        ChatMessage chatMessage = ChatMessage.builder()
+                .roomId(roomId)
+                .userCode(requestMessage.getUserCode())
+                .message(requestMessage.getMessage())
+                .createdAt(requestMessage.getCreatedAt())
+                .build();
+
+        chatMessageMongoRepository.save(chatMessage);  // MongoDB에 메시지 저장
+        System.out.println("mongoDB에 채팅 내용 저장 됨: " + chatMessage.getMessage());
+    }
 }
 
