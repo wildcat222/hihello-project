@@ -1,6 +1,8 @@
 package spring.hi_hello_spring.onboarding.command.domain.aggregate.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
@@ -10,7 +12,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "template")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Builder
 public class Template extends BaseTimeEntity {
 
     @Id
@@ -36,11 +40,11 @@ public class Template extends BaseTimeEntity {
 
     private String templateUrl;
 
-    private int templateQuizQty;
+    private Integer templateQuizQty;
 
     private String templateTaskRound;
 
-    private int templateProcedure;
+    private Integer templateProcedure;
 
     private LocalDateTime templateEndAt;
 }

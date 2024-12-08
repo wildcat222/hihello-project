@@ -1,6 +1,8 @@
 package spring.hi_hello_spring.evaluation.command.domain.aggregate.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
@@ -8,7 +10,9 @@ import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 @Entity
 @Table(name = "eval_list")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Builder
 public class EvalList extends BaseTimeEntity {
 
     @Id
