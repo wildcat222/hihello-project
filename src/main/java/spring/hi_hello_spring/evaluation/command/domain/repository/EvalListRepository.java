@@ -5,6 +5,8 @@ import java.util.Optional;
 
 public interface EvalListRepository {
 
+    Iterable saveAll(Iterable evalIndicators);
+
     EvalList save(EvalList evalList);
 
     boolean existsById(Long evalListSeq);
