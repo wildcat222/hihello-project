@@ -3,7 +3,6 @@ package spring.hi_hello_spring.chatting.domain.aggregate;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
-import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 
 import java.time.LocalDateTime;
 
