@@ -57,8 +57,8 @@ VALUES
 -- Report 데이터 삽입
 INSERT INTO report (mentoring_seq, report_content, report_feeling, report_week, reg_date)
 VALUES
-    (1, '멘토링 첫 주차 보고서', '잘 진행 중입니다.', '2024-12-01', NOW()),
-    (2, '멘토링 두 번째 주차 보고서', '문제가 없습니다.', '2024-12-08', NOW());
+    (1, '멘토링 첫 주차 보고서', '잘 진행 중입니다.', 1, NOW()),
+    (2, '멘토링 두 번째 주차 보고서', '문제가 없습니다.', 2, NOW());
 
 -- Quiz Category 데이터 삽입
 INSERT INTO quiz_category (quiz_category_name, reg_date)
@@ -125,8 +125,6 @@ INSERT INTO wiki (wiki_title, wiki_current_ver, reg_date)
 VALUES
     ('온보딩 가이드', 1, NOW()),
     ('직무 교육 매뉴얼', 1, NOW());
-
-
 
 -- Notification 데이터 삽입
 INSERT INTO noti (employee_seq, template_seq, noti_content, noti_url, reg_date)
