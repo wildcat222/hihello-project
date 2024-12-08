@@ -19,6 +19,8 @@ spring:
       host: 127.0.0.1
       port: 6379
       password: ${REDIS_PASSWORD}
+    mongodb:
+      uri: mongodb://${MONGO_USER_NANE}:${MONGO_PASSWORD}@localhost:27017/hihello?authSource=admin
   jpa:
     show-sql: true
     hibernate:
@@ -36,6 +38,8 @@ spring:
       max-request-size: 10MB
   messages:
     encoding: UTF-8
+  main:
+    allow-bean-definition-overriding: true
 
 
 mybatis:
