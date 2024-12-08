@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface EvalListRepository {
 
+    Iterable saveAll(Iterable evalIndicators);
+
     EvalList save(EvalList evalList);
     List<EvalList> findByEvalIndSeq(Long evalIndSeq);
     boolean existsById(Long evalListSeq);
