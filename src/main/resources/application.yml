@@ -19,6 +19,9 @@ spring:
       host: 127.0.0.1
       port: 6379
       password: ${REDIS_PASSWORD}
+    mongodb:
+      uri: mongodb://iliosam:iliosam1253@localhost:27017/mydatabase?authSource=admin
+
   jpa:
     show-sql: true
     hibernate:
