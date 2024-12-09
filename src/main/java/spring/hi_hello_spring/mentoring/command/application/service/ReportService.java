@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
+import spring.hi_hello_spring.mentoring.command.application.dto.WriteFeedbackDTO;
 import spring.hi_hello_spring.mentoring.command.application.dto.WriteReportDTO;
 import spring.hi_hello_spring.mentoring.command.domain.aggregate.entity.Mentoring;
 import spring.hi_hello_spring.mentoring.command.domain.aggregate.entity.Report;
@@ -43,6 +44,21 @@ public class ReportService {
 
         if (Objects.equals(report.getMentoringSeq(), mentoring.getMentoringSeq())) {
             modelMapper.map(writeReportDTO, report);
+            reportRepository.save(report);
+        } else {
+            throw new CustomException(ErrorCodeType.COMMON_ERROR);
+        }
+
+    }
+
+    public void writeFeedback(Long employeeSeq, Long reportSeq, WriteFeedbackDTO writeFeedbackDTO) {
+
+        Report report = reportRepository.findByReportSeq(reportSeq);
+
+        Mentoring mentoring = mentoringRepository.findByMentoringSeq(report.getMentoringSeq());
+
+        if (Objects.equals(employeeSeq, mentoring.getMentorSeq())) {
+            modelMapper.map(writeFeedbackDTO, report);
             reportRepository.save(report);
         } else {
             throw new CustomException(ErrorCodeType.COMMON_ERROR);
