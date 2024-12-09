@@ -30,20 +30,25 @@
     </select>
 
     <!-- 동료 평가 결과 상세 조회 -->
-    <resultMap id="PeerReviewResultDetail" type="PeerReviewResultDetailQueryDTO"> 
-        <collection property="peerReviewListContent" ofType="java.lang.String" javaType="java.util.List"/>
-        <collection property="peerReviewScore" ofType="java.lang.Integer" javaType="java.util.List"/>
+    <resultMap id="PeerReviewResultDetail" type="PeerReviewResultDetailQueryDTO">
+        <result column="peerReviewScoreSum" property="peerReviewScoreSum" />
+
+        <!-- Map 매핑 -->
+        <collection property="peerReviewDetails" ofType="PeerReviewDetailQueryDTO">
+            <result column="peer_review_list_content" property="peerReviewListContent" />
+            <result column="peer_review_score" property="peerReviewScore" />
+        </collection>
     </resultMap>
 
     <select id="getPeerReviewResultDetail" resultMap="PeerReviewResultDetail">
         SELECT
-        l.peer_review_list_content,
-        r.peer_review_score
+        l.peer_review_list_content, -- 항목 (key)
+        CAST(r.peer_review_score AS SIGNED) AS peer_review_score -- 점수 (value)
         FROM
         peer_review r
         JOIN peer_review_list l ON r.peer_review_list_seq = l.peer_review_list_seq
-        JOIN group_member m ON m.employee_seq = r.reviewee_seq
-        WHERE r.reviewee_seq = #{employeeSeq} <!-- 특정 피평가자의 employee_seq 조건 추가 -->
+        WHERE
+        r.reviewee_seq = #{employeeSeq};
     </select>
 
 </mapper>

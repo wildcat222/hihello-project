@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.hi_hello_spring.group.query.dto.PeerReviewResultAllQueryDTO;
 import spring.hi_hello_spring.group.query.dto.PeerReviewResultDetailQueryDTO;
+import spring.hi_hello_spring.group.query.dto.PeerReviewDetailQueryDTO;
 import spring.hi_hello_spring.group.query.mapper.PeerReviewResultMapper;
 
 import java.util.List;
@@ -21,8 +22,17 @@ public class PeerReviewResultQueryService {
     }
 
     /* 동료 평가 결과 상세 조회 */
-    public List<PeerReviewResultDetailQueryDTO> getAllPeerReviewResultDetail(Long employeeSeq) {
+    public PeerReviewResultDetailQueryDTO getAllPeerReviewResultDetail(Long employeeSeq) {
 
-        return peerReviewResultMapper.getPeerReviewResultDetail(employeeSeq);
+        PeerReviewResultDetailQueryDTO detail = peerReviewResultMapper.getPeerReviewResultDetail(employeeSeq);
+
+        int totalScore = detail.getPeerReviewDetails()
+                .stream()
+                .mapToInt(PeerReviewDetailQueryDTO::getPeerReviewScore)
+                .sum();
+
+        detail.setPeerReviewScoreSum(totalScore);
+
+        return detail; 
     }
 }

@@ -10,5 +10,5 @@ import java.util.List;
 public interface PeerReviewResultMapper {
     List<PeerReviewResultAllQueryDTO> getPeerReviewResult(Long taskGroupSeq);
 
-    List<PeerReviewResultDetailQueryDTO> getPeerReviewResultDetail(Long employeeSeq);
+    PeerReviewResultDetailQueryDTO getPeerReviewResultDetail(Long employeeSeq);
 }

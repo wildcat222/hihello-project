@@ -34,7 +34,8 @@ public class PeerReviewResultQueryController {
     @Operation(summary = "동료 평가 결과 상세 조회", description = "동료 평가 결과 상세 조회 로직입니다.")
     public ApiResponse<?> getPeerReviewResultDetail(@RequestParam Long employeeSeq){
 
-        List<PeerReviewResultDetailQueryDTO> queryDTO = peerReviewResultQueryService.getAllPeerReviewResultDetail(employeeSeq);
+        PeerReviewResultDetailQueryDTO queryDTO = peerReviewResultQueryService.getAllPeerReviewResultDetail(employeeSeq);
+        System.out.println(queryDTO);
         return ResponseUtil.successResponse("동료 평과 결과 상세 조회 성공", queryDTO).getBody();
     }
 

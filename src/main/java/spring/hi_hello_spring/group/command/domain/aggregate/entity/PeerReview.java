@@ -21,5 +21,5 @@ public class PeerReview extends BaseTimeEntity {
 
     private Long revieweeSeq;
 
-    private int peerReviewScore;
+    private Integer peerReviewScore;
 }
