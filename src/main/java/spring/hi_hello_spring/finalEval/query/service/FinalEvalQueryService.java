@@ -2,6 +2,7 @@ package spring.hi_hello_spring.finalEval.query.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import spring.hi_hello_spring.finalEval.query.dto.FinalEvalDetailQueryDTO;
 import spring.hi_hello_spring.finalEval.query.dto.FinalEvalsQueryDTO;
 import spring.hi_hello_spring.finalEval.query.mapper.FinalEvalMapper;
 
@@ -15,5 +16,9 @@ public class FinalEvalQueryService {
 
     public List<FinalEvalsQueryDTO> getAllFinalEvals() {
         return finalEvalMapper.findAllFinalEvals();
+    }
+
+    public List<FinalEvalDetailQueryDTO> getFinalEvalDetails(Long employeeSeq) {
+        return finalEvalMapper.findFinalEvalDetails(employeeSeq);
     }
 }
