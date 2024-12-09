@@ -21,7 +21,7 @@ public class ReportController {
     private final ReportService reportService;
 
     @Operation(summary = "(멘티)보고서 작성", description = "멘티가 보고서를 작성한다.")
-    @PostMapping("/mentees/{employeeSeq}/report")
+    @PostMapping("/mentee/{employeeSeq}/report")
     public ApiResponse<?> writeReport(@PathVariable Long employeeSeq,
                                       @RequestBody WriteReportDTO writeReportDTO) {
 
@@ -30,7 +30,7 @@ public class ReportController {
     }
 
     @Operation(summary = "(멘티)보고서 수정", description = "멘티가 보고서를 수정한다.")
-    @PutMapping("/mentees/{employeeSeq}/report/{reportSeq}")
+    @PutMapping("/mentee/{employeeSeq}/report/{reportSeq}")
     public ApiResponse<?> modifyReport(@PathVariable Long employeeSeq, @PathVariable Long reportSeq,
                                        @RequestBody WriteReportDTO writeReportDTO) {
 
@@ -43,7 +43,7 @@ public class ReportController {
     }
 
     @Operation(summary = "(멘토)피드백 작성/수정", description = "멘토가 보고서에 대한 피드백을 작성, 수정한다.")
-    @PutMapping("/mentors/{employeeSeq}/report/{reportSeq}")
+    @PutMapping("/mentor/{employeeSeq}/report/{reportSeq}")
     public ApiResponse<?> writeFeedback(@PathVariable Long employeeSeq, @PathVariable Long reportSeq,
                                         @RequestBody WriteFeedbackDTO writeFeedbackDTO) {
 
