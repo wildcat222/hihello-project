@@ -1,6 +1,7 @@
 package spring.hi_hello_spring.mentoring.command.domain.aggregate.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
@@ -12,7 +13,7 @@ import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 public class Planning extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long planningSeq;
 
     private Long employeeSeq;
@@ -25,4 +26,11 @@ public class Planning extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private PlanningStatus planningStatus = PlanningStatus.PENDING;
+
+    @Builder
+    public Planning(Long employeeSeq, String planningName, String planningContent) {
+        this.employeeSeq = employeeSeq;
+        this.planningName = planningName;
+        this.planningContent = planningContent;
+    }
 }
