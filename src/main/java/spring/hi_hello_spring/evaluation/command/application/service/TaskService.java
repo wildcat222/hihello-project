@@ -10,6 +10,7 @@ import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.Task;
 import spring.hi_hello_spring.evaluation.command.domain.repository.EvalListRepository;
 import spring.hi_hello_spring.evaluation.command.domain.repository.TaskRepository;
 import spring.hi_hello_spring.evaluation.command.domain.service.EvalListDomainService;
+import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.Template;
 import spring.hi_hello_spring.onboarding.command.domain.repository.TemplateRepository;
 import spring.hi_hello_spring.onboarding.command.domain.service.TemplateDomainService;
 
@@ -29,7 +30,9 @@ public class TaskService {
     @Transactional
     public void createTask(TaskCreateDTO taskContent) {
 
-        Task task = new Task(taskContent);
+        Task task = modelMapper.map(taskContent, Task.class);
+        Template template = templateRepository.findByTemplateTaskRound(taskContent.getTemplateTaskRound());
+        task.updateTemplateSeq(template.getTemplateSeq());
         taskRepository.save(task);
 
         // EvalList 항목들 저장

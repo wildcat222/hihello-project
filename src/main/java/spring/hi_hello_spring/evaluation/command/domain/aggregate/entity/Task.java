@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
-import spring.hi_hello_spring.evaluation.command.application.dto.TaskCreateDTO;
 
 @Entity
 @Table(name = "task")
@@ -18,6 +17,8 @@ public class Task extends BaseTimeEntity {
 
     private Long departmentSeq;
 
+    private Long templateSeq;
+
     @Enumerated(EnumType.STRING)
     private TaskType taskType;
     private String taskTitle;
@@ -26,10 +27,7 @@ public class Task extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String taskContent;
 
-    public Task(TaskCreateDTO taskCreateDTO) {
-        this.departmentSeq = taskCreateDTO.getDepartmentSeq();
-        this.taskType = taskCreateDTO.getTaskType();
-        this.taskTitle = taskCreateDTO.getTaskTitle();
-        this.taskContent = taskCreateDTO.getTaskContent();
+    public void updateTemplateSeq(Long templateSeq) {
+        this.templateSeq = templateSeq;
     }
 }

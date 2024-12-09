@@ -17,5 +17,11 @@ public class TaskGroup extends BaseTimeEntity {
 
     private Long taskSeq;
 
+    private Integer taskGroupNum;
+
     private Boolean taskGroupActiveStatus = true;
+
+    public void updateTaskGroupNum(int groupNum) {
+        this.taskGroupNum = groupNum;
+    }
 }

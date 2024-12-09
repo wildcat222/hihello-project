@@ -17,11 +17,8 @@ public class TaskGroupQueryService {
     public List<TaskGroupListQueryDTO> getTaskGroupList(Long taskSeq) {
 
         List<TaskGroupListQueryDTO> taskGroupList = taskGroupMapper.getTaskGroupList(taskSeq);
-
-        // 그룹 리스트의 첫 번째 항목부터 "1조", "2조" 식으로 변경
-        for (int i = 0; i < taskGroupList.size(); i++) {
-
-            taskGroupList.get(i).setTaskGroupNum((i + 1) + "조");
+        for (TaskGroupListQueryDTO taskGroupListQueryDTO : taskGroupList) {
+            taskGroupListQueryDTO.setTaskGroupNum(taskGroupListQueryDTO.getTaskGroupNum() + "조");
         }
 
         return taskGroupList;
