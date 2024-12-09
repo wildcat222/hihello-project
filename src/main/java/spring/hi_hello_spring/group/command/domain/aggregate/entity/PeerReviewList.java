@@ -21,5 +21,5 @@ public class PeerReviewList extends BaseTimeEntity {
 
     private String peerReviewListContent;
 
-    private int peerReviewScore;
+    private int peerReviewListScore;
 }

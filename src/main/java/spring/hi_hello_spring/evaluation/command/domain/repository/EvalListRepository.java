@@ -10,7 +10,10 @@ public interface EvalListRepository {
     Iterable saveAll(Iterable evalIndicators);
 
     EvalList save(EvalList evalList);
-    List<EvalList> findByEvalIndSeq(Long evalIndSeq);
+
     boolean existsById(Long evalListSeq);
+
     Optional<EvalList> findById(Long evalListSeq);
+
+    List<EvalList> findByEvalIndSeq(Long evalIndSeq);
 }

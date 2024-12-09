@@ -27,7 +27,7 @@ public class Report extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String reportFeeling;
 
-    private LocalDate reportWeek;
+    private int reportWeek;
 
     @Lob // 대량 데이터를 처리하도록 지시
     @Column(columnDefinition = "TEXT")
