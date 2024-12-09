@@ -10,13 +10,15 @@ on:
       - "develop"
     types:
       - opened
+      - reopend
+      - synchronize
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Node.js
@@ -24,20 +26,21 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Grant execute permission for npm scripts
+        run: chmod +x ./node_modules/.bin/* || true
 
       - name: Record Start Time
         id: start_time
         run: echo "START_TIME=$(date +%s)" >> $GITHUB_ENV
 
-      - name: Create .env File
-        run: |
-          echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}" >> .env
-          echo "VITE_APP_TITLE=${{ secrets.VITE_APP_TITLE }}" >> .env
-          echo "VITE_STATIC_FILES=${{ secrets.VITE_STATIC_FILES }}" >> .env
+      - name: Install dependencies
+        run: npm install
 
-      - name: Build Vue Project
+      - name: Build Vue project
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
+          VITE_STATIC_FILES: ${{ secrets.VITE_STATIC_FILES }}
         run: npm run build
 
       - name: Calculate Duration
@@ -48,22 +51,21 @@ jobs:
           echo "DURATION=$DURATION" >> $GITHUB_ENV
 
       - name: Notify Discord
+        if: always()
         run: |
-          # PR 제목 또는 커밋 메시지 가져오기
+          echo "Job Status: ${{ job.status }}"
+          DURATION=${DURATION:-"알 수 없음"}
+
           if [ -n "${{ github.event.pull_request.title }}" ]; then
             PR_TITLE="${{ github.event.pull_request.title }}"
           else
             PR_TITLE="${{ github.event.head_commit.message }}"
           fi
 
-          # JSON-safe 포맷으로 변환
           SAFE_PR_TITLE=$(echo "$PR_TITLE" | jq -R .)
 
-          # 기본값 설정
-          DURATION=${DURATION:-"알 수 없음"}
           ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-          # Discord Webhook 호출
           send_discord_notification() {
             local status="$1"
             local title=""
@@ -94,7 +96,7 @@ jobs:
                             \"inline\": false
                           },
                           {
-                            \"name\": \"⏱️ 소요 시간\",
+                            \"name\": \"⏱️ 실행 시간\",
                             \"value\": \"${DURATION}초\\n\\n\",
                             \"inline\": false
                           },
