@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.mentoring.query.mapper.MentoringPlanMapper">
+
+    <select id="findAllMentoringPlanList" resultType="MentoringPlanListAllQueryDTO">
+        SELECT
+            e.employee_name,
+            p.planning_name,
+            p.planning_status,
+            p.reg_date,
+            f.file_url
+        FROM
+            planning p
+        JOIN
+            file f ON p.planning_seq = f.planning_seq
+        JOIN
+            employee e ON e.employee_seq = p.employee_seq
+        WHERE
+            p.planning_seq = f.planning_seq;
+    </select>
+</mapper>
