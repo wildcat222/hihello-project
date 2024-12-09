@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.finalEval.query.mapper.FinalEvalMapper">
+    <!-- 최종 평가 목록을 조회하는 SQL -->
+    <select id="findAllFinalEvals" resultType="FinalEvalsQueryDTO">
+        SELECT
+            e.employee_seq,
+            e.employee_num,
+            e.employee_name,
+            d.department_seq,
+            d.department_name,
+            SUM(fe.employee_score) AS total_final_eval_score
+        FROM
+            final_eval fe
+        JOIN
+            employee e ON fe.employee_seq = e.employee_seq
+        JOIN
+            department d ON e.department_seq = d.department_seq
+        GROUP BY e.employee_seq
+    </select>
+</mapper>
