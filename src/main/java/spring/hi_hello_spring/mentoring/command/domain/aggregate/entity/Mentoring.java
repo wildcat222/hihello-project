@@ -20,6 +20,8 @@ public class Mentoring extends BaseTimeEntity {
 
     private Long menteeSeq;
 
+    private boolean mentoringActiveStatus = true;
+
     @Builder
     public Mentoring(Long mentorSeq, Long menteeSeq) {
         this.mentorSeq = mentorSeq;
