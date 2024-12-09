@@ -36,7 +36,7 @@ public class FileUploadUtil {
 
         // 파일 확장자 추출 및 검증
         String fileExtension = getFileExtension(fileName);
-        if (!fileExtension.equals("jpg") && !fileExtension.equals("png")) {
+        if (!fileExtension.equals("jpg") && !fileExtension.equals("png") && !fileExtension.equals("pdf")) {
             throw new IllegalArgumentException("Only JPG and PNG files are allowed.");
         }
 
