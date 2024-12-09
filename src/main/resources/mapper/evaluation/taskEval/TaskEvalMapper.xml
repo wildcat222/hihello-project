@@ -50,4 +50,22 @@
                 AND tg.task_seq = t.task_seq
         GROUP BY department_name, tem.template_task_round, submitter_seq, submitter_name
     </select>
+    <select id="findTaskEvalDetails" resultType="TaskEvalDetailsQueryDTO">
+        SELECT
+            te.task_eval_seq,
+            ei.eval_ind_seq,
+            ei.eval_ind_content,
+            el.eval_list_seq,
+            el.eval_list_content,
+            te.task_score
+        FROM
+            task_eval te
+        JOIN
+            eval_list el ON te.eval_list_seq = el.eval_list_seq
+        JOIN
+            eval_ind ei ON el.eval_ind_seq = ei.eval_ind_seq
+        JOIN
+            task_submit ts ON ts.task_submit_seq = te.task_submit_seq
+        WHERE ts.task_submit_seq = #{task_submit_seq}
+    </select>
 </mapper>
