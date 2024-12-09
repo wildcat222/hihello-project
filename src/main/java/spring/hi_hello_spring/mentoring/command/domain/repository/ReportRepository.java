@@ -17,4 +17,6 @@ public interface ReportRepository {
     Report save(Report report);
 
     Optional<Report> findByMentoringSeqOrderByReportWeekDesc(Long mentoringSeq);
+
+    Report findByReportSeq(Long reportSeq);
 }
