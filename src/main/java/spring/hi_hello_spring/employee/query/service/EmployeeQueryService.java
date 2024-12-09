@@ -41,7 +41,7 @@ public class EmployeeQueryService {
         return employeeMapper.findEmployeeInfo(employeeSeq);
     }
 
-    // 멘토 프로필 조회
+    // 멘티/멘토 프로필 조회
     public ReqEmplInfoQueryDTO getMentorInfo(Long mentorSeq) {
         return employeeMapper.findEmployeeInfo(mentorSeq);
     }

@@ -53,11 +53,11 @@ public class EmployeeQueryController {
         return ResponseUtil.successResponse("내 정보가 성공적으로 조회되었습니다.", reqEmployeeInfoDTO).getBody();
     }
 
-    @Operation(summary = "멘토 프로필 조회", description = "멘티는 멘토의 프로필을 조회한다.")
-    @GetMapping("/mentee/{employeeSeq}/info")
-    public ApiResponse<?> getMentorInfo(@PathVariable Long employeeSeq) {
+    @Operation(summary = "멘티/멘토 프로필 조회", description = "멘티/멘토의 프로필을 조회한다.")
+    @GetMapping("/mentor/{employeeSeq}/info")
+    public ApiResponse<?> getMenteeInfo(@PathVariable Long employeeSeq) {
         ReqEmplInfoQueryDTO reqEmployeeInfoDTO = employeeQueryService.getMentorInfo(employeeSeq);
-        return ResponseUtil.successResponse("멘토의 정보가 성공적으로 조회되었습니다.", reqEmployeeInfoDTO).getBody();
+        return ResponseUtil.successResponse("프로필 정보가 성공적으로 조회되었습니다.", reqEmployeeInfoDTO).getBody();
     }
 
 }
