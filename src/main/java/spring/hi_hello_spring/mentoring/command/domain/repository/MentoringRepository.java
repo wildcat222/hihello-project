@@ -7,4 +7,6 @@ public interface MentoringRepository {
     Mentoring save(Mentoring mentoringGroup);
     
     Mentoring findByMentoringSeq(Long mentoringSeq);
+
+    Mentoring findByMenteeSeq(Long menteeSeq);
 }
