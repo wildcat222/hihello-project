@@ -134,6 +134,7 @@ CREATE TABLE `mentoring` (
                              `mentoring_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                              `mentor_seq`   BIGINT   NOT NULL,
                              `mentee_seq`   BIGINT   NOT NULL,
+                             `mentoring_active_status`  BOOLEAN NOT NULL  DEFAULT TRUE,
                              `reg_date`   DATETIME   NOT NULL,
                              `mod_date`   DATETIME   NULL,
                              PRIMARY KEY (`mentoring_seq`),
