@@ -20,4 +20,23 @@
         WHERE
             p.planning_seq = f.planning_seq;
     </select>
+
+    <select id="findMentoringPlanDetail" parameterType="long" resultType="MentoringPlanDetailDTO">
+        SELECT
+        e.employee_name,
+        p.planning_name,
+        p.planning_content,
+        p.planning_status,
+        p.reg_date,
+        f.file_name,
+        f.file_url
+        FROM
+        planning p
+        JOIN
+        file f ON p.planning_seq = f.planning_seq
+        JOIN
+        employee e ON e.employee_seq = p.employee_seq
+        WHERE
+        p.planning_seq = #{planningSeq};
+    </select>
 </mapper>
