@@ -40,4 +40,9 @@ public class EmployeeQueryService {
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
         return employeeMapper.findEmployeeInfo(employeeSeq);
     }
+
+    // 멘토 프로필 조회
+    public ReqEmplInfoQueryDTO getMentorInfo(Long mentorSeq) {
+        return employeeMapper.findEmployeeInfo(mentorSeq);
+    }
 }
