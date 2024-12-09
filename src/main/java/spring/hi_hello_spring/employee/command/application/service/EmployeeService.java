@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.common.util.RedisService;
@@ -33,6 +34,7 @@ public class EmployeeService {
     @Value("${token.secret}")
     private String secretKey;
 
+    @Transactional
     public void logout(String accessToken) {
 
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -61,6 +63,7 @@ public class EmployeeService {
 
     }
 
+    @Transactional
     public void modifyPwd(Long employeeSeq, ModifyPasswordReqDTO modifyPwdDTO) {
 
         Employee employee = employeeRepository.findByEmployeeSeq(employeeSeq)
