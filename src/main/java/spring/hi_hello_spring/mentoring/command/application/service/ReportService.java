@@ -41,7 +41,6 @@ public class ReportService {
 
         Report report = reportRepository.findByReportSeq(reportSeq);
 
-        System.out.println("로그로그 : " + report.getMentoringSeq() + mentoring.getMentoringSeq());
         if (Objects.equals(report.getMentoringSeq(), mentoring.getMentoringSeq())) {
             modelMapper.map(writeReportDTO, report);
             reportRepository.save(report);
