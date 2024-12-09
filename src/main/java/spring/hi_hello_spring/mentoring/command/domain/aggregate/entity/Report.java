@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class Report extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reportSeq;
 
     private Long mentoringSeq;
@@ -32,4 +32,10 @@ public class Report extends BaseTimeEntity {
     @Lob // 대량 데이터를 처리하도록 지시
     @Column(columnDefinition = "TEXT")
     private String reportFeedbackContent;
+
+
+    public void forGroup(Long mentoringSeq, int reportWeek) {
+        this.mentoringSeq = mentoringSeq;
+        this.reportWeek = reportWeek;
+    }
 }
