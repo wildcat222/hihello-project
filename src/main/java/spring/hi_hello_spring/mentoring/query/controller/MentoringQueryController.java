@@ -3,14 +3,12 @@ package spring.hi_hello_spring.mentoring.query.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.mentoring.query.dto.MentoringPlanDetailDTO;
 import spring.hi_hello_spring.mentoring.query.dto.MentoringPlanListAllQueryDTO;
+import spring.hi_hello_spring.mentoring.query.dto.MentoringPlanSearchDTO;
 import spring.hi_hello_spring.mentoring.query.service.MentoringPlanningQueryService;
 
 import java.util.List;
@@ -37,5 +35,12 @@ public class MentoringQueryController {
 
         MentoringPlanDetailDTO mentoringPlanDetailDTO = mentoringPlanningQueryService.getMentoringPlanDetail(planningSeq);
         return ResponseUtil.successResponse("성공적으로 멘토링 계획서 상세 내용을 조회하였습니다.", mentoringPlanDetailDTO).getBody();
+    }
+
+    @GetMapping("/search")
+    @Operation(summary = "멘토링 계획서 검색", description = "멘토링 계획서 검색 로직입니다.")
+    public ApiResponse<?> getMentoringPlanSearchQuery(@RequestParam String category, @RequestParam String word) {
+        List<MentoringPlanSearchDTO> mentoringPlanSearchDTO = mentoringPlanningQueryService.getMentoringPlanSearch(category, word);
+        return ResponseUtil.successResponse("성공적으로 멘토링 계획서 검색을 하였습니다.", mentoringPlanSearchDTO).getBody();
     }
 }

@@ -7,6 +7,7 @@ import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.mentoring.command.domain.repository.PlanningRepository;
 import spring.hi_hello_spring.mentoring.query.dto.MentoringPlanDetailDTO;
 import spring.hi_hello_spring.mentoring.query.dto.MentoringPlanListAllQueryDTO;
+import spring.hi_hello_spring.mentoring.query.dto.MentoringPlanSearchDTO;
 import spring.hi_hello_spring.mentoring.query.mapper.MentoringPlanMapper;
 
 import java.util.List;
@@ -28,5 +29,14 @@ public class MentoringPlanningQueryService {
             throw new CustomException(ErrorCodeType.DATA_NOT_FOUND);
         }
         return mentoringPlanMapper.findMentoringPlanDetail(planningSeq);
+    }
+
+    public List<MentoringPlanSearchDTO> getMentoringPlanSearch(String category, String word) {
+
+        List<MentoringPlanSearchDTO> results = mentoringPlanMapper.findMentoringPlanSearch(category, word);
+        if (results.isEmpty()) {
+            throw new CustomException(ErrorCodeType.DATA_NOT_FOUND);
+        }
+        return results;
     }
 }
