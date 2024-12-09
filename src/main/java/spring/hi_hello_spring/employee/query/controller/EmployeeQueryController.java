@@ -3,6 +3,7 @@ package spring.hi_hello_spring.employee.query.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.OptimisticLock;
 import org.springframework.web.bind.annotation.*;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
@@ -51,4 +52,12 @@ public class EmployeeQueryController {
         ReqEmplInfoQueryDTO reqEmployeeInfoDTO = employeeQueryService.getEmployeeInfo();
         return ResponseUtil.successResponse("내 정보가 성공적으로 조회되었습니다.", reqEmployeeInfoDTO).getBody();
     }
+
+    @Operation(summary = "멘토 프로필 조회", description = "멘티는 멘토의 프로필을 조회한다.")
+    @GetMapping("/mentee/{employeeSeq}/info")
+    public ApiResponse<?> getMentorInfo(@PathVariable Long employeeSeq) {
+        ReqEmplInfoQueryDTO reqEmployeeInfoDTO = employeeQueryService.getMentorInfo(employeeSeq);
+        return ResponseUtil.successResponse("멘토의 정보가 성공적으로 조회되었습니다.", reqEmployeeInfoDTO).getBody();
+    }
+
 }
