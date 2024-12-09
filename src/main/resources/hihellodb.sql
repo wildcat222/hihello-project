@@ -40,6 +40,7 @@ CREATE TABLE `department` (
 CREATE TABLE `task` (
                         `task_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                         `department_seq`   BIGINT   NULL,
+                        `template_seq`  BIGINT  NOT NULL,
                         `task_type`   VARCHAR(20)   NOT NULL,
                         'task_title'    VARCHAR(100)   NOT NULL,
                         `task_content`   TEXT   NOT NULL,
@@ -48,7 +49,9 @@ CREATE TABLE `task` (
                         `mod_date`   DATETIME   NULL,
                         PRIMARY KEY (`task_seq`),
                         KEY `FK_department_TO_task_1` (`department_seq`),
-                        CONSTRAINT `FK_department_TO_task_1` FOREIGN KEY (`department_seq`) REFERENCES `department` (`department_seq`) ON DELETE CASCADE ON UPDATE CASCADE
+                        CONSTRAINT `FK_department_TO_task_1` FOREIGN KEY (`department_seq`) REFERENCES `department` (`department_seq`) ON DELETE CASCADE ON UPDATE CASCADE,
+                        KEY `FK_template_TO_task_1` (`template_seq`),
+                        CONSTRAINT `FK_template_TO_task_1` FOREIGN KEY (`template_seq`) REFERENCES `template` (`template_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE `positions` (
