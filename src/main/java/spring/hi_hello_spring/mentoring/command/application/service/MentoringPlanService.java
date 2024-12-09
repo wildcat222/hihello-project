@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import spring.hi_hello_spring.common.aggregate.entity.File;
+import spring.hi_hello_spring.common.exception.CustomException;
+import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.common.repository.FileRepository;
 import spring.hi_hello_spring.mentoring.command.application.dto.MentoringPlanRequestDTO;
 import spring.hi_hello_spring.mentoring.command.domain.aggregate.entity.Planning;
@@ -18,7 +20,6 @@ public class MentoringPlanService {
 
     private final PlanningRepository planningRepository;
     private final FileRepository fileRepository;
-    private final ModelMapper modelMapper;
 
     @Transactional
     public void createMentoringPlan(MentoringPlanRequestDTO mentoringPlanRequestDTO, String uploadFile) {
@@ -36,5 +37,16 @@ public class MentoringPlanService {
                 .fileUrl(uploadFile)
                 .build();
         fileRepository.save(file);
+    }
+
+    @Transactional
+    public void deleteMentoringPlan(Long planningSeq) {
+
+        Planning savedPlanning = planningRepository.findById(planningSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
+        //
+        fileRepository.deleteByPlanningSeq(planningSeq);
+
+        planningRepository.delete(savedPlanning);
     }
 }
