@@ -20,4 +20,29 @@
             department d ON e.department_seq = d.department_seq
         GROUP BY e.employee_seq
     </select>
+
+    <!--최종 평가 상세 내용을 조회하는 SQL-->
+    <select id="findFinalEvalDetails" resultType="FinalEvalDetailQueryDTO">
+        SELECT
+            CASE
+                WHEN fe.eval_ind_seq IS NOT NULL AND fe.final_eval_ind_seq IS NULL THEN ei.eval_ind_seq
+                WHEN fe.eval_ind_seq IS NULL AND fe.final_eval_ind_seq IS NOT NULL THEN fei.final_eval_ind_seq
+            END AS final_eval_ind_seq,
+            CASE
+                WHEN fe.eval_ind_seq IS NOT NULL AND fe.final_eval_ind_seq IS NULL THEN ei.eval_ind_content
+                WHEN fe.eval_ind_seq IS NULL AND fe.final_eval_ind_seq IS NOT NULL THEN fei.final_eval_ind_name
+            END AS final_eval_ind_name,
+            fe.employee_score AS final_eval_score
+        FROM
+            final_eval fe
+        LEFT JOIN eval_ind ei
+            ON fe.eval_ind_seq IS NOT NULL
+                AND fe.final_eval_ind_seq IS NULL
+                AND fe.eval_ind_seq = ei.eval_ind_seq
+        LEFT JOIN final_eval_ind fei
+            ON fe.eval_ind_seq IS NULL
+                AND fe.final_eval_ind_seq IS NOT NULL
+                AND fe.final_eval_ind_seq = fei.final_eval_ind_seq
+        WHERE fe.employee_seq = #{employee_seq}
+    </select>
 </mapper>
