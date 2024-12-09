@@ -17,8 +17,6 @@
             file f ON p.planning_seq = f.planning_seq
         JOIN
             employee e ON e.employee_seq = p.employee_seq
-        WHERE
-            p.planning_seq = f.planning_seq;
     </select>
 
     <select id="findMentoringPlanDetail" parameterType="long" resultType="MentoringPlanDetailDTO">
@@ -39,4 +37,32 @@
         WHERE
         p.planning_seq = #{planningSeq};
     </select>
+
+    <select id="findMentoringPlanSearch" parameterType="String" resultType="MentoringPlanSearchDTO">
+        SELECT
+            e.employee_name,
+            p.planning_name,
+            p.planning_status,
+            p.reg_date,
+            f.file_url
+        FROM
+            planning p
+        JOIN
+            employee e ON p.employee_seq = e.employee_seq
+        JOIN
+            file f ON p.planning_seq = f.planning_seq
+        WHERE
+        <choose>
+            <when test="ctg == 'name'">
+                e.employee_name LIKE CONCAT('%', #{word}, '%')
+            </when>
+            <when test="ctg == 'title'">
+                p.planning_name LIKE CONCAT('%', #{word}, '%')
+            </when>
+            <otherwise>
+                1 = 0
+            </otherwise>
+        </choose>
+    </select>
+
 </mapper>
