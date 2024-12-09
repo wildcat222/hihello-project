@@ -3,6 +3,7 @@ package spring.hi_hello_spring.mentoring.command.application.service;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.mentoring.command.application.dto.WriteFeedbackDTO;
@@ -23,6 +24,7 @@ public class ReportService {
     public final ReportRepository reportRepository;
     public final ModelMapper modelMapper;
 
+    @Transactional
     public void createReport(Long employeeSeq, WriteReportDTO writeReportDTO) {
 
         Mentoring mentoring = mentoringRepository.findByMenteeSeq(employeeSeq);
@@ -36,6 +38,7 @@ public class ReportService {
         reportRepository.save(report);
     }
 
+    @Transactional
     public void modifyReport(Long employeeSeq, Long reportSeq, WriteReportDTO writeReportDTO) {
 
         Mentoring mentoring = mentoringRepository.findByMenteeSeq(employeeSeq);
@@ -51,6 +54,7 @@ public class ReportService {
 
     }
 
+    @Transactional
     public void writeFeedback(Long employeeSeq, Long reportSeq, WriteFeedbackDTO writeFeedbackDTO) {
 
         Report report = reportRepository.findByReportSeq(reportSeq);

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.employee.command.application.dto.hr.CreateEmplReqDTO;
@@ -25,6 +26,7 @@ public class HRService {
     private final ModelMapper modelMapper;
     private final BCryptPasswordEncoder passwordEncoder;
 
+    @Transactional
     public void createEmpl(CreateEmplReqDTO createEmplReqDTO) {
 
         Department department = departmentRepository.findByDepartmentName(createEmplReqDTO.getDepartment());
@@ -38,6 +40,7 @@ public class HRService {
         employeeRepository.save(newEmployee);
     }
 
+    @Transactional
     public void modifyEmpl(Long employeeSeq, ModifyEmplReqDTO modifyEmplReqDTO) {
 
         Employee employee = employeeRepository.findByEmployeeSeq(employeeSeq)
@@ -47,6 +50,7 @@ public class HRService {
         employeeRepository.save(employee);
     }
 
+    @Transactional
     public void deleteEmpl(Long employeeSeq) {
 
         employeeRepository.deleteById(employeeSeq);
