@@ -158,7 +158,7 @@ CREATE TABLE `report` (
                           `mentoring_seq`   BIGINT   NOT NULL,
                           `report_content`   TEXT   NOT NULL,
                           `report_feeling`   TEXT   NOT NULL,
-                          `report_week`   DATETIME   NOT NULL,
+                          `report_week`   INT   NOT NULL,
                           `report_feedback_content`   TEXT   NULL,
                           `reg_date`   DATETIME   NOT NULL,
                           `mod_date`   DATETIME   NULL,
@@ -284,7 +284,7 @@ CREATE TABLE `final_eval` (
                               `employee_seq`   BIGINT   NOT NULL,
                               `eval_ind_seq`   BIGINT   NULL,
                               `final_eval_ind_seq`   BIGINT   NULL,
-                              `employee_score`   BIGINT   NOT NULL,
+                              `employee_score`   DOUBLE   NOT NULL,
                               `reg_date`   DATETIME   NOT NULL,
                               `mod_date`   DATETIME   NULL,
                               PRIMARY KEY (`final_eval_seq`),
@@ -292,8 +292,8 @@ CREATE TABLE `final_eval` (
                               CONSTRAINT `FK_employee_TO_final_eval_1` FOREIGN KEY (`employee_seq`) REFERENCES `employee` (`employee_seq`) ON DELETE CASCADE ON UPDATE CASCADE,
                               KEY `FK_eval_ind_TO_final_eval_1` (`eval_ind_seq`),
                               CONSTRAINT `FK_eval_ind_TO_final_eval_1` FOREIGN KEY (`eval_ind_seq`) REFERENCES `eval_ind` (`eval_ind_seq`) ON DELETE CASCADE ON UPDATE CASCADE,
-                              KEY `FK_final_eval_ind_TO_final_eval_1` (`employee_seq`),
-                              CONSTRAINT `FK_final_eval_ind_TO_final_eval_1` FOREIGN KEY (`final_eval_seq`) REFERENCES `final_eval_ind` (`final_eval_ind_seq`) ON DELETE CASCADE ON UPDATE CASCADE
+                              KEY `FK_final_eval_ind_TO_final_eval_1` (`final_eval_ind_seq`),
+                              CONSTRAINT `FK_final_eval_ind_TO_final_eval_1` FOREIGN KEY (`final_eval_ind_seq`) REFERENCES `final_eval_ind` (`final_eval_ind_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE `group_member` (
