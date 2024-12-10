@@ -96,5 +96,25 @@
             m.mentee_seq = #{employeeSeq}
     </select>
 
+    <select id="getReportSearch" resultType="ReportListQueryDTO">
+        SELECT
+            r.report_seq AS reportSeq,
+            r.report_week AS reportWeek,
+            e.employee_name AS menteeName,
+            r.reg_date AS regDate
+        FROM
+            report AS r
+        JOIN
+            mentoring AS m ON r.mentoring_seq = m.mentoring_seq
+        JOIN
+            employee AS e ON m.mentee_seq = e.employee_seq
+        WHERE 1 = 1
+        <if test="searchType == 'name'">
+            AND e.employee_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="searchType == 'num'">
+            AND e.employee_num = #{keyword}
+        </if>
+    </select>
 
 </mapper>

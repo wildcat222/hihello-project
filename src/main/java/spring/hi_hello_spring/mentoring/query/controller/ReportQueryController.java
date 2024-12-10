@@ -3,10 +3,7 @@ package spring.hi_hello_spring.mentoring.query.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.mentoring.query.dto.MenteeReportListQueryDTO;
@@ -63,4 +60,13 @@ public class ReportQueryController {
         List<MenteeReportListQueryDTO> reportList = reportQueryService.getReportListByMentee();
         return ResponseUtil.successResponse("멘토링 보고서 리스트를 조회하였습니다.", reportList).getBody();
     }
+
+    @Operation(summary = "(담당자, 팀장) 멘토링 보고서 검색", description = "멘토링 보고서를 검색하여 조회한다.")
+    @GetMapping("/report/search")
+    public ApiResponse<?> getReportSearch(@RequestParam String searchType, @RequestParam String keyword) {
+
+        List<MenteeReportListQueryDTO> reportList = reportQueryService.getReportSearch(searchType, keyword);
+        return ResponseUtil.successResponse("성공적으로 멘토링 보고서를 검색하였습니다.", reportList).getBody();
+    }
+
 }

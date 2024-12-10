@@ -33,12 +33,19 @@ public class ReportQueryService {
     }
 
     public List<ReportListQueryDTO> getReportListByMentor() {
+
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
         return reportMapper.findReportListByMentor(employeeSeq);
     }
 
     public List<MenteeReportListQueryDTO> getReportListByMentee() {
+
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
         return reportMapper.findReportListByMentee(employeeSeq);
+    }
+
+    public List<MenteeReportListQueryDTO> getReportSearch(String searchType, String keyword) {
+
+        return reportMapper.getReportSearch(searchType, keyword);
     }
 }
