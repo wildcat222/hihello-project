@@ -24,11 +24,11 @@ DROP TABLE IF EXISTS `planning`;
 DROP TABLE IF EXISTS `mentoring`;
 DROP TABLE IF EXISTS `checklist_status`;
 DROP TABLE IF EXISTS `checklist`;
-DROP TABLE IF EXISTS `template`;
-DROP TABLE IF EXISTS `quiz_category`;
 DROP TABLE IF EXISTS `employee`;
 DROP TABLE IF EXISTS `positions`;
 DROP TABLE IF EXISTS `task`;
+DROP TABLE IF EXISTS `template`;
+DROP TABLE IF EXISTS `quiz_category`;
 DROP TABLE IF EXISTS `department`;
 
 CREATE TABLE `department` (
@@ -37,14 +37,44 @@ CREATE TABLE `department` (
                               PRIMARY KEY (`department_seq`)
 );
 
+CREATE TABLE `quiz_category` (
+                                 `quiz_category_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
+                                 `quiz_category_name`   VARCHAR(20)   NOT NULL,
+                                 `reg_date`   DATETIME   NOT NULL,
+                                 `mod_date`   DATETIME   NULL,
+                                 PRIMARY KEY(`quiz_category_seq`)
+);
+
+CREATE TABLE `template` (
+                            `template_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
+                            `quiz_category_seq` BIGINT NULL,
+                            `template_type`   VARCHAR(20)   NOT NULL,
+                            `template_check_required_status`   BOOLEAN   NOT NULL,
+                            `template_training_type`   VARCHAR(20)   NULL,
+                            `template_title`   VARCHAR(20)   NOT NULL,
+                            `template_sub`   VARCHAR(50)   NULL,
+                            `template_detail`   TEXT   NULL,
+                            `template_url`   VARCHAR(255)   NULL,
+                            `template_quiz_qty`   INT   NULL,
+                            `template_task_round` VARCHAR(10) NULL,
+                            `template_procedure`   INT   NOT NULL,
+                            `template_end_at`   DATETIME   NULL,
+                            `reg_date`   DATETIME   NOT NULL,
+                            `mod_date`   DATETIME   NULL,
+                            PRIMARY KEY (`template_seq`),
+                            KEY `FK_quiz_category_TO_template_1` (`quiz_category_seq`),
+                            CONSTRAINT `FK_quiz_category_TO_template_1` FOREIGN KEY (`quiz_category_seq`) REFERENCES `quiz_category` (`quiz_category_seq`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
 CREATE TABLE `task` (
                         `task_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                         `department_seq`   BIGINT   NULL,
                         `template_seq`  BIGINT  NOT NULL,
                         `task_type`   VARCHAR(20)   NOT NULL,
-                        'task_title'    VARCHAR(100)   NOT NULL,
+                        `task_title`    VARCHAR(100)   NOT NULL,
                         `task_content`   TEXT   NOT NULL,
-                        'task_url'   VARCHAR(255) NULL,
+                        `task_url`   VARCHAR(255) NULL,
                         `reg_date`   DATETIME   NOT NULL,
                         `mod_date`   DATETIME   NULL,
                         PRIMARY KEY (`task_seq`),
@@ -78,34 +108,8 @@ CREATE TABLE `employee` (
                             CONSTRAINT `FK_department_TO_employee_1` FOREIGN KEY (`department_seq`) REFERENCES `department` (`department_seq`) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE TABLE `quiz_category` (
-                                 `quiz_category_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
-                                 `quiz_category_name`   VARCHAR(20)   NOT NULL,
-                                 `reg_date`   DATETIME   NOT NULL,
-                                 `mod_date`   DATETIME   NULL,
-                                 PRIMARY KEY(`quiz_category_seq`)
-);
 
-CREATE TABLE `template` (
-                            `template_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
-                            `quiz_category_seq` BIGINT NULL,
-                            `template_type`   VARCHAR(20)   NOT NULL,
-                            `template_check_required_status`   BOOLEAN   NOT NULL,
-                            `template_training_type`   VARCHAR(20)   NULL,
-                            `template_title`   VARCHAR(20)   NOT NULL,
-                            `template_sub`   VARCHAR(50)   NULL,
-                            `template_detail`   TEXT   NULL,
-                            `template_url`   VARCHAR(255)   NULL,
-                            `template_quiz_qty`   INT   NULL,
-                            `template_task_round` VARCHAR(10) NULL,
-                            `template_procedure`   INT   NOT NULL,
-                            `template_end_at`   DATETIME   NULL,
-                            `reg_date`   DATETIME   NOT NULL,
-                            `mod_date`   DATETIME   NULL,
-                            PRIMARY KEY (`template_seq`),
-                            KEY `FK_quiz_category_TO_template_1` (`quiz_category_seq`),
-                            CONSTRAINT `FK_quiz_category_TO_template_1` FOREIGN KEY (`quiz_category_seq`) REFERENCES `quiz_category` (`quiz_category_seq`) ON DELETE CASCADE ON UPDATE CASCADE
-);
+
 
 CREATE TABLE `checklist` (
                              `checklist_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
@@ -383,6 +387,7 @@ CREATE TABLE `file` (
                         `task_submit_seq`   BIGINT NULL,
                         `template_seq`   BIGINT NULL,
                         `wiki_mod_content_seq`   BIGINT  NULL,
+                        `employee_seq`  BIGINT  NULL,
                         `file_name`   VARCHAR(50)   NOT NULL,
                         `file_url`   TEXT   NOT NULL,
                         `reg_date`   DATETIME   NOT NULL,
@@ -397,7 +402,9 @@ CREATE TABLE `file` (
                         KEY `FK_template_TO_file_1` (`template_seq`),
                         CONSTRAINT `FK_template_TO_file_1` FOREIGN KEY (`template_seq`) REFERENCES `template` (`template_seq`) ON DELETE CASCADE ON UPDATE CASCADE,
                         KEY `FK_wiki_mod_content_TO_file_1` (`wiki_mod_content_seq`),
-                        CONSTRAINT `FK_wiki_mod_content_TO_file_1` FOREIGN KEY (`wiki_mod_content_seq`) REFERENCES `wiki_mod_content` (`wiki_mod_content_seq`) ON DELETE CASCADE ON UPDATE CASCADE
+                        CONSTRAINT `FK_wiki_mod_content_TO_file_1` FOREIGN KEY (`wiki_mod_content_seq`) REFERENCES `wiki_mod_content` (`wiki_mod_content_seq`) ON DELETE CASCADE ON UPDATE CASCADE,
+                        KEY `FK_employee_TO_file_1` (`employee_seq`),
+                        CONSTRAINT `FK_employee_TO_file_1` FOREIGN KEY (`employee_seq`) REFERENCES `employee` (`employee_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE `noti` (
