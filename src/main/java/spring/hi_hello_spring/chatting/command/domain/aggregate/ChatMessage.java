@@ -1,4 +1,4 @@
-package spring.hi_hello_spring.chatting.domain.aggregate;
+package spring.hi_hello_spring.chatting.command.domain.aggregate;
 
 import jakarta.persistence.Id;
 import lombok.*;

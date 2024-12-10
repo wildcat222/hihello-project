@@ -1,10 +1,10 @@
-package spring.hi_hello_spring.chatting.controller;
+package spring.hi_hello_spring.chatting.command.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import spring.hi_hello_spring.chatting.serivce.ChatRoomService;
+import spring.hi_hello_spring.chatting.command.application.serivce.ChatRoomService;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 
