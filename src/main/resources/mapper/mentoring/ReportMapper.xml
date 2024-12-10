@@ -59,9 +59,24 @@
             FROM employee
             WHERE employee_seq = #{employeeSeq}  -- 현재 조회한 사람의 부서 정보
             )
-
     </select>
 
+    <select id="findReportListByMentor" parameterType="java.lang.Long" resultType="ReportListQueryDTO">
+        SELECT
+            r.report_week AS reportWeek,
+            e.employee_name AS menteeName,
+            r.reg_date AS regDate
+        FROM
+            report AS r
+        JOIN
+            mentoring AS m ON r.mentoring_seq = m.mentoring_seq
+        JOIN
+            employee AS e ON m.mentee_seq = e.employee_seq
+        WHERE
+            m.mentor_seq = #{employeeSeq}
+        AND
+            m.mentoring_active_status = true
+    </select>
 
 
 </mapper>

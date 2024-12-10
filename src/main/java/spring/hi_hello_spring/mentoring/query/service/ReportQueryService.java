@@ -30,4 +30,9 @@ public class ReportQueryService {
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
         return reportMapper.findReportListByLeader(employeeSeq);
     }
+
+    public List<ReportListQueryDTO> getReportListByMentor() {
+        Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
+        return reportMapper.findReportListByMentor(employeeSeq);
+    }
 }
