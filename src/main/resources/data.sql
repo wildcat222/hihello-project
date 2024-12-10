@@ -65,7 +65,9 @@ VALUES
 INSERT INTO report (mentoring_seq, report_content, report_feeling, report_week, reg_date)
 VALUES
     (1, '멘토링 첫 주차 보고서', '잘 진행 중입니다.', 1, NOW()),
-    (2, '멘토링 두 번째 주차 보고서', '문제가 없습니다.', 2, NOW());
+    (2, '멘토링 첫 번째 보고서', '문제가 없습니다.', 1, NOW());
+    (1, '멘토링 두 번째 주차 보고서', '어려웠습니다.', 2, NOW());
+    (2, '멘토링 두 번째 주차 보고서', '재밌었습니다.', 2, NOW());
 
 -- Quiz 데이터 삽입
 INSERT INTO quiz (quiz_category_seq, quiz_question, quiz_answer, quiz_explanation, reg_date)
