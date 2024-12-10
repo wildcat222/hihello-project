@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @ToString
 public class ReportListQueryDTO {
 
+    private Long reportSeq;
     private int reportWeek;
     private String menteeName;    // 멘티
     private LocalDateTime regDate;  // 보고서 생성 날짜
