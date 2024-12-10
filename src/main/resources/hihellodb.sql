@@ -42,17 +42,17 @@ CREATE TABLE `task` (
                         `department_seq`   BIGINT   NULL,
                         `template_seq`  BIGINT  NOT NULL,
                         `task_type`   VARCHAR(20)   NOT NULL,
-                        'task_title'    VARCHAR(100)   NOT NULL,
-                        `task_content`   TEXT   NOT NULL,
-                        'task_url'   VARCHAR(255) NULL,
-                        `reg_date`   DATETIME   NOT NULL,
-                        `mod_date`   DATETIME   NULL,
-                        PRIMARY KEY (`task_seq`),
-                        KEY `FK_department_TO_task_1` (`department_seq`),
-                        CONSTRAINT `FK_department_TO_task_1` FOREIGN KEY (`department_seq`) REFERENCES `department` (`department_seq`) ON DELETE CASCADE ON UPDATE CASCADE,
-                        KEY `FK_template_TO_task_1` (`template_seq`),
-                        CONSTRAINT `FK_template_TO_task_1` FOREIGN KEY (`template_seq`) REFERENCES `template` (`template_seq`) ON DELETE CASCADE ON UPDATE CASCADE
-);
+    'task_title'    VARCHAR(100)   NOT NULL,
+    `task_content`   TEXT   NOT NULL,
+    'task_url'   VARCHAR(255) NULL,
+    `reg_date`   DATETIME   NOT NULL,
+    `mod_date`   DATETIME   NULL,
+    PRIMARY KEY (`task_seq`),
+    KEY `FK_department_TO_task_1` (`department_seq`),
+    CONSTRAINT `FK_department_TO_task_1` FOREIGN KEY (`department_seq`) REFERENCES `department` (`department_seq`) ON DELETE CASCADE ON UPDATE CASCADE,
+    KEY `FK_template_TO_task_1` (`template_seq`),
+    CONSTRAINT `FK_template_TO_task_1` FOREIGN KEY (`template_seq`) REFERENCES `template` (`template_seq`) ON DELETE CASCADE ON UPDATE CASCADE
+    );
 
 CREATE TABLE `positions` (
                              `position_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
@@ -383,6 +383,7 @@ CREATE TABLE `file` (
                         `task_submit_seq`   BIGINT NULL,
                         `template_seq`   BIGINT NULL,
                         `wiki_mod_content_seq`   BIGINT  NULL,
+                        `employee_seq`  BIGINT  NULL,
                         `file_name`   VARCHAR(50)   NOT NULL,
                         `file_url`   TEXT   NOT NULL,
                         `reg_date`   DATETIME   NOT NULL,
@@ -397,7 +398,9 @@ CREATE TABLE `file` (
                         KEY `FK_template_TO_file_1` (`template_seq`),
                         CONSTRAINT `FK_template_TO_file_1` FOREIGN KEY (`template_seq`) REFERENCES `template` (`template_seq`) ON DELETE CASCADE ON UPDATE CASCADE,
                         KEY `FK_wiki_mod_content_TO_file_1` (`wiki_mod_content_seq`),
-                        CONSTRAINT `FK_wiki_mod_content_TO_file_1` FOREIGN KEY (`wiki_mod_content_seq`) REFERENCES `wiki_mod_content` (`wiki_mod_content_seq`) ON DELETE CASCADE ON UPDATE CASCADE
+                        CONSTRAINT `FK_wiki_mod_content_TO_file_1` FOREIGN KEY (`wiki_mod_content_seq`) REFERENCES `wiki_mod_content` (`wiki_mod_content_seq`) ON DELETE CASCADE ON UPDATE CASCADE,
+                        KEY `FK_employee_TO_file_1` (`employee_seq`),
+                        CONSTRAINT `FK_employee_TO_file_1` FOREIGN KEY (`employee_seq`) REFERENCES `employee` (`employee_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE `noti` (
