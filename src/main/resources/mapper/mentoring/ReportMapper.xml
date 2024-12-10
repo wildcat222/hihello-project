@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.mentoring.query.mapper.ReportMapper">
+
+    <!-- 멘토링 보고서 상세 조회 SQL-->
+    <select id="getReportDetail" parameterType="java.lang.Long" resultType="ResMentoringReportDTO">
+        SELECT
+        r.report_seq AS reportSeq,
+        e1.employee_name AS menteeName,
+        e2.employee_name AS mentorName,
+        r.report_week AS reportWeek,
+        r.report_content AS reportContent,
+        r.report_feeling AS reportFeeling,
+        r.report_feedback_content AS reportFeedbackContent
+        FROM
+        report AS r
+        JOIN
+        mentoring AS m ON r.mentoring_seq = m.mentoring_seq
+        JOIN
+        employee AS e1 ON m.mentee_seq = e1.employee_seq
+        JOIN
+        employee AS e2 ON m.mentor_seq = e2.employee_seq
+        WHERE
+        r.report_seq = #{reportSeq};
+    </select>
+
+
+
+
+</mapper>
