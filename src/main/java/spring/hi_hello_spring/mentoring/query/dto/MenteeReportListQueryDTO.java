@@ -11,10 +11,9 @@ import java.time.LocalDateTime;
 @Setter
 @RequiredArgsConstructor
 @ToString
-public class ReportListQueryDTO {
+public class MenteeReportListQueryDTO {
 
     private Long reportSeq;
     private int reportWeek;
-    private String menteeName;    // 멘티
     private LocalDateTime regDate;  // 보고서 생성 날짜
 }
