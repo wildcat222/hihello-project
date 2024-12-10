@@ -66,7 +66,6 @@ CREATE TABLE `template` (
                             CONSTRAINT `FK_quiz_category_TO_template_1` FOREIGN KEY (`quiz_category_seq`) REFERENCES `quiz_category` (`quiz_category_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-
 CREATE TABLE `task` (
                         `task_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                         `department_seq`   BIGINT   NULL,
