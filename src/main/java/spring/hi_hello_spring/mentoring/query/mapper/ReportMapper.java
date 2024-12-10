@@ -13,4 +13,6 @@ public interface ReportMapper {
     List<ReportListQueryDTO> findAllReportListByHR();
 
     List<ReportListQueryDTO> findReportListByLeader(Long employeeSeq);
+
+    List<ReportListQueryDTO> findReportListByMentor(Long employeeSeq);
 }
