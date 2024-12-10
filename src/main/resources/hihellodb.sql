@@ -24,58 +24,17 @@ DROP TABLE IF EXISTS `planning`;
 DROP TABLE IF EXISTS `mentoring`;
 DROP TABLE IF EXISTS `checklist_status`;
 DROP TABLE IF EXISTS `checklist`;
-DROP TABLE IF EXISTS `template`;
-DROP TABLE IF EXISTS `quiz_category`;
 DROP TABLE IF EXISTS `employee`;
 DROP TABLE IF EXISTS `positions`;
 DROP TABLE IF EXISTS `task`;
+DROP TABLE IF EXISTS `template`;
+DROP TABLE IF EXISTS `quiz_category`;
 DROP TABLE IF EXISTS `department`;
 
 CREATE TABLE `department` (
                               `department_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                               `department_name`   VARCHAR(20)   NOT NULL,
                               PRIMARY KEY (`department_seq`)
-);
-
-CREATE TABLE `task` (
-                        `task_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
-                        `department_seq`   BIGINT   NULL,
-                        `template_seq`  BIGINT  NOT NULL,
-                        `task_type`   VARCHAR(20)   NOT NULL,
-    'task_title'    VARCHAR(100)   NOT NULL,
-    `task_content`   TEXT   NOT NULL,
-    'task_url'   VARCHAR(255) NULL,
-    `reg_date`   DATETIME   NOT NULL,
-    `mod_date`   DATETIME   NULL,
-    PRIMARY KEY (`task_seq`),
-    KEY `FK_department_TO_task_1` (`department_seq`),
-    CONSTRAINT `FK_department_TO_task_1` FOREIGN KEY (`department_seq`) REFERENCES `department` (`department_seq`) ON DELETE CASCADE ON UPDATE CASCADE,
-    KEY `FK_template_TO_task_1` (`template_seq`),
-    CONSTRAINT `FK_template_TO_task_1` FOREIGN KEY (`template_seq`) REFERENCES `template` (`template_seq`) ON DELETE CASCADE ON UPDATE CASCADE
-    );
-
-CREATE TABLE `positions` (
-                             `position_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
-                             `position_name`   VARCHAR(20)   NOT NULL,
-                             PRIMARY KEY (`position_seq`)
-);
-
-CREATE TABLE `employee` (
-                            `employee_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
-                            `department_seq`   BIGINT   NOT NULL,
-                            `position_seq`   BIGINT   NOT NULL,
-                            `employee_num`   VARCHAR(20)   NOT NULL,
-                            `employee_name`   VARCHAR(20)   NOT NULL,
-                            `employee_phone`   VARCHAR(20)   NOT NULL,
-                            `employee_email`   VARCHAR(30)   NOT NULL,
-                            `employee_role`   VARCHAR(20)   NOT NULL    DEFAULT 'STAFF',
-                            `employee_password`   VARCHAR(255)   NOT NULL,
-                            `employee_deleted_status`   BOOLEAN   NOT NULL   DEFAULT FALSE,
-                            `reg_date`   DATETIME   NOT NULL,
-                            `mod_date`   DATETIME   NULL,
-                            PRIMARY KEY (`employee_seq`),
-                            KEY `FK_department_TO_employee_1` (`department_seq`),
-                            CONSTRAINT `FK_department_TO_employee_1` FOREIGN KEY (`department_seq`) REFERENCES `department` (`department_seq`) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 CREATE TABLE `quiz_category` (
@@ -106,6 +65,51 @@ CREATE TABLE `template` (
                             KEY `FK_quiz_category_TO_template_1` (`quiz_category_seq`),
                             CONSTRAINT `FK_quiz_category_TO_template_1` FOREIGN KEY (`quiz_category_seq`) REFERENCES `quiz_category` (`quiz_category_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+
+CREATE TABLE `task` (
+                        `task_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
+                        `department_seq`   BIGINT   NULL,
+                        `template_seq`  BIGINT  NOT NULL,
+                        `task_type`   VARCHAR(20)   NOT NULL,
+                        `task_title`    VARCHAR(100)   NOT NULL,
+                        `task_content`   TEXT   NOT NULL,
+                        `task_url`   VARCHAR(255) NULL,
+                        `reg_date`   DATETIME   NOT NULL,
+                        `mod_date`   DATETIME   NULL,
+                        PRIMARY KEY (`task_seq`),
+                        KEY `FK_department_TO_task_1` (`department_seq`),
+                        CONSTRAINT `FK_department_TO_task_1` FOREIGN KEY (`department_seq`) REFERENCES `department` (`department_seq`) ON DELETE CASCADE ON UPDATE CASCADE,
+                        KEY `FK_template_TO_task_1` (`template_seq`),
+                        CONSTRAINT `FK_template_TO_task_1` FOREIGN KEY (`template_seq`) REFERENCES `template` (`template_seq`) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE `positions` (
+                             `position_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
+                             `position_name`   VARCHAR(20)   NOT NULL,
+                             PRIMARY KEY (`position_seq`)
+);
+
+CREATE TABLE `employee` (
+                            `employee_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
+                            `department_seq`   BIGINT   NOT NULL,
+                            `position_seq`   BIGINT   NOT NULL,
+                            `employee_num`   VARCHAR(20)   NOT NULL,
+                            `employee_name`   VARCHAR(20)   NOT NULL,
+                            `employee_phone`   VARCHAR(20)   NOT NULL,
+                            `employee_email`   VARCHAR(30)   NOT NULL,
+                            `employee_role`   VARCHAR(20)   NOT NULL    DEFAULT 'STAFF',
+                            `employee_password`   VARCHAR(255)   NOT NULL,
+                            `employee_deleted_status`   BOOLEAN   NOT NULL   DEFAULT FALSE,
+                            `reg_date`   DATETIME   NOT NULL,
+                            `mod_date`   DATETIME   NULL,
+                            PRIMARY KEY (`employee_seq`),
+                            KEY `FK_department_TO_employee_1` (`department_seq`),
+                            CONSTRAINT `FK_department_TO_employee_1` FOREIGN KEY (`department_seq`) REFERENCES `department` (`department_seq`) ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+
+
 
 CREATE TABLE `checklist` (
                              `checklist_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
