@@ -72,4 +72,22 @@
         WHERE
             e.employee_seq = #{employeeSeq}
     </select>
+
+    <select id="findEmployeeAll" resultType="EmployeeListDTO">
+        SELECT
+            e.employee_seq AS employeeSeq,
+            e.employee_num AS employeeNum,
+            e.employee_name AS employeeName,
+            d.department_name AS departmentName,
+            p.position_name AS positionName,
+            e.employee_phone AS employeePhone,
+            e.employee_email AS employeeEmail,
+            e.employee_role AS employeeRole
+        FROM
+            employee AS e
+        JOIN
+            department AS d ON e.department_seq = d.department_seq
+        JOIN
+            positions AS p ON e.position_seq = p.position_seq
+    </select>
 </mapper>
