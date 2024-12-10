@@ -15,6 +15,7 @@ public class ReqEmplInfoQueryDTO {
     private String employeeName;
     @Enumerated(EnumType.STRING)
     private EmployeeRole employeeRole;
+    private String departmentName;
     private String positionName;
     private String employeePhone;
     private String employeeEmail;
