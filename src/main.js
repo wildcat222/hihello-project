@@ -1,6 +1,10 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
 
 document.title = import.meta.env.VITE_APP_TITLE || 'Default Title';
 
-createApp(App).mount('#app')
+const app = createApp(App);
+
+app.use(router);
+app.mount('#app')
