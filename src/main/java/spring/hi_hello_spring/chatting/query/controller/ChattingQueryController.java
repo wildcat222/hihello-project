@@ -21,9 +21,16 @@ public class ChattingQueryController {
     private final ChattingQueryService chattingQueryService;
 
     @GetMapping("/room/mentoring")
-    @Operation(summary = "참여한 채팅방 조회", description = "현재 사용자가 참여한 채팅방을 반환합니다.")
-    public ApiResponse<?> getUserChatRooms(@RequestParam Long userSeq) {
-        Long roomIds = chattingQueryService.getUserChatRooms(userSeq);
+    @Operation(summary = "참여한 맨토링 채팅방 조회", description = "현재 사용자가 참여한 맨토링 채팅방을 반환합니다.")
+    public ApiResponse<?> getUserMentoringChatRooms(@RequestParam Long userSeq) {
+        Long roomIds = chattingQueryService.getUserMentoringChatRooms(userSeq);
+        return ResponseUtil.successResponse(roomIds).getBody();
+    }
+
+    @GetMapping("/room/grouping")
+    @Operation(summary = "참여한 그룹 채팅방 조회", description = "현재 사용자가 참여한 그룹 채팅방을 반환합니다.")
+    public ApiResponse<List<Long>> getUserGroupingChatRooms(@RequestParam Long userSeq) {
+        List<Long> roomIds = chattingQueryService.getUserGroupingChatRooms(userSeq);
         return ResponseUtil.successResponse(roomIds).getBody();
     }
 }

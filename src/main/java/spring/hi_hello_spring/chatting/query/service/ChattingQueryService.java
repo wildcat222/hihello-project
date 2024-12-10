@@ -17,7 +17,11 @@ public class ChattingQueryService {
     private final ChattingMapper chattingMapper;
 
     @Transactional
-    public Long getUserChatRooms(Long userSeq) {
-        return chattingMapper.findChatRoomsByUserSeq(userSeq);
+    public Long getUserMentoringChatRooms(Long userSeq) {
+        return chattingMapper.findMentoringChatRoomByUserSeq(userSeq);
+    }
+
+    public List<Long> getUserGroupingChatRooms(Long userSeq) {
+        return chattingMapper.findGroupingChatRoomsByUserSeq(userSeq);
     }
 }

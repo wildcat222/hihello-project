@@ -19,8 +19,8 @@ public class MentoringMatchService {
 
     @Transactional
     public void createMentoringGroup(List<MentoringGroupDTO> mentoringGroupDTO) {
-        for (MentoringGroupDTO mentoringGroupDTOs : mentoringGroupDTO) {
 
+        for (MentoringGroupDTO mentoringGroupDTOs : mentoringGroupDTO) {
             // MentoringGroup 생성
             Mentoring mentoringGroup = Mentoring.builder()
                     .mentorSeq(mentoringGroupDTOs.getMentorSeq())
@@ -32,7 +32,7 @@ public class MentoringMatchService {
 
             // mentoringSeq를 roomId로 사용하여 ChatRoom 생성
             Long roomId = savedMentoringGroup.getMentoringSeq();
-            chatRoomService.createChatRoom(roomId, mentoringGroupDTOs.getMentorSeq(), mentoringGroupDTOs.getMenteeSeq());
+            chatRoomService.createMentoringChatRoom(roomId, mentoringGroupDTOs.getMentorSeq(), mentoringGroupDTOs.getMenteeSeq());
         }
     }
 }
