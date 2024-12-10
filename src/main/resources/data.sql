@@ -74,6 +74,9 @@ INSERT INTO quiz (quiz_category_seq, quiz_question, quiz_answer, quiz_explanatio
 VALUES
     (1, '온보딩 퀴즈 질문1', TRUE, '정답 설명1', NOW()),
     (1, '온보딩 퀴즈 질문2', FALSE, '정답 설명2', NOW()),
+    (1, '온보딩 퀴즈 질문3', TRUE, '정답 설명3', NOW()),
+    (1, '온보딩 퀴즈 질문4', FALSE, '정답 설명4', NOW()),
+    (1, '온보딩 퀴즈 질문5', TRUE, '정답 설명5', NOW()),
     (2, '직무 교육 퀴즈 질문1', TRUE, '정답 설명3', NOW());
 
 -- Quiz Result 데이터 삽입
