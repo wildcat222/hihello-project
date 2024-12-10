@@ -1,6 +1,7 @@
 package spring.hi_hello_spring.employee.query.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import spring.hi_hello_spring.employee.query.dto.*;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface EmployeeMapper {
     ReqEmplInfoQueryDTO findEmployeeInfo(Long employeeSeq);
 
     List<EmployeeListDTO> findEmployeeAll();
+
+    List<EmployeeListDTO> getEmployeeSearch(@Param("searchType") String searchType, @Param("keyword") String keyword);
 }
