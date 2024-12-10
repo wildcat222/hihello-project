@@ -3,6 +3,7 @@ package spring.hi_hello_spring.mentoring.query.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.hi_hello_spring.common.util.CustomUserUtils;
+import spring.hi_hello_spring.mentoring.query.dto.MenteeReportListQueryDTO;
 import spring.hi_hello_spring.mentoring.query.dto.ReportListQueryDTO;
 import spring.hi_hello_spring.mentoring.query.dto.ResMentoringReportDTO;
 import spring.hi_hello_spring.mentoring.query.mapper.ReportMapper;
@@ -34,5 +35,10 @@ public class ReportQueryService {
     public List<ReportListQueryDTO> getReportListByMentor() {
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
         return reportMapper.findReportListByMentor(employeeSeq);
+    }
+
+    public List<MenteeReportListQueryDTO> getReportListByMentee() {
+        Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
+        return reportMapper.findReportListByMentee(employeeSeq);
     }
 }
