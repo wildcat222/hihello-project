@@ -21,7 +21,7 @@ public class ChatRoomController {
     public ApiResponse<?> createRoom( @RequestParam Long mentoringSeq,
                                       @RequestParam Long mentorSeq,
                                       @RequestParam Long menteeSeq) {
-        chatRoomService.createChatRoom(mentoringSeq, mentorSeq, menteeSeq);
+        chatRoomService.createMentoringChatRoom(mentoringSeq, mentorSeq, menteeSeq);
         return ResponseUtil.successResponse("그룹핑을 한 후 채팅방이 생성되었습니다.").getBody();
     }
 

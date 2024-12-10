@@ -9,4 +9,6 @@ public interface TaskGroupRepository {
     Optional<TaskGroup> findById(Long taskGroupSeq);
 
     TaskGroup save(TaskGroup taskSeq);
+
+    TaskGroup findByTaskGroupSeq(Long roomId);
 }
