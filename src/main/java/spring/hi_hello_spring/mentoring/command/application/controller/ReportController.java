@@ -15,7 +15,7 @@ import spring.hi_hello_spring.mentoring.command.application.service.ReportServic
 @RestController
 @RequestMapping("api/v1")
 @RequiredArgsConstructor
-@Tag(name = "Report API")
+@Tag(name = "Mentoring Report API", description = "멘토링 보고서 관련 API")
 public class ReportController {
 
     private final ReportService reportService;

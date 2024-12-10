@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
+import spring.hi_hello_spring.mentoring.query.dto.ReportListQueryDTO;
 import spring.hi_hello_spring.mentoring.query.dto.ResMentoringReportDTO;
 import spring.hi_hello_spring.mentoring.query.service.ReportQueryService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -26,5 +29,13 @@ public class ReportQueryController {
 
         ResMentoringReportDTO reqMentoringReportDTO = reportQueryService.findReportDetail(reportSeq);
         return ResponseUtil.successResponse("멘토링 보고서를 성공적으로 조회하였습니다.", reqMentoringReportDTO).getBody();
+    }
+
+    @Operation(summary = "(담당자) 멘토링 보고서 리스트 조회", description = "담당자는 멘토링 보고서 리스트를 조회한다.")
+    @GetMapping("/hr/report")
+    public ApiResponse<?> getReportListAll() {
+
+        List<ReportListQueryDTO> reportList = reportQueryService.getReportListAll();
+        return ResponseUtil.successResponse("멘토링 보고서 리스트를 조회하였습니다.",reportList).getBody();
     }
 }
