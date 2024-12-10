@@ -7,4 +7,4 @@ document.title = import.meta.env.VITE_APP_TITLE || 'Default Title';
 const app = createApp(App);
 
 app.use(router);
-app.mount('#app')
+app.mount('#app');
