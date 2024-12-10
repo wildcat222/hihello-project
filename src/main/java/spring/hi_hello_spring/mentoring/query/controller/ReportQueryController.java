@@ -38,4 +38,12 @@ public class ReportQueryController {
         List<ReportListQueryDTO> reportList = reportQueryService.getReportListAll();
         return ResponseUtil.successResponse("멘토링 보고서 리스트를 조회하였습니다.",reportList).getBody();
     }
+
+    @Operation(summary = "(팀장) 멘토링 보고서 리스트 조회", description = "팀장은 멘토링 보고서 리스트를 조회한다.")
+    @GetMapping("/leader/report")
+    public ApiResponse<?> getReportListByLeader() {
+
+        List<ReportListQueryDTO> reportList = reportQueryService.getReportListByLeader();
+        return ResponseUtil.successResponse("멘토링 보고서 리스트를 조회하였습니다.", reportList).getBody();
+    }
 }

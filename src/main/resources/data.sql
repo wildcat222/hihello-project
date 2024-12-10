@@ -1,6 +1,9 @@
 -- Department 데이터 삽입
 INSERT INTO department (department_name)
-VALUES ('교육팀');
+VALUES ('교육팀'),
+       ('영업팀'),
+       ('총무팀')
+       ;
 
 -- Quiz Category 데이터 삽입
 INSERT INTO quiz_category (quiz_category_name, reg_date)
