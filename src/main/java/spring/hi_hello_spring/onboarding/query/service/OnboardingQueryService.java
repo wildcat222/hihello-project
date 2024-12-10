@@ -15,7 +15,7 @@ public class OnboardingQueryService {
 
     private final OnboardingMapper onboardingMapper;
 
-    public List<OnboardingDTO> getOnboardingList(Long employeeSeq) {
+    public OnboardingResDTO getOnboardingList(Long employeeSeq) {
 
         List<OnboardingDTO> onboardingList = onboardingMapper.getOnboardingList(employeeSeq);
 
@@ -30,6 +30,6 @@ public class OnboardingQueryService {
         OnboardingResDTO onboardingResDTO = new OnboardingResDTO();
         onboardingResDTO.createResOnboarding(onboardingList, onboardingProgress);
 
-        return onboardingList;
+        return onboardingResDTO;
     }
 }
