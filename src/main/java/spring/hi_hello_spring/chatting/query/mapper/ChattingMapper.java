@@ -9,5 +9,5 @@ public interface ChattingMapper {
 
     Long findMentoringChatRoomByUserSeq(Long userSeq);
 
-    List<Long> findGroupingChatRoomsByUserSeq(Long userSeq);
+    Long findGroupingChatRoomsByUserSeq(Long userSeq);
 }

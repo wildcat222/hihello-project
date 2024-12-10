@@ -11,7 +11,6 @@ import spring.hi_hello_spring.chatting.query.service.ChattingQueryService;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 
-import java.util.List;
 @RestController
 @RequestMapping("api/v1/chat")
 @RequiredArgsConstructor
@@ -29,8 +28,8 @@ public class ChattingQueryController {
 
     @GetMapping("/room/grouping")
     @Operation(summary = "참여한 그룹 채팅방 조회", description = "현재 사용자가 참여한 그룹 채팅방을 반환합니다.")
-    public ApiResponse<List<Long>> getUserGroupingChatRooms(@RequestParam Long userSeq) {
-        List<Long> roomIds = chattingQueryService.getUserGroupingChatRooms(userSeq);
-        return ResponseUtil.successResponse(roomIds).getBody();
+    public ApiResponse<?> getUserGroupingChatRooms(@RequestParam Long userSeq) {
+        Long roomId = chattingQueryService.getUserGroupingChatRooms(userSeq);
+        return ResponseUtil.successResponse(roomId).getBody();
     }
 }

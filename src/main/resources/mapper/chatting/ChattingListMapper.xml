@@ -17,12 +17,15 @@
 
     <select id="findGroupingChatRoomsByUserSeq" parameterType="Long" resultType="Long">
         SELECT
-        mentoring_seq
+        t.task_group_seq
         FROM
-        mentoring
+        group_member AS g
+        JOIN
+        task_group AS t
+        ON g.task_group_seq = t.task_group_seq
         WHERE
-        (mentor_seq = #{userSeq} OR mentee_seq = #{userSeq})
+        g.employee_seq = #{userSeq}
         AND
-        mentoring_active_status = 1
+        t.task_group_active_status = 1
     </select>
 </mapper>
