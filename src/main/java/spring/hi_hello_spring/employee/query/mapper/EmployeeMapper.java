@@ -1,10 +1,7 @@
 package spring.hi_hello_spring.employee.query.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import spring.hi_hello_spring.employee.query.dto.MenteeAllQueryDTO;
-import spring.hi_hello_spring.employee.query.dto.MenteeDepQueryDTO;
-import spring.hi_hello_spring.employee.query.dto.MentorAllQueryDTO;
-import spring.hi_hello_spring.employee.query.dto.ReqEmplInfoQueryDTO;
+import spring.hi_hello_spring.employee.query.dto.*;
 
 import java.util.List;
 
@@ -18,4 +15,6 @@ public interface EmployeeMapper {
     List<MentorAllQueryDTO> findAllMentor();
 
     ReqEmplInfoQueryDTO findEmployeeInfo(Long employeeSeq);
+
+    List<EmployeeListDTO> findEmployeeAll();
 }

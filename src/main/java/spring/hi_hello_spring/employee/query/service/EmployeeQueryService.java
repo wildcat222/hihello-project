@@ -3,10 +3,7 @@ package spring.hi_hello_spring.employee.query.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.hi_hello_spring.common.util.CustomUserUtils;
-import spring.hi_hello_spring.employee.query.dto.MenteeAllQueryDTO;
-import spring.hi_hello_spring.employee.query.dto.MenteeDepQueryDTO;
-import spring.hi_hello_spring.employee.query.dto.MentorAllQueryDTO;
-import spring.hi_hello_spring.employee.query.dto.ReqEmplInfoQueryDTO;
+import spring.hi_hello_spring.employee.query.dto.*;
 import spring.hi_hello_spring.employee.query.mapper.EmployeeMapper;
 
 import java.util.List;
@@ -44,5 +41,9 @@ public class EmployeeQueryService {
     // 멘티/멘토 프로필 조회
     public ReqEmplInfoQueryDTO getMentorInfo(Long mentorSeq) {
         return employeeMapper.findEmployeeInfo(mentorSeq);
+    }
+
+    public List<EmployeeListDTO> getEmployeeAll() {
+        return employeeMapper.findEmployeeAll();
     }
 }
