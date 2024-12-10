@@ -2,6 +2,8 @@ package spring.hi_hello_spring.employee.query.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import spring.hi_hello_spring.common.exception.CustomException;
+import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.common.util.CustomUserUtils;
 import spring.hi_hello_spring.employee.query.dto.*;
 import spring.hi_hello_spring.employee.query.mapper.EmployeeMapper;
@@ -45,5 +47,14 @@ public class EmployeeQueryService {
 
     public List<EmployeeListDTO> getEmployeeAll() {
         return employeeMapper.findEmployeeAll();
+    }
+
+    public List<EmployeeListDTO> getEmployeeSearch(String searchType, String keyword) {
+
+        List<EmployeeListDTO> employees = employeeMapper.getEmployeeSearch(searchType, keyword);
+        if (employees == null) {
+            throw new CustomException(ErrorCodeType.DATA_NOT_FOUND);
+        }
+        return employees;
     }
 }
