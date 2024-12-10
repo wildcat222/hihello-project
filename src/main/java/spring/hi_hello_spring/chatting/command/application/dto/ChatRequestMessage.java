@@ -1,4 +1,4 @@
-package spring.hi_hello_spring.chatting.dto;
+package spring.hi_hello_spring.chatting.command.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

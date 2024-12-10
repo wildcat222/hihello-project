@@ -1,4 +1,4 @@
-package spring.hi_hello_spring.chatting.controller;
+package spring.hi_hello_spring.chatting.command.application.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -7,8 +7,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
-import spring.hi_hello_spring.chatting.dto.ChatRequestMessage;
-import spring.hi_hello_spring.chatting.serivce.ChatRoomService;
+import spring.hi_hello_spring.chatting.command.application.dto.ChatRequestMessage;
+import spring.hi_hello_spring.chatting.command.application.serivce.ChatRoomService;
 
 @RequiredArgsConstructor
 @Controller // https 사용 x -> restAPI 아님

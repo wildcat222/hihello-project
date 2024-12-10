@@ -1,13 +1,13 @@
-package spring.hi_hello_spring.chatting.serivce;
+package spring.hi_hello_spring.chatting.command.application.serivce;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import spring.hi_hello_spring.chatting.domain.aggregate.ChatMessage;
-import spring.hi_hello_spring.chatting.dto.ChatRequestMessage;
-import spring.hi_hello_spring.chatting.dto.ChatRoom;
-import spring.hi_hello_spring.chatting.domain.repository.mongo.ChatMessageMongoRepository;
+import spring.hi_hello_spring.chatting.command.domain.aggregate.ChatMessage;
+import spring.hi_hello_spring.chatting.command.application.dto.ChatRequestMessage;
+import spring.hi_hello_spring.chatting.command.application.dto.ChatRoom;
+import spring.hi_hello_spring.chatting.command.domain.repository.mongo.ChatMessageMongoRepository;
 import spring.hi_hello_spring.mentoring.command.domain.aggregate.entity.Mentoring;
 import spring.hi_hello_spring.mentoring.command.domain.repository.MentoringRepository;
 

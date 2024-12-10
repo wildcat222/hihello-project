@@ -1,4 +1,4 @@
-package spring.hi_hello_spring.chatting.dto;
+package spring.hi_hello_spring.chatting.command.application.dto;
 
 import lombok.Getter;
 import lombok.Setter;
