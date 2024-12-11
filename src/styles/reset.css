@@ -1,10 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+KR:wght@100..900&display=swap');
 :root {
-    --grey: #A6A6A6;
+    --gray: #A6A6A6;
     --ivory: #F4F2EE;
     --purple: #7031FC;
+    --light-purple: #eae5fa;
     --yellow: #FFC107;
     --black: #121212;
+    --white: #ffffff;
 }
 
 *{
@@ -54,9 +56,7 @@ footer, header, hgroup, menu, nav, section {
 body {
     line-height: 1;
 }
-ol, ul, li {
-    list-style: none;
-}
+
 li {
     display: list-item;
 }
