@@ -9,6 +9,7 @@ import spring.hi_hello_spring.chatting.command.domain.aggregate.ChatMessage;
 import spring.hi_hello_spring.chatting.command.application.dto.ChatRequestMessage;
 import spring.hi_hello_spring.chatting.command.application.dto.ChatRoom;
 import spring.hi_hello_spring.chatting.command.domain.repository.mongo.ChatMessageMongoRepository;
+import spring.hi_hello_spring.chatting.command.application.dto.ChatResponseMessage;
 import spring.hi_hello_spring.group.command.domain.aggregate.entity.GroupMember;
 import spring.hi_hello_spring.group.command.domain.aggregate.entity.TaskGroup;
 import spring.hi_hello_spring.group.command.domain.repository.GroupMemberRepository;
@@ -18,6 +19,7 @@ import spring.hi_hello_spring.mentoring.command.domain.repository.MentoringRepos
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -55,32 +57,24 @@ public class ChatRoomService {
             throw new IllegalArgumentException("해당하는 방 없음");
         }
 
-        // GroupMember 정보 가져오기 (현재 roomId에 해당하는 멤버 목록)
         List<GroupMember> groupMembers = groupMemberRepository.findByTaskGroupSeq(taskGroup.getTaskGroupSeq());
 
         if (groupMembers.isEmpty()) {
             throw new IllegalArgumentException("TaskGroup에 사람이 없음");
         }
 
-        // ChatRoom 생성
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setRoomId(roomId);
 
-        // 멤버 정보 설정
         List<Long> memberSeqList = new ArrayList<>();
         for (GroupMember groupMember : groupMembers) {
             memberSeqList.add(groupMember.getEmployeeSeq());
         }
 
-        // Set the member sequences to the chatRoom object
         chatRoom.setMemberSeqs(memberSeqList);
-
-        // 채팅방 저장 (이 부분은 필요에 따라 저장 처리)
-//        chatRoomRepository.save(chatRoom);
 
         System.out.println("새로운 grouping 방 생성됨: " + chatRoom.getRoomId() + ", 인원: " + memberSeqList);
     }
-
 
 
     public void saveChatMessage(Long roomId, ChatRequestMessage requestMessage) {
@@ -95,6 +89,16 @@ public class ChatRoomService {
         System.out.println("mongoDB에 채팅 내용 저장 됨: " + chatMessage.getMessage());
     }
 
+
+    public List<ChatResponseMessage> chattingMessageList(Long roomId) {
+        // MongoDB에서 roomId에 해당하는 메시지 목록을 가져옵니다
+        List<ChatMessage> chatMessages = chatMessageMongoRepository.findByRoomId(roomId);
+
+        // ChatResponseMessage 형태로 변환
+        return chatMessages.stream()
+                .map(message -> new ChatResponseMessage(message.getUserCode(), message.getMessage(), message.getCreatedAt()))
+                .collect(Collectors.toList());
+    }
 
 }
 
