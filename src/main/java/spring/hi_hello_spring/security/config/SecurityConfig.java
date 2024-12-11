@@ -38,6 +38,7 @@ public class SecurityConfig {
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
         http.csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authz ->
                         // 추후 api 명세서 작성 후 추가 예정
 //                        authz.requestMatchers(new AntPathRequestMatcher("/users/**", "POST")).permitAll()
@@ -78,4 +79,16 @@ public class SecurityConfig {
         return new ProviderManager(provider);
     }
 
+    @Bean
+    public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
+        org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
+        configuration.addAllowedOriginPattern("*"); // 모든 도메인 허용 (필요시 특정 도메인 설정)
+        configuration.addAllowedMethod("*");       // 모든 HTTP 메서드 허용
+        configuration.addAllowedHeader("*");       // 모든 헤더 허용
+        configuration.setAllowCredentials(true);   // 쿠키 허용 (필요 시 true로 설정)
+
+        org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 적용
+        return source;
+    }
 }
