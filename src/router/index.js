@@ -1,8 +1,10 @@
 import{ createRouter, createWebHistory } from 'vue-router';
 import QuizRouter from '@/router/QuizRouter.js';
+import WikiRouter from "@/router/WikiRouter.js";
 
 const routes = [
-    ...QuizRouter
+    ...QuizRouter,
+    ...WikiRouter
 ]
 
 const router = createRouter({
