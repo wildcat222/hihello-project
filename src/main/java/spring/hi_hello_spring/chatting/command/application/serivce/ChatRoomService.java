@@ -91,7 +91,7 @@ public class ChatRoomService {
     }
 
 
-    public List<ChatResponseMessage> chattingMessageList(Long roomId) {
+    public List<ChatResponseMessage> chattingMessageList(String roomId) {
         // MongoDB에서 roomId에 해당하는 메시지 목록을 가져옵니다
         List<ChatMessage> chatMessages = chatMessageMongoRepository.findByRoomId(roomId);
 
