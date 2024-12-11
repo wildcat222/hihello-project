@@ -40,7 +40,7 @@ const menus = ref([
     flex-direction: column;
     align-items: center;
     /* 수평 가운데 정렬 */
-    background-color: #fff;
+    background-color: var(--white);
     padding: 20px;
     box-sizing: border-box;
 }
@@ -79,13 +79,13 @@ ul {
 
 .menu-item a {
     text-decoration: none;
-    color: black;
+    color: var(--black);
     font-family: 'Inter', sans-serif;
     /* Inter 폰트 적용 */
 }
 
 .menu-item a:hover {
-    color: #007bff;
+    color: var(--blue);
     /* 원하는 hover 색상 */
     text-decoration: underline;
 }
