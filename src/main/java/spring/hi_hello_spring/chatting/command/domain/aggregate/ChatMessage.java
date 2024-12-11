@@ -17,7 +17,7 @@ public class ChatMessage {
 
     @Id
     private String messageId;
-    private Long roomId;
+    private String roomId;
     private Long userCode;
     private String message;
     private LocalDateTime createdAt;

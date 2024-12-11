@@ -4,12 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
 public class ChatRoom {
 
-    private Long roomId;
+    private String roomId;
     private Long mentorSeq;
     private Long menteeSeq;
     private List<Long> memberSeqs;
