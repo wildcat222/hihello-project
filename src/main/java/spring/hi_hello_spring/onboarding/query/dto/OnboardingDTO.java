@@ -16,7 +16,7 @@ public class OnboardingDTO {
     private Long employeeSeq;
     private String employeeName;
     private Long onboardingStatusSeq;
-    private boolean onboardingCompletedStatus = false;
+    private boolean onboardingCompletedStatus;
 
     private Long templateSeq;
     private String templateType;
