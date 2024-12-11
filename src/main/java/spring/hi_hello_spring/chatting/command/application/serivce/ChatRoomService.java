@@ -19,6 +19,7 @@ import spring.hi_hello_spring.mentoring.command.domain.repository.MentoringRepos
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -40,7 +41,7 @@ public class ChatRoomService {
 
         ChatRoom chatRoom = modelMapper.map(mentoring, ChatRoom.class);
 
-        chatRoom.setRoomId(mentoring.getMentoringSeq());  // mentoringSeq를 roomId로 사용
+        chatRoom.setRoomId(UUID.randomUUID().toString());  // roomId는 렌덤으로 생성
         chatRoom.setMentorSeq(mentorSeq);
         chatRoom.setMenteeSeq(menteeSeq);
 
@@ -64,7 +65,7 @@ public class ChatRoomService {
         }
 
         ChatRoom chatRoom = new ChatRoom();
-        chatRoom.setRoomId(roomId);
+        chatRoom.setRoomId(UUID.randomUUID().toString());
 
         List<Long> memberSeqList = new ArrayList<>();
         for (GroupMember groupMember : groupMembers) {
@@ -77,7 +78,7 @@ public class ChatRoomService {
     }
 
 
-    public void saveChatMessage(Long roomId, ChatRequestMessage requestMessage) {
+    public void saveChatMessage(String roomId, ChatRequestMessage requestMessage) {
         ChatMessage chatMessage = ChatMessage.builder()
                 .roomId(roomId)
                 .userCode(requestMessage.getUserCode())
