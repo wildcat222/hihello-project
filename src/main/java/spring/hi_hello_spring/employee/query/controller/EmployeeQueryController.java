@@ -71,4 +71,12 @@ public class EmployeeQueryController {
         return ResponseUtil.successResponse("성공적으로 사원을 검색하였습니다.", employees).getBody();
     }
 
+    @Operation(summary = "사원 이름 조회", description = "사원의 이름을 조회한다.")
+    @GetMapping("/{employeeSeq}/name")
+    public ApiResponse<?> getEmployeeName(@PathVariable Long employeeSeq) {
+
+        String employeeName = employeeQueryService.getEmployeeName(employeeSeq);
+        return ResponseUtil.successResponse("이름을 성공적으로 조회하였습니다.", employeeName).getBody();
+    }
+
 }
