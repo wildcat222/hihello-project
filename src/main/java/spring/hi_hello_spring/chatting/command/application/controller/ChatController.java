@@ -1,47 +1,50 @@
 package spring.hi_hello_spring.chatting.command.application.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import spring.hi_hello_spring.chatting.command.application.dto.ChatRequestMessage;
 import spring.hi_hello_spring.chatting.command.application.serivce.ChatRoomService;
-import spring.hi_hello_spring.chatting.command.application.dto.ChatResponseMessage;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
-
+import spring.hi_hello_spring.chatting.command.application.dto.ChatResponseMessage;
 import java.util.List;
 
+
+@Slf4j
 @RequiredArgsConstructor
 @Controller // https 사용 x -> restAPI 아님
 @Tag(name = "ChatRequestMessage", description = "채팅 내역 API")
 public class ChatController {
 
     private final ChatRoomService chatRoomService;
-    private final SimpMessageSendingOperations messagingTemplate;
+    private final KafkaTemplate<String, ChatRequestMessage> kafkaTemplate;
+    private final ObjectMapper objectMapper;  // ObjectMapper를 주입받기
+
 
     // 메시지 전송
-    @MessageMapping("/chat/{roomId}/sendMessage")
-    @SendTo("/sub/{roomId}")  // 해당 roomId 구독 중인 사용자들에게 메시지 전송
-    public ChatRequestMessage sendMessage(ChatRequestMessage message, @DestinationVariable Long roomId) {
-        System.out.println("Received message: " + message);
-        // 메시지 저장
-        chatRoomService.saveChatMessage(roomId, message);
+    @PostMapping("/chat/{roomId}/sendMessage")
+    public ResponseEntity<Void> sendMessage(@PathVariable Long roomId, @RequestBody ChatRequestMessage message) {
+        log.info("Received message: {}", message);
 
-        // 해당 roomId로 메시지 전송 (STOMP 방식)
-        messagingTemplate.convertAndSend("/sub/" + roomId, message);
+        try {
+            String messageJson = objectMapper.writeValueAsString(message);
+            // Kafka에 메시지 발행 (JSON 형태로)
+            kafkaTemplate.send("chat-message", roomId.toString(), message);
+        } catch (Exception e) {
+            log.error("Failed to serialize message", e);
+            return ResponseEntity.status(500).build();  // 직렬화 실패 시 500 오류 반환
+        }
 
-        return message;
+        return ResponseEntity.ok().build();
     }
 
-    // 채팅 내역 조회
     @GetMapping("chat/room/{roomId}/message")
     @ResponseBody
     @Operation(summary = "채팅 내역", description = "채팅 내역을 반환합니다.")

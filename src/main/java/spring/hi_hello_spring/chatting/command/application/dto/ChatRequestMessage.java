@@ -6,12 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Setter
 @Getter
 @Builder
-public class ChatRequestMessage {
+public class ChatRequestMessage implements Serializable {
 
     private Long userCode;
     private String message;
