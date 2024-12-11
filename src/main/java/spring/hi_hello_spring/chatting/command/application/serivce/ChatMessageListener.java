@@ -25,7 +25,7 @@ public class ChatMessageListener {
         String messageJson = record.value();
         ChatRequestMessage message = parseMessage(messageJson);
 
-        chatRoomService.saveChatMessage(Long.valueOf(roomId), message);
+        chatRoomService.saveChatMessage(roomId, message);
     }
 
     private ChatRequestMessage parseMessage(String messageJson) {

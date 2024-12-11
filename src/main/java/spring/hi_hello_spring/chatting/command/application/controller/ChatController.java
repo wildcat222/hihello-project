@@ -30,13 +30,13 @@ public class ChatController {
 
     // 메시지 전송
     @PostMapping("/chat/{roomId}/sendMessage")
-    public ResponseEntity<Void> sendMessage(@PathVariable Long roomId, @RequestBody ChatRequestMessage message) {
+    public ResponseEntity<Void> sendMessage(@PathVariable String roomId, @RequestBody ChatRequestMessage message) {
         log.info("Received message: {}", message);
 
         try {
             String messageJson = objectMapper.writeValueAsString(message);
             // Kafka에 메시지 발행 (JSON 형태로)
-            kafkaTemplate.send("chat-message", roomId.toString(), message);
+            kafkaTemplate.send("chat-message", roomId, message);
         } catch (Exception e) {
             log.error("Failed to serialize message", e);
             return ResponseEntity.status(500).build();  // 직렬화 실패 시 500 오류 반환
@@ -48,7 +48,7 @@ public class ChatController {
     @GetMapping("chat/room/{roomId}/message")
     @ResponseBody
     @Operation(summary = "채팅 내역", description = "채팅 내역을 반환합니다.")
-    public ApiResponse<String> loadMessage(@PathVariable("roomId") Long roomId) {
+    public ApiResponse<String> loadMessage(@PathVariable("roomId") String roomId) {
         // 채팅 내역을 조회하여 반환
         List<ChatResponseMessage> messages = chatRoomService.chattingMessageList(roomId);
         // return ResponseUtil.successResponse(messages); // 내용 확인용

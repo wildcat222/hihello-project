@@ -14,6 +14,5 @@ import java.util.List;
 public class TaskRequestDTO {
 
     private Long taskSeq;
-    private Long taskGroupSeq;
     private List<MemberDTO> members;
 }
