@@ -4,6 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +39,6 @@ public class WikiService {
 
     @Transactional
     public void createWiki(WikiCreateRequestDTO wikiCreateRequestDTO) {
-
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
 
         // 위키 생성
@@ -51,14 +54,42 @@ public class WikiService {
         wikiSnapshot.updateWikiSnapshotVer(1);
         wikiSnapshotRepository.save(wikiSnapshot);
 
-        // 변경 내역 기록(처음 위키 등록 시에는 전체 내용을 DIFF로 저장)
+        // 변경 내용
+        String modContent = processHtmlToJson(wikiCreateRequestDTO.getWikiSnapshotContent());
+
+        // 변경 내역 기록(처음 위키 등록 시에는 전체 내용을 수정된 것으로 간주하고 저장)
         WikiModContent wikiModContent = WikiModContent.builder()
                 .wikiSeq(wiki.getWikiSeq())
                 .employeeSeq(1L)
                 .wikiSnapshotSeq(wikiSnapshot.getWikiSnapshotSeq())
-                .modContent("{\"1\": \"" + wikiCreateRequestDTO.getWikiSnapshotContent() + "\"}")
+                .modContent(modContent)
                 .build();
         wikiModContentRepository.save(wikiModContent);
+    }
+
+    private String processHtmlToJson(String wikiSnapshotContent) {
+        // HTML 파싱
+        Document doc = Jsoup.parse(wikiSnapshotContent, "", Parser.htmlParser());
+
+        int index = 1;
+
+        Map<Integer, Map<String, String>> blockMap = new HashMap<>();
+
+        for (Element element : doc.body().children()) {
+            System.out.println("하하"+element);
+            Map<String, String> block = new HashMap<>();
+            block.put("original", "");
+            block.put("modified", element.outerHtml());
+            blockMap.put(index++, block);
+        }
+
+        // Map을 JSON 문자열로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(blockMap);
+        } catch(Exception e) {
+            throw new CustomException(ErrorCodeType.INVALID_SERIALIZATION);
+        }
     }
 
     @Transactional
