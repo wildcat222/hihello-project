@@ -117,6 +117,14 @@
         <if test="searchType == 'num'">
             AND e.employee_num = #{keyword}
         </if>
+    </select>
 
+    <select id="findEmployeeName" parameterType="java.lang.Long" resultType="java.lang.String">
+        SELECT
+            employee_name AS employeeName
+        FROM
+            employee
+        WHERE
+            employee_seq = #{employeeSeq}
     </select>
 </mapper>

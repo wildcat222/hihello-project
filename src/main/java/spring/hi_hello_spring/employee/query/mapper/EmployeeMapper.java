@@ -20,4 +20,6 @@ public interface EmployeeMapper {
     List<EmployeeListDTO> findEmployeeAll();
 
     List<EmployeeListDTO> getEmployeeSearch(@Param("searchType") String searchType, @Param("keyword") String keyword);
+
+    String findEmployeeName(Long employeeSeq);
 }

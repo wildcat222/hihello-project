@@ -57,4 +57,8 @@ public class EmployeeQueryService {
         }
         return employees;
     }
+
+    public String getEmployeeName(Long employeeSeq) {
+        return employeeMapper.findEmployeeName(employeeSeq);
+    }
 }
