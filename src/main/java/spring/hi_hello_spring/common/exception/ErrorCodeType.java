@@ -28,7 +28,10 @@ public enum ErrorCodeType {
     INVALID_REQUEST(HttpStatus.BAD_REQUEST, "COMMON_ERROR_001", "유효하지 않은 요청입니다."),
 
     // template 관련 오류
-    TEMPLATE_NOT_FOUND(HttpStatus.NOT_FOUND, "TEMPLATE_ERROR_001", "템플릿을 찾을 수 없습니다.")
+    TEMPLATE_NOT_FOUND(HttpStatus.NOT_FOUND, "TEMPLATE_ERROR_001", "템플릿을 찾을 수 없습니다."),
+
+    // wiki 관련 오류
+    INVALID_SERIALIZATION(HttpStatus.BAD_REQUEST, "WIKI_ERROR_01", "직렬화 처리가 불가능한 값입니다.")
     ;
 
     private final HttpStatus httpStatus;
