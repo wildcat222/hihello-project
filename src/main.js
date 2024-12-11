@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
+import './styles/reset.css';
 
 document.title = import.meta.env.VITE_APP_TITLE || 'Default Title';
 
