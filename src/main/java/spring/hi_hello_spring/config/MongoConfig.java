@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import java.util.Arrays;
 
 @Configuration
-@EnableMongoRepositories(basePackages = "spring.hi_hello_spring.chatting.domain.repository.mongo")
+@EnableMongoRepositories(basePackages = "spring.hi_hello_spring.chatting.command.domain.repository.mongo")
 public class MongoConfig {
 
     @Bean
