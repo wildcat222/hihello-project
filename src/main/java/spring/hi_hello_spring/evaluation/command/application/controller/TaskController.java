@@ -37,4 +37,10 @@ public class TaskController {
     }
 
     // 과제 삭제
+    @DeleteMapping("/task/{taskSeq}")
+    @Operation(summary = "과제 삭제", description = "과제를 삭제하는 기능입니다.")
+    public ApiResponse<?> updateTask(@PathVariable Long taskSeq) {
+        taskService.deleteTask(taskSeq);
+        return ResponseUtil.successResponse("과제가 성공적으로 삭제되었습니다.").getBody();
+    }
 }
