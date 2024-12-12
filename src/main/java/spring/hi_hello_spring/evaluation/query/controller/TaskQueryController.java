@@ -67,4 +67,11 @@ public class TaskQueryController {
         List<TaskSearchQueryDTO> taskSearchQueryDTO = taskQueryService.getSearchTask(taskContent);
         return ResponseUtil.successResponse("과제를 성공적으로 검색하였습니다.", taskSearchQueryDTO).getBody();
     }
+
+    @GetMapping("mentee/task/group/{taskGroupSeq}")
+    @Operation(summary = "그룹 과제 동료 조회", description = "그룹과제를 같이 수행할 동료를 조회합니다.")
+    public ApiResponse<?> getTaskGroupPartner(@PathVariable Long taskGroupSeq) {
+        List<TaskGroupPartnerQueryDTO> taskGroupPartner = taskQueryService.getTaskGroupPartner(taskGroupSeq);
+        return ResponseUtil.successResponse("그룹 과제 제목 리스트를 성공적으로 조회했습니다.", taskGroupPartner).getBody();
+    }
 }

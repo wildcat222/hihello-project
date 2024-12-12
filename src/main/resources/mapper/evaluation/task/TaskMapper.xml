@@ -174,4 +174,16 @@
         OR a.task_title LIKE CONCAT('%', #{taskContent}, '%')
     </select>
 
+    <select id="findTaskGroupPartner" resultType="TaskGroupPartnerQueryDTO">
+        SELECT
+        tg.task_group_seq,
+        gm.group_member_seq,
+        gm.employee_seq,
+        e.employee_name
+        FROM group_member gm
+        JOIN task_group tg ON tg.task_group_seq = gm.task_group_seq
+        JOIN employee e ON e.employee_seq = gm.employee_seq
+        WHERE tg.task_group_seq = #{taskGroupSeq}
+    </select>
+
 </mapper>
