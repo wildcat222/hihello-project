@@ -53,5 +53,10 @@ public class TaskQueryService {
 
         return taskQueryMapper.findSearchTask(taskSearch);
     }
+
+    public List<TaskGroupPartnerQueryDTO> getTaskGroupPartner(Long taskGroupSeq) {
+
+        return taskQueryMapper.findTaskGroupPartner(taskGroupSeq);
+    }
 }
 
