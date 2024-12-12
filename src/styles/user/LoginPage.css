@@ -1,0 +1,79 @@
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.login-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.login-title {
+    font-size: 1.7rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 40px 0 30px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.login-form .form-group label {
+    font-weight: bold; /* 라벨 강조 */
+    font-size: 1rem;
+    margin-bottom: 10px; /* 아래 여백 */
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: var(--ivory);
+    font-size: 0.9rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: #888;
+}
+
+.login-button {
+    width: 80%;
+    max-width: 200px;
+    padding: 12px;
+    background-color: var(--purple);
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.login-button:hover {
+    background-color: var(--blue);
+}
