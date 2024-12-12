@@ -20,7 +20,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private static final AntPathRequestMatcher[] SWAGGER_URLS = {
             new AntPathRequestMatcher("/"),
-            new AntPathRequestMatcher("/login"),
+            new AntPathRequestMatcher("/api/v1/login"),
             new AntPathRequestMatcher("/swagger-ui/**"),
             new AntPathRequestMatcher("/v3/api-docs/**"),
             new AntPathRequestMatcher("/swagger-resources/**")
