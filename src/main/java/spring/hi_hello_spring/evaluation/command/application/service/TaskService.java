@@ -6,7 +6,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskCreateDTO;
+import spring.hi_hello_spring.evaluation.command.application.dto.TaskUpdateDTO;
 import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.Task;
+import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.TaskEval;
 import spring.hi_hello_spring.evaluation.command.domain.repository.EvalListRepository;
 import spring.hi_hello_spring.evaluation.command.domain.repository.TaskRepository;
 import spring.hi_hello_spring.evaluation.command.domain.service.EvalListDomainService;
@@ -31,19 +33,36 @@ public class TaskService {
     public void createTask(TaskCreateDTO taskContent) {
 
         Task task = modelMapper.map(taskContent, Task.class);
-        Template template = templateRepository.findByTemplateTaskRound(taskContent.getTemplateTaskRound());
+        Template template = templateRepository.findByTemplateSeq(taskContent.getTemplateSeq());
         task.updateTemplateSeq(template.getTemplateSeq());
         taskRepository.save(task);
 
         // EvalList 항목들 저장
         evalListDomainService.createTask(taskContent,task);
 
-        // Template 항목 수정
-        templateDomainService.updateTask(taskContent);
-
     }
 
     // 과제 수정
+    @Transactional
+    public void updateTask(TaskUpdateDTO taskUpdateDTO, Long taskSeq) {
+
+        Template template = templateRepository.findByTemplateSeq(taskUpdateDTO.getTemplateSeq());
+
+        Task task = Task.builder()
+                .taskSeq(taskSeq)  // 기존 taskSeq 사용
+                .taskType(taskUpdateDTO.getTaskType())
+                .departmentSeq(taskUpdateDTO.getDepartmentSeq())
+                .templateSeq(taskUpdateDTO.getTemplateSeq())
+                .taskTitle(taskUpdateDTO.getTaskTitle())
+                .taskContent(taskUpdateDTO.getTaskContent())
+                .taskUrl(taskUpdateDTO.getTaskUrl())
+                .build();
+
+        taskRepository.save(task);
+
+        // EvalList 항목들 저장
+        evalListDomainService.updateTask(taskUpdateDTO, task);
+    }
 
     // 과제 삭제
 }

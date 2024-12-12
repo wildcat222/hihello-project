@@ -14,8 +14,8 @@ VALUES
 -- Template 데이터 삽입
 INSERT INTO template (template_type, template_check_required_status, template_training_type, template_title, template_sub, template_detail, template_url, template_task_round, template_procedure, reg_date)
 VALUES
-    ('온보딩', TRUE, '기본교육', '교육 템플릿1', '교육 템플릿 설명', '온보딩 교육 내용', 'https://example.com','3주차', 1, NOW()),
-    ('직무교육', FALSE, '심화교육', '교육 템플릿2', '직무 교육 설명', '직무 교육 내용', 'https://example.com','2주차', 2, NOW());
+    ('NORMAL', TRUE, '기본교육', '교육 템플릿1', '교육 템플릿 설명', '온보딩 교육 내용', 'https://example.com','3주차', 1, NOW()),
+    ('JOB', FALSE, '심화교육', '교육 템플릿2', '직무 교육 설명', '직무 교육 내용', 'https://example.com','2주차', 2, NOW());
 
 -- Task 데이터 삽입
 INSERT INTO task (department_seq, template_seq, task_type, task_title, task_content, task_url, reg_date)
