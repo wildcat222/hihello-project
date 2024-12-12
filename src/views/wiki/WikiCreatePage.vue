@@ -13,7 +13,7 @@
 
 <script setup>
 // 서버로 이미지 파일을 업로드
-import Editor from '@/components/Tiptap.vue';
+import Editor from '@/components/EditorComponent.vue';
 import {createWiki} from "@/services/WikiApi.js";
 import {ref} from "vue";
 
@@ -31,6 +31,7 @@ const creatingWiki = async () => {
       .then(() => {
         alert("위키가 성공적으로 등록되었습니다.");
         wikiTitle.value = '';
+        wikiContent.value = '';
       })
       .catch((error) => {
         console.error("위키 생성 도중 오류가 발생했습니다.", error);
