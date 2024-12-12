@@ -38,8 +38,6 @@ public class Task extends BaseTimeEntity {
         this.taskTitle = taskTitle;
         this.taskContent = taskContent;
         this.taskUrl = taskUrl;
-
-
     }
 
     public void updateTemplateSeq(Long templateSeq) {

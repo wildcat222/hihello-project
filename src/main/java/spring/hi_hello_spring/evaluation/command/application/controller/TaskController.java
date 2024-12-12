@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskCreateDTO;
+import spring.hi_hello_spring.evaluation.command.application.dto.TaskSubmitDTO;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskUpdateDTO;
 import spring.hi_hello_spring.evaluation.command.application.service.TaskService;
 
@@ -42,5 +43,13 @@ public class TaskController {
     public ApiResponse<?> updateTask(@PathVariable Long taskSeq) {
         taskService.deleteTask(taskSeq);
         return ResponseUtil.successResponse("과제가 성공적으로 삭제되었습니다.").getBody();
+    }
+
+    // 과제 제출
+    @PostMapping("/mentee/task/{taskSeq}")
+    @Operation(summary = "과제 제출", description = "멘티가 과제를 제출하는 기능입니다.")
+    public ApiResponse<?> createTask(@PathVariable Long taskSeq, @RequestBody TaskSubmitDTO taskSubmitDTO) {
+        taskService.submitTask(taskSeq, taskSubmitDTO);
+        return ResponseUtil.successResponse("과제가 성공적으로 제출되었습니다.").getBody();
     }
 }
