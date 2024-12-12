@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.hi_hello_spring.common.aggregate.entity.File;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
+import spring.hi_hello_spring.common.repository.FileRepository;
 import spring.hi_hello_spring.common.util.CustomUserUtils;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskCreateDTO;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskSubmitDTO;
@@ -28,6 +30,7 @@ public class TaskService {
 
     private final EvalListRepository evalListRepository;
     private final TaskRepository taskRepository;
+    private final FileRepository fileRepository;
     private final TemplateRepository templateRepository;
     private final ModelMapper modelMapper;
     private final EvalListDomainService evalListDomainService;
@@ -91,7 +94,13 @@ public class TaskService {
                 .taskSubmitContent(taskSubmitDTO.getTaskSubmitContent())
                 .taskAttachedUrl(taskSubmitDTO.getTaskAttachedUrl())
                 .build();
-
         taskRepository.save(taskSubmit);
+
+        File file = File.builder()
+                .fileName(taskSubmitDTO.getFileName())
+                .fileUrl(taskSubmitDTO.getTaskAttachedUrl())
+                .build();
+        fileRepository.save(file);
+
     }
 }

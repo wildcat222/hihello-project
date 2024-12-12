@@ -24,13 +24,10 @@ public class TaskSubmit extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String taskSubmitContent;
 
-    private String taskAttachedUrl;
-
     @Builder
     public TaskSubmit(Long taskSeq, Long employeeSeq, String taskSubmitContent, String taskAttachedUrl){
         this.taskSeq = taskSeq;
         this.employeeSeq = employeeSeq;
         this.taskSubmitContent = taskSubmitContent;
-        this.taskAttachedUrl = taskAttachedUrl;
     }
 }
