@@ -7,10 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
+import spring.hi_hello_spring.common.util.CustomUserUtils;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskCreateDTO;
+import spring.hi_hello_spring.evaluation.command.application.dto.TaskSubmitDTO;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskUpdateDTO;
 import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.Task;
 import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.TaskEval;
+import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.TaskSubmit;
 import spring.hi_hello_spring.evaluation.command.domain.repository.EvalListRepository;
 import spring.hi_hello_spring.evaluation.command.domain.repository.TaskRepository;
 import spring.hi_hello_spring.evaluation.command.domain.service.EvalListDomainService;
@@ -67,11 +70,28 @@ public class TaskService {
     }
 
     // 과제 삭제
+    @Transactional
     public void deleteTask(Long taskSeq) {
         if(taskRepository.existsById(taskSeq)) {
             taskRepository.deleteById(taskSeq);
         }else{
             throw new CustomException(ErrorCodeType.DATA_NOT_FOUND);
         }
+    }
+
+    // 과제 제출
+    @Transactional
+    public void submitTask(Long taskSeq, TaskSubmitDTO taskSubmitDTO) {
+
+        Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
+
+        TaskSubmit taskSubmit = TaskSubmit.builder()
+                .taskSeq(taskSeq)
+                .employeeSeq(employeeSeq)
+                .taskSubmitContent(taskSubmitDTO.getTaskSubmitContent())
+                .taskAttachedUrl(taskSubmitDTO.getTaskAttachedUrl())
+                .build();
+
+        taskRepository.save(taskSubmit);
     }
 }
