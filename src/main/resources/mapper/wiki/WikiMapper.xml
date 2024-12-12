@@ -43,4 +43,44 @@
         WHERE wm.wiki_seq = #{wiki_seq}
         ORDER BY reg_date DESC
     </select>
+
+    <!--위키 내용을 조회하는 SQL-->
+    <select id="findWikiSnapshotByWikiSeq" resultType="WikiSnapshotQueryDTO">
+        SELECT
+            w.wiki_seq,
+            w.wiki_title,
+            ws.wiki_snapshot_seq,
+            ws.wiki_snapshot_ver,
+            ws.wiki_snapshot_content
+        FROM
+            wiki w
+        JOIN
+            wiki_snapshot ws ON w.wiki_seq = ws.wiki_seq
+        WHERE
+            w.wiki_seq = #{wiki_seq} AND ws.wiki_snapshot_ver &lt;= (w.wiki_current_ver / 10 + 1)
+    </select>
+
+    <!--위키 수정 내용을 조회하는 SQL-->
+    <select id="findWikiModContentsByWikiSeqAndWikiSnapshotSeq" resultType="WikiModContentQueryDTO">
+        SELECT
+            wiki_mod_content_seq,
+            wiki_seq,
+            wiki_snapshot_seq,
+            mod_content AS wikiModContent
+        FROM
+            wiki_mod_content
+        WHERE
+            wiki_seq = #{wikiSeq} AND wiki_snapshot_seq = #{wikiSnapshotSeq}
+        ORDER BY wiki_mod_content_seq
+    </select>
+
+    <!--위키 최신 수정 날짜를 조회하는 SQL-->
+    <select id="findWikiLatestModDateByWikiSeq" resultType="java.time.LocalDateTime">
+        SELECT
+            reg_date
+        FROM
+            wiki_mod_content
+        ORDER BY wiki_mod_content_seq DESC
+        LIMIT 1
+    </select>
 </mapper>
