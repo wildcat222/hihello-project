@@ -3,7 +3,7 @@ INSERT INTO department (department_name)
 VALUES ('교육팀'),
        ('영업팀'),
        ('총무팀')
-       ;
+;
 
 -- Quiz Category 데이터 삽입
 INSERT INTO quiz_category (quiz_category_name, reg_date)
@@ -68,8 +68,8 @@ VALUES
 INSERT INTO report (mentoring_seq, report_content, report_feeling, report_week, reg_date)
 VALUES
     (1, '멘토링 첫 주차 보고서', '잘 진행 중입니다.', 1, NOW()),
-    (2, '멘토링 첫 번째 보고서', '문제가 없습니다.', 1, NOW());
-    (1, '멘토링 두 번째 주차 보고서', '어려웠습니다.', 2, NOW());
+    (2, '멘토링 첫 번째 보고서', '문제가 없습니다.', 1, NOW()),
+    (1, '멘토링 두 번째 주차 보고서', '어려웠습니다.', 2, NOW()),
     (2, '멘토링 두 번째 주차 보고서', '재밌었습니다.', 2, NOW());
 
 -- Quiz 데이터 삽입
@@ -152,9 +152,3 @@ INSERT INTO wiki_mod_content (wiki_seq, employee_seq, wiki_snapshot_seq, mod_con
 VALUES
     (1, 5, 1, '{"content": "온보딩 가이드 수정"}', NOW()),
     (2, 6, 1, '{"content": "직무 교육 매뉴얼 수정"}', NOW());
-
--- Notification 데이터 삽입
-INSERT INTO noti (employee_seq, template_seq, noti_content, noti_url, reg_date)
-VALUES
-    (1, 1, '온보딩 교육이 시작되었습니다.', 'https://example.com/onboarding', NOW()),
-    (3, 2, '직무 교육이 시작되었습니다.', 'https://example.com/job-training', NOW());

@@ -409,7 +409,7 @@ CREATE TABLE `file` (
 CREATE TABLE `noti` (
                         `noti_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                         `employee_seq`   BIGINT   NOT NULL,
-                        `template_seq`   BIGINT   NOT NULL,
+                        `noti_type` VARCHAR(50) NOT NULL,
                         `noti_content`   VARCHAR(100)   NOT NULL,
                         `noti_url`   VARCHAR(255)   NULL,
                         `alarm_read_status`   BOOLEAN   NOT NULL   DEFAULT FALSE,
@@ -417,9 +417,7 @@ CREATE TABLE `noti` (
                         `mod_date`   DATETIME      NULL,
                         PRIMARY KEY (`noti_seq`),
                         KEY `FK_employee_TO_noti_1` (`employee_seq`),
-                        CONSTRAINT `FK_employee_TO_noti_1` FOREIGN KEY (`employee_seq`) REFERENCES `employee` (`employee_seq`) ON DELETE CASCADE ON UPDATE CASCADE,
-                        KEY `FK_template_TO_noti_1` (`template_seq`),
-                        CONSTRAINT `FK_template_TO_noti_1` FOREIGN KEY (`template_seq`) REFERENCES `template` (`template_seq`) ON DELETE CASCADE ON UPDATE CASCADE
+                        CONSTRAINT `FK_employee_TO_noti_1` FOREIGN KEY (`employee_seq`) REFERENCES `employee` (`employee_seq`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE `chatbot_category` (
