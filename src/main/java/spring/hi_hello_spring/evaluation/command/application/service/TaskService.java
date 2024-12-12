@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.hi_hello_spring.common.exception.CustomException;
+import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskCreateDTO;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskUpdateDTO;
 import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.Task;
@@ -65,4 +67,11 @@ public class TaskService {
     }
 
     // 과제 삭제
+    public void deleteTask(Long taskSeq) {
+        if(taskRepository.existsById(taskSeq)) {
+            taskRepository.deleteById(taskSeq);
+        }else{
+            throw new CustomException(ErrorCodeType.DATA_NOT_FOUND);
+        }
+    }
 }

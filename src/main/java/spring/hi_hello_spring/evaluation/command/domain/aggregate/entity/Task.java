@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
 
 @Entity
