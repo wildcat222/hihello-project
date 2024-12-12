@@ -158,4 +158,32 @@
         AND a.task_seq = #{task_seq}
     </select>
 
+    <select id="findSearchTask" resultType="TaskSearchQueryDTO">
+        SELECT
+        a.task_seq,
+        d.department_seq,
+        d.department_name,
+        a.template_seq,
+        t.template_task_round,
+        a.task_title,
+        a.task_content
+        FROM task a
+        JOIN department d ON a.department_seq = d.department_seq
+        JOIN template t ON a.template_seq = t.template_seq
+        WHERE a.task_content LIKE CONCAT('%', #{taskContent}, '%')
+        OR a.task_title LIKE CONCAT('%', #{taskContent}, '%')
+    </select>
+
+    <select id="findTaskGroupPartner" resultType="TaskGroupPartnerQueryDTO">
+        SELECT
+        tg.task_group_seq,
+        gm.group_member_seq,
+        gm.employee_seq,
+        e.employee_name
+        FROM group_member gm
+        JOIN task_group tg ON tg.task_group_seq = gm.task_group_seq
+        JOIN employee e ON e.employee_seq = gm.employee_seq
+        WHERE tg.task_group_seq = #{taskGroupSeq}
+    </select>
+
 </mapper>
