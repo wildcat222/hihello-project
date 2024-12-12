@@ -1,19 +1,14 @@
 package spring.hi_hello_spring.wiki.command.application.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.parser.Parser;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.common.util.CustomUserUtils;
+import spring.hi_hello_spring.common.util.WikiUtil;
 import spring.hi_hello_spring.wiki.command.application.dto.WikiCreateRequestDTO;
 import spring.hi_hello_spring.wiki.command.application.dto.WikiUpdateRequestDTO;
 import spring.hi_hello_spring.wiki.command.domain.aggregate.entity.Wiki;
@@ -33,9 +28,9 @@ public class WikiService {
     private final WikiRepository wikiRepository;
     private final WikiSnapshotRepository wikiSnapshotRepository;
     private final WikiModContentRepository wikiModContentRepository;
-
     private final ModelMapper modelMapper;
     private final ObjectMapper objectMapper;
+    private final WikiUtil wikiUtil;
 
     @Transactional
     public void createWiki(WikiCreateRequestDTO wikiCreateRequestDTO) {
@@ -55,7 +50,7 @@ public class WikiService {
         wikiSnapshotRepository.save(wikiSnapshot);
 
         // 변경 내용
-        String modContent = processHtmlToJson(wikiCreateRequestDTO.getWikiSnapshotContent());
+        String modContent = wikiUtil.processHtmlToJson(wikiCreateRequestDTO.getWikiSnapshotContent());
 
         // 변경 내역 기록(처음 위키 등록 시에는 전체 내용을 수정된 것으로 간주하고 저장)
         WikiModContent wikiModContent = WikiModContent.builder()
@@ -67,42 +62,20 @@ public class WikiService {
         wikiModContentRepository.save(wikiModContent);
     }
 
-    private String processHtmlToJson(String wikiSnapshotContent) {
-        // HTML 파싱
-        Document doc = Jsoup.parse(wikiSnapshotContent, "", Parser.htmlParser());
-
-        int index = 1;
-
-        Map<Integer, Map<String, String>> blockMap = new HashMap<>();
-
-        for (Element element : doc.body().children()) {
-            System.out.println("하하"+element);
-            Map<String, String> block = new HashMap<>();
-            block.put("original", "");
-            block.put("modified", element.outerHtml());
-            blockMap.put(index++, block);
-        }
-
-        // Map을 JSON 문자열로 변환
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.writeValueAsString(blockMap);
-        } catch(Exception e) {
-            throw new CustomException(ErrorCodeType.INVALID_SERIALIZATION);
-        }
-    }
-
     @Transactional
-    public void updateWiki(Long wikiSeq, Long employeeSeq, WikiUpdateRequestDTO wikiUpdateRequestDTO) throws IOException {
+    public void updateWiki(Long wikiSeq, WikiUpdateRequestDTO wikiUpdateRequestDTO) throws IOException {
+        Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
         // 기존 위키 문서 가져오기
         Wiki wiki = wikiRepository.findById(wikiSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
 
         // 현재 위키 문서의 버전
-        int currentVersion = wiki.getWikiCurrentVer();
+        int currentWikiVer = wiki.getWikiCurrentVer();
 
+        // 새로 수정될 경우 생길 위키 문서의 버전
+        int wikiMaxVer = wikiModContentRepository.countByWikiSeq(wikiSeq).intValue();
         // 위키 문서의 현재 버전 이전의 가장 가까운 스냅샷 버전
-        int latestSnapshotVer = currentVersion / 10 + 1;
+        int latestSnapshotVer = (currentWikiVer - 1) / 10 + 1;
 
         // 위키 문서의 현재 버전 이전의 가장 가까운 스냅샷
         WikiSnapshot latestWikiSnapshot = wikiSnapshotRepository.findByWikiSeqAndWikiSnapshotVer(wikiSeq, latestSnapshotVer)
@@ -111,109 +84,56 @@ public class WikiService {
         // 최신 스냅샷의 snapshotSeq 가져오기
         Long latestWikiSnapshotSeq = latestWikiSnapshot.getWikiSnapshotSeq();
 
-        // 최신 스냅샷을 각 문단별로 쪼개기
-        String[] latestSnapshotParagraphs = latestWikiSnapshot.getWikiSnapshotContent().split("\n");
-
         // 최신 스냅샷을 기준으로 변경된 내용들 찾기
         List<String> modContents = wikiModContentRepository.findModContentsByWikiSeqAndWikiSnapshotSeqOrderByWikiModContentSeq(wikiSeq, latestWikiSnapshotSeq);
 
-        // 현재 버전의 위키 전체 내용을 저장할 배열
-        String[] currentWikiContent = new String[latestSnapshotParagraphs.length];
+        // 최신 스냅샷과 변경 내용을 병합해서 현재 위키 내용 가져오기
+        HashMap<Integer, String> currentWikiContent = wikiUtil.mergeWikiContent(latestWikiSnapshot.getWikiSnapshotContent(), modContents);
 
-        // 수정된 내용을 저장할 리스트(JSON 형식으로 반환)
-        List<Map<String, String>> modContentsList = new ArrayList<>();
-
-        for (String modContent : modContents) {
-            // json 형식을 hashmap으로 변환하기
-            HashMap<Integer, Map<String, String>> modifications = parseModContent(modContent);
-
-            // 수정 사항을 기존 문단에 반영(즉 현재 버전의 위키 전체 내용)
-            currentWikiContent = applyModification(latestSnapshotParagraphs, modifications);
-        }
-
-        // 해당 위키의 해당 스냅샷 개수 가져오기
+        // 위키의 해당 스냅샷 개수 가져오기
         int numOfVersions = wikiModContentRepository.countByWikiSeqAndWikiSnapshotSeq(wikiSeq, latestWikiSnapshotSeq).intValue();
 
-        // 만약 현재 이 위키에 존재하는 버전이 10의 배수라면, 다음 버전은 snapshot에 저장되어야 한다.
-        if (numOfVersions % 10 == 0) {
-            String modContent = wikiUpdateRequestDTO.getWikiModContent().replace("\n", "\\n").replace("\r", "\\r");
-            WikiSnapshot newWikiSnapshot = saveSnapshot(wikiSeq, numOfVersions,modContent);
+        // 만약 현재 이 위키에 존재하는 버전이 10의 배수라면, 현재의 위키는 snapshot 테이블에 저장돼야 한다.
+        if (wikiMaxVer % 10 == 0) {
+            String newSnapshot = wikiUpdateRequestDTO.getWikiModContent();
+            WikiSnapshot newWikiSnapshot = saveSnapshot(wikiSeq, numOfVersions, newSnapshot);
             latestWikiSnapshotSeq = newWikiSnapshot.getWikiSnapshotSeq();
         }
 
-        // 수정내용 전체를 문단 단위로 쪼개서 modifiedContent에 저장
-        String[] modifiedContent = wikiUpdateRequestDTO.getWikiModContent().split("\n");
-        Map<String, String> modification = new HashMap<>();
-        int minParagraphQty = Math.min(currentWikiContent.length, modifiedContent.length);
-        for (int i = 0; i < minParagraphQty; i++) {
-            if (!Objects.equals(currentWikiContent[i], modifiedContent[i])) {
-                modification.put("index", String.valueOf(i + 1));
-                modification.put("original", currentWikiContent[i]);
-                modification.put("modified", modifiedContent[i]);
+        // 수정내용 전체를 블럭 단위로 쪼개서 modifiedContent에 저장
+        HashMap<Integer, String> modifiedContents = wikiUtil.parseSnapshotJsonToHashmap(wikiUpdateRequestDTO.getWikiModContent());
 
-                modContentsList.add(modification);
+        // db에 저장할 mod_content
+        Map<Integer, Map<String, String>> wikiModContentHashMap = new HashMap<>();
+
+        int maxParagraphQty = Math.max(currentWikiContent.size(), modifiedContents.size());
+
+        for (int i = 1; i <= maxParagraphQty; i++) {
+            currentWikiContent.putIfAbsent(i, ""); // currentWikiContent에 없는 인덱스는 빈 문자열로 채움
+            modifiedContents.putIfAbsent(i, "");  // modifiedContents에 없는 인덱스는 빈 문자열로 채움
+        }
+
+        for (int i = 1; i <= maxParagraphQty; i++) {
+            int index = i;
+
+            if (!Objects.equals(currentWikiContent.get(i), modifiedContents.get(i))) {
+                wikiModContentHashMap.put(i, new HashMap<>() {{
+                    put("original", currentWikiContent.get(index));
+                    put("modified", modifiedContents.get(index));
+                }});
             }
         }
 
-        if (currentWikiContent.length < modifiedContent.length) {
-            for (int i = minParagraphQty; i < modifiedContent.length; i++) {
-                modification.put("index", String.valueOf(i + 1));
-                modification.put("original", "");
-                modification.put("modified", modifiedContent[i]);
-
-                modContentsList.add(modification);
-            }
-        }
-
-        // modContentsList를 String(Json)으로 변환
-        String modContentJson = objectMapper.writeValueAsString(modContentsList);
-
-        // 변경 내역 기록
+        String wikiModContentJson = objectMapper.writeValueAsString(wikiModContentHashMap);
+        // 변경 내역 기록(처음 위키 등록 시에는 전체 내용을 수정된 것으로 간주하고 저장)
         WikiModContent wikiModContent = WikiModContent.builder()
                 .wikiSeq(wiki.getWikiSeq())
                 .employeeSeq(1L)
                 .wikiSnapshotSeq(latestWikiSnapshotSeq)
-                .modContent(modContentJson)
+                .modContent(wikiModContentJson)
                 .build();
         wikiModContentRepository.save(wikiModContent);
-
-        // wiki 엔티티의 wikiCurrentVer 수정
-        wiki.updateWikiCurrentVer(numOfVersions + 1);
-    }
-
-    // json 형태로 들어있는 modContent를 hashmap으로 파싱
-    private HashMap<Integer, Map<String, String>> parseModContent(String modContentJson) {
-        HashMap<Integer, Map<String, String>> modContentHashMap = new HashMap<>();
-
-        try {
-            List<Map<String, Object>> modifications = objectMapper.readValue(
-                    modContentJson, new TypeReference<List<Map<String, Object>>>() {
-                    }
-            );
-
-            // index를 키, original과 modified를 값으로 변환
-            for (Map<String, Object> modification : modifications) {
-                Integer index = (Integer) modification.get("index");
-                Map<String, String> valueMap = new HashMap<>();
-                valueMap.put("original", (String) modification.get("original"));
-                valueMap.put("modified", (String) modification.get("modified"));
-
-                modContentHashMap.put(index, valueMap);
-            }
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-        return modContentHashMap;
-    }
-
-    private String[] applyModification(String[] paragraphs, HashMap<Integer, Map<String, String>> modifications) {
-        for(Map.Entry<Integer, Map<String, String>> modification : modifications.entrySet()) {
-            Integer index = modification.getKey();
-            String modified = (String) modification.getValue().get("modified");
-
-            paragraphs[index] = modified;
-        }
-        return paragraphs;
+        wiki.updateWikiCurrentVer(wikiMaxVer + 1);
     }
 
     private WikiSnapshot saveSnapshot(Long wikiSeq, int numOfVersions, String wikiModContent) {
@@ -231,4 +151,3 @@ public class WikiService {
         wikiRepository.deleteById(wikiSeq);
     }
 }
-

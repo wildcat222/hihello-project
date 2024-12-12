@@ -14,4 +14,6 @@ public interface WikiModContentRepository {
     List<String> findModContentsByWikiSeqAndWikiSnapshotSeqOrderByWikiModContentSeq(@Param("wikiSeq") Long wikiSeq, @Param("latestSnapshotSeq") Long latestSnapshotSeq);
 
     Long countByWikiSeqAndWikiSnapshotSeq(Long wikiSeq, Long latestSnapshotSeq);
+
+    Long countByWikiSeq(Long wikiSeq);
 }
