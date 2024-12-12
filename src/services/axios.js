@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 export const springAPI = axios.create({
-  baseURL: 'http://localhost:8253:/api/v1',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
 });
 
 export const lambdaAPI = axios.create({
-  baseURL: 'https://kobrxuzr12.execute-api.ap-northeast-2.amazonaws.com/dev',
+  baseURL: import.meta.env.VITE_LAMBDA_API_BASE_URL,
 });

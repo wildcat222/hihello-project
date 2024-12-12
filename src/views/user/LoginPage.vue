@@ -5,27 +5,40 @@
             <form class="login-form" @submit.prevent="onLogin">
                 <div class="form-group">
                     <label for="username">사번</label>
-                    <input type="text" id="username" v-model="username" placeholder="사번을 입력하세요" />
+                    <input type="text" id="username" v-model="employee_num" placeholder="사번을 입력하세요" />
                 </div>
                 <div class="form-group">
                     <label for="password">비밀번호</label>
-                    <input type="password" id="password" v-model="password" placeholder="비밀번호를 입력하세요" />
+                    <input type="password" id="password" v-model="employee_password" placeholder="비밀번호를 입력하세요" />
                 </div>
                 <button type="submit" class="login-button">로그인</button>
             </form>
+            <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
         </WhiteBoxComponent>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { useUserStore } from '@/stores/UserStore';
 import WhiteBoxComponent from '@/components/WhiteBoxComponent.vue';
-import '@/styles/user/LoginPage.css'
+import { useRouter } from 'vue-router';
+import '@/styles/user/LoginPage.css';
 
-const username = ref('');
-const password = ref('');
+const router = useRouter();
+const userStore = useUserStore();
 
-const onLogin = () => {
-    console.log('사번:', username.value, '비밀번호:', password.value);
+const employee_num = ref('');
+const employee_password = ref('');
+const errorMessage = ref('');
+
+const onLogin = async () => {
+    const success = await userStore.login(employee_num.value, employee_password.value);
+    if (!success) {
+        errorMessage.value = '로그인에 실패했습니다. 사번과 비밀번호를 확인하세요.';
+    } else {
+        errorMessage.value = '';
+        router.push('/main');
+    }
 };
 </script>
