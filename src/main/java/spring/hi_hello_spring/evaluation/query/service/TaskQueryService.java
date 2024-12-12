@@ -2,10 +2,7 @@ package spring.hi_hello_spring.evaluation.query.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import spring.hi_hello_spring.evaluation.query.dto.GroupTaskAllQueryDTO;
-import spring.hi_hello_spring.evaluation.query.dto.TaskMenteeDetailQueryDTO;
-import spring.hi_hello_spring.evaluation.query.dto.TaskMentorDetailQueryDTO;
-import spring.hi_hello_spring.evaluation.query.dto.TaskAllListQueryDTO;
+import spring.hi_hello_spring.evaluation.query.dto.*;
 import spring.hi_hello_spring.evaluation.query.mapper.TaskQueryMapper;
 
 import java.util.HashMap;
@@ -51,6 +48,10 @@ public class TaskQueryService {
         return taskQueryMapper.findGroupTaskTitle();
 
     }
+    /* 과제 검색*/
+    public List<TaskSearchQueryDTO> getSearchTask(String taskSearch) {
 
+        return taskQueryMapper.findSearchTask(taskSearch);
+    }
 }
 

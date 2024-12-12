@@ -2,17 +2,12 @@ package spring.hi_hello_spring.evaluation.query.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
-import spring.hi_hello_spring.evaluation.query.dto.GroupTaskAllQueryDTO;
-import spring.hi_hello_spring.evaluation.query.dto.TaskMenteeDetailQueryDTO;
-import spring.hi_hello_spring.evaluation.query.dto.TaskMentorDetailQueryDTO;
-import spring.hi_hello_spring.evaluation.query.dto.TaskAllListQueryDTO;
+import spring.hi_hello_spring.evaluation.query.dto.*;
 import spring.hi_hello_spring.evaluation.query.service.TaskQueryService;
 
 import java.util.List;
@@ -63,5 +58,13 @@ public class TaskQueryController {
 
         List<GroupTaskAllQueryDTO> queryDTO = taskQueryService.getGroupTaskTitle();
         return ResponseUtil.successResponse("그룹 과제 제목 리스트를 성공적으로 조회했습니다.", queryDTO).getBody();
+    }
+
+    @GetMapping("task")
+    @Operation(summary = "과제 검색", description = "담당자, 멘토가 과제를 검색할 수 있는 기능입니다.")
+    public ApiResponse<?> getSearchTask(@RequestParam String taskContent) {
+
+        List<TaskSearchQueryDTO> taskSearchQueryDTO = taskQueryService.getSearchTask(taskContent);
+        return ResponseUtil.successResponse("과제를 성공적으로 검색하였습니다.", taskSearchQueryDTO).getBody();
     }
 }
