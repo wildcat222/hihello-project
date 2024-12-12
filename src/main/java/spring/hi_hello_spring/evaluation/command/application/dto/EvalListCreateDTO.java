@@ -11,6 +11,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class EvalListCreateDTO {
 
+    private Long evalListSeq;
     private String evalListContent;
     private Integer evalListScore;
     private Long evalIndSeq;

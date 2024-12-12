@@ -15,10 +15,12 @@ public interface TemplateRepository {
 
     Optional<Template> findById(Long templateSeq);
 
-    Template findByTemplateTaskRound(String templateTaskRound);
-
     @Query("SELECT SUM(templateQuizQty) FROM Template WHERE templateType = 'QUIZ'")
     Integer countTotalQuizQty();
 
     Long countByTemplateTaskRoundIsNotNull();
+
+    Template findByTemplateSeq(Long templateSeq);
+
+
 }
