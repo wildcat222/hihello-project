@@ -109,10 +109,10 @@ VALUES
     (2, 4, FALSE, NOW());
 
 -- Task Submit 데이터 삽입
-INSERT INTO task_submit (task_seq, employee_seq, task_submit_content, task_attached_url, reg_date)
+INSERT INTO task_submit (task_seq, employee_seq, task_submit_content, reg_date)
 VALUES
-    (1, 1, "1차 과제 제출합니다.", "taskAttached@gmail.com",NOW()),
-    (1, 2, "제출합니다.", "taskAttached@gamil.com",NOW());
+    (1, 1, "1차 과제 제출합니다.", NOW()),
+    (1, 2, "제출합니다.", NOW());
 
 -- Group Member 데이터 삽입
 INSERT INTO group_member (task_group_seq, employee_seq)
