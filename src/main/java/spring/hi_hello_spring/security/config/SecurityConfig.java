@@ -50,7 +50,7 @@ public class SecurityConfig {
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
-//        http.addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         http.addFilterBefore(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -86,6 +86,8 @@ public class SecurityConfig {
         configuration.addAllowedMethod("*");       // 모든 HTTP 메서드 허용
         configuration.addAllowedHeader("*");       // 모든 헤더 허용
         configuration.setAllowCredentials(true);   // 쿠키 허용 (필요 시 true로 설정)
+        configuration.addExposedHeader("accesstoken");
+        configuration.addExposedHeader("refreshtoken");
 
         org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 적용
