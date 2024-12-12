@@ -3,14 +3,22 @@ import AsideComponent from '@/components/AsideComponent.vue';
 </script>
 
 <template>
-    <div id="app">
-        <AsideComponent/>
-        <router-view/>
+  <div id="app">
+    <AsideComponent />
+    <div class="router-container">
+      <router-view />
     </div>
+  </div>
 </template>
 
 <style scoped>
 #app {
-  background-color: var(--ivory); /* 원하는 배경색으로 변경 */
+  display: flex;
+}
+
+.router-container {
+  flex-grow: 1;
+  background-color: var(--ivory);
 }
 </style>
+
