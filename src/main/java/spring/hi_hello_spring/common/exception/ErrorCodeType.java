@@ -31,7 +31,10 @@ public enum ErrorCodeType {
     TEMPLATE_NOT_FOUND(HttpStatus.NOT_FOUND, "TEMPLATE_ERROR_001", "템플릿을 찾을 수 없습니다."),
 
     // wiki 관련 오류
-    INVALID_SERIALIZATION(HttpStatus.BAD_REQUEST, "WIKI_ERROR_01", "직렬화 처리가 불가능한 값입니다.")
+    INVALID_SERIALIZATION(HttpStatus.BAD_REQUEST, "WIKI_ERROR_01", "직렬화 처리가 불가능한 값입니다."),
+
+    // 알림 관련 오류
+    NOT_FOUND_NOTIFY(HttpStatus.NOT_FOUND, "NOTI_ERRER_01", "존재하지 않는 알림입니다."),
     ;
 
     private final HttpStatus httpStatus;
