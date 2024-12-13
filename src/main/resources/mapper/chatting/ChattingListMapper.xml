@@ -15,9 +15,9 @@
         mentoring_active_status = 1
     </select>
 
-    <select id="findGroupingChatRoomsByUserSeq" parameterType="Long" resultType="Long">
+    <select id="findGroupingChatRoomsByUserSeq" parameterType="Long" resultType="String">
         SELECT
-        t.task_group_seq
+        t.chat_room_seq
         FROM
         group_member AS g
         JOIN
