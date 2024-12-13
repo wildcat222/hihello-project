@@ -27,17 +27,15 @@ public class Task extends BaseTimeEntity {
     @Lob // 대량 데이터를 처리하도록 지시
     @Column(columnDefinition = "TEXT")
     private String taskContent;
-    private String taskUrl;
 
     @Builder
-    public Task(Long taskSeq, Long templateSeq, TaskType taskType, Long departmentSeq, String taskTitle, String taskContent, String taskUrl){
+    public Task(Long taskSeq, Long templateSeq, TaskType taskType, Long departmentSeq, String taskTitle, String taskContent){
         this.taskType = taskType;
         this.departmentSeq = departmentSeq;
         this.templateSeq = templateSeq;
         this.taskSeq = taskSeq;
         this.taskTitle = taskTitle;
         this.taskContent = taskContent;
-        this.taskUrl = taskUrl;
     }
 
     public void updateTemplateSeq(Long templateSeq) {

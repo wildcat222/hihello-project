@@ -14,8 +14,8 @@ import spring.hi_hello_spring.evaluation.command.application.dto.TaskCreateDTO;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskSubmitDTO;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskUpdateDTO;
 import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.Task;
-import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.TaskEval;
 import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.TaskSubmit;
+import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.TaskType;
 import spring.hi_hello_spring.evaluation.command.domain.repository.EvalListRepository;
 import spring.hi_hello_spring.evaluation.command.domain.repository.TaskRepository;
 import spring.hi_hello_spring.evaluation.command.domain.service.EvalListDomainService;
@@ -38,16 +38,28 @@ public class TaskService {
 
     // 과제 등록
     @Transactional
-    public void createTask(TaskCreateDTO taskContent) {
+    public void createTask(TaskCreateDTO taskCreateDTO, String uploadFile) {
 
-        Task task = modelMapper.map(taskContent, Task.class);
-        Template template = templateRepository.findByTemplateSeq(taskContent.getTemplateSeq());
-        task.updateTemplateSeq(template.getTemplateSeq());
+        Task task = Task.builder()
+                .departmentSeq(taskCreateDTO.getDepartmentSeq())
+                .templateSeq(taskCreateDTO.getTemplateSeq())
+                .taskType(taskCreateDTO.getTaskType())
+                .taskTitle(taskCreateDTO.getTaskTitle())
+                .taskContent(taskCreateDTO.getTaskContent())
+                .build();
+        Task saveTask = taskRepository.save(task);
         taskRepository.save(task);
 
-        // EvalList 항목들 저장
-        evalListDomainService.createTask(taskContent,task);
 
+        File file = File.builder()
+                .taskSeq(saveTask.getTaskSeq())
+                .fileName(taskCreateDTO.getFileName())
+                .fileUrl(uploadFile)
+                .build();
+        fileRepository.save(file);
+
+        // EvalList 항목들 저장
+        evalListDomainService.createTask(taskCreateDTO,task);
     }
 
     // 과제 수정
@@ -63,10 +75,10 @@ public class TaskService {
                 .templateSeq(taskUpdateDTO.getTemplateSeq())
                 .taskTitle(taskUpdateDTO.getTaskTitle())
                 .taskContent(taskUpdateDTO.getTaskContent())
-                .taskUrl(taskUpdateDTO.getTaskUrl())
                 .build();
-
         taskRepository.save(task);
+
+
 
         // EvalList 항목들 저장
         evalListDomainService.updateTask(taskUpdateDTO, task);

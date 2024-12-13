@@ -11,16 +11,15 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 public class TaskCreateDTO {
 
-    private TaskType taskType;
     private Long departmentSeq;
     private Long templateSeq;
+    private TaskType taskType;
     private String taskTitle;
     private String taskContent;
-    private String taskUrl;
-    private List<EvalListCreateDTO> evalIndicators;
+    private String FileName;
 
+    private List<EvalListCreateDTO> evalIndicators;
 
 }
