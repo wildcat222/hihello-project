@@ -138,6 +138,7 @@ CREATE TABLE `mentoring` (
                              `mentor_seq`   BIGINT   NOT NULL,
                              `mentee_seq`   BIGINT   NOT NULL,
                              `mentoring_active_status`  BOOLEAN NOT NULL  DEFAULT TRUE,
+                             `chat_room_seq`   VARCHAR(255)   NOT NULL,
                              `reg_date`   DATETIME   NOT NULL,
                              `mod_date`   DATETIME   NULL,
                              PRIMARY KEY (`mentoring_seq`),
@@ -205,7 +206,9 @@ CREATE TABLE `quiz_result` (
 CREATE TABLE `task_group` (
                               `task_group_seq`   BIGINT   NOT NULL   AUTO_INCREMENT,
                               `task_seq`   BIGINT   NOT NULL,
+                              `task_group_num`   INT   NOT NULL,
                               `task_group_active_status`   BOOLEAN   NOT NULL   DEFAULT TRUE,
+                              `chat_room_seq`   VARCHAR(255)   NOT NULL,
                               `reg_date`   DATETIME   NOT NULL,
                               `mod_date`   DATETIME   NULL,
                               PRIMARY KEY (`task_group_seq`),

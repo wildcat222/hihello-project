@@ -49,7 +49,7 @@ public class TaskQueryController {
     public ApiResponse<?> getMenteeTaskDetail(@PathVariable Long taskSeq) {
 
         List<TaskMenteeDetailQueryDTO> taskMenteeDetailQueryDTO = taskQueryService.getMenteeTaskDetail(taskSeq);
-        return ResponseUtil.successResponse("멘티의 과제를 성공적으로 조회되었습니다.", taskMenteeDetailQueryDTO).getBody();
+        return ResponseUtil.successResponse("멘티 본인의 과제를 성공적으로 조회되었습니다.", taskMenteeDetailQueryDTO).getBody();
     }
 
     @GetMapping("hr/group/task")
