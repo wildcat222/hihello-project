@@ -1,9 +1,11 @@
 package spring.hi_hello_spring.evaluation.query.dto;
 
+import jakarta.persistence.Enumerated;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.TaskType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +17,8 @@ import java.util.List;
 public class TaskMentorDetailQueryDTO {
 
     private Long taskSeq;
-    private String taskType;
+    @Enumerated
+    private TaskType taskType;
     private String taskTitle;
     private String taskUrl;
     private Long templateSeq;
