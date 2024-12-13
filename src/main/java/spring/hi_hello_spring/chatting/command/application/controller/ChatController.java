@@ -35,6 +35,7 @@ public class ChatController {
 
         try {
             String messageJson = objectMapper.writeValueAsString(message);
+            chatRoomService.saveChatMessage(roomId, message);
             // Kafka에 메시지 발행 (JSON 형태로)
             kafkaTemplate.send("chat-message", roomId, message);
         } catch (Exception e) {
@@ -48,10 +49,9 @@ public class ChatController {
     @GetMapping("chat/room/{roomId}/message")
     @ResponseBody
     @Operation(summary = "채팅 내역", description = "채팅 내역을 반환합니다.")
-    public ApiResponse<String> loadMessage(@PathVariable("roomId") String roomId) {
+    public ResponseEntity<ApiResponse<List<ChatResponseMessage>>> loadMessage(@PathVariable("roomId") String roomId) {
         // 채팅 내역을 조회하여 반환
         List<ChatResponseMessage> messages = chatRoomService.chattingMessageList(roomId);
-        // return ResponseUtil.successResponse(messages); // 내용 확인용
-        return  ResponseUtil.successResponse("채팅 내역이 성공적으로 조회 되었습니다.").getBody();
+        return ResponseUtil.successResponse(messages); // 내용 확인용
     }
 }
