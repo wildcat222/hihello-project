@@ -2,6 +2,7 @@ package spring.hi_hello_spring.evaluation.query.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import spring.hi_hello_spring.common.util.CustomUserUtils;
 import spring.hi_hello_spring.evaluation.query.dto.*;
 import spring.hi_hello_spring.evaluation.query.mapper.TaskQueryMapper;
 
@@ -36,8 +37,10 @@ public class TaskQueryService {
 
     public List<TaskMenteeDetailQueryDTO> getMenteeTaskDetail(Long taskSeq) {
 
+        Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
+
         Map<String, Object> params = new HashMap<>();
-        params.put("employee_seq", 2L); // 시큐리티Seq 구현되면 변경 예정
+        params.put("employee_seq", employeeSeq);
         params.put("task_seq", taskSeq);
         return taskQueryMapper.findMenteeTaskDetail(params);
     }
