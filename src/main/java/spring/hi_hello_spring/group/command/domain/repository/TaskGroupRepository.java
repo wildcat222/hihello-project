@@ -10,5 +10,5 @@ public interface TaskGroupRepository {
 
     TaskGroup save(TaskGroup taskSeq);
 
-    TaskGroup findByTaskGroupSeq(Long roomId);
+    TaskGroup findByChatRoomSeq(String roomId);
 }
