@@ -62,7 +62,6 @@ public class WikiQueryService {
 
     // 위키 수정 내용 리스트 조회하기 (최신 스냅샷 이후~현재까지의 수정 내역)
     public List<WikiModContentQueryDTO> getWikiModContents(Long wikiSeq, Long wikiSnapshotSeq) {
-
         return wikiMapper.findWikiModContentsByWikiSeqAndWikiSnapshotSeq(wikiSeq, wikiSnapshotSeq);
     }
 

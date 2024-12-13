@@ -8,9 +8,9 @@
         SELECT
             w.wiki_seq,
             w.wiki_title,
-            wmc.employee_seq,
-            e.employee_num,
-            e.employee_name,
+            wmc.employee_seq AS editor_seq,
+            e.employee_num AS editor_num,
+            e.employee_name AS editor_name,
             wmc.reg_date AS latest_mod_date
         FROM
             wiki w
