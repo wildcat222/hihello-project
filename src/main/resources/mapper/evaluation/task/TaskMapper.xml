@@ -110,7 +110,7 @@
     </resultMap>
       
     <select id="findMentorTaskDetail" resultMap="TaskResultMap">
-        SELECT
+        SELECT DISTINCT
         a.task_seq,
         a.task_type,
         a.task_title,
@@ -122,10 +122,9 @@
         tl.eval_list_content,
         tl.eval_list_score
         FROM task a
-        JOIN department d
-        ON a.department_seq = d.department_seq
-        JOIN employee e
-        ON d.department_seq = e.department_seq
+        JOIN template t ON t.template_seq = a.template_seq
+        JOIN department d ON a.department_seq = d.department_seq
+        JOIN employee e ON d.department_seq = e.department_seq
         LEFT JOIN (
         SELECT
         m.mentor_seq,
@@ -140,17 +139,6 @@
         FROM employee e
         ) em
         ON mt.mentee_seq = em.mentee_seq
-        LEFT JOIN (
-        SELECT
-        os.employee_seq,
-        t.template_seq,
-        t.template_task_round,
-        t.template_end_at
-        FROM onboarding_status os
-        JOIN template t
-        ON os.template_seq = t.template_seq
-        ) t
-        ON em.mentee_seq = t.employee_seq
         LEFT JOIN eval_list tl
         ON a.task_seq = tl.task_seq
         WHERE e.employee_seq = #{employee_seq}
