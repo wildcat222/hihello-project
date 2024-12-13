@@ -45,8 +45,8 @@ public class JwtFilter extends OncePerRequestFilter {
             String employeeSeq = jwtUtil.getEmployeeSeq(newAccessToken);
             String newRefreshToken = jwtUtil.generateRefreshToken(employeeSeq);
 
-            response.setHeader("accessToken", newAccessToken);
-            response.setHeader("refreshToken", newRefreshToken);
+            response.setHeader("accesstoken", newAccessToken);
+            response.setHeader("refreshtoken", newRefreshToken);
 
             // 로그용 코드
             log.info("accessToken {} ", newAccessToken);
