@@ -21,7 +21,13 @@ public class TaskGroup extends BaseTimeEntity {
 
     private Boolean taskGroupActiveStatus = true;
 
+    private String chatRoomSeq;
+
     public void updateTaskGroupNum(int groupNum) {
         this.taskGroupNum = groupNum;
+    }
+
+    public void saveChatRoomSeq(String chatRoomSeq) {
+        this.chatRoomSeq = chatRoomSeq;
     }
 }

@@ -35,13 +35,13 @@ public class ChatRoomService {
 
     // Mentoring을 사용해 채팅방 생성
     @Transactional
-    public void createMentoringChatRoom(Long mentoringSeq, Long mentorSeq, Long menteeSeq) {
+    public void createMentoringChatRoom(String roomId, Long mentorSeq, Long menteeSeq) {
 
-        Mentoring mentoring = mentoringRepository.findByMentoringSeq(mentoringSeq);
+        Mentoring mentoring = mentoringRepository.findByChatRoomSeq(roomId);
 
         ChatRoom chatRoom = modelMapper.map(mentoring, ChatRoom.class);
 
-        chatRoom.setRoomId(UUID.randomUUID().toString());  // roomId는 렌덤으로 생성
+        chatRoom.setRoomId(roomId);
         chatRoom.setMentorSeq(mentorSeq);
         chatRoom.setMenteeSeq(menteeSeq);
 
@@ -50,11 +50,11 @@ public class ChatRoomService {
 
     // Grouping을 사용해 채팅방 생성
     @Transactional
-    public void createGroupChatRoom(Long roomId) {
+    public void createGroupChatRoom(String roomId) {
         // Grouping 정보 가져오기
-        TaskGroup taskGroup = taskGroupRepository.findByTaskGroupSeq(roomId);
+        TaskGroup taskGroup = taskGroupRepository.findByChatRoomSeq(roomId);
 
-        if (taskGroup == null) {
+        if (taskGroup.getChatRoomSeq() == null) {
             throw new IllegalArgumentException("해당하는 방 없음");
         }
 
@@ -65,7 +65,7 @@ public class ChatRoomService {
         }
 
         ChatRoom chatRoom = new ChatRoom();
-        chatRoom.setRoomId(UUID.randomUUID().toString());
+        chatRoom.setRoomId(roomId);
 
         List<Long> memberSeqList = new ArrayList<>();
         for (GroupMember groupMember : groupMembers) {

@@ -9,4 +9,6 @@ public interface MentoringRepository {
     Mentoring findByMentoringSeq(Long mentoringSeq);
 
     Mentoring findByMenteeSeq(Long menteeSeq);
+
+    Mentoring findByChatRoomSeq(String roomId);
 }

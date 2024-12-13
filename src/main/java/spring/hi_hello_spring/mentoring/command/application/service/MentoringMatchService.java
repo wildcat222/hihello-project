@@ -9,6 +9,7 @@ import spring.hi_hello_spring.mentoring.command.domain.aggregate.entity.Mentorin
 import spring.hi_hello_spring.mentoring.command.domain.repository.MentoringRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,13 +26,14 @@ public class MentoringMatchService {
             Mentoring mentoringGroup = Mentoring.builder()
                     .mentorSeq(mentoringGroupDTOs.getMentorSeq())
                     .menteeSeq(mentoringGroupDTOs.getMenteeSeq())
+                    .chatRoomSeq(UUID.randomUUID().toString())
                     .build();
 
             Mentoring savedMentoringGroup = mentoringRepository.save(mentoringGroup);
             System.out.println("MentoringGroup saved with mentoringSeq: " + savedMentoringGroup.getMentoringSeq());
 
             // mentoringSeq를 roomId로 사용하여 ChatRoom 생성
-            Long roomId = savedMentoringGroup.getMentoringSeq();
+            String roomId = savedMentoringGroup.getChatRoomSeq();
             chatRoomService.createMentoringChatRoom(roomId, mentoringGroupDTOs.getMentorSeq(), mentoringGroupDTOs.getMenteeSeq());
         }
     }
