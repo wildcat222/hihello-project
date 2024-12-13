@@ -66,10 +66,9 @@ public class WikiController {
     @Operation(summary = "위키 수정", description = "위키 수정 로직입니다.")
     public ApiResponse<?> updateWiki(
             @PathVariable Long wikiSeq,
-            @RequestParam Long employeeSeq,
             @RequestBody WikiUpdateRequestDTO wikiUpdateRequestDTO
     ) throws IOException {
-        wikiService.updateWiki(wikiSeq, employeeSeq, wikiUpdateRequestDTO);
+        wikiService.updateWiki(wikiSeq, wikiUpdateRequestDTO);
         return ResponseUtil.successResponse("위키가 성공적으로 수정되었습니다.").getBody();
     }
 
@@ -77,8 +76,7 @@ public class WikiController {
     @Operation(summary = "위키 삭제", description = "위키 삭제 로직입니다.")
     public ApiResponse<?> deleteWiki(
             @PathVariable Long wikiSeq
-    )
-    throws IOException {
+    ) {
         wikiService.deleteWiki(wikiSeq);
         return ResponseUtil.successResponse("위키가 성공적으로 삭제되었습니다.").getBody();
     }

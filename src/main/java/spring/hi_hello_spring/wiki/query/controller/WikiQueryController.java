@@ -11,6 +11,7 @@ import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.wiki.query.dto.WikiHistoryListQueryDTO;
 import spring.hi_hello_spring.wiki.query.dto.WikiListQueryDTO;
+import spring.hi_hello_spring.wiki.query.dto.WikiQueryDTO;
 import spring.hi_hello_spring.wiki.query.service.WikiQueryService;
 
 import java.util.List;
@@ -23,7 +24,6 @@ public class WikiQueryController {
 
     private final WikiQueryService wikiQueryService;
 
-    // 위키 리스트 조회
     @GetMapping
     @Operation(summary = "위키 리스트 전체 조회", description = "위키 리스트 전체 조회 로직입니다.")
     public ApiResponse<?> getAllWikis() {
@@ -36,5 +36,12 @@ public class WikiQueryController {
     public ApiResponse<?> getWikiHistories(@PathVariable("wikiSeq") Long wikiSeq) {
         List<WikiHistoryListQueryDTO> wikiHistoryListQueryDTOS = wikiQueryService.getWikiHistories(wikiSeq);
         return ResponseUtil.successResponse("데이터가 성공적으로 조회되었습니다.", wikiHistoryListQueryDTOS).getBody();
+    }
+
+    @GetMapping("/{wikiSeq}")
+    @Operation(summary = "위키 조회", description = "위키 조회 로직입니다.")
+    public ApiResponse<?> getWiki(@PathVariable("wikiSeq") Long wikiSeq) {
+        WikiQueryDTO wikiQueryDTO = wikiQueryService.getWikiByWikiSeq(wikiSeq);
+        return ResponseUtil.successResponse("데이터가 성공적으로 조회되었습니다.", wikiQueryDTO).getBody();
     }
 }
