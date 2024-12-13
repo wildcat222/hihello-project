@@ -45,13 +45,9 @@ export const useUserStore = defineStore('user', {
         },
         async logout() {
             try {
-                // 서버에 로그아웃 요청 (Authorization 헤더에 accessToken 포함)
+                // 서버에 로그아웃 요청
                 if (this.accessToken) {
-                    await springAPI.post('/logout', {}, {
-                        headers: {
-                            Authorization: `Bearer ${this.accessToken}`,
-                        },
-                    });
+                    await springAPI.post('/logout');
                 }
             } catch (error) {
                 console.error('Server logout failed:', error.response?.data || error.message);
