@@ -46,11 +46,24 @@ public class TaskController {
     }
 
     // 과제 수정
-    @PutMapping("/task/{taskSeq}")
+    @PutMapping(value = "/task/{taskSeq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "과제 수정", description = "과제를 수정하는 기능입니다.")
-    public ApiResponse<?> updateTask(@RequestBody TaskUpdateDTO taskUpdateDTO,
-                                     @PathVariable("taskSeq") Long taskSeq) {
-        taskService.updateTask(taskUpdateDTO, taskSeq);
+    public ApiResponse<?> updateTask(@RequestPart("updateTaskDTO") TaskUpdateDTO taskUpdateDTO,
+                                     @PathVariable("taskSeq") Long taskSeq,
+                                     @RequestPart(value = "fileUrl", required = false) MultipartFile fileUrl) {
+        try {
+            String uploadFile = null;
+
+            // 파일이 존재하는 경우에만 업로드 처리
+            if (fileUrl != null && !fileUrl.isEmpty()) {
+                uploadFile = fileUploadUtil.uploadFile(fileUrl);
+            }
+
+            // 서비스 호출
+            taskService.updateTask(taskUpdateDTO, taskSeq, uploadFile);
+        } catch (IOException e) {
+            throw new RuntimeException("파일 업로드 중 오류 발생", e);
+        }
         return ResponseUtil.successResponse("과제가 성공적으로 수정되었습니다.").getBody();
     }
 

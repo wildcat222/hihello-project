@@ -19,7 +19,7 @@ public class TaskUpdateDTO {
     private Long departmentSeq;
     private String taskTitle;
     private String taskContent;
-    private String taskUrl;
+    private String fileName;
     private List<EvalListCreateDTO> evalIndicators;
 
 }

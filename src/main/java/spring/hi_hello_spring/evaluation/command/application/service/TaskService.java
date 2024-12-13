@@ -64,7 +64,7 @@ public class TaskService {
 
     // 과제 수정
     @Transactional
-    public void updateTask(TaskUpdateDTO taskUpdateDTO, Long taskSeq) {
+    public void updateTask(TaskUpdateDTO taskUpdateDTO, Long taskSeq, String uploadFile) {
 
         Template template = templateRepository.findByTemplateSeq(taskUpdateDTO.getTemplateSeq());
 
@@ -76,9 +76,16 @@ public class TaskService {
                 .taskTitle(taskUpdateDTO.getTaskTitle())
                 .taskContent(taskUpdateDTO.getTaskContent())
                 .build();
-        taskRepository.save(task);
+        Task updateTask = taskRepository.save(task);
 
-
+        if (uploadFile != null) {
+            File file = File.builder()
+                    .taskSeq(updateTask.getTaskSeq())
+                    .fileName(taskUpdateDTO.getFileName())
+                    .fileUrl(uploadFile)
+                    .build();
+            fileRepository.save(file);
+        }
 
         // EvalList 항목들 저장
         evalListDomainService.updateTask(taskUpdateDTO, task);
