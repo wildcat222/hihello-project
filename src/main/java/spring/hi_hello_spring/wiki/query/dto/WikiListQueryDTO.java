@@ -13,8 +13,8 @@ public class WikiListQueryDTO {
 
     private Long wikiSeq;
     private String wikiTitle;
-    private Long employeeSeq;
-    private String employeeNum;
-    private String employeeName;
-    private LocalDateTime LatestModDate;
+    private Long editorSeq;
+    private String editorNum;
+    private String editorName;
+    private LocalDateTime latestModDate;
 }
