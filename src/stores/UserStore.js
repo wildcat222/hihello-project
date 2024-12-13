@@ -4,9 +4,9 @@ import { springAPI } from '@/services/axios';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
-        accessToken: localStorage.getItem('accesstoken') || null,
-        refreshToken: localStorage.getItem('refreshtoken') || null,
-        isAuthenticated: !!localStorage.getItem('refreshtoken'),
+        accessToken: localStorage.getItem('accessToken') || null,
+        refreshToken: localStorage.getItem('refreshToken') || null,
+        isAuthenticated: !!localStorage.getItem('refreshToken'),
     }),
     actions: {
         async login(employeeNum, employeePassword) {
@@ -17,8 +17,8 @@ export const useUserStore = defineStore('user', {
                 });
         
                 // 응답 헤더에서 토큰 가져오기
-                this.accessToken = response.headers['accesstoken'];
-                this.refreshToken = response.headers['refreshtoken'];
+                this.accessToken = response.headers['accessToken'];
+                this.refreshToken = response.headers['refreshToken'];
         
                 console.log('header : ', response.headers);
                 console.log('Access Token:', this.accessToken); // 디버깅용
@@ -28,11 +28,12 @@ export const useUserStore = defineStore('user', {
                     this.isAuthenticated = true;
         
                     // 로컬 스토리지에 토큰 저장
-                    localStorage.setItem('accesstoken', this.accessToken);
-                    localStorage.setItem('refreshtoken', this.refreshToken);
+                    localStorage.setItem('accessToken', this.accessToken);
+                    localStorage.setItem('refreshToken', this.refreshToken);
         
                     // Axios 기본 헤더 설정
                     axios.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
+                    axios.defaults.headers.common['tokenType'] = 'access'
                 } else {
                     console.error('Tokens are missing in the response headers');
                 }
@@ -58,9 +59,10 @@ export const useUserStore = defineStore('user', {
                     this.isAuthenticated = false;
 
                     delete axios.defaults.headers.common['Authorization'];
+                    delete axios.defaults.headers.common['tokenType'];
 
-                    localStorage.removeItem('accesstoken');
-                    localStorage.removeItem('refreshtoken');
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
                 }
             }
             // 로그아웃 로딩 스피너 처리
@@ -74,18 +76,29 @@ export const useUserStore = defineStore('user', {
                 async (error) => {
                     if (error.response?.status === 401 && this.refreshToken) {
                         try {
-                            const res = await springAPI.post('/token/refresh', {
-                                refreshToken: this.refreshToken,
+                            const res = await springAPI.request({
+                                ...error.config,
+                                headers: {
+                                    refreshToken: `Bearer ${this.refreshToken}`,
+                                    tokenType: 'refresh'
+                                }
                             });
 
-                            this.accessToken = res.data.accessToken;
-                            localStorage.setItem('accesstoken', res.data.accessToken);
+                            this.accessToken = res.headers['accessToken'];
+                            this.refreshToken = res.headers['refreshToken'];
 
-                            axios.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
-                            return springAPI.request(error.config); // 원래 요청 재시도
+                            localStorage.setItem('accessToken', this.accessToken);
+                            localStorage.setItem('refreshToken', this.refreshToken);
+
+                            springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
+                            springAPI.defaults.headers.common['tokenType'] = 'access';
+
+                            return res;
+
                         } catch (err) {
                             console.error('Token refresh failed:', err);
                             this.logout();
+                            alert('세션이 만료되었습니다. 다시 로그인해주세요.');
                             return Promise.reject(err);
                         }
                     }
