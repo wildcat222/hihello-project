@@ -96,7 +96,7 @@ public class TaskService {
 
     // 과제 제출
     @Transactional
-    public void submitTask(Long taskSeq, TaskSubmitDTO taskSubmitDTO) {
+    public void submitTask(TaskSubmitDTO taskSubmitDTO, Long taskSeq, String uploadFile) {
 
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
 
@@ -104,15 +104,18 @@ public class TaskService {
                 .taskSeq(taskSeq)
                 .employeeSeq(employeeSeq)
                 .taskSubmitContent(taskSubmitDTO.getTaskSubmitContent())
-                .taskAttachedUrl(taskSubmitDTO.getTaskAttachedUrl())
                 .build();
-        taskRepository.save(taskSubmit);
+        TaskSubmit saveSubmit = taskRepository.save(taskSubmit);
 
-        File file = File.builder()
-                .fileName(taskSubmitDTO.getFileName())
-                .fileUrl(taskSubmitDTO.getTaskAttachedUrl())
-                .build();
-        fileRepository.save(file);
+        if (uploadFile != null) {
+            File file = File.builder()
+                    .taskSubmitSeq(saveSubmit.getTaskSubmitSeq())
+                    .fileName(taskSubmitDTO.getFileName())
+                    .fileUrl(uploadFile)
+                    .build();
+            fileRepository.save(file);
+        }
+
 
     }
 }
