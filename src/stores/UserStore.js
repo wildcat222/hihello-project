@@ -43,24 +43,30 @@ export const useUserStore = defineStore('user', {
                 return false;
             }
         },
-        async logout() {
-            try {
-                // 서버에 로그아웃 요청
-                if (this.accessToken) {
-                    await springAPI.post('/logout');
+        logout() {
+            const performLogout = async () => {
+                try {
+                    // 서버에 로그아웃 요청
+                    if (this.accessToken) {
+                        await springAPI.post('/logout');
+                    }
+                } catch (error) {
+                    console.error('Server logout failed:', error.response?.data || error.message);
+                } finally {
+                    this.accessToken = null;
+                    this.refreshToken = null;
+                    this.isAuthenticated = false;
+
+                    delete axios.defaults.headers.common['Authorization'];
+
+                    localStorage.removeItem('accesstoken');
+                    localStorage.removeItem('refreshtoken');
                 }
-            } catch (error) {
-                console.error('Server logout failed:', error.response?.data || error.message);
-            } finally {
-                this.accessToken = null;
-                this.refreshToken = null;
-                this.isAuthenticated = false;
-
-                delete axios.defaults.headers.common['Authorization'];
-
-                localStorage.removeItem('accesstoken');
-                localStorage.removeItem('refreshtoken');
             }
+            // 로그아웃 로딩 스피너 처리
+            performLogout().finally(() => {
+                console.log('User logged out.');
+            });
         },
         initializeInterceptors() {
             springAPI.interceptors.response.use(
