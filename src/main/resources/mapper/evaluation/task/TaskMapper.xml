@@ -45,38 +45,22 @@
 
     <select id="findMenteeTaskDetail" parameterType="java.util.Map" resultType="TaskMenteeDetailQueryDTO">
 
-        SELECT
+        SELECT DISTINCT
         a.task_seq,
         a.task_title,
         a.task_type,
         t.template_seq,
         a.task_content,
         a.task_url,
-        d.department_seq,
-        d.department_name,
         t.template_task_round,
         t.template_end_at
         FROM task a
-        JOIN department d
-        ON a.department_seq = d.department_seq
+        JOIN department d ON d.department_seq = a.department_seq
         JOIN employee e
         ON d.department_seq = e.department_seq
-        LEFT JOIN (
-        SELECT
-        os.employee_seq,
-        t.template_seq,
-        t.template_task_round,
-        t.template_end_at
-        FROM onboarding_status os
-        JOIN template t
-        ON os.template_seq = t.template_seq
-        ) t
-        ON e.employee_seq = t.employee_seq
-        WHERE d.department_seq = (
-        SELECT department_seq
-        FROM employee
-        WHERE employee_seq = #{employee_seq}
-        )
+        JOIN template t ON t.template_seq = a.template_seq
+        JOIN onboarding_status os ON os.template_seq = t.template_seq
+        WHERE os.employee_seq = #{employee_seq}
         AND a.task_seq = #{task_seq}
 
     </select>

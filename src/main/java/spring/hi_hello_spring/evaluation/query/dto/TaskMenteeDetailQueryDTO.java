@@ -14,13 +14,11 @@ import java.time.LocalDateTime;
 public class TaskMenteeDetailQueryDTO {
 
     private Long taskSeq;
-    private String templateTitle;
     private String taskType;
-    private Long templateSeq;
-    private String taskContent;
+    private String taskTitle;
     private String taskUrl;
-    private Long departmentSeq;
-    private String departmentName;
+    private String taskContent;
+    private Long templateSeq;
     private String templateTaskRound;
     private LocalDateTime templateEndAt;
 }
