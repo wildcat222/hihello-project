@@ -151,7 +151,7 @@ public class JwtUtil {
     public Optional<String> getToken(HttpServletRequest request, String tokenType) {
 
         String authorizationHeader;
-        if (tokenType.equals("refresh")) authorizationHeader = request.getHeader("refreshToken");
+        if (tokenType.equals("refresh")) authorizationHeader = request.getHeader("RefreshToken");
         else authorizationHeader = request.getHeader("Authorization");
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
