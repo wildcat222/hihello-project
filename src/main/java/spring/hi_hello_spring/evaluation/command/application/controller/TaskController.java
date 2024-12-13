@@ -76,10 +76,23 @@ public class TaskController {
     }
 
     // 과제 제출
-    @PostMapping("/mentee/task/{taskSeq}")
+    @PostMapping(value = "/mentee/task/{taskSeq}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "과제 제출", description = "멘티가 과제를 제출하는 기능입니다.")
-    public ApiResponse<?> createTask(@PathVariable Long taskSeq, @RequestBody TaskSubmitDTO taskSubmitDTO) {
-        taskService.submitTask(taskSeq, taskSubmitDTO);
+    public ApiResponse<?> createSubmit(@RequestPart("createSubmitDTO") TaskSubmitDTO taskSubmitDTO,
+                                     @PathVariable("taskSeq") Long taskSeq,
+                                     @RequestPart(value = "fileUrl", required = false) MultipartFile fileUrl){
+
+        try {
+            // 파일 업로드 처리
+            String uploadFile = null;
+            if (fileUrl != null && !fileUrl.isEmpty()) {
+                uploadFile = fileUploadUtil.uploadFile(fileUrl);
+            }
+            // 서비스 호출
+            taskService.submitTask(taskSubmitDTO, taskSeq, uploadFile);
+        } catch (IOException e) {
+            throw new RuntimeException("파일 업로드 중 오류 발생", e);
+        }
         return ResponseUtil.successResponse("과제가 성공적으로 제출되었습니다.").getBody();
     }
 }

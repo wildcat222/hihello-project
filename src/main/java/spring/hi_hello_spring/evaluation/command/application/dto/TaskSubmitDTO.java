@@ -13,6 +13,5 @@ public class TaskSubmitDTO {
 
     private String taskSubmitContent;
     private String fileName;
-    private String taskAttachedUrl;
 
 }
