@@ -15,9 +15,8 @@ public class TaskAllListQueryDTO {
     private Long departmentSeq;
     private String departmentName;
     private Long templateSeq;
+    private String taskTitle;
     private String templateTaskRound;
-    private Long employeeSeq;
-    private String displayName;
-    private String taskContent;
+
 
 }
