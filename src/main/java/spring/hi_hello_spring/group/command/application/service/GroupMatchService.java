@@ -13,7 +13,7 @@ import spring.hi_hello_spring.group.command.domain.repository.GroupMemberReposit
 import spring.hi_hello_spring.group.command.domain.repository.TaskGroupRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,9 +31,9 @@ public class GroupMatchService {
             // TaskGroup 생성 및 저장
             TaskGroup taskSeq = modelMapper.map(taskRequestDTOs, TaskGroup.class);
             taskSeq.updateTaskGroupNum(groupNum++);
+            taskSeq.saveChatRoomSeq(UUID.randomUUID().toString());
             taskSeq = taskGroupRepository.save(taskSeq);
 
-            Long roomId = taskSeq.getTaskGroupSeq(); // 생성된 TaskGroupSeq를 roomID로 사용
 
             // GroupMember 추가
             for (MemberDTO memberDTO : taskRequestDTOs.getMembers()) {
@@ -41,7 +41,7 @@ public class GroupMatchService {
                 groupMemberRepository.save(groupMember);
             }
 
-            chatRoomService.createGroupChatRoom(roomId);
+            chatRoomService.createGroupChatRoom(taskSeq.getChatRoomSeq());
         }
     }
 
