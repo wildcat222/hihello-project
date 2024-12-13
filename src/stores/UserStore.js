@@ -17,8 +17,8 @@ export const useUserStore = defineStore('user', {
                 });
         
                 // 응답 헤더에서 토큰 가져오기
-                this.accessToken = response.headers['accessToken'];
-                this.refreshToken = response.headers['refreshToken'];
+                this.accessToken = response.headers['accesstoken'];
+                this.refreshToken = response.headers['refreshtoken'];
         
                 console.log('header : ', response.headers);
                 console.log('Access Token:', this.accessToken); // 디버깅용
@@ -79,13 +79,13 @@ export const useUserStore = defineStore('user', {
                             const res = await springAPI.request({
                                 ...error.config,
                                 headers: {
-                                    refreshToken: `Bearer ${this.refreshToken}`,
+                                    RefreshToken: `Bearer ${this.refreshToken}`,
                                     tokenType: 'refresh'
                                 }
                             });
 
-                            this.accessToken = res.headers['accessToken'];
-                            this.refreshToken = res.headers['refreshToken'];
+                            this.accessToken = res.headers['accesstoken'];
+                            this.refreshToken = res.headers['refreshtoken'];
 
                             localStorage.setItem('accessToken', this.accessToken);
                             localStorage.setItem('refreshToken', this.refreshToken);
