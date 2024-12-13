@@ -22,9 +22,12 @@ public class Mentoring extends BaseTimeEntity {
 
     private boolean mentoringActiveStatus = true;
 
+    private String chatRoomSeq;
+
     @Builder
-    public Mentoring(Long mentorSeq, Long menteeSeq) {
+    public Mentoring(Long mentorSeq, Long menteeSeq, String chatRoomSeq) {
         this.mentorSeq = mentorSeq;
         this.menteeSeq = menteeSeq;
+        this.chatRoomSeq = chatRoomSeq;
     }
 }
