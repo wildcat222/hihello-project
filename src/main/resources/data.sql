@@ -18,10 +18,10 @@ VALUES
     ('JOB', FALSE, '심화교육', '교육 템플릿2', '직무 교육 설명', '직무 교육 내용', 'https://example.com','2주차', 2, NOW());
 
 -- Task 데이터 삽입
-INSERT INTO task (department_seq, template_seq, task_type, task_title, task_content, task_url, reg_date)
+INSERT INTO task (department_seq, template_seq, task_type, task_title, task_content, reg_date)
 VALUES
-    (1, 1, 'PERSONAL', '온보딩 참여하기', '온보딩 교육 자료 준비', 'onboarding@url.com' ,NOW()),
-    (1, 1, 'GROUP', '직무교육 참여하기', '직무 교육 평가 준비', 'workedu@url.com',NOW());
+    (1, 1, 'PERSONAL', '온보딩 참여하기', '온보딩 교육 자료 준비', NOW()),
+    (1, 1, 'GROUP', '직무교육 참여하기', '직무 교육 평가 준비', NOW());
 
 -- Position 데이터 삽입
 INSERT INTO positions (position_name)

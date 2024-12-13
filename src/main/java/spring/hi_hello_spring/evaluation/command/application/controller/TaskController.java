@@ -3,13 +3,18 @@ package spring.hi_hello_spring.evaluation.command.application.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
+import spring.hi_hello_spring.common.s3.FileUploadUtil;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskCreateDTO;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskSubmitDTO;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskUpdateDTO;
 import spring.hi_hello_spring.evaluation.command.application.service.TaskService;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("api/v1")
@@ -18,13 +23,25 @@ import spring.hi_hello_spring.evaluation.command.application.service.TaskService
 public class TaskController {
 
     private final TaskService taskService;
+    private final FileUploadUtil fileUploadUtil;
 
     // 과제 등록
-    @PostMapping("/task")
+    @PostMapping(value = "/task", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "과제 생성", description = "과제를 생성하는 기능입니다.")
-    public ApiResponse<?> createTask(@RequestBody TaskCreateDTO taskContent) {
+    public ApiResponse<?> createTask(
+            @RequestPart("taskCreateDTO") TaskCreateDTO taskCreateDTO,
+            @RequestPart("fileUrl") MultipartFile fileUrl) {
 
-        taskService.createTask(taskContent);
+        try {
+            // 파일 업로드 처리
+            String uploadFile = fileUploadUtil.uploadFile(fileUrl);
+
+            // 서비스 호출
+            taskService.createTask(taskCreateDTO, uploadFile);
+        } catch (IOException e) {
+            throw new RuntimeException("파일 업로드 중 오류 발생", e);
+        }
+
         return ResponseUtil.successResponse("과제가 성공적으로 등록되었습니다.").getBody();
     }
 
