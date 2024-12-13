@@ -33,7 +33,7 @@ export const useUserStore = defineStore('user', {
         
                     // Axios 기본 헤더 설정
                     axios.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
-                    axios.defaults.headers.common['tokenType'] = 'access'
+
                 } else {
                     console.error('Tokens are missing in the response headers');
                 }
@@ -59,7 +59,6 @@ export const useUserStore = defineStore('user', {
                     this.isAuthenticated = false;
 
                     delete axios.defaults.headers.common['Authorization'];
-                    delete axios.defaults.headers.common['tokenType'];
 
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('refreshToken');
@@ -80,7 +79,6 @@ export const useUserStore = defineStore('user', {
                                 ...error.config,
                                 headers: {
                                     RefreshToken: `Bearer ${this.refreshToken}`,
-                                    tokenType: 'refresh'
                                 }
                             });
 
@@ -91,7 +89,6 @@ export const useUserStore = defineStore('user', {
                             localStorage.setItem('refreshToken', this.refreshToken);
 
                             springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
-                            springAPI.defaults.headers.common['tokenType'] = 'access';
 
                             return res;
 
