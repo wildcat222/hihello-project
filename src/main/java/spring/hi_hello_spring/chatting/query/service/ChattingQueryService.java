@@ -14,7 +14,7 @@ public class ChattingQueryService {
         return chattingMapper.findMentoringChatRoomByUserSeq(userSeq);
     }
 
-    public Long getUserGroupingChatRooms(Long userSeq) {
+    public String getUserGroupingChatRooms(Long userSeq) {
         return chattingMapper.findGroupingChatRoomsByUserSeq(userSeq);
     }
 }
