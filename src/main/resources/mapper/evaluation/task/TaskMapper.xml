@@ -6,40 +6,17 @@
 
     <select id="findHrAllTask" resultType="TaskAllListQueryDTO">
 
-        SELECT
+        SELECT DISTINCT
         a.task_seq,
         a.department_seq,
         d.department_name,
-        e.employee_seq,
-        CASE
-        WHEN a.task_type = 'PERSONER' THEN e.employee_name
-        WHEN a.task_type = 'GROUP' THEN CAST(rt.group_rank AS CHAR)
-        END AS display_name,
-        a.task_content,
+        a.task_title ,
         t.template_seq,
         t.template_task_round
         FROM task a
         JOIN department d ON a.department_seq = d.department_seq
+        JOIN template t ON a.template_seq = t.template_seq
         JOIN employee e ON d.department_seq = e.department_seq
-        LEFT JOIN (
-        SELECT
-        tg.task_seq,
-        tg.task_group_seq,
-        ROW_NUMBER() OVER (
-        PARTITION BY tg.task_seq
-        ORDER BY tg.task_group_seq
-        ) AS group_rank
-        FROM task_group tg
-        WHERE tg.task_group_active_status = 1
-        ) rt ON a.task_seq = rt.task_seq
-        LEFT JOIN (
-        SELECT
-        os.employee_seq,
-        t.template_seq,
-        t.template_task_round
-        FROM onboarding_status os
-        JOIN template t ON os.template_seq = t.template_seq
-        ) t ON e.employee_seq = t.employee_seq
 
     </select>
 
