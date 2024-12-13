@@ -43,15 +43,28 @@ export const useUserStore = defineStore('user', {
                 return false;
             }
         },
-        logout() {
-            this.accessToken = null;
-            this.refreshToken = null;
-            this.isAuthenticated = false;
+        async logout() {
+            try {
+                // 서버에 로그아웃 요청 (Authorization 헤더에 accessToken 포함)
+                if (this.accessToken) {
+                    await springAPI.post('/logout', {}, {
+                        headers: {
+                            Authorization: `Bearer ${this.accessToken}`,
+                        },
+                    });
+                }
+            } catch (error) {
+                console.error('Server logout failed:', error.response?.data || error.message);
+            } finally {
+                this.accessToken = null;
+                this.refreshToken = null;
+                this.isAuthenticated = false;
 
-            delete axios.defaults.headers.common['Authorization'];
+                delete axios.defaults.headers.common['Authorization'];
 
-            localStorage.removeItem('accesstoken');
-            localStorage.removeItem('refreshtoken');
+                localStorage.removeItem('accesstoken');
+                localStorage.removeItem('refreshtoken');
+            }
         },
         initializeInterceptors() {
             springAPI.interceptors.response.use(
