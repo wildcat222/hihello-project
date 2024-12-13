@@ -158,4 +158,22 @@
         WHERE tg.task_group_seq = #{taskGroupSeq}
     </select>
 
+    <select id="findMentorAllTask" parameterType="java.lang.Long" resultType="TaskAllListQueryDTO">
+        SELECT DISTINCT
+        a.task_seq,
+        a.department_seq,
+        d.department_name,
+        a.task_title ,
+        t.template_seq,
+        t.template_task_round
+        FROM task a
+        JOIN department d ON a.department_seq = d.department_seq
+        JOIN template t ON a.template_seq = t.template_seq
+        JOIN employee e ON d.department_seq = e.department_seq
+        WHERE a.department_seq = (
+        SELECT department_seq
+        FROM employee
+        WHERE employee_seq = #{employee_seq}
+        )
+    </select>
 </mapper>
