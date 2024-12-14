@@ -120,7 +120,6 @@ public class JwtUtil {
         long expirationTime = (long) 1000 * 60 * 30; // 30분
 
         Claims claims = Jwts.claims().setSubject(String.valueOf(employeeSeq));
-//        claims.put("auth", authentication.getAuthorities());
 
         // 권한 정보를 List<String> 형태로 변환하여 클레임에 담기
         List<String> authorities = authentication.getAuthorities().stream()
@@ -137,7 +136,6 @@ public class JwtUtil {
                 claims.put("positionSeq", auth);
             }
         });
-        log.info("토큰에 들어갈 권한 정보 : " + authentication.getAuthorities());
 
         return Jwts.builder()
                 .setClaims(claims)
