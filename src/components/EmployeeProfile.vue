@@ -29,7 +29,7 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: #e0e0e0;
+  background-color: var(--gray);
   margin-bottom: 10px;
 }
 .employee_name {
@@ -42,7 +42,7 @@
   color: #555;
 }
 .button {
-  background-color: #6c63ff;
+  background-color: var(--purple);
   color: white;
   border: none;
   border-radius: 5px;
