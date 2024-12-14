@@ -57,7 +57,9 @@
         JOIN
             wiki_snapshot ws ON w.wiki_seq = ws.wiki_seq
         WHERE
-            w.wiki_seq = #{wiki_seq} AND ws.wiki_snapshot_ver &lt;= (w.wiki_current_ver / 10 + 1)
+            w.wiki_seq = #{wiki_seq} AND ws.wiki_snapshot_ver &lt;= (w.wiki_current_ver - 1) / 10 + 1
+        ORDER BY ws.wiki_snapshot_ver DESC
+        LIMIT 1
     </select>
 
     <!--위키 수정 내용을 조회하는 SQL-->
