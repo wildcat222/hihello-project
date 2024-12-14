@@ -1,12 +1,13 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
 import axios from 'axios';
-import { springAPI } from '@/services/axios';
+import {springAPI} from '@/services/axios';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
         accessToken: localStorage.getItem('accessToken') || null,
         refreshToken: localStorage.getItem('refreshToken') || null,
         isAuthenticated: !!localStorage.getItem('refreshToken'),
+        employeeInfo: null
     }),
     actions: {
         async login(employeeNum, employeePassword) {
@@ -49,7 +50,7 @@ export const useUserStore = defineStore('user', {
                 try {
                     // 서버에 로그아웃 요청
                     if (this.accessToken) {
-                        await springAPI.post('/logout');
+                        await springAPI.post('/employee/logout');
                     }
                 } catch (error) {
                     console.error('Server logout failed:', error.response?.data || error.message);
@@ -103,5 +104,34 @@ export const useUserStore = defineStore('user', {
                 }
             );
         },
+        getTokenPayload() {
+            if (!this.accessToken) {
+                console.error('Token이 존재하지 않습니다.');
+                return null;
+            }
+            try {
+                const payloadBase64 = this.accessToken.split('.')[1];
+                const payload = JSON.parse(atob(payloadBase64));
+                return payload;
+            } catch (error) {
+                console.error('토큰에서 Payload를 추출할 수 없습니다.', error);
+                return null;
+            }
+        },
+        getEmployeeInfo() {
+            const payload = this.getTokenPayload();
+            if (payload) {
+                this.employeeInfo = {
+                    employSeq: payload.employeeSeq,
+                    employeeNum: payload.employeeNum,
+                    employeeRole: payload.employeeRole,
+                    departmentSeq: payload.departmentSeq
+                };
+                return this.employeeInfo;
+            }
+            console.error('Employee 정보가 존재하지 않습니다.');
+            return null;
+        },
+
     },
 });
