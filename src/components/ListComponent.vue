@@ -13,7 +13,7 @@ defineProps(['items']);
     <!-- 아이템 -->
     <div>
       <div v-for="(item, index) in items" :key="index">
-        <div class="items">
+        <div>
           <slot name="item" :item="item" :index="index"></slot>
         </div>
         <hr class="light_gray_hr">
@@ -27,13 +27,8 @@ defineProps(['items']);
   display: flex;
   font-size: 17px;
   font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.items {
-  display: flex;
-  font-size: 15px;
-  margin: 22px 20px;
+  margin: 0 20px 14px 20px;
+  justify-content: space-between;
 }
 
 .gray_hr {

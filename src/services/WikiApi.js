@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {springAPI} from "@/services/axios.js";
 
 // 위키 등록
 export const createWiki = async(wikiData) => {
@@ -10,7 +9,17 @@ export const createWiki = async(wikiData) => {
     }
 }
 
-// 위키 조회
+// 위키 리스트 조회
+export const fetchWikiList = async() => {
+    try {
+        const response = await axios.get(`http://localhost:8253/api/v1/wiki`);
+        return response.data;
+    } catch(error) {
+        console.error('위키 리스트를 가져오는 중 오류가 발생헸습니다.', error);
+    }
+}
+
+// 위키 내용 조회
 export const fetchWiki = async(wikiSeq) => {
     try {
         const response = await axios.get(`http://localhost:8253/api/v1/wiki/${wikiSeq}`);
