@@ -27,7 +27,7 @@ const fetchingWikiList = async () => {
 }
 
 const navigateToWikiNewPost = () => {
-  router.push('wiki/newPost');
+  router.push('/wiki/newPost');
 }
 
 const navigateToWiki = (wikiSeq) => {
