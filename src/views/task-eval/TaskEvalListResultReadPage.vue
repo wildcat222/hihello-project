@@ -33,9 +33,6 @@ onMounted(async () => {
 <template>
   <div class="task-eval-result-list-container">
     <div class="page-title">과제 평가 조회</div>
-    <div class="search-bar">
-      <SearchBarComponent/>
-    </div>
     <WhiteBoxListComponent>
       <ListComponent :items="taskEvalResultList">
         <template #header>
@@ -70,11 +67,7 @@ onMounted(async () => {
   font-size: 35px;
   font-weight: bold;
   text-align: center;
-  margin: 6.562rem 0 2.88rem;
-}
-
-.search-bar {
-  margin-bottom: 1.813rem;
+  margin: 6.562rem 0 2.88rem 0;
 }
 
 .task-eval-result-list-row-container {
