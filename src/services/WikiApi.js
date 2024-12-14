@@ -29,6 +29,16 @@ export const fetchWiki = async(wikiSeq) => {
     }
 }
 
+// 위키 히스토리 리스트 조회
+export const fetchWikiHistory = async(wikiSeq) => {
+    try {
+        const response = await axios.get(`http://localhost:8253/api/v1/wiki/${wikiSeq}/history`);
+        return response.data;
+    } catch(error) {
+        console.error('위키 히스토리 리스트를 가져오는 중 오류가 발생했습니다.', error);
+    }
+}
+
 // 위키 수정
 export const updateWiki = async(wikiSeq, wikiData) => {
     try {
