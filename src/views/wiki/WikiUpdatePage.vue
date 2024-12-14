@@ -53,7 +53,6 @@ const updatingWiki = async (seq) => {
       alert("위키 수정 도중 오류가 발생했습니다.");
     }
   } catch (error) {
-    console.error("위키 수정 도중 오류가 발생했습니다.", error);
     alert("위키 수정 도중 오류가 발생했습니다.");
   }
 }

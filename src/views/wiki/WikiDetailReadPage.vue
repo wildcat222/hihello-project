@@ -3,6 +3,7 @@ import {onMounted, ref} from "vue";
 import {fetchWiki} from "@/services/WikiApi.js";
 import {useRoute} from "vue-router";
 import WhiteBoxListComponent from "@/components/WhiteBoxListComponent.vue";
+import WikiHistoryModal from "@/views/wiki/WikiHistoryModal.vue";
 
 const route = useRoute();
 const wikiTitle = ref('');
@@ -18,7 +19,6 @@ defineProps({
 
 const fetchingWiki = async(wikiSeq) => {
   try {
-
     const response = await fetchWiki(wikiSeq);
 
     wikiTitle.value = response.data.wikiTitle;
@@ -31,6 +31,12 @@ const fetchingWiki = async(wikiSeq) => {
 
 const formattingDateTime = (dateTime) => {
   return dateTime.replace("T", " ");
+}
+
+const isModalOpen = ref(false);
+
+const toggleModal = () => {
+  isModalOpen.value = !isModalOpen.value;
 }
 
 onMounted(async() => {
@@ -46,11 +52,16 @@ onMounted(async() => {
       <div class="wiki-header-container">
         <div class="wiki-title"> {{ wikiTitle }}</div>
         <div>
-          <button class="button purple-border">히스토리</button>
+          <button class="button purple-border" @click="toggleModal">히스토리</button>
           <button class="button purple-background">편집</button>
           <button class="button purple-background">삭제</button>
         </div>
       </div>
+      <WikiHistoryModal
+          :wikiSeq = "wikiSeq"
+          v-if="isModalOpen"
+          @click.stop
+      />
       <div class="latest-mod-date">최근 수정 시각: {{ formattingDateTime(latestModDate) }}</div>
       <div v-html="wikiContent" class="wiki-content"></div>
     </WhiteBoxListComponent>
@@ -93,6 +104,7 @@ onMounted(async() => {
   height: 32px;
   font-size: 15px;
   margin: 0 0.1rem;
+  cursor: pointer;
 }
 
 .purple-border {
