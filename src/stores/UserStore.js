@@ -122,10 +122,10 @@ export const useUserStore = defineStore('user', {
             const payload = this.getTokenPayload();
             if (payload) {
                 this.employeeInfo = {
-                    employSeq: payload.employeeSeq,
-                    employeeNum: payload.employeeNum,
+                    employeeSeq: payload.sub,
                     employeeRole: payload.employeeRole,
-                    departmentSeq: payload.departmentSeq
+                    departmentSeq: payload.departmentSeq,
+                    positionSeq: payload.positionSeq,
                 };
                 return this.employeeInfo;
             }
