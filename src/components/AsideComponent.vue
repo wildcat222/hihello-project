@@ -23,7 +23,7 @@ import { ref } from 'vue';
 
 // 메뉴 데이터
 const menus = ref([
-    { name: '인턴 위키', url: '/intern-crisis' },
+    { name: '인턴 위키', url: '/wiki' },
     { name: '멘토 소개', url: '/mentor-intro' },
     { name: '멘토 채팅', url: '/mentor-chat' },
     { name: '보고서 작성', url: '/report-write' },

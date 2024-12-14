@@ -39,5 +39,8 @@ onMounted(() => {
 .router-container {
   flex-grow: 1;
   background-color: var(--ivory);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
