@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +25,9 @@ import spring.hi_hello_spring.security.service.CustomUserDetailsService;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -117,7 +120,24 @@ public class JwtUtil {
         long expirationTime = (long) 1000 * 60 * 30; // 30분
 
         Claims claims = Jwts.claims().setSubject(String.valueOf(employeeSeq));
-        claims.put("auth", authentication.getAuthorities());
+//        claims.put("auth", authentication.getAuthorities());
+
+        // 권한 정보를 List<String> 형태로 변환하여 클레임에 담기
+        List<String> authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)  // GrantedAuthority -> String (권한 이름)
+                .collect(Collectors.toList());
+
+        // 권한에 추가된 역할, 부서 번호, 직급 번호 추출
+        authorities.forEach(auth -> {
+            if (auth.equals(String.valueOf(employee.getEmployeeRole()))) {
+                claims.put("employeeRole", auth);
+            } else if (auth.equals(String.valueOf(employee.getDepartmentSeq()))) {
+                claims.put("departmentSeq", auth);
+            } else if (auth.equals(String.valueOf(employee.getPositionSeq()))) {
+                claims.put("positionSeq", auth);
+            }
+        });
+        log.info("토큰에 들어갈 권한 정보 : " + authentication.getAuthorities());
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -188,7 +208,7 @@ public class JwtUtil {
     }
 
     // 생성된 토큰 레디스에 저장
-        public void saveToken(String Token) {
+    public void saveToken(String Token) {
 
         String employeeSeq = getEmployeeSeq(Token);
         // JWT 디코딩하여 만료 시간 가져오기

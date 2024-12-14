@@ -30,7 +30,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         // 담당자인지 멘토장인지 멘토인지 멘티인지 확인
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(loginUser.getEmployeeRole()))); // 역할 -> mentee
-        grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(loginUser.getDepartmentSeq()))); // 직급Seq
+        grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(loginUser.getDepartmentSeq()))); // 부서Seq
+        grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(loginUser.getPositionSeq()))); // 직급Seq
 
         return new CustomUserDetails(loginUser.getEmployeeSeq(), loginUser.getEmployeeNum(), loginUser.getEmployeePassword(), grantedAuthorities);
     }
@@ -44,7 +45,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         // 담당자인지 멘토장인지 멘토인지 멘티인지 확인
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(employee.getEmployeeRole()))); // 역할 -> mentee
-        grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(employee.getDepartmentSeq()))); // 직급Seq
+        grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(employee.getDepartmentSeq()))); // 부서Seq
+        grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(employee.getPositionSeq()))); // 직급Seq
 
         return new CustomUserDetails(employee.getEmployeeSeq(), employee.getEmployeeNum(), employee.getEmployeePassword(), grantedAuthorities);
     }
