@@ -5,23 +5,23 @@
       <div class="quiz-result-list">
         <div
           v-for="(result, index) in quizResults"
-          :key="index"
+          :key="result.quiz_number"
           class="quiz-result-item"
         >
           <!-- 문제 번호 -->
           <div class="quiz-result-question">
-            Q{{ index + 1 }}.
+            Q{{ result.quiz_number }}.
           </div>
           <!-- 정답 여부 (✔️ 또는 ❌) -->
           <div
             class="quiz-result-status"
-            :class="{ correct: result.isCorrect, incorrect: !result.isCorrect }"
+            :class="{ correct: result.quiz_correct_status === 1, incorrect: result.quiz_correct_status !== 1 }"
           >
-            {{ result.isCorrect ? "✔️" : "❌" }}
+            {{ result.quiz_correct_status === 1 ? "✔️" : "❌" }}
           </div>
           <!-- 정답 해설 -->
           <div class="quiz-result-answer">
-            정답 : {{ result.correctAnswer }}
+            정답 : {{ result.quiz_explanation }}
           </div>
         </div>
       </div>
@@ -32,41 +32,52 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import "@/styles/quiz/QuizResult.css";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
-import "@/styles/quiz/QuizResult.css"
+import { ref, onMounted, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { useQuizStore } from "@/stores/QuizStore";
+import { useUserStore } from "@/stores/UserStore";
+import { fetchQuizResults } from "@/services/QuizApi";
 
-export default {
-  components: {
-    WhiteBox,
-  },
-  data() {
-    return {
-      quizResults: [
-        { isCorrect: false, correctAnswer: "한화 시스템은 대기업이다." },
-        { isCorrect: true, correctAnswer: "부장은 팀장보다 높다." },
-        { isCorrect: false, correctAnswer: "한화 시스템은 대기업이다." },
-        { isCorrect: true, correctAnswer: "부장은 팀장보다 높다." },
+const route = useRoute();
 
-      ],
-    };
-  },
-  methods: {
-    handleFinish() {
-      this.$router.push("/dashboard");
-    },
-  },
+const userStore = useUserStore();
+const quizStore = useQuizStore();
+
+const quizResults = ref([]);
+const quizCategorySeq = quizStore.quizCategorySeq;
+
+
+const fetchResults = async () => {
+  const employeeInfo = userStore.getEmployeeInfo();
+
+  try {
+    if (!quizCategorySeq) {
+      console.error("Quiz Category Seq is missing.");
+      return;
+    }
+    quizResults.value = await fetchQuizResults(quizCategorySeq, employeeInfo.employeeSeq);
+  } catch (error) {
+    console.error("Failed to fetch quiz results:", error);
+  }
 };
+
+onMounted(() => {
+  fetchResults();
+});
+
 </script>
 
 <style scoped>
-/* 컴포넌트에 따로 적용한 css는 scoped 속성을 이용해야 함 */
 .white-box {
-  width: fit-content; 
-  padding: 2vw; 
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-  border-radius: 12px; 
+  width: fit-content;
+  padding: 2vw;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
   background-color: var(--white);
-  overflow: hidden; 
+  overflow: hidden;
 }
 </style>
+

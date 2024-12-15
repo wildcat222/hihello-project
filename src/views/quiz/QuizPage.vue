@@ -4,7 +4,7 @@
     <white-box v-if="currentQuiz">
       <div class="white-box-content">
         <div class="quiz-number">
-          <h2>Q{{ currentQuizIndex + 1 }}</h2> <!-- 퀴즈 번호 변경 -->
+          <h2>Q{{ currentQuizIndex + 1 }}</h2>
         </div>
         <div class="quiz-question">
           <p>{{ currentQuiz.quiz_question }}</p>
@@ -31,64 +31,74 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/UserStore";
+import { useQuizStore } from "@/stores/QuizStore";
 import { fetchQuizzes, submitQuizAnswer } from "@/services/QuizApi";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
-import "@/styles/quiz/Quiz.css"; // 스타일 파일을 import
+import "@/styles/quiz/Quiz.css";
 
-export default {
-  components: {
-    WhiteBox,
-  },
-  data() {
-    return {
-      quizzes: [],
-      currentQuizIndex: 0,
-      quizCategorySeq: 1, // 예제 카테고리 Seq
-      employeeSeq: 1, // 예제 직원 ID
-    };
-  },
-  computed: {
-    currentQuiz() {
-      return this.quizzes[this.currentQuizIndex] || null;
-    },
-  },
-  async mounted() {
-    try {
-      this.quizzes = await fetchQuizzes(this.quizCategorySeq);
-    } catch (error) {
-      console.error("Failed to load quizzes:", error);
-    }
-  },
-  methods: {
-    async handleAnswer(userAnswer) {
-      if (!this.currentQuiz) return;
+const router = useRouter();
+const userStore = useUserStore();
+const quizStore = useQuizStore();
 
-      const isCorrect = this.currentQuiz.quiz_answer === (userAnswer ? 1 : 0);
+const quizzes = ref([]);
+const currentQuizIndex = ref(0);
 
-      try {
-        console.log("Submitting quiz answer:", {
-          quiz_seq: this.currentQuiz.quiz_seq,
-          correct_status: isCorrect,
-        });
+const currentQuiz = computed(() => quizzes.value[currentQuizIndex.value] || null);
 
-        await submitQuizAnswer(
-          this.quizCategorySeq,
-          this.employeeSeq,
-          this.currentQuiz.quiz_seq,
-          isCorrect
-        );
+const loadQuizzes = async () => {
+  const employeeInfo = userStore.getEmployeeInfo();
 
-        if (this.currentQuizIndex < this.quizzes.length - 1) {
-          this.currentQuizIndex++;
-        } else {
-          this.$router.push("/quiz/result");
-        }
-      } catch (error) {
-        console.error("Error submitting quiz answer:", error.response?.data || error.message);
-        alert("퀴즈 제출에 실패했습니다. 다시 시도해주세요.");
-      }
-    },
-  },
+  if (!employeeInfo || !quizStore.quizCategorySeq) {
+    console.error("quizCategorySeq or employeeInfo is missing");
+    return;
+  }
+
+  try {
+    quizzes.value = await fetchQuizzes(quizStore.quizCategorySeq);
+  } catch (error) {
+    console.error("Failed to load quizzes:", error);
+  }
 };
+
+const handleAnswer = async (userAnswer) => {
+  const employeeInfo = userStore.getEmployeeInfo();
+
+  if (!currentQuiz.value || !employeeInfo) {
+    console.error("Current quiz or employee info is missing");
+    return;
+  }
+
+  const isCorrect = currentQuiz.value.quiz_answer === (userAnswer ? 1 : 0);
+
+  try {
+    await submitQuizAnswer(
+      quizStore.quizCategorySeq,
+      employeeInfo.employeeSeq, // Use the employeeSeq from the store
+      currentQuiz.value.quiz_seq,
+      isCorrect
+    );
+
+    if (currentQuizIndex.value < quizzes.value.length - 1) {
+      currentQuizIndex.value++;
+    } else {
+      router.push(`/quiz/${quizStore.quizCategorySeq}/result`);
+    }
+  } catch (error) {
+    console.error("Error submitting quiz answer:", error.response?.data || error.message);
+    alert("퀴즈 제출에 실패했습니다. 다시 시도해주세요.");
+  }
+};
+
+onMounted(() => {
+  // Ensure employee info is initialized before loading quizzes
+  const employeeInfo = userStore.getEmployeeInfo();
+  if (!employeeInfo) {
+    console.error("Employee info is missing");
+  }
+  loadQuizzes();
+});
 </script>
