@@ -11,7 +11,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: auto;
 }
 
 .login-title {
@@ -26,7 +26,7 @@
     flex-direction: column;
     gap: 20px;
     align-items: center;
-    width: 100%;
+    width: auto;
 }
 
 .form-group {
@@ -35,22 +35,23 @@
     align-items: flex-start;
     gap: 5px;
     width: 100%;
-    max-width: 300px;
+
 }
 
 .login-form .form-group label {
-    font-weight: bold; /* 라벨 강조 */
+    font-weight: bold; 
     font-size: 1rem;
-    margin-bottom: 10px; /* 아래 여백 */
+    margin-bottom: 10px;
 }
 
-input {
-    width: 100%;
+.form-group input {
+    width: 95%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: var(--ivory);
     font-size: 0.9rem;
+    
 }
 
 input:focus {
