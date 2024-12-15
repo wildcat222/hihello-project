@@ -1,4 +1,4 @@
-import TaskEvalListResultReadPage from "@/views/task-eval/TaskEvalListResultReadPage.vue";
+import TaskEvalListResultReadPage from "@/views/task-eval/TaskEvalResultListReadPage.vue";
 
 export default [
     {

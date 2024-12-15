@@ -2,9 +2,9 @@
 import ListComponent from "@/components/ListComponent.vue";
 import {onMounted, reactive} from "vue";
 import {fetchWikiList} from "@/services/WikiApi.js";
-import WhiteBoxListComponent from "@/components/WhiteBoxListComponent.vue";
 import SearchBarComponent from "@/components/SearchBarComponent.vue";
 import router from "@/router/index.js";
+import WhiteBoxComponent from "@/components/WhiteBoxComponent.vue";
 
 const wikiList = reactive([]);
 
@@ -51,7 +51,7 @@ onMounted(async () => {
       <SearchBarComponent/>
       <button class="purple_button" @click="navigateToWikiNewPost">문서작성</button>
     </div>
-    <WhiteBoxListComponent>
+    <WhiteBoxComponent>
       <ListComponent :items="wikiList">
         <template #header>
           <div class="left_list">문서</div>
@@ -72,7 +72,7 @@ onMounted(async () => {
 
         </template>
       </ListComponent>
-    </WhiteBoxListComponent>
+    </WhiteBoxComponent>
   </div>
 </template>
 
