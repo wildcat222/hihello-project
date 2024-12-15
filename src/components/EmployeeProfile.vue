@@ -17,7 +17,7 @@
 
 <style scoped>
 .profile {
-  background-color: var(--ivory);
+  background-color: var(--white);
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
@@ -42,7 +42,7 @@
 }
 .button {
   background-color: var(--purple);
-  color: white;
+  color: var(--white);
   border: none;
   border-radius: 5px;
   padding: 10px 15px;
