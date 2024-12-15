@@ -3,10 +3,7 @@ package spring.hi_hello_spring.finalEval.query.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.finalEval.query.dto.FinalEvalDetailQueryDTO;
@@ -29,6 +26,16 @@ public class FinalEvalQueryController {
     public ApiResponse<?> getAllFinalEvals() {
         List<FinalEvalsQueryDTO> finalEvalListQueryDTOs = finalEvalQueryService.getAllFinalEvals();
         return ResponseUtil.successResponse("데이터가 성공적으로 조회되었습니다.", finalEvalListQueryDTOs).getBody();
+    }
+
+    // 최종 평가 목록 검색
+    @GetMapping("/final-eval/search")
+    @Operation(summary="최종 평가 목록 검색", description = "최종 평가 목록 검색 로직입니다.")
+    public ApiResponse<?> searchFinalEvals(
+            @RequestParam String keyword
+    ) {
+        List<FinalEvalsQueryDTO> finalEvalListQueryDTOs = finalEvalQueryService.searchFinalEvals(keyword);
+        return ResponseUtil.successResponse("데이터가 성공적으로 검색되었습니다.", finalEvalListQueryDTOs).getBody();
     }
 
     // 최종 평가 상세 조회

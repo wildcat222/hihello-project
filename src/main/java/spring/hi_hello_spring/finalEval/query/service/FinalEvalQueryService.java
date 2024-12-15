@@ -21,4 +21,8 @@ public class FinalEvalQueryService {
     public List<FinalEvalDetailQueryDTO> getFinalEvalDetails(Long employeeSeq) {
         return finalEvalMapper.findFinalEvalDetails(employeeSeq);
     }
+
+    public List<FinalEvalsQueryDTO> searchFinalEvals(String keyword) {
+        return finalEvalMapper.searchFinalEvals(keyword);
+    }
 }

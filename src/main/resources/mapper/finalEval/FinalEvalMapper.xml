@@ -21,6 +21,28 @@
         GROUP BY e.employee_seq
     </select>
 
+    <!--최종 평가 목록을 검색하는 SQL-->
+    <select id="searchFinalEvals" resultType="FinalEvalsQueryDTO">
+        SELECT
+            e.employee_seq,
+            e.employee_num,
+            e.employee_name,
+            d.department_seq,
+            d.department_name,
+            SUM(fe.employee_score) AS total_final_eval_score
+        FROM
+            final_eval fe
+        JOIN
+            employee e ON fe.employee_seq = e.employee_seq
+        JOIN
+            department d ON e.department_seq = d.department_seq
+        WHERE
+        e.employee_num LIKE (CONCAT('%', #{keyword}, '%')) OR
+        e.employee_name LIKE (CONCAT('%', #{keyword}, '%')) OR
+        d.department_name LIKE (CONCAT('%', #{keyword}, '%'))
+        GROUP BY e.employee_seq
+    </select>
+
     <!--최종 평가 상세 내용을 조회하는 SQL-->
     <select id="findFinalEvalDetails" resultType="FinalEvalDetailQueryDTO">
         SELECT
