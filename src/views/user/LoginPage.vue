@@ -1,6 +1,6 @@
 <template>
     <div class="login-page">
-        <WhiteBoxComponent>
+        <WhiteBox>
             <h2 class="login-title">로그인</h2>
             <form class="login-form" @submit.prevent="onLogin">
                 <div class="form-group">
@@ -14,14 +14,14 @@
                 <button type="submit" class="login-button">로그인</button>
             </form>
             <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-        </WhiteBoxComponent>
+        </WhiteBox>
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/UserStore';
-import WhiteBoxComponent from '@/components/WhiteBoxComponent.vue';
+import WhiteBox from '@/components/WhiteBoxComponent.vue';
 import { useRouter } from 'vue-router';
 import '@/styles/user/LoginPage.css';
 
@@ -42,3 +42,10 @@ const onLogin = async () => {
     }
 };
 </script>
+
+<style scoped>
+.white-box{
+    width: auto;
+    min-width: 25vw;
+}
+</style>
