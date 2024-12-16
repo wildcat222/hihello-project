@@ -1,26 +1,25 @@
 <template>
     <div class="category-tabs">
-        <!-- 카테고리 버튼 리스트 -->
         <button v-for="(tab, index) in categories" :key="tab.quizCategorySeq"
             :class="['circle-button', { active: activeTab === tab.quizCategorySeq }]"
-            @click="selectTab(tab.quizCategorySeq)">
+            @click="selectCategory(tab.quizCategorySeq)">
             {{ tab.quizCategoryName }}
         </button>
     </div>
 </template>
 
 <script>
-import { fetchQuizCategory } from "@/services/QuizApi";
+import { fetchQuizCategory } from "@/services/QuizCategoryApi";
 
 export default {
     data() {
         return {
-            categories: [], 
+            categories: [],
             activeTab: null,
         };
     },
     async created() {
-        await this.loadCategories();
+        this.loadCategories();
     },
     methods: {
         async loadCategories() {
@@ -29,15 +28,18 @@ export default {
                 if (response.success) {
                     this.categories = response.data;
                     this.activeTab = this.categories[0]?.quizCategorySeq || null;
-                    this.$emit("tab-selected", this.activeTab);
+
+                    if (this.activeTab) {
+                        this.$emit("tab-selected", this.activeTab);
+                    }
                 }
             } catch (error) {
-                console.error("Failed to fetch quiz categories:", error.message);
+                console.error("카테고리 로드 실패:", error);
             }
         },
-        selectTab(quizCategorySeq) {
-            this.activeTab = quizCategorySeq;
-            this.$emit("tab-selected", quizCategorySeq);
+        selectCategory(categorySeq) {
+            this.activeTab = categorySeq;
+            this.$emit("tab-selected", categorySeq);
         },
     },
 };
