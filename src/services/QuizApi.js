@@ -47,4 +47,18 @@ export const fetchHrQuiz = async (quizCategorySeq) =>{
     throw error;
   }
 };
+
+// 담당자 카테고리 별 퀴즈 등록
+export const postHrQuiz = async (quizCategorySeq, newQuiz) => {
+  try {
+      const response = await springAPI.post(
+          `/hr/quizCategory/${quizCategorySeq}/quiz`, 
+          newQuiz
+      );
+      return response.data;
+  } catch (error) {
+      console.error("퀴즈 등록 실패:", error.response?.data || error.message);
+      throw error;
+  }
+};
   

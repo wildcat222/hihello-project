@@ -8,8 +8,11 @@
             <div class="search-bar-wrapper">
                 <search-bar></search-bar>
             </div>
-            <button class="register-button">퀴즈 등록</button>
+            <button class="register-button" @click="showAddQuizModal = true">퀴즈 등록</button>
         </div>
+
+        <add-quiz-modal v-if="showAddQuizModal" :quiz-category-seq="selectedCategorySeq"
+            @close="showAddQuizModal = false" @quiz-added="addQuizToList" />
 
         <!-- 퀴즈 카테고리 및 추가 버튼 -->
         <div class="quiz-category-container">
@@ -18,9 +21,7 @@
         </div>
 
         <!-- 카테고리 추가 모달 -->
-        <add-category-modal 
-            v-if="showAddCategoryModal" 
-            @close="showAddCategoryModal = false" 
+        <add-category-modal v-if="showAddCategoryModal" @close="showAddCategoryModal = false"
             @category-added="refreshCategories" />
 
         <!-- 리스트 컴포넌트 -->
@@ -70,7 +71,8 @@ import SearchBar from "@/components/SearchBarComponent.vue";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
 import ListComponent from "@/components/ListComponent.vue";
 import QuizCategory from "@/components/QuizCategoryComponent.vue";
-import AddCategoryModal from "@/components/AddCategoryModal.vue";
+import AddCategoryModal from "@/views/quiz/AddQuizCategoryModal.vue";
+import AddQuizModal from "@/views/quiz/AddQuizModal.vue";
 import { fetchHrQuiz } from "@/services/QuizApi";
 import { useQuizStore } from '@/stores/QuizStore';
 
@@ -78,7 +80,18 @@ const quizStore = useQuizStore();
 const quizItems = computed(() => quizStore.quizItems);
 
 const showAddCategoryModal = ref(false);
+const showAddQuizModal = ref(false);
 const quizCategoryRef = ref(null);
+
+const selectedCategorySeq = ref(null);
+
+const addQuizToList = (newQuiz) => {
+    // 새 퀴즈 항목 추가
+    quizItems.value.push({
+        quizSeq: Date.now(), // 고유한 ID로 대체
+        ...newQuiz
+    });
+};
 
 const refreshCategories = () => {
     quizCategoryRef.value?.loadCategories();
@@ -87,6 +100,8 @@ const refreshCategories = () => {
 
 // 선택된 카테고리 퀴즈 조회
 const onTabSelected = async (quizCategorySeq) => {
+    selectedCategorySeq.value = quizCategorySeq;
+
     try {
         const response = await fetchHrQuiz(quizCategorySeq);
         if (response.success && response.data) {
