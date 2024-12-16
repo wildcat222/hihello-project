@@ -15,6 +15,7 @@ public class SocketTextHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        System.out.println("Connected to " + session.getId());
         sessions.add(session);
     }
 
