@@ -1,0 +1,133 @@
+.hr-quiz-container{
+    width: 80vw;
+}
+
+.hr-quiz-container h1 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-bar-wrapper {
+    flex: 0 1 500px;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+.register-button {
+    background-color:  var(--purple);
+    color: var(--white);
+    border: none;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 80px;
+    padding: 0 15px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.quiz-category-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px auto;
+    width: 90%;
+}
+
+.add-button {
+    background-color: var(--yellow);
+    color: var(--black);
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    align-items: center;
+}
+
+.list-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.list-header{
+    font-weight: bold;
+}
+
+.list-header,
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.column {
+    text-align: center;
+    flex: 1;
+}
+
+.header-number,
+.item-number {
+    flex: 0.5;
+}
+
+.header-content,
+.item-content {
+    flex: 2;
+    text-align: center;
+}
+
+.header-answer,
+.item-answer {
+    flex: 0.5;
+}
+
+.header-actions,
+.actions {
+    flex: 1;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.edit-button,
+.delete-button {
+    background-color: var(--purple);
+    color:  var(--white);
+    border: none;
+    padding: 5px 10px;
+    height: 35px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.delete-button {
+    background-color: var(--yellow);
+    color: var(--white);
+}
+
+.save-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.save-button {
+    background-color: var(--yellow);
+    color: var(--black);
+    border: none;
+    padding: 10px 30px;
+    width: 10vw;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+}

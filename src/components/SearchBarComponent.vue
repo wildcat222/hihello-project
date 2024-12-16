@@ -1,5 +1,26 @@
 <script setup>
+import {ref, defineEmits} from 'vue';
 
+// 검색어 상태 변수
+const searchQuery = ref('');
+
+// emit 설정
+const emit = defineEmits();
+
+// 검색 이벤트 발생
+const onSearch = () => {
+  if (searchQuery.value.trim() !== '') {
+    // search 이벤트 발생, 부모 컴포넌트에서 처리
+    emit('search', searchQuery.value);
+  }
+};
+
+// 엔터 키 눌렀을 때 호출
+const handleKeyUp = (event) => {
+  if (event.key === 'Enter') {
+    onSearch();
+  }
+};
 </script>
 
 <template>
@@ -8,7 +29,13 @@
       <img src="../assets/search-icon.png" class="search_bar_image" alt="검색 이미지">
     </div>
     <div class="input_container">
-      <input class="search" type="text">
+      <input
+          class="search"
+          type="text"
+          v-model="searchQuery"
+          @keyup="handleKeyUp"
+          placeholder="검색어를 입력하세요"
+      />
     </div>
   </div>
 </template>

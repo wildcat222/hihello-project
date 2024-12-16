@@ -1,4 +1,4 @@
-import { lambdaAPI } from "@/services/axios";
+import { lambdaAPI, springAPI } from "@/services/axios";
 
 // 전체 퀴즈 조회
 export const fetchQuizzes = async (quizCategorySeq) => {
@@ -34,6 +34,17 @@ export const submitQuizAnswer = async (quizCategorySeq, employeeSeq, quizSeq, co
   } catch (error) {
       console.error("Failed to submit quiz answer:", error.response?.data || error.message);
       throw error;
+  }
+};
+
+// 퀴즈 카테고리 조회
+export const fetchQuizCategory = async () =>{
+  try{
+    const response = await springAPI.get(`/hr/quizCategory`)
+    return response.data;
+  }catch(error){
+    console.error("퀴즈 카테고리 조회 실패", error.response?.data || error.message);
+    throw error;
   }
 };
   

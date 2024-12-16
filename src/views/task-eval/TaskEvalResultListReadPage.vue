@@ -1,11 +1,16 @@
 <script setup>
-import SearchBarComponent from "@/components/SearchBarComponent.vue";
 import WhiteBoxListComponent from "@/components/WhiteBoxListComponent.vue";
 import ListComponent from "@/components/ListComponent.vue";
-import {onMounted, reactive} from "vue";
+
+import '@/styles/task-eval/TaskEvalResultDetailReadPage.css'
+
+import {onMounted, reactive, ref} from "vue";
 import {fetchTaskEvalResultList} from "@/services/TaskEvalResultApi.js";
+import TaskEvalResultDetailReadModal from "@/views/task-eval/TaskEvalResultDetailReadModal.vue";
 
 const taskEvalResultList = reactive([]);
+const taskInfo = ref({});
+const isModalOpen = ref(false);
 
 const fetchingTaskEvalResultList = async () => {
   try {
@@ -15,6 +20,7 @@ const fetchingTaskEvalResultList = async () => {
       taskEvalResultList.push({
         departmentName: taskEvalResult.departmentName,
         templateTaskRound: taskEvalResult.templateTaskRound,
+        taskSubmitSeq: taskEvalResult.taskSubmitSeq,
         submitterName: taskEvalResult.submitterName,
         taskContent: taskEvalResult.taskContent,
         taskTotalScore: taskEvalResult.taskTotalScore
@@ -23,6 +29,16 @@ const fetchingTaskEvalResultList = async () => {
   } catch (error) {
     alert("과제 평가 결과 리스트를 조회하던 도중 오류가 발생했습니다.");
   }
+}
+
+const openTaskResultDetailModal = (task) => {
+  taskInfo.value = task;
+  isModalOpen.value = true;
+}
+
+const closeTaskResultDetailModal = () => {
+  isModalOpen.value = false;
+  taskInfo.value = {};
 }
 
 onMounted(async () => {
@@ -45,7 +61,7 @@ onMounted(async () => {
           </div>
         </template>
         <template #item="{ item }">
-          <div class="task-eval-result-list-row-container item">
+          <div class="task-eval-result-list-row-container item" @click="openTaskResultDetailModal(item)">
             <div>{{ item.departmentName }}</div>
             <div>{{ item.templateTaskRound }}</div>
             <div>{{ item.submitterName }}</div>
@@ -55,6 +71,10 @@ onMounted(async () => {
         </template>
       </ListComponent>
     </WhiteBoxListComponent>
+    <TaskEvalResultDetailReadModal
+      :isOpen="isModalOpen"
+      :taskData="taskInfo"
+      @close="closeTaskResultDetailModal"/>
   </div>
 </template>
 
