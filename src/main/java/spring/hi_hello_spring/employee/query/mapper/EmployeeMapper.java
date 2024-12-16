@@ -22,4 +22,8 @@ public interface EmployeeMapper {
     List<EmployeeListDTO> getEmployeeSearch(@Param("searchType") String searchType, @Param("keyword") String keyword);
 
     String findEmployeeName(Long employeeSeq);
+
+    ReqEmplInfoQueryDTO findMentorInfo(Long employeeSeq);
+
+    ReqEmplInfoQueryDTO findMenteeInfo(Long employeeSeq);
 }

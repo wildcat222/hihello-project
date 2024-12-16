@@ -54,11 +54,10 @@
             e.employee_role = "mentor"
     </select>
 
-    <!-- 프로필 정보를 조회하는 SQL -->
+    <!-- 내 정보를 조회하는 SQL -->
     <select id="findEmployeeInfo" parameterType="java.lang.Long" resultType="ReqEmplInfoQueryDTO">
         SELECT
             e.employee_name AS employeeName,
-            e.employee_role AS employeeRole,
             d.department_name AS departmentName,
             p.position_name AS positionName,
             e.employee_phone AS employeePhone,
@@ -74,6 +73,60 @@
             file AS f ON e.employee_seq = f.employee_seq
         WHERE
             e.employee_seq = #{employeeSeq}
+    </select>
+
+    <!-- 멘토의 프로필 정보를 조회하는 SQL -->
+    <select id="findMentorInfo" parameterType="java.lang.Long" resultType="ReqEmplInfoQueryDTO">
+        SELECT
+            mentor.employee_name AS employeeName,
+            mentor.employee_role AS employeeRole,
+            d.department_name AS departmentName,
+            p.position_name AS positionName,
+            mentor.employee_phone AS employeePhone,
+            mentor.employee_email AS employeeEmail,
+            f.file_url AS fileUrl
+        FROM
+            employee AS mentee
+        JOIN
+            mentoring AS m ON mentee.employee_seq = m.mentee_seq
+        JOIN
+            employee AS mentor ON m.mentor_seq = mentor.employee_seq
+        JOIN
+            department AS d ON mentor.department_seq = d.department_seq
+        JOIN
+            positions AS p ON mentor.position_seq = p.position_seq
+        LEFT JOIN
+            file AS f ON mentor.employee_seq = f.employee_seq
+        WHERE
+            mentee.employee_seq = #{employeeSeq}
+    </select>
+
+    <!-- 멘티의 프로필 정보를 조회하는 SQL -->
+    <select id="findMenteeInfo" parameterType="java.lang.Long" resultType="ReqEmplInfoQueryDTO">
+        SELECT
+            mentee.employee_name AS employeeName,
+            mentee.employee_role AS employeeRole,
+            d.department_name AS departmentName,
+            p.position_name AS positionName,
+            mentee.employee_phone AS employeePhone,
+            mentee.employee_email AS employeeEmail,
+            f.file_url AS fileUrl
+        FROM
+            employee AS mentor
+        JOIN
+            mentoring AS m ON mentor.employee_seq = m.mentor_seq
+        JOIN
+            employee AS mentee ON m.mentee_seq = mentee.employee_seq
+        JOIN
+            department AS d ON mentee.department_seq = d.department_seq
+        JOIN
+            positions AS p ON mentee.position_seq = p.position_seq
+        LEFT JOIN
+            file AS f ON mentee.employee_seq = f.employee_seq
+        WHERE
+            mentor.employee_seq = #{employeeSeq}
+        AND
+            m.mentoring_active_status = true
     </select>
 
     <select id="findEmployeeAll" resultType="EmployeeListDTO">
