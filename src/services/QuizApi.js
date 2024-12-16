@@ -37,17 +37,6 @@ export const submitQuizAnswer = async (quizCategorySeq, employeeSeq, quizSeq, co
   }
 };
 
-// 퀴즈 카테고리 조회
-export const fetchQuizCategory = async () =>{
-  try{
-    const response = await springAPI.get(`/hr/quizCategory`)
-    return response.data;
-  }catch(error){
-    console.error("퀴즈 카테고리 조회 실패", error.response?.data || error.message);
-    throw error;
-  }
-};
-
 // 담당자 카테고리 별 퀴즈 조회
 export const fetchHrQuiz = async (quizCategorySeq) =>{
   try{
