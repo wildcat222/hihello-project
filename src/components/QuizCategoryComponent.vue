@@ -2,21 +2,31 @@
     <div class="category-tabs">
         <!-- 카테고리 버튼 리스트 -->
         <button v-for="(tab, index) in categories" :key="tab.quizCategorySeq"
-            :class="['circle-button', { active: activeTab === tab.quizCategorySeq }]"
-            @click="selectTab(tab.quizCategorySeq)">
+            :class="['circle-button', { active: activeTab === tab.quizCategorySeq }]">
             {{ tab.quizCategoryName }}
         </button>
+        <!-- 추가 버튼 -->
+        <button class="add-button" @click="showModal = true">+</button>
     </div>
+
+    <!-- 모달 컴포넌트 -->
+    <add-category-modal 
+        v-if="showModal" 
+        @close="showModal = false" 
+        @category-added="refreshCategories" />
 </template>
 
 <script>
-import { fetchQuizCategory } from "@/services/QuizApi";
+import { fetchQuizCategory } from "@/services/QuizCategoryApi";
+import AddCategoryModal from "@/components/AddCategoryModal.vue";
 
 export default {
+    components: { AddCategoryModal },
     data() {
         return {
-            categories: [], 
+            categories: [],
             activeTab: null,
+            showModal: false, // 모달 표시 여부
         };
     },
     async created() {
@@ -24,20 +34,15 @@ export default {
     },
     methods: {
         async loadCategories() {
-            try {
-                const response = await fetchQuizCategory();
-                if (response.success) {
-                    this.categories = response.data;
-                    this.activeTab = this.categories[0]?.quizCategorySeq || null;
-                    this.$emit("tab-selected", this.activeTab);
-                }
-            } catch (error) {
-                console.error("Failed to fetch quiz categories:", error.message);
+            const response = await fetchQuizCategory();
+            if (response.success) {
+                this.categories = response.data;
+                this.activeTab = this.categories[0]?.quizCategorySeq || null;
             }
         },
-        selectTab(quizCategorySeq) {
-            this.activeTab = quizCategorySeq;
-            this.$emit("tab-selected", quizCategorySeq);
+        refreshCategories() {
+            this.loadCategories(); // 카테고리 새로고침
+            this.showModal = false;
         },
     },
 };
