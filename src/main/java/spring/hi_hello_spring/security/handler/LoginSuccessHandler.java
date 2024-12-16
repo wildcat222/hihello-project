@@ -36,7 +36,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         response.setHeader("accessToken", accessToken);
         response.setHeader("refreshToken", refreshToken);
 
-        // 레디스에 리프레시 토큰 저장 // 어느정도 개발 진행 후 활성화
-//        jwtUtil.saveToken(refreshToken);
+        // 레디스에 리프레시 토큰 저장
+        jwtUtil.saveToken(refreshToken);
     }
 }
