@@ -18,8 +18,8 @@ import { ref } from "vue";
 import { postQuizCategory } from "@/services/QuizCategoryApi";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
 
-const emit = defineEmits(["close", "category-added"]); // 이벤트 정의
-const categoryName = ref(""); // 카테고리 이름 입력값
+const emit = defineEmits(["close", "category-added"]);
+const categoryName = ref("");
 
 const addCategory = async () => {
     if (!categoryName.value.trim()) {
@@ -27,10 +27,10 @@ const addCategory = async () => {
         return;
     }
     try {
-        await postQuizCategory(categoryName.value); // API 호출
+        await postQuizCategory(categoryName.value);
         alert("카테고리가 성공적으로 추가되었습니다.");
-        emit("category-added"); // 부모 컴포넌트에 알림
-        categoryName.value = ""; // 입력 필드 초기화
+        emit("category-added");
+        categoryName.value = "";
     } catch (error) {
         console.error("카테고리 추가 실패:", error.message);
         alert("카테고리 추가 중 오류가 발생했습니다.");

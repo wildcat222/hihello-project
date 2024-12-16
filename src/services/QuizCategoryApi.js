@@ -12,10 +12,10 @@ export const fetchQuizCategory = async () => {
 };
 
 // 퀴즈 카테고리 추가
-export const postQuizCategory = async () => {
+export const postQuizCategory = async (quizCategoryName) => {
     try{
         const response = await springAPI.post(`/hr/quizCategory`, {
-            quiz_category_name: quizCategoryName
+            quizCategoryName: quizCategoryName
         });
         return response.data;
     } catch (error){

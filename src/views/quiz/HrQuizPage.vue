@@ -13,14 +13,19 @@
 
         <!-- 퀴즈 카테고리 및 추가 버튼 -->
         <div class="quiz-category-container">
-            <quiz-category @tab-selected="onTabSelected"></quiz-category>
-            <button class="add-button">+</button>
+            <quiz-category ref="quizCategoryRef" @tab-selected="onTabSelected"></quiz-category>
+            <button class="add-button" @click="showAddCategoryModal = true">+</button>
         </div>
+
+        <!-- 카테고리 추가 모달 -->
+        <add-category-modal 
+            v-if="showAddCategoryModal" 
+            @close="showAddCategoryModal = false" 
+            @category-added="refreshCategories" />
 
         <!-- 리스트 컴포넌트 -->
         <white-box>
             <div class="list-wrapper">
-                <!-- 헤더 -->
                 <div class="list-header">
                     <div class="column header-number">번호</div>
                     <div class="column header-question">질문</div>
@@ -29,7 +34,6 @@
                     <div class="column header-actions">관리</div>
                 </div>
 
-                <!-- 아이템 목록 -->
                 <div v-if="quizItems.length > 0">
                     <list-component :items="quizItems">
                         <template #item="{ item, index }">
@@ -61,38 +65,51 @@
 
 <script setup>
 import "@/styles/quiz/HrQuiz.css";
+import { ref, computed, onMounted } from 'vue';
 import SearchBar from "@/components/SearchBarComponent.vue";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
 import ListComponent from "@/components/ListComponent.vue";
 import QuizCategory from "@/components/QuizCategoryComponent.vue";
-import { ref } from "vue";
+import AddCategoryModal from "@/components/AddCategoryModal.vue";
 import { fetchHrQuiz } from "@/services/QuizApi";
+import { useQuizStore } from '@/stores/QuizStore';
 
-// 퀴즈 데이터
-const quizItems = ref([]);
+const quizStore = useQuizStore();
+const quizItems = computed(() => quizStore.quizItems);
 
-// 카테고리 선택 핸들러
+const showAddCategoryModal = ref(false);
+const quizCategoryRef = ref(null);
+
+const refreshCategories = () => {
+    quizCategoryRef.value?.loadCategories();
+    showAddCategoryModal.value = false;
+};
+
+// 선택된 카테고리 퀴즈 조회
 const onTabSelected = async (quizCategorySeq) => {
     try {
-        console.log("선택된 탭:", quizCategorySeq);
         const response = await fetchHrQuiz(quizCategorySeq);
         if (response.success && response.data) {
-            quizItems.value = response.data.map((quiz) => ({
-                quizSeq: quiz.quizSeq,
-                quizQuestion: quiz.quizQuestion,
-                quizAnswer: quiz.quizAnswer,
-                quizExplanation: quiz.quizExplanation,
-            }));
+            quizStore.setQuizCategorySeq(quizCategorySeq);
+            quizStore.setQuizItems(
+                response.data.map((quiz) => ({
+                    quizSeq: quiz.quizSeq,
+                    quizQuestion: quiz.quizQuestion,
+                    quizAnswer: quiz.quizAnswer,
+                    quizExplanation: quiz.quizExplanation,
+                }))
+            );
         } else {
-            quizItems.value = [];
+            quizStore.clearQuizItems();
+            alert("퀴즈를 불러오지 못했습니다. 다시 시도해주세요.");
         }
     } catch (error) {
         console.error("퀴즈 조회 중 오류 발생:", error);
-        quizItems.value = [];
+        quizStore.clearQuizItems();
+        alert("퀴즈를 조회하는 도중 문제가 발생했습니다.");
     }
 };
 
-// 수정 핸들러
 const editQuiz = (item) => {
     console.log("수정할 퀴즈:", item);
     // 여기에 수정 로직 추가
@@ -108,6 +125,10 @@ const deleteQuiz = async (quizSeq) => {
         console.error("퀴즈 삭제 중 오류 발생:", error);
     }
 };
+
+onMounted(() => {
+    quizCategoryRef.value?.loadCategories();
+});
 </script>
 
 <style scoped>
@@ -115,6 +136,7 @@ const deleteQuiz = async (quizSeq) => {
     width: 90%;
     margin: 0 auto;
 }
+
 .no-data {
     text-align: center;
     margin: 20px 0;
