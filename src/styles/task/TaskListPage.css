@@ -1,0 +1,119 @@
+.header {
+    margin: 0 0 0 100px;
+}
+.underline {
+    text-decoration: underline;
+    text-decoration-color: #7031FC; /* 밑줄 색상 */
+    text-decoration-thickness: 2px;
+    font-weight: bold; /* 글씨 두껍게 */
+}
+.user-roll{
+    margin:0 0 13px 0;
+}
+.search-bar {
+    width: 900px;
+    display: flex;
+    margin:0 0 21px 0;
+}
+.list-item{
+    display: flex;
+    margin: 0 0 0 17px;
+}
+
+.task-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px; /* 기본 간격 */
+    width: 100%;
+}
+.task-header, .list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+}
+.list-button-delete{
+    width: 47px;
+    height: 25px;
+    border-radius: 10px;
+    border: 1px solid white;
+    background: #121212;
+    font-size: 12px;
+    color: #FFF;
+}
+.list-button-revise{
+    width: 47px;
+    height: 25px;
+    border-radius: 10px;
+    border: 1px solid white;
+    background: #7031FC;
+    font-size: 12px;
+    color: #FFF;
+    margin: 0 4px 0 0;
+}
+.task-num-title{
+    flex: 1;
+    text-align: center;
+    margin-right: 10px;
+}
+.list-item-num {
+    flex: 1; /* 과제 번호 */
+    text-align: center;
+}
+
+.task-depart-title{
+    flex:1;
+    text-align: center;
+    margin-right: 10px;
+}
+.list-item-departmentName {
+    flex: 1; /* 과제 부서 */
+    text-align: center;
+}
+.task-round-title{
+    flex:1;
+    text-align: center;
+}
+.list-item-taskRound {
+    flex: 1; /* 과제 지정 */
+    text-align: center;
+}
+.list-item-title{
+    flex: 3.4; /* 과제 제목 */
+    padding: 0 0 0 20px;
+    text-align: center;
+}
+.task-name-title {
+    flex: 4; /* 과제 제목 */
+    text-align: center;
+    padding-left: 10px; /* 내부에서 오른쪽으로 20px 이동 */
+}
+.task-title-box{
+    flex: 0.6;
+
+}
+.list-button{
+    flex:1;
+}
+.body{
+    border-radius:10px;
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.25);
+    background: #FDFDFD;
+    width: 68%;
+    margin: 0 0 0 95px;
+    padding: 47px 46.17px 12px 43px;
+}
+.add-task {
+    text-align: center;
+    margin: 0 0 0 35px;
+    border-radius: 10px;
+    color: white;
+}
+.title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 35px;
+    margin: 105px 0 46px 0;
+}
