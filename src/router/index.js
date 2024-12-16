@@ -4,13 +4,15 @@ import WikiRouter from "@/router/WikiRouter.js";
 import UserRouter from '@/router/UserRouter';
 import MainRouter from '@/router/MainRouter';
 import TaskEvalRouter from "@/router/TaskEvalRouter.js";
+import TaskRouter from '@/router/TaskRouter.js';
 
 const routes = [
     ...QuizRouter,
     ...WikiRouter,
     ...TaskEvalRouter,
     ...UserRouter,
-    ...MainRouter
+    ...MainRouter,
+    ...TaskRouter
 ]
 
 const router = createRouter({
