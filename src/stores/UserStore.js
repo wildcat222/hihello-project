@@ -49,6 +49,11 @@ export const useUserStore = defineStore('user', {
         logout() {
             const router = useRouter();
             const performLogout = async () => {
+                if (!this.isAuthenticated) {
+                    console.warn("이미 로그아웃된 상태입니다."); // 중복 호출 방지
+                    return;
+                }
+
                 try {
                     // 서버에 로그아웃 요청
                     if (this.accessToken) {
@@ -65,12 +70,17 @@ export const useUserStore = defineStore('user', {
 
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('refreshToken');
+
+                    if (router.currentRoute.value.path !== "/") { // 이미 "/"에 있다면 이동하지 않음
+                        router.push("/").catch((error) => {
+                            console.error("Navigation failed:", error);
+                        });
+                    }
                 }
             }
             // 로그아웃 로딩 스피너 처리
             performLogout().finally(() => {
                 console.log('User logged out.');
-                router.push("/").catch((error) => console.error("Navigation failed:", error));
             });
         },
         initializeInterceptors() {
