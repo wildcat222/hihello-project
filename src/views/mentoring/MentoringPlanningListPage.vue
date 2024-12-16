@@ -5,12 +5,16 @@ import { onMounted, reactive, ref } from "vue";
 import { fetchMentoringPlanningList, searchMentoringPlans } from "@/services/MentoringApi.js";
 import WhiteBoxListComponent from "@/components/WhiteBoxListComponent.vue";
 import SearchBarComponent from "@/components/SearchBarComponent.vue";
-
+import {useUserStore} from "@/stores/UserStore.js";
+import router from "@/router/index.js";
 // 상태 관리
 const mentoringPlanningList = reactive([]);
 
 const searchCategory = ref("title"); // 기본 검색 카테고리
 
+const userStore = useUserStore();
+const employeeInfo = userStore.getEmployeeInfo();
+const employRole = employeeInfo.employeeRole;
 // 멘토링 계획서 리스트 가져오기
 const fetchingMentoringPlanningList = async () => {
   try {
@@ -44,10 +48,9 @@ const getStatusClass = (status) => {
 };
 
 // 검색 로직
-// 검색 로직
 const searchPlans = async (query) => {
   if (!query.trim()) { // 검색어가 비어있다면
-    await fetchingMentoringPlanningList(); // 전체 데이터를 다시 가져옵니다
+    await fetchingMentoringPlanningList(); // 전체 데이터를 다시 가져옴
     return;
   }
   try {
@@ -69,6 +72,9 @@ const searchPlans = async (query) => {
   }
 };
 
+const goToRegisterPage = () => {
+  router.push(`/mentoring/planning/create`);
+};
 
 onMounted(async () => {
   await fetchingMentoringPlanningList();
@@ -85,6 +91,10 @@ onMounted(async () => {
           <option value="title">제목</option>
           <option value="name">기안자</option>
         </select>
+        <div class="yellow-box" v-if="employRole === 'MENTOR'"  @click="goToRegisterPage">
+          <img src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/8d64cbf7-77f8-4670-8ddf-40e43d7bc481_plus.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241216T063855Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241216%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=7b785c3af1fdf24cef7127814d2d0327e29824719c832902b14f72af28fb0af6">
+          <div>계획서 등록</div>
+        </div>
       </div>
 
     </div>
@@ -129,6 +139,23 @@ onMounted(async () => {
 .rejected {
   color: var(--red);
 }
+.yellow-box{
+  box-shadow: 2px 2px 4px 0 var(--gray);
+  background-color: var(--yellow);
+  border-radius: 15px;
+  height: 50px;
+  display: flex;
+  width: 200px;
+  align-items: center;
+  justify-content: space-evenly;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+}
+.yellow-box img{
+  width: 25px;
+  height: 25px;
+}
 .left-title{
   width: 70px;
   display: flex;
@@ -155,7 +182,7 @@ onMounted(async () => {
   margin: 62px 0 49px;
 }
 .search_bar_container {
-  width: 70%;
+  width: 90%;
   margin: 29px auto;
   align-items: center;
 }
@@ -169,5 +196,6 @@ onMounted(async () => {
   box-shadow: 2px 2px 4px 0 var(--gray);
   border-radius: 15px;
   width: 100px;
+  height: 50px;
 }
 </style>

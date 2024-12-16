@@ -16,3 +16,12 @@ export const searchMentoringPlans = (category, word) => {
         params: { category, word }
     });
 };
+
+// 멘토링 계획서 등록
+export const submitMentoringPlanService = (formData) => {
+    return axios.post("http://localhost:8253/api/v1/mentor/planning", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    }).then((response) => response.data);
+};
