@@ -11,6 +11,9 @@ import spring.hi_hello_spring.mentoring.query.dto.MentoringPlanListAllQueryDTO;
 import spring.hi_hello_spring.mentoring.query.dto.MentoringPlanSearchDTO;
 import spring.hi_hello_spring.mentoring.query.service.MentoringPlanningQueryService;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -40,7 +43,14 @@ public class MentoringQueryController {
     @GetMapping("/search")
     @Operation(summary = "멘토링 계획서 검색", description = "멘토링 계획서 검색 로직입니다.")
     public ApiResponse<?> getMentoringPlanSearchQuery(@RequestParam String category, @RequestParam String word) {
-        List<MentoringPlanSearchDTO> mentoringPlanSearchDTO = mentoringPlanningQueryService.getMentoringPlanSearch(category, word);
+        String decodedWord = null;
+        try {
+            decodedWord = URLDecoder.decode(word, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        // System.out.println("멘토링 계획서"+decodedWord);
+        List<MentoringPlanSearchDTO> mentoringPlanSearchDTO = mentoringPlanningQueryService.getMentoringPlanSearch(category, decodedWord);
         return ResponseUtil.successResponse("성공적으로 멘토링 계획서 검색을 하였습니다.", mentoringPlanSearchDTO).getBody();
     }
 }
