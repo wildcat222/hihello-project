@@ -8,7 +8,9 @@ import java.util.List;
 
 @Mapper
 public interface OnboardingMapper {
-    List<OnboardingDTO> getOnboardingList(Long employeeSeq);
+    List<OnboardingDTO> getOnboardingListByMentee(Long employeeSeq);
 
     CompletedStatusDTO getCountStatus(Long employeeSeq);
+
+    List<OnboardingDTO> getOnboardingListByMentor(Long employeeSeq);
 }
