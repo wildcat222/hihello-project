@@ -16,3 +16,11 @@ export const searchMentoringPlans = (category, word) => {
         params: { category, word }
     });
 };
+
+export const submitMentoringPlanService = (formData) => {
+    return axios.post("http://localhost:8253/api/v1/mentor/planning", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    }).then((response) => response.data);
+};
