@@ -9,8 +9,8 @@ export default[
         component: LoginPage,
         meta: { hideAside : true },
         beforeEnter: () => {
-            const userStore = useUserStore();
-            userStore.logout(); // 로그인 페이지 접근 시 로그아웃
+            // const userStore = useUserStore();
+            // userStore.logout(); // 로그인 페이지 접근 시 로그아웃
         },
     },
     {
