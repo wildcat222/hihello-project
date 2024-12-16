@@ -1,7 +1,6 @@
 package spring.hi_hello_spring.chatting;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
 
@@ -16,11 +15,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setAllowedOrigins("*") ; // 허용할 특정 도메인으로 변경
 //                .withSockJS();  // SockJS 지원
     }
+
     // 메시지 브로커를 구성하는 메서드
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/sub"); // /subscribe/{chatNo}로 주제 구독 가능
-        registry.setApplicationDestinationPrefixes("/pub"); // /publish/message로 메시지 전송 컨트롤러 라우팅 가능
+        registry.enableSimpleBroker("/sub");
+        registry.setApplicationDestinationPrefixes("/pub");
     }
 
     // STOMP에서 64KB 이상의 데이터 전송을 못하는 문제 해결

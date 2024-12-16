@@ -21,9 +21,10 @@ services:
     # 환경 변수 설정
     environment:
       KAFKA_ADVERTISED_HOST_NAME: ${KAFKA_HOST_NAME}
-      KAFKA_CREATE_TOPICS: "chat-message:1:2"
+      KAFKA_CREATE_TOPICS: "chat-messages:1:2"
       KAFKA_LISTENER_PORT: 9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
     # 볼륨 설정
     volumes:
       - /var/run/docker.sock
