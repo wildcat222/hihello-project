@@ -9,6 +9,7 @@
     <ul>
       <!-- 김인턴 -->
       <li class="menu-item menu-title">김인턴</li>
+      <button @click="logout">로그아웃 버튼(임시)</button>
 
       <li v-for="menu in filteredMenus" :key="menu.name" class="menu-item">
         <div :class="{ active: activeMenu === menu.name }" @mouseenter="showSubMenu(menu.name)">
@@ -33,6 +34,9 @@ import {useUserStore} from "@/stores/UserStore.js";
 const userStore = useUserStore();
 const activeMenu = ref(null);
 
+function logout() {
+  userStore.logout();
+}
 
 const menus = ref([
   // 멘티 ASIDE
