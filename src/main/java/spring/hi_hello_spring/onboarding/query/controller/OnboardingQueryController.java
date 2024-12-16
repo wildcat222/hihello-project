@@ -23,11 +23,19 @@ public class OnboardingQueryController {
 
     private final OnboardingQueryService onboardingQueryService;
 
-    @Operation(summary = "온보딩 리스트 조회", description = "사원은 온보딩 리스트를 조회한다.")
-    @GetMapping("/{employeeSeq}/onboarding")
-    public ApiResponse<?> getOnboardingList(@PathVariable Long employeeSeq) {
+    @Operation(summary = "멘티 온보딩 리스트 조회", description = "멘티는 온보딩 리스트를 조회한다.")
+    @GetMapping("/mentee/onboarding")
+    public ApiResponse<?> getOnboardingListByMentee() {
 
-        OnboardingResDTO onboarding = onboardingQueryService.getOnboardingList(employeeSeq);
+        OnboardingResDTO onboarding = onboardingQueryService.getOnboardingListByMentee();
+        return ResponseUtil.successResponse("온보딩 리스트를 조회하였습니다.", onboarding).getBody();
+    }
+
+    @Operation(summary = "멘토 온보딩 리스트 조회", description = "멘토는 담당 멘티의 온보딩 리스트를 조회한다.")
+    @GetMapping("/mentor/onboarding")
+    public ApiResponse<?> getOnboardingListByMentor() {
+
+        OnboardingResDTO onboarding = onboardingQueryService.getOnboardingListByMentor();
         return ResponseUtil.successResponse("온보딩 리스트를 조회하였습니다.", onboarding).getBody();
     }
 }
