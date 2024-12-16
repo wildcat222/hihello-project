@@ -27,15 +27,18 @@ public class TaskController {
 
     // 과제 등록
     @PostMapping(value = "/task", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "과제 생성", description = "과제를 생성하는 기능입니다.")
+    @Operation(summary = "과제 등록", description = "과제를 등록하는 기능입니다.")
     public ApiResponse<?> createTask(
             @RequestPart("taskCreateDTO") TaskCreateDTO taskCreateDTO,
-            @RequestPart("fileUrl") MultipartFile fileUrl) {
+            @RequestPart(value = "fileUrl", required = false) MultipartFile fileUrl) {
 
         try {
-            // 파일 업로드 처리
-            String uploadFile = fileUploadUtil.uploadFile(fileUrl);
+            String uploadFile = null;
 
+            // 파일이 존재하는 경우에만 업로드 처리
+            if (fileUrl != null && !fileUrl.isEmpty()) {
+                uploadFile = fileUploadUtil.uploadFile(fileUrl);
+            }
             // 서비스 호출
             taskService.createTask(taskCreateDTO, uploadFile);
         } catch (IOException e) {
