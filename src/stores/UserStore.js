@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia';
 import axios from 'axios';
 import {springAPI} from '@/services/axios';
+import {useRouter} from "vue-router";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -46,6 +47,7 @@ export const useUserStore = defineStore('user', {
             }
         },
         logout() {
+            const router = useRouter();
             const performLogout = async () => {
                 try {
                     // 서버에 로그아웃 요청
@@ -68,9 +70,11 @@ export const useUserStore = defineStore('user', {
             // 로그아웃 로딩 스피너 처리
             performLogout().finally(() => {
                 console.log('User logged out.');
+                router.push("/").catch((error) => console.error("Navigation failed:", error));
             });
         },
         initializeInterceptors() {
+            const router = useRouter();
             springAPI.interceptors.response.use(
                 (response) => response,
                 async (error) => {
@@ -97,6 +101,7 @@ export const useUserStore = defineStore('user', {
                             console.error('Token refresh failed:', err);
                             this.logout();
                             alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+                            await router.push("/");
                             return Promise.reject(err);
                         }
                     }

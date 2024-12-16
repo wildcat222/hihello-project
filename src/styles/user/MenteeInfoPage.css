@@ -1,0 +1,153 @@
+.mentee-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.mentee-header h1 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: var(--black);
+}
+
+.mentee-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    padding: 2rem;
+    width: 30vw;
+    margin-bottom: 30px;
+}
+
+.mentee-card-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.mentee-image-container {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    margin-left: 30px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.mentee-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mentee-header-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+.mentee-name {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 0;
+    color: #222;
+}
+
+.mentee-phone,
+.mentee-email {
+    color: var(--black);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.mentee-email {
+    text-decoration: none;
+    color: var(--purple);
+}
+
+.mentee-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    margin-left: 70px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+
+.info-label {
+    font-weight: bold;
+    color: var(--black);
+    width: 60px;
+    text-align: left;
+}
+
+.info-value {
+    color: var(--black);
+    flex: 1;
+    text-align: left;
+    font-weight: bold;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .mentee-card {
+        width: 90%;
+        padding: 1.5rem;
+    }
+
+    .mentee-card-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .mentee-header-details {
+        align-items: center;
+    }
+
+    .mentee-info {
+        margin-left: 0;
+    }
+
+    .info-row {
+        flex-direction: column;
+        gap: 0.3rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .mentee-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .mentee-image-container {
+        width: 100px;
+        height: 100px;
+        margin-left: 0;
+    }
+
+    .mentee-card {
+        padding: 1rem;
+    }
+
+    .mentee-info {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+}
