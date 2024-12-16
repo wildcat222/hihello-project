@@ -8,7 +8,7 @@
             <div class="mentor-card-header">
                 <div class="mentor-image-container">
                     <img class="mentor-image"
-                        :src="mentor.fileUrl || 'https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/a24c3335-c7cf-4c87-934b-daf74b3ba9d6_%EA%B8%B0%EB%B3%B8%20%ED%94%84%EB%A1%9C%ED%95%84%20%EC%9D%B4%EB%AF%B8%EC%A7%80.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241216T054358Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241216%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=41579ddf56fe556d187ac8fbfabdcdf6fb768c23c09427702d2e791597c76656'"
+                        :src="mentor.fileUrl || 'https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/982d01fa-4aac-4cba-b477-993841d53842_%EB%A3%A8%ED%94%BC.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241216T071922Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241216%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=eed2f8afca007ee9a5e3d5f04f92029d984940566bc8716e1c108a3d0a13526b'"
                         alt="멘토 이미지" />
                 </div>
 
