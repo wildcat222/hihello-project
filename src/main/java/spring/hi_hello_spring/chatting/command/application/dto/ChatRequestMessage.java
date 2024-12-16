@@ -2,18 +2,16 @@ package spring.hi_hello_spring.chatting.command.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
+@Setter
+@NoArgsConstructor
 @Builder
-public class ChatRequestMessage implements Serializable {
-
+public class ChatRequestMessage {
     private Long userCode;
     private String message;
     private LocalDateTime createdAt;

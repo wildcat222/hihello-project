@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import spring.hi_hello_spring.chatting.command.application.dto.ChatRequestMessage;
 
@@ -14,27 +17,23 @@ import spring.hi_hello_spring.chatting.command.application.dto.ChatRequestMessag
 @RequiredArgsConstructor
 public class ChatMessageListener {
 
-    private final ChatRoomService chatRoomService;
+    private final SimpMessagingTemplate messagingTemplate;
+    private static final String TOPIC = "chat-messages"; // Kafka 토픽 이름
+
+    @Autowired
+    private KafkaTemplate<String, ChatRequestMessage> kafkaTemplate;
 
     @KafkaListener(topics = "chat-messages", groupId = "chat-group")
-    public void consumeMessage(ConsumerRecord<String, String> record) {
-        log.info("Consumed message: {}", record.value());
+    public void consumeMessage(ConsumerRecord<String, ChatRequestMessage> record) {
 
-        // JSON 파싱 및 저장
-        String roomId = record.key();
-        String messageJson = record.value();
-        ChatRequestMessage message = parseMessage(messageJson);
+        log.info("Consumed message: Key (roomId)={}, Value (message)={}", record.key(), record.value().getMessage());
 
-        chatRoomService.saveChatMessage(roomId, message);
+        messagingTemplate.convertAndSend("/sub/", record.key());  // 구독 경로
+        log.info("Consumed message: Key (roomId)={}", record.key());
     }
 
-    private ChatRequestMessage parseMessage(String messageJson) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.readValue(messageJson, ChatRequestMessage.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to parse message JSON", e);
-        }
+    public void sendMessage(ChatRequestMessage message) {
+        kafkaTemplate.send(TOPIC, message);
     }
 }
 

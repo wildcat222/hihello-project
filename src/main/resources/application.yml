@@ -41,6 +41,9 @@ spring:
   main:
     allow-bean-definition-overriding: true
   kafka:
+    consumer:
+      group-id: chat-group
+      auto-offset-reset: latest
     bootstrap-servers: ${KAFKA_HOST_NAME}:9092
     producer:
       bootstrap-servers: localhost
