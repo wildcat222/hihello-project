@@ -12,4 +12,6 @@ public interface FinalEvalMapper {
     List<FinalEvalsQueryDTO> findAllFinalEvals();
 
     List<FinalEvalDetailQueryDTO> findFinalEvalDetails(Long employeeSeq);
+
+    List<FinalEvalsQueryDTO> searchFinalEvals(String keyword);
 }
