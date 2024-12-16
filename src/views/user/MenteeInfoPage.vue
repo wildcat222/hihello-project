@@ -1,36 +1,36 @@
 <template>
-    <div class="mentor-container">
-        <header class="mentor-header">
-            <h1>멘토 조회</h1>
+    <div class="mentee-container">
+        <header class="mentee-header">
+            <h1>멘티 조회</h1>
         </header>
 
-        <div class="mentor-card">
-            <div class="mentor-card-header">
-                <div class="mentor-image-container">
-                    <img class="mentor-image"
+        <div class="mentee-card">
+            <div class="mentee-card-header">
+                <div class="mentee-image-container">
+                    <img class="mentee-image"
                         src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/68a6a4c5-2e9f-4618-ac13-dfa0860b1052_%EB%A3%A8%ED%94%BC.jpg"
-                        alt="멘토 이미지" />
+                        alt="멘티 이미지" />
                 </div>
 
-                <div class="mentor-header-details">
-                    <h2 class="mentor-name">{{ mentor.name }}</h2>
-                    <p class="mentor-phone">{{ mentor.phone }}</p>
-                    <a :href="`mailto:${mentor.email}`" class="mentor-email">{{ mentor.email }}</a>
+                <div class="mentee-header-details">
+                    <h2 class="mentee-name">{{ mentee.name }}</h2>
+                    <p class="mentee-phone">{{ mentee.phone }}</p>
+                    <a :href="`mailto:${mentee.email}`" class="mentee-email">{{ mentee.email }}</a>
                 </div>
             </div>
 
-            <div class="mentor-info">
+            <div class="mentee-info">
                 <div class="info-row">
                     <span class="info-label">소속</span>
-                    <span class="info-value">{{ mentor.department }}</span>
+                    <span class="info-value">{{ mentee.department }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">사번</span>
-                    <span class="info-value">{{ mentor.employeeId }}</span>
+                    <span class="info-value">{{ mentee.employeeId }}</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">직급</span>
-                    <span class="info-value">{{ mentor.position }}</span>
+                    <span class="info-value">{{ mentee.position }}</span>
                 </div>
             </div>
         </div>
@@ -38,10 +38,10 @@
 </template>
 
 <script setup>
-import "@/styles/user/MentorInfoPage.css";
+import "@/styles/user/MenteeInfoPage.css"
 import { ref, onMounted } from "vue";
 
-const mentor = ref({
+const mentee = ref({
     name: "구대윤",
     phone: "02-1234-1023",
     email: "soulsoul@hihello.com",
@@ -50,7 +50,7 @@ const mentor = ref({
     position: "대리",
 });
 
-const fetchMentorInfo = async () => {
+const fetchMenteeInfo = async () => {
     try {
         // API 로직
     } catch (error) {
@@ -59,6 +59,6 @@ const fetchMentorInfo = async () => {
 };
 
 onMounted(() => {
-    fetchMentorInfo();
+    fetchMenteeInfo();
 });
 </script>

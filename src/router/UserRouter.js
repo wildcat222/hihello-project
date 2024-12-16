@@ -1,6 +1,7 @@
 import LoginPage from "@/views/user/LoginPage.vue";
 import { useUserStore } from '@/stores/UserStore';
 import MentorInfoPage from "@/views/user/MentorInfoPage.vue";
+import MenteeInfoPage from "@/views/user/MenteeInfoPage.vue";
 
 export default[
     {
@@ -15,5 +16,9 @@ export default[
     {
         path: '/mentor/intro',
         component: MentorInfoPage,
+    },
+    {
+        path: '/mentee/intro',
+        component: MenteeInfoPage,
     }
 ]
