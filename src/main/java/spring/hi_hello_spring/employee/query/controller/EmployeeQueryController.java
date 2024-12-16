@@ -12,14 +12,14 @@ import spring.hi_hello_spring.employee.query.service.EmployeeQueryService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/hr")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Tag(name = "Employee API", description = "사원 관련 API")
 public class EmployeeQueryController {
 
     private final EmployeeQueryService employeeQueryService;
 
-    @GetMapping("/mentee")
+    @GetMapping("/hr/mentee")
     @Operation(summary = "멘티 전체 조회", description = "멘티 전체 조회 로직 입니다.")
     public ApiResponse<?> getAllMentee() {
 
@@ -27,7 +27,7 @@ public class EmployeeQueryController {
         return ResponseUtil.successResponse("멘티 전체 조회가 성공적으로 조회되었습니다.", menteeAllQueryDTO).getBody();
     }
 
-    @GetMapping("/mentee/{departmentSeq}")
+    @GetMapping("/hr/mentee/{departmentSeq}")
     @Operation(summary = "부서별 멘티 조회", description = "부서별 멘티 조회 로직 입니다.")
     public ApiResponse<?> getEmployeeByDepartmentSeq( @PathVariable Long departmentSeq) {
 
@@ -35,7 +35,7 @@ public class EmployeeQueryController {
         return ResponseUtil.successResponse("부서별 멘티 조회가 성공적으로 조회되었습니다.", menteeDepQueryDTO).getBody();
     }
 
-    @GetMapping("/mentor")
+    @GetMapping("/hr/mentor")
     @Operation(summary = "멘토 전체 조회", description = "멘토 전체 조회 로직 입니다.")
     public ApiResponse<?> getAllMentor() {
         List<MentorAllQueryDTO> mentorAllQueryDTO = employeeQueryService.getAllMentor();
@@ -64,7 +64,7 @@ public class EmployeeQueryController {
     }
 
     @Operation(summary = "사원 리스트 조회", description = "담당자는 사원 리스트를 조회한다.")
-    @GetMapping("/user")
+    @GetMapping("/hr/user")
     public ApiResponse<?> getEmployeeAll() {
         List<EmployeeListDTO> employees = employeeQueryService.getEmployeeAll();
         return ResponseUtil.successResponse("사원 리스트를 조회하였습니다.", employees).getBody();
