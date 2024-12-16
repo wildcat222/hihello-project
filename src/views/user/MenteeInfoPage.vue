@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import "@/styles/user/menteeInfoPage.css";
+import "@/styles/user/MenteeInfoPage.css";
 import { ref, computed, onMounted } from "vue";
 import { fetchMenteeInfo } from "@/services/UserApi.js";
 
