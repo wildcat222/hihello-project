@@ -23,25 +23,32 @@
                 <!-- 헤더 -->
                 <div class="list-header">
                     <div class="column header-number">번호</div>
-                    <div class="column header-content">내용</div>
-                    <div class="column header-answer">답안</div>
+                    <div class="column header-question">질문</div>
+                    <div class="column header-answer">정답</div>
+                    <div class="column header-explanation">설명</div>
                     <div class="column header-actions">관리</div>
                 </div>
 
                 <!-- 아이템 목록 -->
-                <list-component :items="quizItems">
-                    <template #item="{ item, index }">
-                        <div class="list-item">
-                            <div class="column item-number">{{ index + 1 }}</div>
-                            <div class="column item-content">{{ item.content }}</div>
-                            <div class="column item-answer">{{ item.answer }}</div>
-                            <div class="column actions">
-                                <button class="edit-button">수정</button>
-                                <button class="delete-button">삭제</button>
+                <div v-if="quizItems.length > 0">
+                    <list-component :items="quizItems">
+                        <template #item="{ item, index }">
+                            <div class="quiz-list-item">
+                                <div class="column item-number">{{ index + 1 }}</div>
+                                <div class="column item-question">{{ item.quizQuestion }}</div>
+                                <div class="column item-answer">{{ item.quizAnswer ? 'O' : 'X' }}</div>
+                                <div class="column item-explanation">{{ item.quizExplanation }}</div>
+                                <div class="column actions">
+                                    <button class="edit-button" @click="editQuiz(item)">수정</button>
+                                    <button class="delete-button" @click="deleteQuiz(item.quizSeq)">삭제</button>
+                                </div>
                             </div>
-                        </div>
-                    </template>
-                </list-component>
+                        </template>
+                    </list-component>
+                </div>
+                <div v-else>
+                    <p class="no-data">해당 카테고리에 퀴즈가 없습니다.</p>
+                </div>
             </div>
         </white-box>
 
@@ -53,24 +60,53 @@
 </template>
 
 <script setup>
-import "@/styles/quiz/HrQuiz.css"
+import "@/styles/quiz/HrQuiz.css";
 import SearchBar from "@/components/SearchBarComponent.vue";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
 import ListComponent from "@/components/ListComponent.vue";
 import QuizCategory from "@/components/QuizCategoryComponent.vue";
 import { ref } from "vue";
+import { fetchHrQuiz } from "@/services/QuizApi";
 
-// 더미 데이터
-const quizItems = ref([
-    { content: "우리 기업은 이지화된 업무 프로세스를 사용한다.", answer: "O" },
-    {
-        content: "우리 기업은 다양한 복지 정책이 존재하고 이를 통해 임직원에게 더 나은 근무 환경을 제공하고 있다.",
-        answer: "O",
-    },
-]);
+// 퀴즈 데이터
+const quizItems = ref([]);
 
-const onTabSelected = (tab) => {
-    console.log("선택된 탭:", tab);
+// 카테고리 선택 핸들러
+const onTabSelected = async (quizCategorySeq) => {
+    try {
+        console.log("선택된 탭:", quizCategorySeq);
+        const response = await fetchHrQuiz(quizCategorySeq);
+        if (response.success && response.data) {
+            quizItems.value = response.data.map((quiz) => ({
+                quizSeq: quiz.quizSeq,
+                quizQuestion: quiz.quizQuestion,
+                quizAnswer: quiz.quizAnswer,
+                quizExplanation: quiz.quizExplanation,
+            }));
+        } else {
+            quizItems.value = [];
+        }
+    } catch (error) {
+        console.error("퀴즈 조회 중 오류 발생:", error);
+        quizItems.value = [];
+    }
+};
+
+// 수정 핸들러
+const editQuiz = (item) => {
+    console.log("수정할 퀴즈:", item);
+    // 여기에 수정 로직 추가
+};
+
+// 삭제 핸들러
+const deleteQuiz = async (quizSeq) => {
+    try {
+        console.log("삭제할 퀴즈 번호:", quizSeq);
+        // 여기에 삭제 API 호출 로직 추가
+        quizItems.value = quizItems.value.filter((quiz) => quiz.quizSeq !== quizSeq);
+    } catch (error) {
+        console.error("퀴즈 삭제 중 오류 발생:", error);
+    }
 };
 </script>
 
@@ -78,5 +114,11 @@ const onTabSelected = (tab) => {
 .white-box {
     width: 90%;
     margin: 0 auto;
+}
+.no-data {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 1.2em;
+    color: #888;
 }
 </style>

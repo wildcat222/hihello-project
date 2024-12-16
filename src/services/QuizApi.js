@@ -47,4 +47,15 @@ export const fetchQuizCategory = async () =>{
     throw error;
   }
 };
+
+// 담당자 카테고리 별 퀴즈 조회
+export const fetchHrQuiz = async (quizCategorySeq) =>{
+  try{
+    const response = await springAPI.get(`/hr/quizCategory/${quizCategorySeq}/quiz`)
+    return response.data;
+  }catch(error){
+    console.error("카테고리 별 퀴즈 조회 실패", error.response?.data || error.message);
+    throw error;
+  }
+};
   
