@@ -10,7 +10,8 @@ export default[
         meta: { hideAside : true },
         beforeEnter: () => {
             const userStore = useUserStore();
-            userStore.logout(); // 로그인 페이지 접근 시 로그아웃
+            // userStore.logout(); // 로그인 페이지 접근 시 로그아웃
+            // 로그인 상태일 때 접근 못하게
         },
     },
     {
