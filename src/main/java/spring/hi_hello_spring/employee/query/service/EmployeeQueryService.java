@@ -40,9 +40,18 @@ public class EmployeeQueryService {
         return employeeMapper.findEmployeeInfo(employeeSeq);
     }
 
-    // 멘티/멘토 프로필 조회
-    public ReqEmplInfoQueryDTO getMentorInfo(Long mentorSeq) {
-        return employeeMapper.findEmployeeInfo(mentorSeq);
+    // 멘토 프로필 조회
+    public ReqEmplInfoQueryDTO getMentorInfo() {
+
+        Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
+        return employeeMapper.findMentorInfo(employeeSeq);
+    }
+
+    // 멘티 프로필 조회
+    public ReqEmplInfoQueryDTO getMenteeInfo() {
+
+        Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
+        return employeeMapper.findMenteeInfo(employeeSeq);
     }
 
     public List<EmployeeListDTO> getEmployeeAll() {
