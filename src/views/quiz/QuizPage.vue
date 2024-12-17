@@ -52,13 +52,13 @@ const currentQuiz = computed(() => quizzes.value[currentQuizIndex.value] || null
 const loadQuizzes = async () => {
   const employeeInfo = userStore.getEmployeeInfo();
 
-  if (!employeeInfo || !quizStore.quizCategorySeq) {
+  if (!employeeInfo || !quizStore.userQuizCategorySeq) {
     console.error("quizCategorySeq or employeeInfo is missing");
     return;
   }
 
   try {
-    quizzes.value = await fetchQuizzes(quizStore.quizCategorySeq);
+    quizzes.value = await fetchQuizzes(quizStore.userQuizCategorySeq);
   } catch (error) {
     console.error("Failed to load quizzes:", error);
   }
@@ -76,7 +76,7 @@ const handleAnswer = async (userAnswer) => {
 
   try {
     await submitQuizAnswer(
-      quizStore.quizCategorySeq,
+      quizStore.userQuizCategorySeq,
       employeeInfo.employeeSeq, // Use the employeeSeq from the store
       currentQuiz.value.quiz_seq,
       isCorrect
@@ -85,7 +85,7 @@ const handleAnswer = async (userAnswer) => {
     if (currentQuizIndex.value < quizzes.value.length - 1) {
       currentQuizIndex.value++;
     } else {
-      router.push(`/quiz/${quizStore.quizCategorySeq}/result`);
+      router.push(`/quiz/${quizStore.userQuizCategorySeq}/result`);
     }
   } catch (error) {
     console.error("Error submitting quiz answer:", error.response?.data || error.message);

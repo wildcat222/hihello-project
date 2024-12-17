@@ -1,23 +1,28 @@
-// stores/quizStore.js
 import { defineStore } from 'pinia';
 
 export const useQuizStore = defineStore('quizStore', {
   state: () => ({
-    quizCategorySeq: 1,
-    quizItems: [],
+    // 일반 퀴즈 상태
+    userQuizCategorySeq: 1,
+    userQuizItems: [],
+
+    // HR 퀴즈 상태
+    hrQuizCategorySeq: null,
+    hrQuizItems: [],
   }),
   actions: {
-    setQuizCategorySeq(seq) {
-      this.quizCategorySeq = seq;
+    // 일반 퀴즈 메서드
+    setUserQuizCategorySeq(seq) {
+      this.userQuizCategorySeq = seq;
     },
-    setQuizItems(items) {
-      this.quizItems = items;
+    setUserQuizItems(items) {
+      this.userQuizItems = items;
     },
-    clearQuizItems() {
-      this.quizItems = [];
+    clearUserQuizItems() {
+      this.userQuizItems = [];
     },
   },
   persist: {
-    storage: sessionStorage, 
+    storage: sessionStorage,
   },
 });

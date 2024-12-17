@@ -1,6 +1,6 @@
 <template>
     <div class="category-tabs">
-        <button v-for="(tab, index) in categories" :key="tab.quizCategorySeq"
+        <button v-for="(tab) in categories" :key="tab.quizCategorySeq"
             :class="['circle-button', { active: activeTab === tab.quizCategorySeq }]"
             @click.stop="selectCategory(tab.quizCategorySeq)">
             {{ tab.quizCategoryName }}
@@ -34,11 +34,9 @@ const activeTab = ref(null);
 const loadCategories = async () => {
     try {
         const response = await fetchQuizCategory();
-        console.log("API 응답:", response); // API 응답 확인
 
         if (response.success) {
             categories.value = response.data;
-            console.log("로드된 카테고리:", categories.value); // 로드된 데이터 확인
             activeTab.value = categories.value[0]?.quizCategorySeq || null;
 
             if (activeTab.value) {
