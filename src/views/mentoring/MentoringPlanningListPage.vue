@@ -14,7 +14,7 @@ const searchCategory = ref("title"); // 기본 검색 카테고리
 
 const userStore = useUserStore();
 const employeeInfo = userStore.getEmployeeInfo();
-const employRole = "MENTOR";
+const employRole = employeeInfo.employeeRole;
 
 // 멘토링 계획서 리스트 가져오기
 const fetchingMentoringPlanningList = async () => {
