@@ -3,11 +3,11 @@
         <WhiteBox>
             <h2 class="login-title">로그인</h2>
             <form class="login-form" @submit.prevent="onLogin">
-                <div class="form-group">
+                <div class="login-form-group">
                     <label for="username">사번</label>
                     <input type="text" id="username" v-model="employee_num" placeholder="사번을 입력하세요" />
                 </div>
-                <div class="form-group">
+                <div class="login-form-group">
                     <label for="password">비밀번호</label>
                     <input type="password" id="password" v-model="employee_password" placeholder="비밀번호를 입력하세요" />
                 </div>

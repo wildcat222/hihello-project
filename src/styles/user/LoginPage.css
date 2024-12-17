@@ -29,7 +29,7 @@
     width: auto;
 }
 
-.form-group {
+.login-form-group {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
