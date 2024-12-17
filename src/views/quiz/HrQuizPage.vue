@@ -79,7 +79,7 @@ import QuizCategory from "@/components/QuizCategoryComponent.vue";
 import AddCategoryModal from "@/views/quiz/AddQuizCategoryModal.vue";
 import AddQuizModal from "@/views/quiz/AddQuizModal.vue";
 import UpdateQuizModal from "@/views/quiz/UpdateQuizModal.vue";
-import { fetchHrQuiz } from "@/services/QuizApi";
+import { fetchHrQuiz, deleteHrQuiz } from "@/services/QuizApi";
 import { useQuizStore } from '@/stores/QuizStore';
 
 const quizStore = useQuizStore();
@@ -150,12 +150,19 @@ const onTabSelected = async (quizCategorySeq) => {
 
 // 삭제 핸들러
 const deleteQuiz = async (quizSeq) => {
+    const isConfirmed = window.confirm("퀴즈를 삭제하시겠습니까?");
+    if (!isConfirmed) return; 
+
     try {
-        console.log("삭제할 퀴즈 번호:", quizSeq);
-        // 여기에 삭제 API 호출 로직 추가
-        quizItems.value = quizItems.value.filter((quiz) => quiz.quizSeq !== quizSeq);
+        await deleteHrQuiz(selectedCategorySeq.value, quizSeq);
+
+        quizStore.setQuizItems(
+            quizItems.value.filter((quiz) => quiz.quizSeq !== quizSeq)
+        );
+
+        alert("퀴즈가 성공적으로 삭제되었습니다.");
     } catch (error) {
-        console.error("퀴즈 삭제 중 오류 발생:", error);
+        alert("퀴즈 삭제에 실패했습니다. 다시 시도해주세요.");
     }
 };
 
