@@ -1,11 +1,12 @@
 package spring.hi_hello_spring.security.util;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,12 +15,7 @@ import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMap
 import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import spring.hi_hello_spring.common.exception.CustomException;
-import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.common.util.RedisService;
-import spring.hi_hello_spring.employee.command.application.service.EmployeeService;
-import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
-import spring.hi_hello_spring.employee.command.domain.repository.EmployeeRepository;
 import spring.hi_hello_spring.security.entity.CustomUserDetails;
 import spring.hi_hello_spring.security.service.CustomUserDetailsService;
 
@@ -27,7 +23,6 @@ import java.security.Key;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -36,34 +31,36 @@ public class JwtUtil {
     private final Key key;
     private final CustomUserDetailsService userDetailsService;
     private final RedisService redisService;
-    private final EmployeeService employeeService;
 
     private final GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
-    private final EmployeeRepository employeeRepository;
 
 
     public JwtUtil(
             @Value("${TOKEN_SECRET}") String secretKey,
-            CustomUserDetailsService userDetailsService, RedisService redisService, EmployeeService employeeService,
-            EmployeeRepository employeeRepository) {
+            CustomUserDetailsService userDetailsService, RedisService redisService) {
         this.redisService = redisService;
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
         this.userDetailsService = userDetailsService;
-        this.employeeRepository = employeeRepository;
-        this.employeeService = employeeService;
     }
 
     /* accessToken 검증(Bearer 토큰이 넘어왔고, 우리 사이트의 secret key로 만들어 졌는가, 만료되었는지와 내용이 비어있진 않은지) */
     public boolean validateAccessToken(String accessToken) {
 
         accessToken = accessToken.replaceAll("\\s+", "");
-        System.out.println("엑세스 토큰 " + accessToken);
+
+        log.info("엑세스 토큰 검증 도중 확인 : " + accessToken);
 
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
+
+            // 레디스 내 블랙리스트 토큰과 비교 검증 로직 추가
+
             return true;
+        } catch (ExpiredJwtException e) {
+            throw e;
         } catch (Exception e) {
+            log.info("엑세스 토큰 검증 과정 중 예외 발생 : " + e);
             return false;
         }
     }
@@ -92,10 +89,8 @@ public class JwtUtil {
             }
 
         } catch (Exception e) {
-            log.info("Invalid JWT Token {}", e);
-            // 로그아웃 처리 및 레디스 내의 토큰 삭제
-            employeeService.logout(null);
-            return false;
+            log.info("리프레시 토큰 검증 과정 중 예외 발생 : " + e.getMessage());
+            throw e;
         }
         return false;
     }
@@ -111,33 +106,34 @@ public class JwtUtil {
     }
 
     // accessToken 생성
-    public String generateAccessToken(String employeeNum, Authentication authentication) {
+    public String generateAccessToken(Authentication authentication) {
 
-        Employee employee = employeeRepository.findByEmployeeNum(employeeNum)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND)); // 예외 처리 어찌할건지
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        Long employeeSeq = employee.getEmployeeSeq();
-        long expirationTime = (long) 1000 * 60 * 30; // 30분
+        log.info("액세스 토큰 생성 중(generateAccessToken) 객체 확인 : " + customUserDetails.toString());
+
+        Long employeeSeq = customUserDetails.getEmployeeSeq();
+        String employeeDepartment = customUserDetails.getEmployeeDepartment();
+        String employeePosition = customUserDetails.getEmployeePosition();
+
+//        long expirationTime = (long) 1000 * 60 * 30; // 30분
+//        long expirationTime = (long) 3000; // 토큰 테스트 용
+        long expirationTime = (long) 1000 * 60 * 120; // 프론트 개발 용 2시간
+
+        /* 권한을 꺼내 List<String> 으로 변환 */
+        List<String> authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
 
         Claims claims = Jwts.claims().setSubject(String.valueOf(employeeSeq));
+        claims.put("employeeDeptartment", employeeDepartment);
+        claims.put("employeePosition", employeePosition);
+        claims.put("employeeRole", authorities);
 
-        // 권한 정보를 List<String> 형태로 변환하여 클레임에 담기
-        List<String> authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)  // GrantedAuthority -> String (권한 이름)
-                .collect(Collectors.toList());
-
-        // 권한에 추가된 역할, 부서 번호, 직급 번호 추출
-        authorities.forEach(auth -> {
-            if (auth.equals(String.valueOf(employee.getEmployeeRole()))) {
-                claims.put("employeeRole", auth);
-            } else if (auth.equals(String.valueOf(employee.getDepartmentSeq()))) {
-                claims.put("departmentSeq", auth);
-            } else if (auth.equals(String.valueOf(employee.getPositionSeq()))) {
-                claims.put("positionSeq", auth);
-            }
-        });
+//        log.info("클레임 정보 : " + claims.toString());
 
         return Jwts.builder()
+                // 부서, 직급 정보 추가
                 .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
@@ -146,12 +142,13 @@ public class JwtUtil {
     }
 
     // refreshToken 생성
-    public String generateRefreshToken(String employeeNum) {
+    public String generateRefreshToken(Authentication authentication) {
 
-        Employee employee = employeeRepository.findByEmployeeNum(employeeNum)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND)); // 예외 처리 어찌할건지
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        Long employeeSeq = employee.getEmployeeSeq();
+        log.info("리프레시 토큰 생성 중(generateAccessToken) 객체 확인 : " + customUserDetails.toString());
+
+        Long employeeSeq = customUserDetails.getEmployeeSeq();
 
         long expirationTime = (long) 1000 * 60 * 60 * 24 * 7; // 7일
         Claims claims = Jwts.claims().setSubject(String.valueOf(employeeSeq));
@@ -164,6 +161,8 @@ public class JwtUtil {
                 .signWith(key)
                 .compact();
     }
+
+
 
     // request 에서 refresh token or access token 을 추출
     public Optional<String> getToken(HttpServletRequest request, String tokenType) {
@@ -180,7 +179,8 @@ public class JwtUtil {
 
     // authentication 저장
     public void saveAuthentication(Long employeeSeq) {
-        System.out.println("employeeSeq: " + employeeSeq);
+
+        log.info("authentication 저장 과정 중 seq 확인 : " + employeeSeq);
         CustomUserDetails customUserDetails = userDetailsService.loadUserBySeq(employeeSeq);
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(customUserDetails, null,
@@ -193,16 +193,31 @@ public class JwtUtil {
     public String reIssueAccessToken(String refreshToken) {
         // 리프레시 토큰에서 사용자 employeeSeq 추출
         Long employeeSeq = Long.parseLong(getEmployeeSeq(refreshToken));
-        Employee findUser = employeeRepository.findByEmployeeSeq(employeeSeq)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
 
-        // 새로운 액세스 토큰 생성
-        CustomUserDetails customUserDetails = userDetailsService.loadUserByUsername(findUser.getEmployeeNum());
+        // 권한 생성
+        CustomUserDetails customUserDetails = userDetailsService.loadUserBySeq(employeeSeq);
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(customUserDetails, null,
                         authoritiesMapper.mapAuthorities(customUserDetails.getAuthorities()));
 
-        return generateAccessToken(getEmployeeSeq(refreshToken), authentication);
+        log.info("액세스 토큰 재 발급 도중의 principal : " + authentication);
+
+        return generateAccessToken(authentication);
+    }
+
+    // refreshToken 재발급
+    public String reIssueRefreshToken(String employeeSeq) {
+
+        long expirationTime = (long) 1000 * 60 * 60 * 24 * 7; // 7일
+        Claims claims = Jwts.claims().setSubject(String.valueOf(employeeSeq));
+
+        // 만료 시간 설정
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime)) // 만료 시간
+                .signWith(key)
+                .compact();
     }
 
     // 생성된 토큰 레디스에 저장

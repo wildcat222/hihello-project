@@ -22,6 +22,7 @@ public class EmployeeController {
     @Operation(summary = "로그아웃", description = "사원이 로그아웃을 한다.")
     @PostMapping("/logout")
     public ApiResponse<?> logout(@RequestHeader("Authorization") String accessToken) {
+        System.out.println(accessToken);
         employeeService.logout(accessToken);
         return ResponseUtil.successResponse("로그아웃을 완료하였습니다.").getBody();
     }

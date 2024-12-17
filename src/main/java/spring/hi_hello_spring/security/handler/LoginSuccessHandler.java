@@ -18,19 +18,15 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtUtil jwtUtil;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-
-        log.info("로그인 성공 후 security 가 관리하는 principal 객체 : {}", authentication);
-
-        // 사용자 이름 가져오기
-        String username = authentication.getName();
-        log.info(username);
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+            throws IOException, ServletException {
+//        log.info("로그인 성공 후 security 가 관리하는 principal 객체 : {}", authentication);
 
         // Access Token 생성
-        String accessToken = jwtUtil.generateAccessToken(username, authentication);
+        String accessToken = jwtUtil.generateAccessToken(authentication);
 
         // Refresh Token 생성
-        String refreshToken = jwtUtil.generateRefreshToken(username);
+        String refreshToken = jwtUtil.generateRefreshToken(authentication);
 
         // 응답 헤더에 토큰 추가
         response.setHeader("accessToken", accessToken);
