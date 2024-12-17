@@ -23,3 +23,14 @@ export const postQuizCategory = async (quizCategoryName) => {
         throw error;
     }
 };
+
+// 퀴즈 카테고리 삭제
+export const deleteQuizCategory = async (quizCategorySeq) => {
+    try{
+        const response = await springAPI.delete(`/hr/quizCategory/${quizCategorySeq}`);
+        return response.data;
+    }catch (error){
+        console.error("퀴즈 카테고리 삭제를 실패했습니다.", error.response?.data || error.message);
+        throw error;
+    }
+};
