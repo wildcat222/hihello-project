@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @ToString
 public class MentoringPlanListAllQueryDTO {
 
+    private Long planningSeq;
     private String employeeName;
     private String planningName;
     private PlanningStatus planningStatus;
