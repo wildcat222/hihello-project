@@ -1,5 +1,5 @@
 import MentoringPlanningListPage from "@/views/mentoring/MentoringPlanningListPage.vue";
-import MentoringPlanningCreate from "@/views/mentoring/MentoringPlanningCreate.vue";
+import MentoringPlanningCreatePage from "@/views/mentoring/MentoringPlanningCreatePage.vue";
 export default [
     {
         path: '/mentoring/planning',
@@ -7,6 +7,6 @@ export default [
     },
     {
         path: '/mentoring/planning/create',
-        component: MentoringPlanningCreate
+        component: MentoringPlanningCreatePage
     }
 ]
