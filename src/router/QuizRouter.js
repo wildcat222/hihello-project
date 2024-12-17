@@ -12,7 +12,7 @@ export default [
         component: QuizResultPage,
     },
     {
-        path: '/hr/quiz/result',
+        path: '/hr/quiz',
         component: HrQuizPage,
     }
 ]

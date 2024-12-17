@@ -1,0 +1,184 @@
+.submitButton-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.task-submit-button {
+    background-color: #7031FC;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+
+}
+.evalContent{
+    width: 250px;
+    height: 25px;
+    border-radius: 10px;
+    border: 1px #ccc solid;
+    text-align: center;
+}
+.evalButton{
+    width: 80px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px #ccc solid;
+    background: #7031FC;
+    color: white;
+}
+.evalscore{
+    width: 50px;
+    height: 25px;
+    border-radius: 10px;
+    border: 1px #ccc solid;
+    text-align: center;
+}
+table {
+    width: 100%;
+    border-collapse: collapse; /* 테이블 경계선 합치기 */
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+.table-detail{
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0 0 10px;
+    padding: 0 100px 0 0;
+}
+
+.header-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 35px;
+    margin: 105px 0 46px 0;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 0 132px;
+    gap: 19px;
+}
+.container-line {
+    display: flex;
+}
+.task-name,
+.task-depart,
+.task-round,
+.task-type,
+.task-content {
+    margin-right: 64px;
+    color: #000;
+    font-size: 20px;
+    font-weight: 500;
+    display: inline;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+}
+.task-attach {
+    margin-right: 24px;
+    color: #000;
+    font-size: 20px;
+    font-weight: 500;
+    display: inline;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+}
+.task-attach-input {
+    display: none; /* 기본 파일 선택 버튼 숨기기 */
+}
+.file-name {
+    margin-left: 10px;
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+    display: inline-block;
+    align-content: center;
+}
+.file-upload-label {
+    display: inline-block;
+    padding: 7px 10px;
+    background-color: #7031FC; /* 버튼 배경색 */
+    color: white; /* 글자 색 */
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+.file-upload-label:hover {
+    background-color: #5a1dc2; /* 마우스 호버 시 배경색 변경 */
+}
+.file-name {
+    margin-left: 10px;
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+    display: inline-block;
+}
+.task-name-input {
+    width: 60%;
+    height: 15px;
+    padding: 5px;
+    margin-left: 4.2px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+}
+.task-content-input {
+    width: 60%;
+    height: 202px; /* 과제 내용 입력란의 높이 */
+    padding: 5px;
+    margin-left: 4.2px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+}
+.table-container{
+    margin:20px 0 40px 0;
+}
+
+.task-round-input,
+.task-type-input {
+    width: 100px;
+    height: 30px;
+    padding: 5px;
+    margin-left: 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.task-depart-input {
+    width: 100px;
+    height: 30px;
+    padding: 3px;
+    margin-left: 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.task-group-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #7031FC;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 15px;
+}

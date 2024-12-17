@@ -37,14 +37,52 @@ export const submitQuizAnswer = async (quizCategorySeq, employeeSeq, quizSeq, co
   }
 };
 
-// 퀴즈 카테고리 조회
-export const fetchQuizCategory = async () =>{
+// 담당자 카테고리 별 퀴즈 조회
+export const fetchHrQuiz = async (quizCategorySeq) =>{
   try{
-    const response = await springAPI.get(`/hr/quizCategory`)
+    const response = await springAPI.get(`/hr/quizCategory/${quizCategorySeq}/quiz`)
     return response.data;
   }catch(error){
-    console.error("퀴즈 카테고리 조회 실패", error.response?.data || error.message);
+    console.error("카테고리 별 퀴즈 조회 실패", error.response?.data || error.message);
     throw error;
   }
 };
+
+// 담당자 카테고리 별 퀴즈 등록
+export const postHrQuiz = async (quizCategorySeq, newQuiz) => {
+  try {
+      const response = await springAPI.post(
+          `/hr/quizCategory/${quizCategorySeq}/quiz`, 
+          newQuiz
+      );
+      return response.data;
+  } catch (error) {
+      console.error("퀴즈 등록 실패:", error.response?.data || error.message);
+      throw error;
+  }
+};
+
+// 담당자 카테고리 별 퀴즈 수정
+export const updateHrQuiz = async (quizCategorySeq, quizSeq, updateQuiz) => {
+  try{
+    const response = await springAPI.put(`/hr/quizCategory/${quizCategorySeq}/quiz/${quizSeq}`,
+      updateQuiz
+    );
+    return response.data;
+  }catch (error){
+    console.error("퀴즈 수정 실패: ", error.response?.data || error.message);
+    throw error;
+  }
+}
+
+// 담당자 카테고리 별 퀴즈 삭제
+export const deleteHrQuiz = async (quizCategorySeq, quizSeq) => {
+  try{
+    const response = await springAPI.delete(`/hr/quizCategory/${quizCategorySeq}/quiz/${quizSeq}`)
+    return response.data;
+  }catch (error){
+    console.error("퀴즈 삭제 실패: ", error.response?.data || error.message);
+    throw error;
+  }
+}
   

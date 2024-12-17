@@ -1,46 +1,65 @@
 <template>
     <div class="category-tabs">
-        <!-- 카테고리 버튼 리스트 -->
-        <button v-for="(tab, index) in categories" :key="tab.quizCategorySeq"
+        <button v-for="(tab) in categories" :key="tab.quizCategorySeq"
             :class="['circle-button', { active: activeTab === tab.quizCategorySeq }]"
-            @click="selectTab(tab.quizCategorySeq)">
+            @click.stop="selectCategory(tab.quizCategorySeq)">
             {{ tab.quizCategoryName }}
+            <!-- 삭제 아이콘 (showDelete가 true일 때만 표시) -->
+            <span v-if="showDelete" class="delete-icon" @click.stop="$emit('delete-category', tab.quizCategorySeq)">
+                ✖
+            </span>
         </button>
     </div>
 </template>
 
-<script>
-import { fetchQuizCategory } from "@/services/QuizApi";
+<script setup>
+import { ref, onMounted } from "vue";
+import { fetchQuizCategory } from "@/services/QuizCategoryApi";
 
-export default {
-    data() {
-        return {
-            categories: [], 
-            activeTab: null,
-        };
+// Props
+defineProps({
+    showDelete: {
+        type: Boolean,
+        default: false, // 기본값: 삭제 버튼 숨김
     },
-    async created() {
-        await this.loadCategories();
-    },
-    methods: {
-        async loadCategories() {
-            try {
-                const response = await fetchQuizCategory();
-                if (response.success) {
-                    this.categories = response.data;
-                    this.activeTab = this.categories[0]?.quizCategorySeq || null;
-                    this.$emit("tab-selected", this.activeTab);
-                }
-            } catch (error) {
-                console.error("Failed to fetch quiz categories:", error.message);
+});
+
+// Emits
+const emit = defineEmits(["tab-selected", "delete-category"]);
+
+const categories = ref([]);
+const activeTab = ref(null);
+
+// 카테고리 불러오기
+const loadCategories = async () => {
+    try {
+        const response = await fetchQuizCategory();
+
+        if (response.success) {
+            categories.value = response.data;
+            activeTab.value = categories.value[0]?.quizCategorySeq || null;
+
+            if (activeTab.value) {
+                emit("tab-selected", activeTab.value);
             }
-        },
-        selectTab(quizCategorySeq) {
-            this.activeTab = quizCategorySeq;
-            this.$emit("tab-selected", quizCategorySeq);
-        },
-    },
+        } else {
+            console.error("API 응답 실패: success가 false입니다.");
+        }
+    } catch (error) {
+        console.error("카테고리 로드 실패:", error);
+    }
 };
+
+const selectCategory = (categorySeq) => {
+    activeTab.value = categorySeq;
+    emit("tab-selected", categorySeq);
+};
+
+onMounted(() => {
+    loadCategories();
+});
+
+defineExpose({ loadCategories });
 </script>
 
 <style scoped>
@@ -64,5 +83,17 @@ export default {
 .circle-button.active {
     background-color: var(--purple);
     color: var(--white);
+}
+
+.delete-icon {
+    margin-left: 8px;
+    color: red;
+    font-size: 12px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.delete-icon:hover {
+    color: darkred;
 }
 </style>

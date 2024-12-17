@@ -3,6 +3,8 @@ import axios from 'axios';
 import {springAPI} from '@/services/axios';
 import {useRouter} from "vue-router";
 
+const router = useRouter();
+
 export const useUserStore = defineStore('user', {
     state: () => ({
         accessToken: localStorage.getItem('accessToken') || null,
@@ -17,29 +19,29 @@ export const useUserStore = defineStore('user', {
                     employeeNum,
                     employeePassword,
                 });
-        
+
                 // 응답 헤더에서 토큰 가져오기
                 this.accessToken = response.headers['accesstoken'];
                 this.refreshToken = response.headers['refreshtoken'];
-        
+
                 console.log('header : ', response.headers);
                 console.log('Access Token:', this.accessToken); // 디버깅용
                 console.log('Refresh Token:', this.refreshToken); // 디버깅용
-        
+
                 if (this.accessToken && this.refreshToken) {
                     this.isAuthenticated = true;
-        
+
                     // 로컬 스토리지에 토큰 저장
                     localStorage.setItem('accessToken', this.accessToken);
                     localStorage.setItem('refreshToken', this.refreshToken);
-        
+
                     // Axios 기본 헤더 설정
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
+                    springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
 
                 } else {
                     console.error('Tokens are missing in the response headers');
                 }
-        
+
                 return true;
             } catch (error) {
                 console.error('Login failed:', error.response?.data || error.message);
@@ -47,18 +49,17 @@ export const useUserStore = defineStore('user', {
             }
         },
         logout() {
-            const router = useRouter();
             const performLogout = async () => {
-                if (!this.isAuthenticated) {
-                    console.warn("이미 로그아웃된 상태입니다."); // 중복 호출 방지
+                console.log('엑세스 토큰 : ' + this.accessToken);
+                if (!this.accessToken) {
+                    console.warn("이미 로그아웃된 상태입니다.");
                     return;
                 }
 
                 try {
                     // 서버에 로그아웃 요청
-                    if (this.accessToken) {
-                        await springAPI.post('/employee/logout');
-                    }
+                    await springAPI.post("/employee/logout");
+
                 } catch (error) {
                     console.error('Server logout failed:', error.response?.data || error.message);
                 } finally {
@@ -66,7 +67,7 @@ export const useUserStore = defineStore('user', {
                     this.refreshToken = null;
                     this.isAuthenticated = false;
 
-                    delete axios.defaults.headers.common['Authorization'];
+                    delete springAPI.defaults.headers.common['Authorization'];
 
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('refreshToken');
@@ -84,11 +85,11 @@ export const useUserStore = defineStore('user', {
             });
         },
         initializeInterceptors() {
-            const router = useRouter();
             springAPI.interceptors.response.use(
                 (response) => response,
                 async (error) => {
-                    if (error.response?.status === 401 && this.refreshToken) {
+                    console.log(error.response.data.message);
+                    if (error.response?.data.message === '엑세스 토큰이 만료되었습니다.') {
                         try {
                             const res = await springAPI.request({
                                 ...error.config,
@@ -105,18 +106,24 @@ export const useUserStore = defineStore('user', {
 
                             springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
 
-                            return res;
+                            const response = await springAPI.request({
+                                ...error.config,
+                                headers: {
+                                    Authorization: `Bearer ${this.accessToken}`
+                                }
+                            });
+
+                            return response;
 
                         } catch (err) {
                             console.error('Token refresh failed:', err);
-                            this.logout();
                             alert('세션이 만료되었습니다. 다시 로그인해주세요.');
                             await router.push("/");
                             return Promise.reject(err);
                         }
                     }
                     return Promise.reject(error);
-                }
+                },
             );
         },
         getTokenPayload() {

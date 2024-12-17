@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue';
 import axios from 'axios';
 import { useUserStore } from "@/stores/UserStore.js";
+import {springAPI} from "@/services/axios.js";
 
 export function useTask() {
     const searchQuery = ref('');
@@ -22,10 +23,10 @@ export function useTask() {
     const fetchTasks = async () => {
         try {
             const url = employeeRole === 'MENTOR'
-                ? 'http://localhost:8253/api/v1/mentor/task'
-                : 'http://localhost:8253/api/v1/hr/task';
+                ? '/mentor/task'
+                : '/hr/task';
 
-            const response = await axios.get(url, {
+            const response = await springAPI.get(url, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -46,7 +47,7 @@ export function useTask() {
 
     const handleSearch = async (query) => {
         try {
-            const response = await axios.get('http://localhost:8253/api/v1/task', {
+            const response = await springAPI.get('/task', {
                 params: { taskContent: query },
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
@@ -77,7 +78,7 @@ export function useTask() {
 
     const deleteTask = async () => {
         try {
-            const response = await axios.delete(`http://localhost:8253/api/v1/task/${selectedTaskSeq.value}`, {
+            const response = await springAPI.delete(`/task/${selectedTaskSeq.value}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')}`
                 }
