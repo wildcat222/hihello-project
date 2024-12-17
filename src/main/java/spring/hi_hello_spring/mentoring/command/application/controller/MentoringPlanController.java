@@ -47,7 +47,7 @@ public class MentoringPlanController {
 
     @PutMapping("/{planningSeq}")
     @Operation(summary = "멘토링 계획서 처리", description = "멘토링 계획서 처리 로직입니다.")
-    public ApiResponse<?> modifyMentoringPlan(@PathVariable Long planningSeq, MentoringPlanUpdateDTO mentoringPlanUpdateDTO){
+    public ApiResponse<?> modifyMentoringPlan(@PathVariable Long planningSeq, @RequestBody MentoringPlanUpdateDTO mentoringPlanUpdateDTO){
 
         mentoringPlanService.modifyMentoringPlan(planningSeq, mentoringPlanUpdateDTO);
         return ResponseUtil.successResponse("멘토링 계획서가 성공적으로 처리 되었습니다.").getBody();
