@@ -25,3 +25,13 @@ export const submitMentoringPlanService = (formData) => {
         },
     }).then((response) => response.data);
 };
+
+export const fetchMentoringPlanDetail = async (planningSeq) => {
+    try {
+        const response = await springAPI.get(`/mentor/planning/${planningSeq}`);
+        return response.data; // 성공 시 데이터 반환
+    } catch (error) {
+        console.error("멘토링 계획서 상세 조회 실패:", error);
+        throw error;
+    }
+};

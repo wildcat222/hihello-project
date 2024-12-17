@@ -1,26 +1,28 @@
 <script setup>
-
 import ListComponent from "@/components/ListComponent.vue";
 import { onMounted, reactive, ref } from "vue";
 import { fetchMentoringPlanningList, searchMentoringPlans } from "@/services/MentoringApi.js";
 import WhiteBoxListComponent from "@/components/WhiteBoxListComponent.vue";
 import SearchBarComponent from "@/components/SearchBarComponent.vue";
-import {useUserStore} from "@/stores/UserStore.js";
-import router from "@/router/index.js";
-// 상태 관리
+import { useUserStore } from "@/stores/UserStore.js";
+import { useRouter } from "vue-router"; // useRouter 추가
+
+const router = useRouter(); // useRouter 사용
 const mentoringPlanningList = reactive([]);
 
 const searchCategory = ref("title"); // 기본 검색 카테고리
 
 const userStore = useUserStore();
 const employeeInfo = userStore.getEmployeeInfo();
-const employRole = employeeInfo.employeeRole;
+const employRole = "MENTOR";
+
 // 멘토링 계획서 리스트 가져오기
 const fetchingMentoringPlanningList = async () => {
   try {
     const response = await fetchMentoringPlanningList();
     response.data.forEach(plan => {
       mentoringPlanningList.push({
+        planningSeq: plan.planningSeq,
         employeeName: plan.employeeName,
         planningName: plan.planningName,
         planningStatus: plan.planningStatus,
@@ -32,7 +34,6 @@ const fetchingMentoringPlanningList = async () => {
     alert("멘토링 계획서 리스트를 조회하던 중 오류가 발생했습니다.");
   }
 };
-
 // 상태별 클래스와 텍스트 반환
 const getStatusClass = (status) => {
   switch (status) {
@@ -47,6 +48,7 @@ const getStatusClass = (status) => {
   }
 };
 
+
 // 검색 로직
 const searchPlans = async (query) => {
   if (!query.trim()) { // 검색어가 비어있다면
@@ -60,6 +62,7 @@ const searchPlans = async (query) => {
     mentoringPlanningList.splice(0); // 기존 리스트 초기화
     response.data.data.forEach(plan => {
       mentoringPlanningList.push({
+        planningSeq: plan.planningSeq,
         employeeName: plan.employeeName,
         planningName: plan.planningName,
         planningStatus: plan.planningStatus,
@@ -76,10 +79,15 @@ const goToRegisterPage = () => {
   router.push(`/mentoring/planning/create`);
 };
 
+const goToDetailPage = (planningSeq) => {
+  router.push(`/mentoring/planning/${planningSeq}`);
+};
+
 onMounted(async () => {
   await fetchingMentoringPlanningList();
 });
 </script>
+
 
 <template>
   <div class="content_box">
@@ -111,7 +119,7 @@ onMounted(async () => {
         </template>
 
         <template #item="{ item, index }">
-          <div class="flex-line">
+          <div class="flex-line" @click="goToDetailPage(item.planningSeq)">
             <div>{{ index + 1 }}</div>
             <div>{{ item.planningName }}</div>
 
@@ -121,7 +129,6 @@ onMounted(async () => {
               <div class="left-title">{{ item.regDate }}</div>
             </div>
           </div>
-
         </template>
       </ListComponent>
     </WhiteBoxListComponent>

@@ -26,11 +26,15 @@ const handleFileChange = (event) => {
   }
 };
 
-
 // 폼 제출 로직
 const submitMentoringPlan = async () => {
-  try {
+  // 파일이 선택되지 않은 경우 경고 메시지 출력
+  if (!mentoringPlanForm.value.file) {
+    alert("파일을 첨부해주세요.");
+    return; // 파일이 없으면 더 이상 진행되지 않도록
+  }
 
+  try {
     const formData = new FormData();
     formData.append("createProductReqDTO", JSON.stringify({
       employeeSeq: mentoringPlanForm.value.employeeSeq,
@@ -57,7 +61,8 @@ const submitMentoringPlan = async () => {
 
     router.push("/mentoring/planning");
   } catch (error) {
-    errorMessage.value = error.response?.data?.message || "등록 중 오류가 발생했습니다. 다시 시도해주세요.";
+    const errorMessage = error.response?.data?.message || "등록 중 오류가 발생했습니다. 다시 시도해주세요.";
+    alert(errorMessage);
   }
 };
 </script>
@@ -86,10 +91,10 @@ const submitMentoringPlan = async () => {
           ></textarea>
         </div>
         <div class="form-group">
-          <div>파일</div>
+          <div class="file_name">파일</div>
           <label for="file" class="file_button">
             <img
-                src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/d941c931-e33a-4055-8309-87cb762d17fd_attach_file.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241216T074513Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241216%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=1254a50ab2c8cc440d0e67d8855b0b38237958f7a1a448d0c399e763226b6226"
+                src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/62dd909f-f788-4694-bd9b-6e01e7806fa2_attach_file.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241217T021443Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241217%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=521920dac44120fdaec406215d16562aeaa600321a67418e622977c8e0652355"
                 id="file-button"
             />
             <p v-if="mentoringPlanForm.fileName" id="file-name">{{ mentoringPlanForm.fileName }}</p>
@@ -113,12 +118,13 @@ const submitMentoringPlan = async () => {
 .form-group {
   display: flex;
   flex-direction: row;
-  align-items: center;
   margin: 5px 0px;
   justify-content: center;
   gap: 50px;
 }
-
+.file_name{
+  margin-top: 10px;
+}
 .planning-container {
   width: 550px;
 }
@@ -136,10 +142,13 @@ const submitMentoringPlan = async () => {
 }
 #planningContent{
   height: 150px;
+  padding-top: 10px;
 }
 h1{
   text-align: center;
   margin: 150px 0px 49px 0px;
+  font-size: 35px;
+  font-weight: 700;
 }
 .submit-button {
   width: 297px;
@@ -150,7 +159,9 @@ h1{
   color: var(--white);
   border-radius: 10px;
 }
-
+.form-group label{
+  margin-top: 5px;
+}
 form {
   display: flex;
   flex-direction: column;
