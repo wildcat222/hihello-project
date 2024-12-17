@@ -26,7 +26,10 @@ const handleKeyUp = (event) => {
 <template>
   <div class="search_bar">
     <div class="search_bar_image_container">
-      <img src="../assets/search-icon.png" class="search_bar_image" alt="검색 이미지">
+      <img
+          src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/c0802cd3-1389-4ce5-b539-8d6bc35ea23d_search-icon.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241217T064206Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241217%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=1b23fdb117f1613d5f57811c81340adbbe9e06de499cee383931e3c331829169"
+          class="search_bar_image"
+          alt="검색 이미지">
     </div>
     <div class="input_container">
       <input

@@ -22,7 +22,10 @@ const handleClick = () => {
 
 <template>
   <div class="add-button" @click="handleClick">
-    <img src="../assets/plus-icon.png" class="plus-icon" alt="플러스 아이콘">
+    <img
+        src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/4bbe8df4-8f32-47a8-bf29-d04f1198cd42_plus-icon.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241217T064323Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241217%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=1ae7a4d9e0574c673608ca68d39c389dc84724811d83bbbc9bfb4bac197dbce5"
+         class="plus-icon"
+         alt="플러스 아이콘">
     <div class="button-text">
       {{ buttonText }}
     </div>
