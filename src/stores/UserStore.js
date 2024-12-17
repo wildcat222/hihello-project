@@ -127,16 +127,22 @@ export const useUserStore = defineStore('user', {
             );
         },
         getTokenPayload() {
-            if (!this.accessToken) {
-                console.error('Token이 존재하지 않습니다.');
-                return null;
-            }
+            const base64 = this.accessToken.split('.')[1];
+            console.log(base64);
+
             try {
-                const payloadBase64 = this.accessToken.split('.')[1];
-                const payload = JSON.parse(atob(payloadBase64));
-                return payload;
+                // Base64 URL -> Base64 변환
+                // const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                // console.log(base64);
+                // Base64 디코딩
+                const decodedToken = atob(base64);
+                console.log(decodedToken);
+                // UTF-8 디코딩
+                const bytes = new Uint8Array(decodedToken.split('').map(char => char.charCodeAt(0)));
+                const decodedText = new TextDecoder('utf-8').decode(bytes);
+                return JSON.parse(decodedText);
             } catch (error) {
-                console.error('토큰에서 Payload를 추출할 수 없습니다.', error);
+                console.error("추출이 불가능합니다.", error);
                 return null;
             }
         },
@@ -146,13 +152,28 @@ export const useUserStore = defineStore('user', {
                 this.employeeInfo = {
                     employeeSeq: payload.sub,
                     employeeRole: payload.employeeRole,
-                    departmentSeq: payload.departmentSeq,
-                    positionSeq: payload.positionSeq,
+                    employeeDepartmentName: payload.employeeDepartmentName,
+                    employeePositionName: payload.employeePositionName,
                 };
                 return this.employeeInfo;
             }
             console.error('Employee 정보가 존재하지 않습니다.');
             return null;
+            // const payload = this.getTokenPayload();
+            // if (!payload) {
+            //     console.error('Employee 정보가 존재하지 않습니다.');
+            //     return null;
+            // }
+            //
+            // // 안전하게 정보 추출 (기본값 설정)
+            // this.employeeInfo = {
+            //     employeeSeq: payload.sub || null,
+            //     employeeRole: payload.employeeRole || 'UNKNOWN', // 기본값 'UNKNOWN'
+            //     departmentName: payload.employeeDeptartment || 'UNKNOWN', // 이름 수정
+            //     positionName: payload.employeePosition || 'UNKNOWN', // 이름 수정
+            // };
+            //
+            // return this.employeeInfo;
         },
 
     },
