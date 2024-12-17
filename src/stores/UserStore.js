@@ -36,7 +36,7 @@ export const useUserStore = defineStore('user', {
                     localStorage.setItem('refreshToken', this.refreshToken);
 
                     // Axios 기본 헤더 설정
-                    axios.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
+                    springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
 
                 } else {
                     console.error('Tokens are missing in the response headers');
@@ -50,6 +50,7 @@ export const useUserStore = defineStore('user', {
         },
         logout() {
             const performLogout = async () => {
+                console.log('엑세스 토큰 : ' + this.accessToken);
                 if (!this.accessToken) {
                     console.warn("이미 로그아웃된 상태입니다.");
                     return;
@@ -57,16 +58,7 @@ export const useUserStore = defineStore('user', {
 
                 try {
                     // 서버에 로그아웃 요청
-                    await springAPI.post("/employee/logout", {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-                        }
-                    });
-                    // const response = await axios.post("http://localhost:8253/api/v1/employee/logout", {
-                    //     headers: {
-                    //         Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-                    //     }
-                    // });
+                    await springAPI.post("/employee/logout");
 
                 } catch (error) {
                     console.error('Server logout failed:', error.response?.data || error.message);
@@ -75,7 +67,7 @@ export const useUserStore = defineStore('user', {
                     this.refreshToken = null;
                     this.isAuthenticated = false;
 
-                    delete axios.defaults.headers.common['Authorization'];
+                    delete springAPI.defaults.headers.common['Authorization'];
 
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('refreshToken');
@@ -96,9 +88,10 @@ export const useUserStore = defineStore('user', {
             springAPI.interceptors.response.use(
                 (response) => response,
                 async (error) => {
-                    if (error.response?.message === '엑세스 토큰이 만료되었습니다.') {
+                    console.log(error.response.data.message);
+                    if (error.response?.data.message === '엑세스 토큰이 만료되었습니다.') {
                         try {
-                            const res = await axios.request({
+                            const res = await springAPI.request({
                                 ...error.config,
                                 headers: {
                                     RefreshToken: `Bearer ${this.refreshToken}`,
@@ -113,11 +106,13 @@ export const useUserStore = defineStore('user', {
 
                             springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
 
-                            const response = await axios.request({
+                            const response = await springAPI.request({
+                                ...error.config,
                                 headers: {
                                     Authorization: `Bearer ${this.accessToken}`
                                 }
                             });
+
                             return response;
 
                         } catch (err) {
