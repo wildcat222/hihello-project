@@ -20,7 +20,7 @@ public class QuizCategoryController {
     /* 퀴즈 카테고리 등록 */
     @PostMapping
     @Operation(summary = "퀴즈 카테고리 생성", description = "퀴즈 카테고리 생성 로직입니다.")
-    public ApiResponse<?> createQuizCategory(QuizCategoryCreateDTO createDTO){
+    public ApiResponse<?> createQuizCategory(@RequestBody QuizCategoryCreateDTO createDTO){
 
         quizCategoryService.createQuizCategory(createDTO);
         return ResponseUtil.successResponse("퀴즈 카테고리가 성공적으로 등록되었습니다.").getBody();

@@ -1,13 +1,19 @@
 package spring.hi_hello_spring.security.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import spring.hi_hello_spring.employee.command.application.service.EmployeeService;
+import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Department;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
+import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Position;
+import spring.hi_hello_spring.employee.command.domain.repository.DepartmentRepository;
 import spring.hi_hello_spring.employee.command.domain.repository.EmployeeRepository;
+import spring.hi_hello_spring.employee.command.domain.repository.PositionRepository;
 import spring.hi_hello_spring.security.entity.CustomUserDetails;
 
 import java.util.ArrayList;
@@ -15,10 +21,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final EmployeeRepository employeeRepository;
-
+    private final DepartmentRepository departmentRepository;
+    private final PositionRepository positionRepository;
+    private final EmployeeService employeeService;
 
     @Override
     public CustomUserDetails loadUserByUsername(String employeeNum) throws UsernameNotFoundException {
@@ -27,13 +36,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         Employee loginUser = employeeRepository.findByEmployeeNum(employeeNum)
                 .orElseThrow(() -> new UsernameNotFoundException(employeeNum));
 
+        Department loginUserDepartment = departmentRepository.findByDepartmentSeq(loginUser.getDepartmentSeq());
+        Position loginUserPosition = positionRepository.findByPositionSeq(loginUser.getPositionSeq());
+
         // 담당자인지 멘토장인지 멘토인지 멘티인지 확인
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(loginUser.getEmployeeRole()))); // 역할 -> mentee
-        grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(loginUser.getDepartmentSeq()))); // 부서Seq
-        grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(loginUser.getPositionSeq()))); // 직급Seq
 
-        return new CustomUserDetails(loginUser.getEmployeeSeq(), loginUser.getEmployeeNum(), loginUser.getEmployeePassword(), grantedAuthorities);
+        return new CustomUserDetails(loginUser.getEmployeeSeq(), loginUserDepartment.getDepartmentName()
+                , loginUserPosition.getPositionName(), loginUser.getEmployeeNum()
+                , loginUser.getEmployeePassword(), grantedAuthorities);
     }
 
     public CustomUserDetails loadUserBySeq(Long employeeSeq) {
@@ -42,12 +54,15 @@ public class CustomUserDetailsService implements UserDetailsService {
         Employee employee = employeeRepository.findByEmployeeSeq(employeeSeq)
                 .orElseThrow(() -> new UsernameNotFoundException(String.valueOf(employeeSeq)));
 
+        Department employeeDepartment = departmentRepository.findByDepartmentSeq(employee.getDepartmentSeq());
+        Position employeePosition = positionRepository.findByPositionSeq(employee.getPositionSeq());
+
         // 담당자인지 멘토장인지 멘토인지 멘티인지 확인
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(employee.getEmployeeRole()))); // 역할 -> mentee
-        grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(employee.getDepartmentSeq()))); // 부서Seq
-        grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(employee.getPositionSeq()))); // 직급Seq
 
-        return new CustomUserDetails(employee.getEmployeeSeq(), employee.getEmployeeNum(), employee.getEmployeePassword(), grantedAuthorities);
+        return new CustomUserDetails(employee.getEmployeeSeq(), employee.getEmployeeNum()
+                ,employeeDepartment.getDepartmentName(), employeePosition.getPositionName()
+                , employee.getEmployeePassword(), grantedAuthorities);
     }
 }

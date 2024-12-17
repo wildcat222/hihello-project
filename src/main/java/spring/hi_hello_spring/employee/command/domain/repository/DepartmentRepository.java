@@ -5,4 +5,6 @@ import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Departmen
 public interface DepartmentRepository {
 
     Department findByDepartmentName(String department);
+
+    Department findByDepartmentSeq(Long departmentSeq);
 }

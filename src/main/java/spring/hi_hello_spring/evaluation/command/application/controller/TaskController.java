@@ -27,7 +27,7 @@ public class TaskController {
 
     // 과제 등록
     @PostMapping(value = "/task", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "과제 생성", description = "과제를 생성하는 기능입니다.")
+    @Operation(summary = "과제 등록", description = "과제를 등록하는 기능입니다.")
     public ApiResponse<?> createTask(
             @RequestPart("taskCreateDTO") TaskCreateDTO taskCreateDTO,
             @RequestPart(value = "fileUrl", required = false) MultipartFile fileUrl) {

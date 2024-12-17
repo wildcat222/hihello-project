@@ -50,7 +50,6 @@ public class TaskService {
         Task saveTask = taskRepository.save(task);
         taskRepository.save(task);
 
-
         if (uploadFile != null) {
             File file = File.builder()
                     .taskSeq(saveTask.getTaskSeq())
@@ -83,7 +82,6 @@ public class TaskService {
         if (uploadFile != null) {
             File file = File.builder()
                     .taskSeq(updateTask.getTaskSeq())
-                    .fileName(taskUpdateDTO.getFileName())
                     .fileUrl(uploadFile)
                     .build();
             fileRepository.save(file);

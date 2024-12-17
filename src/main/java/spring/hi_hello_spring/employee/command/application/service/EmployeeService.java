@@ -44,22 +44,19 @@ public class EmployeeService {
 
         redisService.deleteToken(EmployeeSeq);
 
-        if (accessToken != null) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody();
 
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(accessToken)
-                    .getBody();
+        // 만료 시간 (exp는 Unix timestamp 형식)
+        long exp = claims.getExpiration().getTime() / 1000;  // 초 단위로 변환
 
-            // 만료 시간 (exp는 Unix timestamp 형식)
-            long exp = claims.getExpiration().getTime() / 1000;  // 초 단위로 변환
+        // 현재 시간과 만료 시간을 비교하여 TTL 계산
+        long ttl = exp - (System.currentTimeMillis() / 1000);
 
-            // 현재 시간과 만료 시간을 비교하여 TTL 계산
-            long ttl = exp - (System.currentTimeMillis() / 1000);
-
-            redisService.saveToken(EmployeeSeq + "a", accessToken, ttl);
-        }
+        redisService.saveToken(EmployeeSeq + "a", accessToken, ttl);
 
     }
 
