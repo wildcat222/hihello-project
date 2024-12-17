@@ -1,9 +1,9 @@
-import axios from "axios";
+import {springAPI} from "@/services/axios.js";
 
 // 최종 평가 결과 리스트 조회
 export const fetchFinalEvalResultList = async() => {
     try {
-        return await axios.get(`http://localhost:8253/api/v1/final-eval`);
+        return await springAPI.get(`/final-eval`);
     } catch(error) {
         console.error("최종 평가 결과 리스트를 조회하던 도중 오류가 발생했습니다.", error);
     }
@@ -12,7 +12,7 @@ export const fetchFinalEvalResultList = async() => {
 // 최종 평가 결과 리스트 검색
 export const searchFinalEvalResultList = async(keyword) => {
     try {
-        return await axios.get(`http://localhost:8253/api/v1/final-eval/search`, {
+        return await springAPI.get(`/final-eval/search`, {
             params: {keyword}
         });
     } catch(error) {
