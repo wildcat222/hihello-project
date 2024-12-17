@@ -6,6 +6,7 @@
 
     <select id="findAllMentoringPlanList" resultType="MentoringPlanListAllQueryDTO">
         SELECT
+            p.planning_seq,
             e.employee_name,
             p.planning_name,
             p.planning_status,
