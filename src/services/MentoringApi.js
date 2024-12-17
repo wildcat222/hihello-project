@@ -1,9 +1,9 @@
-import axios from 'axios';
+import {springAPI} from "@/services/axios.js";
 
 // 멘토링 계획서 전체 리스트 조회
 export const fetchMentoringPlanningList = async() => {
     try{
-        const response = await axios.get('http://localhost:8253/api/v1/mentor/planning');
+        const response = await springAPI.get('/mentor/planning');
         return response.data;
     } catch (error){
         console.log("멘토링 계획서 리스트를 불러오지 못했습니다.",error);
@@ -12,14 +12,14 @@ export const fetchMentoringPlanningList = async() => {
 
 // 멘토링 계획서 검색
 export const searchMentoringPlans = (category, word) => {
-    return axios.get(`http://localhost:8253/api/v1/mentor/planning/search`, {
+    return springAPI.get(`/mentor/planning/search`, {
         params: { category, word }
     });
 };
 
 // 멘토링 계획서 등록
 export const submitMentoringPlanService = (formData) => {
-    return axios.post("http://localhost:8253/api/v1/mentor/planning", formData, {
+    return springAPI.post("/mentor/planning", formData, {
         headers: {
             "Content-Type": "multipart/form-data",
         },
