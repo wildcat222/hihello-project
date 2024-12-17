@@ -40,25 +40,31 @@ public class JwtFilter extends OncePerRequestFilter {
 
         Optional<String> refreshToken = jwtUtil.getToken(request, "refresh");
 
-        if (refreshToken.isPresent() && jwtUtil.validateRefreshToken(refreshToken.get())) {
-            String newAccessToken = jwtUtil.reIssueAccessToken(refreshToken.get());
-            String employeeSeq = jwtUtil.getEmployeeSeq(newAccessToken);
-            String newRefreshToken = jwtUtil.reIssueRefreshToken(employeeSeq);
+        try {
+            if (refreshToken.isPresent() && jwtUtil.validateRefreshToken(refreshToken.get())) {
+                String newAccessToken = jwtUtil.reIssueAccessToken(refreshToken.get());
+                String employeeSeq = jwtUtil.getEmployeeSeq(newAccessToken);
+                String newRefreshToken = jwtUtil.reIssueRefreshToken(employeeSeq);
 
-            response.setHeader("accesstoken", newAccessToken);
-            response.setHeader("refreshtoken", newRefreshToken);
+                response.setHeader("accesstoken", newAccessToken);
+                response.setHeader("refreshtoken", newRefreshToken);
 
-            // 로그용 코드
-            log.info("재발급 된 엑세스 토큰 {} ", newAccessToken);
-            log.info("재발급 된 리프레시 토큰 {} ", newRefreshToken);
+                // 로그용 코드
+                log.info("재발급 된 엑세스 토큰 {} ", newAccessToken);
+                log.info("재발급 된 리프레시 토큰 {} ", newRefreshToken);
 
-            jwtUtil.saveAuthentication(Long.parseLong(jwtUtil.getEmployeeSeq(newAccessToken)));
+                jwtUtil.saveAuthentication(Long.parseLong(jwtUtil.getEmployeeSeq(newAccessToken)));
 
-            // 재발급된 리프레시 토큰 레디스에 저장 (덮어쓰기)
-            jwtUtil.saveToken(newRefreshToken);
+                // 재발급된 리프레시 토큰 레디스에 저장 (덮어쓰기)
+                jwtUtil.saveToken(newRefreshToken);
 
-//            filterChain.doFilter(request, response);
-            return;
+                return;
+            }
+        } catch (Exception e) {
+            log.error("Invalid Token: {}", e.getMessage());
+            if (!response.isCommitted()) { // 응답이 커밋되지 않았을 때만 에러 전송
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "사용할 수 없는 토큰입니다.");
+            }
         }
 
         Optional<String> accessToken = jwtUtil.getToken(request, "access");
@@ -69,19 +75,17 @@ public class JwtFilter extends OncePerRequestFilter {
                     jwtUtil.saveAuthentication(Long.parseLong(jwtUtil.getEmployeeSeq(accessToken.get())));
 //                log.info("accessToken {} ", accessToken.get());
                     filterChain.doFilter(request, response); // 다음 필터로 요청 전달
-//                    return;
+                    return;
                 }
             }
+            filterChain.doFilter(request, response); // 다음 필터로 요청 전달
         } catch (ExpiredJwtException e) {
             // 만료된 토큰 처리
             log.error("Expired JWT Token: {}", e.getMessage());
             if (!response.isCommitted()) { // 응답이 커밋되지 않았을 때만 에러 전송
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "엑세스 토큰이 만료되었습니다.");
             }
-//            return; // 필요 없을 듯
         }
 
-//        filterChain.doFilter(request, response); // 필요 없을 듯
     }
-
 }

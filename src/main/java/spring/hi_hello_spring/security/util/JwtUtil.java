@@ -89,7 +89,8 @@ public class JwtUtil {
             }
 
         } catch (Exception e) {
-            log.info("리프레시 토큰 검증 과정 중 예외 발생 : " + e);
+            log.info("리프레시 토큰 검증 과정 중 예외 발생 : " + e.getMessage());
+            throw e;
         }
         return false;
     }
@@ -115,8 +116,9 @@ public class JwtUtil {
         String employeeDepartment = customUserDetails.getEmployeeDepartment();
         String employeePosition = customUserDetails.getEmployeePosition();
 
-        long expirationTime = (long) 1000 * 60 * 30; // 30분
+//        long expirationTime = (long) 1000 * 60 * 30; // 30분
 //        long expirationTime = (long) 3000; // 토큰 테스트 용
+        long expirationTime = (long) 1000 * 60 * 120; // 프론트 개발 용 2시간
 
         /* 권한을 꺼내 List<String> 으로 변환 */
         List<String> authorities = authentication.getAuthorities().stream()
@@ -198,7 +200,7 @@ public class JwtUtil {
                 new UsernamePasswordAuthenticationToken(customUserDetails, null,
                         authoritiesMapper.mapAuthorities(customUserDetails.getAuthorities()));
 
-        log.info("액세스 토큰 재 발급 도중의 principal : " + authentication.toString());
+        log.info("액세스 토큰 재 발급 도중의 principal : " + authentication);
 
         return generateAccessToken(authentication);
     }
