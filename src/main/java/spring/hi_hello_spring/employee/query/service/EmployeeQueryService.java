@@ -7,7 +7,7 @@ import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.common.util.CustomUserUtils;
 import spring.hi_hello_spring.employee.query.dto.*;
 import spring.hi_hello_spring.employee.query.mapper.EmployeeMapper;
-import spring.hi_hello_spring.mentoring.query.dto.DepartmentListDTO;
+import spring.hi_hello_spring.employee.query.dto.DepartmentListDTO;
 
 import java.util.List;
 
@@ -74,5 +74,14 @@ public class EmployeeQueryService {
 
     public List<DepartmentListDTO> getAllDepartment() {
         return employeeMapper.findAllDepartment();
+    }
+
+    public List<MentorDepQueryDTO> getDepMentors(Long departmentSeq) {
+
+        List<MentorDepQueryDTO>  mentorDepQueryDTO = employeeMapper.findMentorByDep(departmentSeq);
+        if(mentorDepQueryDTO == null) {
+            throw new IllegalArgumentException("해당 부서의 멘토가 존재하지 않습니다");
+        }
+        return mentorDepQueryDTO;
     }
 }

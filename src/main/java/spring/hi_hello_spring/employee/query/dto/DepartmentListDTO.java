@@ -1,4 +1,4 @@
-package spring.hi_hello_spring.mentoring.query.dto;
+package spring.hi_hello_spring.employee.query.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -8,7 +8,7 @@ import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.employee.query.dto.*;
 import spring.hi_hello_spring.employee.query.service.EmployeeQueryService;
-import spring.hi_hello_spring.mentoring.query.dto.DepartmentListDTO;
+import spring.hi_hello_spring.employee.query.dto.DepartmentListDTO;
 
 import java.util.List;
 
@@ -41,6 +41,14 @@ public class EmployeeQueryController {
     public ApiResponse<?> getAllMentor() {
         List<MentorAllQueryDTO> mentorAllQueryDTO = employeeQueryService.getAllMentor();
         return ResponseUtil.successResponse("멘토 전체 조회가 성공적으로 조회되었습니다.", mentorAllQueryDTO).getBody();
+    }
+
+    @GetMapping("/hr/mentor/{departmentSeq}")
+    @Operation(summary = "부서별 멘토 조회", description = "부서별 멘토 조회 로직 입니다.")
+    public ApiResponse<?> getMentorByDepartmentSeq( @PathVariable Long departmentSeq) {
+
+        List<MentorDepQueryDTO> mentorDepQueryDTO = employeeQueryService.getDepMentors(departmentSeq);
+        return ResponseUtil.successResponse("부서별 멘토 조회가 성공적으로 조회되었습니다.", mentorDepQueryDTO).getBody();
     }
 
     @Operation(summary = "내 프로필 조회", description = "사원은 본인의 프로필을 조회한다.")
@@ -92,6 +100,6 @@ public class EmployeeQueryController {
     public ApiResponse<?> getEmployeeDepartment() {
 
         List<DepartmentListDTO> departmentListDTOs = employeeQueryService.getAllDepartment();
-        return ResponseUtil.successResponse("부서를 성공적으로 조회하였습니다.").getBody();
+        return ResponseUtil.successResponse("부서를 성공적으로 조회하였습니다.", departmentListDTOs).getBody();
     }
 }
