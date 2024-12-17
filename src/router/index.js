@@ -5,6 +5,7 @@ import UserRouter from '@/router/UserRouter';
 import MainRouter from '@/router/MainRouter';
 import TaskEvalRouter from "@/router/TaskEvalRouter.js";
 import TaskRouter from '@/router/TaskRouter.js';
+import FinalEvalRouter from "@/router/FinalEvalRouter.js";
 import MentoringRouter from "@/router/MentoringRouter.js";
 
 const routes = [
@@ -14,6 +15,7 @@ const routes = [
     ...UserRouter,
     ...MainRouter,
     ...TaskRouter,
+    ...FinalEvalRouter,
     ...MentoringRouter
 ]
 
