@@ -35,3 +35,7 @@ export const fetchMentoringPlanDetail = async (planningSeq) => {
         throw error;
     }
 };
+
+export const updateMentoringPlanStatus = (planningSeq, planningStatus) => {
+    return springAPI.put(`/mentor/planning/${planningSeq}`, { planningStatus });
+};

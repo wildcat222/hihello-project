@@ -1,13 +1,22 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import { fetchMentoringPlanDetail } from '@/services/MentoringApi.js';
+import {useRoute, useRouter} from 'vue-router';
+import { fetchMentoringPlanDetail, updateMentoringPlanStatus } from '@/services/MentoringApi.js';
 import WhiteBoxListComponent from "@/components/WhiteBoxListComponent.vue";
+import {useUserStore} from "@/stores/UserStore.js";
 
+const router = useRouter();
 const route = useRoute();
 const planningSeq = ref(null); // planningSeq를 안전하게 보관
 const planDetail = ref({}); // API 데이터를 저장 (빈 객체로 초기화)
 
+const userStore = useUserStore();
+const employeeInfo = userStore.getEmployeeInfo();
+const employPosition = employeeInfo.positionSeq;
+
+const goToBack = () => {
+  router.push(`/mentoring/planning`);
+};
 // 라우트가 유효할 때 planningSeq 추출
 onMounted(() => {
   if (route.params && route.params.planningSeq) {
@@ -30,20 +39,35 @@ const getStatusClass = (status) => {
   }
 };
 
-// API 호출 함수
+// 계획서 상세 조회
 const getPlanDetail = async () => {
   try {
     const response = await fetchMentoringPlanDetail(planningSeq.value);
     if (response && response.data) {
-      planDetail.value = response.data; // 서버에서 반환된 DTO 데이터
+      planDetail.value = response.data;
     } else {
-      // 데이터가 없을 경우 처리 로직
-      planDetail.value = {};  // 빈 객체로 설정
+      planDetail.value = {};
     }
   } catch (error) {
-    // 에러 발생 시 planDetail을 빈 객체로 설정
     console.error("멘토링 계획서 상세 조회 오류:", error);
-    planDetail.value = {};  // 에러 시에도 빈 객체로 설정
+    planDetail.value = {};
+  }
+};
+
+// 버튼 클릭 이벤트 처리
+const handleButtonClick = async (event) => {
+  const planningStatus = event.target.id; // 클릭된 버튼의 id 값(APPROVE or REJECT)
+  console.log(planningStatus)
+  try {
+    // 서버에 PUT 요청 보내기
+    const response = await updateMentoringPlanStatus(planningSeq.value, planningStatus);
+    alert("계획서가 성공적으로 처리되었습니다.");
+
+    // 성공적으로 처리되면 새로고침 또는 뒤로 가기
+    router.push(`/mentoring/planning`);
+  } catch (error) {
+    console.error("계획서 처리 오류:", error);
+    alert("오류가 발생했습니다. 다시 시도해주세요.");
   }
 };
 </script>
@@ -74,12 +98,59 @@ const getPlanDetail = async () => {
           <div class="head">첨부 파일</div>
           <a :href="planDetail.fileUrl" target="_blank" class="content-line">{{ planDetail.fileName }}</a>
         </div>
+        <div class="button-container">
+          <div v-if="'employPosition' === '1'" class="inline buttons"> <!-- 팀장만 보이는 버튼 -->
+            <div class="approve" id="APPROVE" @click="handleButtonClick($event)">승인</div>
+            <div class="deny" id="REJECT" @click="handleButtonClick($event)">반려</div>
+          </div>
+          <div class="goToBack"  @click="goToBack">뒤로가기</div><!-- 모두가 볼 수 있음 -->
+        </div>
       </div>
     </WhiteBoxListComponent>
   </div>
 </template>
 
 <style scoped>
+.buttons{
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 700;
+  gap: 20px;
+  justify-content: center;
+}
+.approve{
+  background-color: var(--purple);
+  width: 50%;
+  border-radius: 10px;
+  height: 33px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.deny{
+  background-color: var(--black);
+  width: 50%;
+  border-radius: 10px;
+  height: 33px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.button-container{
+  margin-top: 15px;
+}
+.goToBack{
+  border-radius: 10px;
+  background: var(--black);
+  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
+  color: var(--white);
+  height: 50px;
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .inline{
   display: flex;
   margin: 15px 0px;
