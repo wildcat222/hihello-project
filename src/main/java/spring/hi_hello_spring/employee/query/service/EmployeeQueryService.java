@@ -7,6 +7,7 @@ import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.common.util.CustomUserUtils;
 import spring.hi_hello_spring.employee.query.dto.*;
 import spring.hi_hello_spring.employee.query.mapper.EmployeeMapper;
+import spring.hi_hello_spring.mentoring.query.dto.DepartmentListDTO;
 
 import java.util.List;
 
@@ -69,5 +70,9 @@ public class EmployeeQueryService {
 
     public String getEmployeeName(Long employeeSeq) {
         return employeeMapper.findEmployeeName(employeeSeq);
+    }
+
+    public List<DepartmentListDTO> getAllDepartment() {
+        return employeeMapper.findAllDepartment();
     }
 }
