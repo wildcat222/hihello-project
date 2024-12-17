@@ -23,6 +23,7 @@
     <!-- 해당 부서의 멘티를 조회하는 SQL   -->
     <select id="findMenteeByDep" parameterType="long" resultType="MenteeDepQueryDTO">
         SELECT
+            e.employee_seq,
             e.employee_name,
             e.employee_num,
             d.department_name
@@ -190,9 +191,10 @@
             department
     </select>
 
-    <!-- 해당 부서의 멘티를 조회하는 SQL   -->
+    <!-- 해당 부서의 멘토를 조회하는 SQL   -->
     <select id="findMentorByDep" parameterType="long" resultType="MentorDepQueryDTO">
         SELECT
+        e.employee_seq,
         e.employee_name,
         e.employee_num,
         d.department_name
@@ -205,6 +207,6 @@
         WHERE
         e.department_seq = #{departmentSeq}
         AND
-        e.employee_role = "MENTEE"
+        e.employee_role = "MENTOR"
     </select>
 </mapper>
