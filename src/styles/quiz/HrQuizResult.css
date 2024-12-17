@@ -1,0 +1,61 @@
+.hr-quiz-result-container {
+    width: 80vw;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 35px;
+    color: #333;
+    font-weight: bold;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.quiz-category-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.list-wrapper {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.list-header,
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.list-header {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.column {
+    text-align: center;
+    flex: 1;
+    color: #333;
+}
+
+.header-number, .item-number {
+    flex: 0.5;
+}
+
+.header-score, .item-score {
+    flex: 1;
+}
