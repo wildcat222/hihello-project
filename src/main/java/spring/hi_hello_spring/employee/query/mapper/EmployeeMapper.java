@@ -3,7 +3,7 @@ package spring.hi_hello_spring.employee.query.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import spring.hi_hello_spring.employee.query.dto.*;
-import spring.hi_hello_spring.mentoring.query.dto.DepartmentListDTO;
+import spring.hi_hello_spring.employee.query.dto.DepartmentListDTO;
 
 import java.util.List;
 
@@ -29,4 +29,6 @@ public interface EmployeeMapper {
     ReqEmplInfoQueryDTO findMenteeInfo(Long employeeSeq);
 
     List<DepartmentListDTO> findAllDepartment();
+
+    List<MentorDepQueryDTO> findMentorByDep(Long departmentSeq);
 }

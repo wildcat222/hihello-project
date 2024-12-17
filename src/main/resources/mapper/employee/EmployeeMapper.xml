@@ -17,7 +17,7 @@
         ON
             e.department_seq = d.department_seq
         WHERE
-            e.employee_role = "mentee"
+            e.employee_role = "MENTEE"
     </select>
 
     <!-- 해당 부서의 멘티를 조회하는 SQL   -->
@@ -35,7 +35,7 @@
         WHERE
             e.department_seq = #{departmentSeq}
         AND
-            e.employee_role = "mentee"
+            e.employee_role = "MENTEE"
     </select>
 
     <!-- 모든 멘토 데이터를 가져오는 SQL -->
@@ -51,7 +51,7 @@
         ON
             e.department_seq = d.department_seq
         WHERE
-            e.employee_role = "mentor"
+            e.employee_role = "MENTOR"
     </select>
 
     <!-- 내 정보를 조회하는 SQL -->
@@ -188,5 +188,23 @@
             department_name
         FROM
             department
+    </select>
+
+    <!-- 해당 부서의 멘티를 조회하는 SQL   -->
+    <select id="findMentorByDep" parameterType="long" resultType="MentorDepQueryDTO">
+        SELECT
+        e.employee_name,
+        e.employee_num,
+        d.department_name
+        FROM
+        employee AS e
+        JOIN
+        department AS d
+        ON
+        e.department_seq = d.department_seq
+        WHERE
+        e.department_seq = #{departmentSeq}
+        AND
+        e.employee_role = "MENTEE"
     </select>
 </mapper>
