@@ -19,6 +19,7 @@ import spring.hi_hello_spring.common.util.RedisService;
 import spring.hi_hello_spring.security.entity.CustomUserDetails;
 import spring.hi_hello_spring.security.service.CustomUserDetailsService;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
@@ -113,8 +114,9 @@ public class JwtUtil {
         log.info("액세스 토큰 생성 중(generateAccessToken) 객체 확인 : " + customUserDetails.toString());
 
         Long employeeSeq = customUserDetails.getEmployeeSeq();
-        String employeeDepartment = customUserDetails.getEmployeeDepartment();
-        String employeePosition = customUserDetails.getEmployeePosition();
+        String employeeDepartmentName = customUserDetails.getEmployeeDepartmentName();
+        String employeePositionName = customUserDetails.getEmployeePositionName();
+//        log.info("employee 정보 : " + employeePositionName + " + " + employeeDepartmentName);
 
 //        long expirationTime = (long) 1000 * 60 * 30; // 30분
 //        long expirationTime = (long) 3000; // 토큰 테스트 용
@@ -126,18 +128,19 @@ public class JwtUtil {
                 .toList();
 
         Claims claims = Jwts.claims().setSubject(String.valueOf(employeeSeq));
-        claims.put("employeeDeptartment", employeeDepartment);
-        claims.put("employeePosition", employeePosition);
+        claims.put("employeeDepartmentName", new String(employeeDepartmentName.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+        claims.put("employeePositionName", new String(employeePositionName.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+//        claims.put("employeeDepartmentName", employeeDepartmentName);
+//        claims.put("employeePositionName", employeePositionName);
         claims.put("employeeRole", authorities);
-
 //        log.info("클레임 정보 : " + claims.toString());
 
         return Jwts.builder()
-                // 부서, 직급 정보 추가
                 .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(key)
+                .setHeaderParam("typ", "JWT") // JWT 타입 지정
                 .compact();
     }
 
