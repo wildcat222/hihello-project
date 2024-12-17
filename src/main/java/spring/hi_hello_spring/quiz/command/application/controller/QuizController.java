@@ -21,7 +21,7 @@ public class QuizController {
     /* 카테고리 별 퀴즈 등록 */
     @PostMapping("/{quizCategorySeq}/quiz")
     @Operation(summary = "카테고리 별 퀴즈 생성", description = "카테고리별 퀴즈 생성 로직입니다.")
-    public ApiResponse<?> createQuiz(@PathVariable Long quizCategorySeq, QuizCreateDTO quizCreateDTO){
+    public ApiResponse<?> createQuiz(@PathVariable Long quizCategorySeq, @RequestBody QuizCreateDTO quizCreateDTO){
 
         quizService.createQuiz(quizCategorySeq, quizCreateDTO);
         return ResponseUtil.successResponse("퀴즈가 성공적으로 추가 되었습니다.").getBody();
@@ -32,7 +32,7 @@ public class QuizController {
     @Operation(summary = "카테고리 별 퀴즈 수정", description = "카테고리별 퀴즈 수정 로직입니다.")
     public ApiResponse<?> updateQuiz(@PathVariable Long quizCategorySeq,
                                      @PathVariable Long quizSeq,
-                                     QuizUpdateDTO quizUpdateDTO){
+                                     @RequestBody QuizUpdateDTO quizUpdateDTO){
 
         quizService.updateQuiz( quizSeq, quizCategorySeq, quizUpdateDTO);
         return ResponseUtil.successResponse("퀴즈가 성공적으로 수정 되었습니다.").getBody();
