@@ -89,14 +89,17 @@ const registerQuiz = async () => {
 
     const newQuiz = {
         quizQuestion: quizQuestion.value,
-        quizAnswer: quizAnswer.value === "true" || quizAnswer.value === true ? 1 : 0,
+        quizAnswer: quizAnswer.value === "true" || quizAnswer.value === true, // Boolean 값으로 처리
         quizExplanation: quizExplanation.value,
     };
 
     try {
         const response = await postHrQuiz(quizCategorySeq, newQuiz);
         if (response && response.success) {
-            emit("quiz-added", response.data);
+            emit("quiz-added", {
+                ...newQuiz,
+                quizSeq: response.data.quizSeq || Date.now(), // 추가된 데이터에 quizSeq 할당
+            });
             resetForm();
             emit("close");
         } else {
@@ -113,150 +116,158 @@ const registerQuiz = async () => {
 <style scoped>
 /* 모달 스타일 */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  animation: fadeIn 0.5s ease-out;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.5s ease-out;
 }
 
 .modal-content {
-  background: #ffffff;
-  padding: 30px;
-  border-radius: 12px;
-  width: 35vw;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  animation: slideUp 0.5s ease-out;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 35vw;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.5s ease-out;
 }
 
 .modal-title {
-  margin-bottom: 20px;
-  font-size: 1.8rem;
-  color: #333;
-  text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: #333;
+    text-align: center;
 }
 
 .form-group {
-  margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
 label {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #555;
+    flex: 0 0 100px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #555;
 }
 
-textarea {
-  width: 95%;
-  padding: 8px 12px;
-  margin-top: 5px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  outline: none;
-  transition: border 0.3s ease;
-  font-size: 0.9rem;
+textarea,
+.answer-options {
+    flex: 1;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    font-size: 0.95rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 textarea:focus {
-  border-color: #7a5af5;
-  box-shadow: 0 0 5px rgba(122, 90, 245, 0.3);
+    border-color: #7a5af5;
+    box-shadow: 0 0 5px rgba(122, 90, 245, 0.4);
 }
 
 .answer-options {
-  display: flex;
-  gap: 15px;
-  margin-top: 8px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
 }
 
 input[type="radio"] {
-  display: none;
+    display: none;
 }
 
 .radio-custom {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid #7a5af5; /* 더 선명한 색상 */
-  background-color: #fff; /* 흰색 배경 */
-  border-radius: 50%; /* 완전한 원형 */
-  position: relative;
-  transition: all 0.3s ease; /* 전체적인 부드러운 전환 효과 */
-  cursor: pointer;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #7a5af5;
+    border-radius: 50%;
+    background-color: #fff;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 input[type="radio"]:checked + .radio-custom {
-  border-color: #7a5af5; /* 선택된 상태에서 더 강조된 색상 */
-  background-color: #7a5af5; /* 선택 시 배경 색 변경 */
+    background-color: #7a5af5;
 }
 
 input[type="radio"]:checked + .radio-custom::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 7px;
-  height: 7px;
-  background-color: #fff; /* 선택된 내부 원의 색상 */
-  border-radius: 50%; /* 내부 원도 동그랗게 */
-  transform: translate(-50%, -50%); /* 원의 중심 정렬 */
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background-color: #fff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 30px;
 }
 
 .save-button,
 .cancel-button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .save-button {
-  background-color: #7a5af5;
-  color: white;
+    background-color: #7a5af5;
+    color: #fff;
 }
 
 .save-button:disabled {
-  background-color: #aaa;
-  cursor: not-allowed;
+    background-color: #ccc;
+    color: #888;
 }
 
 .cancel-button {
-  background-color: #ddd;
-  color: #555;
+    background-color: #f5f5f5;
+    color: #555;
 }
 
 .cancel-button:hover {
-  background-color: #ccc;
+    background-color: #e0e0e0;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes slideUp {
-  from {
-    transform: translateY(50px);
-  }
-  to {
-    transform: translateY(0);
-  }
+    from {
+        transform: translateY(50px);
+    }
+    to {
+        transform: translateY(0);
+    }
 }
 </style>
+
