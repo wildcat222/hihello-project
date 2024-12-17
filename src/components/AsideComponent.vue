@@ -65,7 +65,7 @@ const menus = ref([
     name: '온보딩 결과 조회', role: 'HR',
     subMenus: [
       {name: '퀴즈 결과 조회', url: '/onboarding/result/quiz'},
-      {name: '과제 평가 조회', url: '/onboarding/result/task'},
+      {name: '과제 평가 조회', url: '/task-eval'},
       {name: '동료 평가 조회', url: '/onboarding/peer-review'},
     ]
   },
@@ -92,7 +92,7 @@ const menus = ref([
     name: '온보딩 결과 조회', role: 'MENTOR', position: '1',
     subMenus: [
       {name: '퀴즈 결과 조회', url: '/onboarding/result/quiz'},
-      {name: '과제 평가 조회', url: '/onboarding/result/task'},
+      {name: '과제 평가 조회', url: '/task-eval'},
       {name: '멘토링 보고서 조회', url: '/onboarding/report'},
       {name: '동료 평가 조회', url: '/onboarding/peer-review'},
     ]
