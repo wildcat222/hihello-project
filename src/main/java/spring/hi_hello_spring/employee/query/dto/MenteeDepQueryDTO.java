@@ -11,6 +11,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class MenteeDepQueryDTO {
 
+    private Long employeeSeq;
     private String employeeNum;
     private String employeeName;
     private String departmentName;
