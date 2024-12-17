@@ -51,12 +51,14 @@ public class TaskService {
         taskRepository.save(task);
 
 
-        File file = File.builder()
-                .taskSeq(saveTask.getTaskSeq())
-                .fileUrl(uploadFile)
-                .fileName(taskCreateDTO.getFileName())
-                .build();
-        fileRepository.save(file);
+        if (uploadFile != null) {
+            File file = File.builder()
+                    .taskSeq(saveTask.getTaskSeq())
+                    .fileName(taskCreateDTO.getFileName())
+                    .fileUrl(uploadFile)
+                    .build();
+            fileRepository.save(file);
+        }
 
         // EvalList 항목들 저장
         evalListDomainService.createTask(taskCreateDTO,task);
@@ -81,8 +83,8 @@ public class TaskService {
         if (uploadFile != null) {
             File file = File.builder()
                     .taskSeq(updateTask.getTaskSeq())
-                    .fileUrl(uploadFile)
                     .fileName(taskUpdateDTO.getFileName())
+                    .fileUrl(uploadFile)
                     .build();
             fileRepository.save(file);
         }
