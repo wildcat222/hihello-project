@@ -42,7 +42,7 @@ public class FinalEvalQueryController {
     @GetMapping("/employee/{employeeSeq}/final-eval")
     @Operation(summary = "최종 평가 상세 조회", description = "최종 평가 상세 조회 로직입니다.")
     public ApiResponse<?> getFinalEvalDetail(@PathVariable("employeeSeq") Long employeeSeq) {
-        List<FinalEvalDetailQueryDTO> finalEvalDetailQueryDTOs = finalEvalQueryService.getFinalEvalDetails(employeeSeq);
-        return ResponseUtil.successResponse("데이터가 성공적으로 조회되었습니다.", finalEvalDetailQueryDTOs).getBody();
+        FinalEvalDetailQueryDTO finalEvalDetailQueryDTO = finalEvalQueryService.getFinalEvalDetail(employeeSeq);
+        return ResponseUtil.successResponse("데이터가 성공적으로 조회되었습니다.", finalEvalDetailQueryDTO).getBody();
     }
 }

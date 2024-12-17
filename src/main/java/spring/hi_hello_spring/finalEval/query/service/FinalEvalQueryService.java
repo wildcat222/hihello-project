@@ -3,6 +3,7 @@ package spring.hi_hello_spring.finalEval.query.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.hi_hello_spring.finalEval.query.dto.FinalEvalDetailQueryDTO;
+import spring.hi_hello_spring.finalEval.query.dto.FinalEvalResultQueryDTO;
 import spring.hi_hello_spring.finalEval.query.dto.FinalEvalsQueryDTO;
 import spring.hi_hello_spring.finalEval.query.mapper.FinalEvalMapper;
 
@@ -18,8 +19,11 @@ public class FinalEvalQueryService {
         return finalEvalMapper.findAllFinalEvals();
     }
 
-    public List<FinalEvalDetailQueryDTO> getFinalEvalDetails(Long employeeSeq) {
-        return finalEvalMapper.findFinalEvalDetails(employeeSeq);
+    public FinalEvalDetailQueryDTO getFinalEvalDetail(Long employeeSeq) {
+        FinalEvalDetailQueryDTO finalEvalDetailQueryDTO = finalEvalMapper.findEmployeeInfo(employeeSeq);
+        List<FinalEvalResultQueryDTO> finalEvalResultQueryDTOS = finalEvalMapper.findFinalEvalResult(employeeSeq);
+        finalEvalDetailQueryDTO.setFinalEvalResults(finalEvalResultQueryDTOS);
+        return finalEvalDetailQueryDTO;
     }
 
     public List<FinalEvalsQueryDTO> searchFinalEvals(String keyword) {
