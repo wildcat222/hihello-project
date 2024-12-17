@@ -180,4 +180,13 @@
         WHERE
             employee_seq = #{employeeSeq}
     </select>
+
+    <!-- 부서 조회 -->
+    <select id="findAllDepartment" resultType="DepartmentListDTO">
+        SELECT
+            department_seq,
+            department_name
+        FROM
+            department
+    </select>
 </mapper>

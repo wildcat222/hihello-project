@@ -8,6 +8,7 @@ import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.employee.query.dto.*;
 import spring.hi_hello_spring.employee.query.service.EmployeeQueryService;
+import spring.hi_hello_spring.mentoring.query.dto.DepartmentListDTO;
 
 import java.util.List;
 
@@ -86,4 +87,11 @@ public class EmployeeQueryController {
         return ResponseUtil.successResponse("이름을 성공적으로 조회하였습니다.", employeeName).getBody();
     }
 
+    @Operation(summary = "부서 조회", description = "부서를을 조회한다.")
+    @GetMapping("/hr/department")
+    public ApiResponse<?> getEmployeeDepartment() {
+
+        List<DepartmentListDTO> departmentListDTOs = employeeQueryService.getAllDepartment();
+        return ResponseUtil.successResponse("부서를 성공적으로 조회하였습니다.").getBody();
+    }
 }
