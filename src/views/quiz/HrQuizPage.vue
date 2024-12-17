@@ -12,23 +12,39 @@
         </div>
 
         <!-- 퀴즈 등록 모달 -->
-        <add-quiz-modal v-if="showAddQuizModal" :quiz-category-seq="selectedCategorySeq"
-            @close="showAddQuizModal = false" @quiz-added="addQuizToList" />
+        <add-quiz-modal 
+            v-if="showAddQuizModal" 
+            :quiz-category-seq="selectedCategorySeq"
+            @close="showAddQuizModal = false" 
+            @quiz-added="addQuizToList" 
+        />
 
         <!-- 퀴즈 수정 모달 -->
-        <update-quiz-modal v-if="showUpdateQuizModal" :quiz-category-seq="selectedCategorySeq"
-            :quiz-data="selectedQuizData" @quiz-updated="applyQuizUpdate" @close="showUpdateQuizModal = false" />
+        <update-quiz-modal 
+            v-if="showUpdateQuizModal" 
+            :quiz-category-seq="selectedCategorySeq"
+            :quiz-data="selectedQuizData" 
+            @quiz-updated="applyQuizUpdate" 
+            @close="showUpdateQuizModal = false" 
+        />
 
-        <!-- 퀴즈 카테고리 및 추가 버튼 -->
+        <!-- 퀴즈 카테고리 -->
         <div class="quiz-category-container">
-            <quiz-category ref="quizCategoryRef" :show-delete="true" @tab-selected="onTabSelected"
-                @delete-category="deleteCategory"></quiz-category>
+            <quiz-category 
+                ref="quizCategoryRef" 
+                :show-delete="true" 
+                @tab-selected="onTabSelected" 
+                @delete-category="deleteCategory" 
+            />
             <button class="add-button" @click="showAddCategoryModal = true">+</button>
         </div>
 
         <!-- 카테고리 추가 모달 -->
-        <add-category-modal v-if="showAddCategoryModal" @close="showAddCategoryModal = false"
-            @category-added="refreshCategories" />
+        <add-category-modal 
+            v-if="showAddCategoryModal" 
+            @close="showAddCategoryModal = false" 
+            @category-added="quizCategoryRef?.loadCategories()" 
+        />
 
         <!-- 리스트 컴포넌트 -->
         <white-box>
@@ -67,7 +83,7 @@
 
 <script setup>
 import "@/styles/quiz/HrQuiz.css";
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
 import SearchBar from "@/components/SearchBarComponent.vue";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
 import ListComponent from "@/components/ListComponent.vue";
@@ -77,28 +93,19 @@ import AddQuizModal from "@/views/quiz/AddQuizModal.vue";
 import UpdateQuizModal from "@/views/quiz/UpdateQuizModal.vue";
 import { deleteQuizCategory } from "@/services/QuizCategoryApi";
 import { fetchHrQuiz, deleteHrQuiz } from "@/services/QuizApi";
-import { useQuizStore } from '@/stores/QuizStore';
 
-const quizStore = useQuizStore();
-const quizItems = computed(() => quizStore.hrQuizItems);
-
+const quizItems = ref([]);
 const showAddCategoryModal = ref(false);
 const showAddQuizModal = ref(false);
 const showUpdateQuizModal = ref(false);
 const quizCategoryRef = ref(null);
-
 const selectedCategorySeq = ref(null);
 const selectedQuizData = ref(null);
 
 const addQuizToList = (newQuiz) => {
-    quizStore.hrQuizItems.push({
-        quizSeq: newQuiz.quizSeq || Date.now(),
-        quizQuestion: newQuiz.quizQuestion,
-        quizAnswer: newQuiz.quizAnswer,
-        quizExplanation: newQuiz.quizExplanation,
-    });
+    quizItems.value.push(newQuiz);
+    showAddQuizModal.value = false;
 };
-
 
 const editQuiz = (quiz) => {
     selectedQuizData.value = { ...quiz };
@@ -107,80 +114,45 @@ const editQuiz = (quiz) => {
 
 const applyQuizUpdate = (updatedQuiz) => {
     const index = quizItems.value.findIndex((quiz) => quiz.quizSeq === updatedQuiz.quizSeq);
-    if (index !== -1) {
-        quizItems.value[index] = { ...updatedQuiz };
-    }
-    showUpdateQuizModal.value = false;
+    if (index !== -1) quizItems.value[index] = { ...updatedQuiz };
 };
 
-const refreshCategories = () => {
-    quizCategoryRef.value?.loadCategories();
-    showAddCategoryModal.value = false;
-};
-
-// 선택된 카테고리 퀴즈 조회
 const onTabSelected = async (quizCategorySeq) => {
     selectedCategorySeq.value = quizCategorySeq;
-
     try {
         const response = await fetchHrQuiz(quizCategorySeq);
-        if (response.success && response.data) {
-            quizStore.setHrQuizCategorySeq(quizCategorySeq);
-            quizStore.setHrQuizItems(
-                response.data.map((quiz) => ({
-                    quizSeq: quiz.quizSeq,
-                    quizQuestion: quiz.quizQuestion,
-                    quizAnswer: quiz.quizAnswer,
-                    quizExplanation: quiz.quizExplanation,
-                }))
-            );
-        } else {
-            quizStore.clearHrQuizItems();
-            alert("퀴즈를 불러오지 못했습니다. 다시 시도해주세요.");
-        }
+        quizItems.value = response.data;
     } catch (error) {
-        console.error("퀴즈 조회 중 오류 발생:", error);
-        quizStore.clearHrQuizItems();
+        console.error("퀴즈 조회 중 오류:", error);
         alert("퀴즈를 조회하는 도중 문제가 발생했습니다.");
     }
 };
 
-// 카테고리 삭제 로직
 const deleteCategory = async (categorySeq) => {
-    const isConfirmed = window.confirm("카테고리를 삭제하시겠습니까?");
-    if (!isConfirmed) return;
-
+    if (!confirm("카테고리를 삭제하시겠습니까?")) return;
     try {
         await deleteQuizCategory(categorySeq);
         alert("카테고리가 삭제되었습니다.");
-        quizCategoryRef.value.loadCategories();
+        quizCategoryRef.value?.loadCategories();
     } catch (error) {
         console.error("카테고리 삭제 실패:", error);
-        alert("카테고리 삭제에 실패했습니다. 다시 시도해주세요.");
+        alert("카테고리 삭제에 실패했습니다.");
     }
 };
 
-// 퀴즈 삭제 핸들러
 const deleteQuiz = async (quizSeq) => {
-    const isConfirmed = window.confirm("퀴즈를 삭제하시겠습니까?");
-    if (!isConfirmed) return;
-
+    if (!confirm("퀴즈를 삭제하시겠습니까?")) return;
     try {
         await deleteHrQuiz(selectedCategorySeq.value, quizSeq);
-
-        quizStore.setHrQuizItems(
-            quizItems.value.filter((quiz) => quiz.quizSeq !== quizSeq)
-        );
-
-        alert("퀴즈가 성공적으로 삭제되었습니다.");
+        quizItems.value = quizItems.value.filter((quiz) => quiz.quizSeq !== quizSeq);
+        alert("퀴즈가 삭제되었습니다.");
     } catch (error) {
-        alert("퀴즈 삭제에 실패했습니다. 다시 시도해주세요.");
+        console.error("퀴즈 삭제 실패:", error);
+        alert("퀴즈 삭제에 실패했습니다.");
     }
 };
 
-onMounted(() => {
-    quizCategoryRef.value?.loadCategories();
-});
+onMounted(() => quizCategoryRef.value?.loadCategories());
 </script>
 
 <style scoped>

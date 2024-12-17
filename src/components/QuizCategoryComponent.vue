@@ -1,6 +1,6 @@
 <template>
     <div class="category-tabs">
-        <button v-for="(tab, index) in categories" :key="tab.quizCategorySeq"
+        <button v-for="(tab) in categories" :key="tab.quizCategorySeq"
             :class="['circle-button', { active: activeTab === tab.quizCategorySeq }]"
             @click.stop="selectCategory(tab.quizCategorySeq)">
             {{ tab.quizCategoryName }}

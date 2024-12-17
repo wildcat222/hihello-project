@@ -86,7 +86,6 @@ const updateQuiz = async () => {
             requestBody
         );
 
-        console.log("퀴즈 수정 완료:", response);
         emit("quiz-updated", { ...requestBody, quizSeq: quizSeq.value });
         emit("close");
     } catch (error) {

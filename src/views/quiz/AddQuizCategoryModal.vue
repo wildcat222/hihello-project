@@ -30,6 +30,7 @@ const addCategory = async () => {
         await postQuizCategory(categoryName.value);
         alert("카테고리가 성공적으로 추가되었습니다.");
         emit("category-added");
+        emit("close"); // 모달 닫기 이벤트 추가
         categoryName.value = "";
     } catch (error) {
         console.error("카테고리 추가 실패:", error.message);
@@ -52,11 +53,12 @@ const addCategory = async () => {
 }
 
 .modal-content {
-    background: white;
+    background: var(--ivory);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+    width: 30vw;
 }
 
 input {

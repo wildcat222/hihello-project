@@ -21,17 +21,6 @@ export const useQuizStore = defineStore('quizStore', {
     clearUserQuizItems() {
       this.userQuizItems = [];
     },
-
-    // HR 퀴즈 메서드
-    setHrQuizCategorySeq(seq) {
-      this.hrQuizCategorySeq = seq;
-    },
-    setHrQuizItems(items) {
-      this.hrQuizItems = items;
-    },
-    clearHrQuizItems() {
-      this.hrQuizItems = [];
-    },
   },
   persist: {
     storage: sessionStorage,
