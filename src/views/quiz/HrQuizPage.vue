@@ -21,7 +21,8 @@
 
         <!-- 퀴즈 카테고리 및 추가 버튼 -->
         <div class="quiz-category-container">
-            <quiz-category ref="quizCategoryRef" @tab-selected="onTabSelected"></quiz-category>
+            <quiz-category ref="quizCategoryRef" :show-delete="true" @tab-selected="onTabSelected"
+                @delete-category="deleteCategory"></quiz-category>
             <button class="add-button" @click="showAddCategoryModal = true">+</button>
         </div>
 
@@ -61,11 +62,6 @@
                 </div>
             </div>
         </white-box>
-
-        <!-- 저장 버튼 -->
-        <div class="save-container">
-            <button class="save-button">저장</button>
-        </div>
     </div>
 </template>
 
@@ -79,6 +75,7 @@ import QuizCategory from "@/components/QuizCategoryComponent.vue";
 import AddCategoryModal from "@/views/quiz/AddQuizCategoryModal.vue";
 import AddQuizModal from "@/views/quiz/AddQuizModal.vue";
 import UpdateQuizModal from "@/views/quiz/UpdateQuizModal.vue";
+import { deleteQuizCategory } from "@/services/QuizCategoryApi";
 import { fetchHrQuiz, deleteHrQuiz } from "@/services/QuizApi";
 import { useQuizStore } from '@/stores/QuizStore';
 
@@ -148,10 +145,25 @@ const onTabSelected = async (quizCategorySeq) => {
     }
 };
 
-// 삭제 핸들러
+// 카테고리 삭제 로직
+const deleteCategory = async (categorySeq) => {
+    const isConfirmed = window.confirm("카테고리를 삭제하시겠습니까?");
+    if (!isConfirmed) return;
+
+    try {
+        await deleteQuizCategory(categorySeq);
+        alert("카테고리가 삭제되었습니다.");
+        quizCategoryRef.value.loadCategories();
+    } catch (error) {
+        console.error("카테고리 삭제 실패:", error);
+        alert("카테고리 삭제에 실패했습니다. 다시 시도해주세요.");
+    }
+};
+
+// 퀴즈 삭제 핸들러
 const deleteQuiz = async (quizSeq) => {
     const isConfirmed = window.confirm("퀴즈를 삭제하시겠습니까?");
-    if (!isConfirmed) return; 
+    if (!isConfirmed) return;
 
     try {
         await deleteHrQuiz(selectedCategorySeq.value, quizSeq);
