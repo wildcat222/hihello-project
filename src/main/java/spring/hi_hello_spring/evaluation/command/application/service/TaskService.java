@@ -53,6 +53,7 @@ public class TaskService {
         if (uploadFile != null) {
             File file = File.builder()
                     .taskSeq(saveTask.getTaskSeq())
+                    .fileName(taskCreateDTO.getFileName())
                     .fileUrl(uploadFile)
                     .build();
             fileRepository.save(file);
