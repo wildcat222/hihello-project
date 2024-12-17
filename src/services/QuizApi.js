@@ -74,4 +74,15 @@ export const updateHrQuiz = async (quizCategorySeq, quizSeq, updateQuiz) => {
     throw error;
   }
 }
+
+// 담당자 카테고리 별 퀴즈 삭제
+export const deleteHrQuiz = async (quizCategorySeq, quizSeq) => {
+  try{
+    const response = await springAPI.delete(`/hr/quizCategory/${quizCategorySeq}/quiz/${quizSeq}`)
+    return response.data;
+  }catch (error){
+    console.error("퀴즈 삭제 실패: ", error.response?.data || error.message);
+    throw error;
+  }
+}
   
