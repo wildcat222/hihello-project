@@ -10,16 +10,16 @@ import java.util.Collection;
 public class CustomUserDetails extends User {
 
     private Long employeeSeq;
-    private String employeeDepartment;
-    private String employeePosition;
+    private String employeeDepartmentName;
+    private String employeePositionName;
     // 부서, 직급 추가
 
 
-    public CustomUserDetails(Long employeeSeq, String employeeDepartment, String employeePosition, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public CustomUserDetails(Long employeeSeq, String employeeDepartmentName, String employeePositionName, String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
         this.employeeSeq = employeeSeq;
-        this.employeeDepartment = employeeDepartment;
-        this.employeePosition = employeePosition;
+        this.employeeDepartmentName = employeeDepartmentName;
+        this.employeePositionName = employeePositionName;
     }
 
 }
