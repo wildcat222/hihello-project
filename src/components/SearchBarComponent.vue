@@ -12,6 +12,8 @@ const onSearch = () => {
   if (searchQuery.value.trim() !== '') {
     // search 이벤트 발생, 부모 컴포넌트에서 처리
     emit('search', searchQuery.value);
+  } else {
+    emit('search', '');
   }
 };
 
