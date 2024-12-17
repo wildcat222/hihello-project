@@ -83,7 +83,7 @@ import { fetchHrQuiz, deleteHrQuiz } from "@/services/QuizApi";
 import { useQuizStore } from '@/stores/QuizStore';
 
 const quizStore = useQuizStore();
-const quizItems = computed(() => quizStore.quizItems);
+const quizItems = computed(() => quizStore.hrQuizItems);
 
 const showAddCategoryModal = ref(false);
 const showAddQuizModal = ref(false);
@@ -94,7 +94,7 @@ const selectedCategorySeq = ref(null);
 const selectedQuizData = ref(null);
 
 const addQuizToList = (newQuiz) => {
-    quizStore.quizItems.push({
+    quizStore.hrQuizItems.push({
         quizSeq: newQuiz.quizSeq || Date.now(),
         quizQuestion: newQuiz.quizQuestion,
         quizAnswer: newQuiz.quizAnswer,
@@ -128,8 +128,8 @@ const onTabSelected = async (quizCategorySeq) => {
     try {
         const response = await fetchHrQuiz(quizCategorySeq);
         if (response.success && response.data) {
-            quizStore.setQuizCategorySeq(quizCategorySeq);
-            quizStore.setQuizItems(
+            quizStore.setHrQuizCategorySeq(quizCategorySeq);
+            quizStore.setHrQuizItems(
                 response.data.map((quiz) => ({
                     quizSeq: quiz.quizSeq,
                     quizQuestion: quiz.quizQuestion,
@@ -138,12 +138,12 @@ const onTabSelected = async (quizCategorySeq) => {
                 }))
             );
         } else {
-            quizStore.clearQuizItems();
+            quizStore.clearHrQuizItems();
             alert("퀴즈를 불러오지 못했습니다. 다시 시도해주세요.");
         }
     } catch (error) {
         console.error("퀴즈 조회 중 오류 발생:", error);
-        quizStore.clearQuizItems();
+        quizStore.clearHrQuizItems();
         alert("퀴즈를 조회하는 도중 문제가 발생했습니다.");
     }
 };
@@ -156,7 +156,7 @@ const deleteQuiz = async (quizSeq) => {
     try {
         await deleteHrQuiz(selectedCategorySeq.value, quizSeq);
 
-        quizStore.setQuizItems(
+        quizStore.setHrQuizItems(
             quizItems.value.filter((quiz) => quiz.quizSeq !== quizSeq)
         );
 
