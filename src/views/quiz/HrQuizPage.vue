@@ -11,8 +11,13 @@
             <button class="register-button" @click="showAddQuizModal = true">퀴즈 등록</button>
         </div>
 
+        <!-- 퀴즈 등록 모달 -->
         <add-quiz-modal v-if="showAddQuizModal" :quiz-category-seq="selectedCategorySeq"
             @close="showAddQuizModal = false" @quiz-added="addQuizToList" />
+
+        <!-- 퀴즈 수정 모달 -->
+        <update-quiz-modal v-if="showUpdateQuizModal" :quiz-category-seq="selectedCategorySeq"
+            :quiz-data="selectedQuizData" @quiz-updated="applyQuizUpdate" @close="showUpdateQuizModal = false" />
 
         <!-- 퀴즈 카테고리 및 추가 버튼 -->
         <div class="quiz-category-container">
@@ -73,6 +78,7 @@ import ListComponent from "@/components/ListComponent.vue";
 import QuizCategory from "@/components/QuizCategoryComponent.vue";
 import AddCategoryModal from "@/views/quiz/AddQuizCategoryModal.vue";
 import AddQuizModal from "@/views/quiz/AddQuizModal.vue";
+import UpdateQuizModal from "@/views/quiz/UpdateQuizModal.vue";
 import { fetchHrQuiz } from "@/services/QuizApi";
 import { useQuizStore } from '@/stores/QuizStore';
 
@@ -81,16 +87,33 @@ const quizItems = computed(() => quizStore.quizItems);
 
 const showAddCategoryModal = ref(false);
 const showAddQuizModal = ref(false);
+const showUpdateQuizModal = ref(false);
 const quizCategoryRef = ref(null);
 
 const selectedCategorySeq = ref(null);
+const selectedQuizData = ref(null);
 
 const addQuizToList = (newQuiz) => {
-    // 새 퀴즈 항목 추가
-    quizItems.value.push({
-        quizSeq: Date.now(), // 고유한 ID로 대체
-        ...newQuiz
+    quizStore.quizItems.push({
+        quizSeq: newQuiz.quizSeq || Date.now(),
+        quizQuestion: newQuiz.quizQuestion,
+        quizAnswer: newQuiz.quizAnswer,
+        quizExplanation: newQuiz.quizExplanation,
     });
+};
+
+
+const editQuiz = (quiz) => {
+    selectedQuizData.value = { ...quiz };
+    showUpdateQuizModal.value = true;
+};
+
+const applyQuizUpdate = (updatedQuiz) => {
+    const index = quizItems.value.findIndex((quiz) => quiz.quizSeq === updatedQuiz.quizSeq);
+    if (index !== -1) {
+        quizItems.value[index] = { ...updatedQuiz };
+    }
+    showUpdateQuizModal.value = false;
 };
 
 const refreshCategories = () => {
@@ -123,11 +146,6 @@ const onTabSelected = async (quizCategorySeq) => {
         quizStore.clearQuizItems();
         alert("퀴즈를 조회하는 도중 문제가 발생했습니다.");
     }
-};
-
-const editQuiz = (item) => {
-    console.log("수정할 퀴즈:", item);
-    // 여기에 수정 로직 추가
 };
 
 // 삭제 핸들러

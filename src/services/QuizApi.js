@@ -61,4 +61,17 @@ export const postHrQuiz = async (quizCategorySeq, newQuiz) => {
       throw error;
   }
 };
+
+// 담당자 카테고리 별 퀴즈 수정
+export const updateHrQuiz = async (quizCategorySeq, quizSeq, updateQuiz) => {
+  try{
+    const response = await springAPI.put(`/hr/quizCategory/${quizCategorySeq}/quiz/${quizSeq}`,
+      updateQuiz
+    );
+    return response.data;
+  }catch (error){
+    console.error("퀴즈 수정 실패: ", error.response?.data || error.message);
+    throw error;
+  }
+}
   
