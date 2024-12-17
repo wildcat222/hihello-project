@@ -9,10 +9,10 @@ export default [
     {
         path: '/mentoring/planning/create',
         component: MentoringPlanningCreatePage
-    },
-    {
-        path: '/mentoring/planning/:planningSeq',
-        component:MentoringPlanningDetailPage,
-        props: true
-    }
+    }//,
+    // {
+    //     path: '/mentoring/planning/:planningSeq',
+    //     component:MentoringPlanningDetailPage,
+    //     props: true
+    // }
 ]
