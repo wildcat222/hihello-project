@@ -12,7 +12,7 @@
       <button @click="logout">로그아웃 버튼(임시)</button>
 
       <li v-for="menu in filteredMenus" :key="menu.name" class="menu-item">
-        <div :class="{ active: activeMenu === menu.name }" @mouseenter="showSubMenu(menu.name)">
+        <div :class="{ active: activeMenu === menu.name }" @click="toggleMenu(menu.name)">
           <router-link :to="menu.url">{{ menu.name }}</router-link>
         </div>
 
@@ -28,8 +28,9 @@
 </template>
 
 <script setup>
-import {computed, ref} from 'vue';
+import {computed, onMounted, onUnmounted, ref} from 'vue';
 import {useUserStore} from "@/stores/UserStore.js";
+import router from "@/router/index.js";
 
 const userStore = useUserStore();
 const activeMenu = ref(null);
@@ -79,21 +80,21 @@ const menus = ref([
 
   // 멘토, 팀장 ASIDE
   {
-    name: '멘토링', role: 'MENTOR', position: '1',
+    name: '멘토링', role: 'MENTOR', position: '팀장',
     subMenus: [
       {name: '멘토링 계획서', url: '/mentoring/planning'},
       {name: '멘토링 보고서', url: '/mentoring/report'}
     ]
   },
   {
-    name: '온보딩 데이터 입력', role: 'MENTOR', position: '1',
+    name: '온보딩 데이터 입력', role: 'MENTOR', position: '팀장',
     subMenus: [
       {name: '과제 등록', url: '/onboarding/task'},
       {name: '평가 관리', url: '/onboarding/eval'}
     ]
   },
   {
-    name: '온보딩 결과 조회', role: 'MENTOR', position: '1',
+    name: '온보딩 결과 조회', role: 'MENTOR', position: '팀장',
     subMenus: [
       {name: '퀴즈 결과 조회', url: '/onboarding/result/quiz'},
       {name: '과제 평가 조회', url: '/task-eval'},
@@ -101,19 +102,53 @@ const menus = ref([
       {name: '동료 평가 조회', url: '/onboarding/peer-review'},
     ]
   },
-  {name: '최종 평가', url: '/final-eval', role: 'MENTOR', position: '1'},
-  {name: '위키 관리', url: '/wiki/managing', role: 'MENTOR', position: '1'}
+  {name: '최종 평가', url: '/final-eval', role: 'MENTOR', position: '팀장'},
+  {name: '위키 관리', url: '/wiki/managing', role: 'MENTOR', position: '팀장'}
 ]);
 
 const filteredMenus = computed(() => {
-  const role = userStore.getEmployeeInfo().employeeRole;
-  const positionSeq = userStore.getEmployeeInfo().positionSeq;
-  return menus.value.filter(menu => menu.role === role || menu.position === positionSeq);
+  const role = userStore.getEmployeeInfo().employeeRole[0];
+  const positionName = userStore.getEmployeeInfo().employeePositionName;
+  return menus.value.filter(menu => menu.role === role || menu.position === positionName);
 })
 
-const showSubMenu = (menuName) => {
-  activeMenu.value = menuName;
-}
+// 토글 로직
+const toggleMenu = (menuName) => {
+  activeMenu.value = activeMenu.value === menuName ? null : menuName;
+};
+
+// 서브 메뉴 사용 방식 맘에 들면 삭제 예정
+//
+// // 서브 메뉴 활성화
+// const showSubMenu = (menuName) => {
+//   activeMenu.value = menuName;
+// }
+//
+// // 서브 메뉴 비활성화
+// const hideSubMenu = () => {
+//   activeMenu.value = null;
+// };
+
+// 외부를 클릭하면 서브 메뉴 비활성화
+const hideSubMenuOnOutsideClick = (event) => {
+  // 메뉴와 서브 메뉴가 아닌 곳을 클릭하면 비활성화
+  if (!event.target.closest('.menu-item')) {
+    activeMenu.value = null;
+  }
+};
+
+// 마운트 시 이벤트 추가, 언마운트 시 이벤트 제거
+onMounted(() => {
+  document.addEventListener('click', hideSubMenuOnOutsideClick);
+  // 라우터 이동 후 activeMenu 초기화
+  router.afterEach(() => {
+    activeMenu.value = null; // 서브메뉴 비활성화
+  });
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', hideSubMenuOnOutsideClick);
+});
 </script>
 
 <style scoped>
