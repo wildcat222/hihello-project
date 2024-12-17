@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import axios from 'axios';
+import {springAPI} from "@/services/axios.js";
 
 export function useTask() {
     const taskType = ref('PERSONAL');
@@ -14,18 +15,12 @@ export function useTask() {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
-        console.log(file);
-
         if (file) {
-            const fileType = file.type;
-            if (fileType !== 'image/jpeg' && fileType !== 'image/png') {
-                alert('JPG 또는 PNG 파일만 업로드 가능합니다.');
-                fileName.value = '';
-                event.target.value = '';
-                return;
-            }
+            fileName.value = file.name.length > 15
+                ? file.name.substring(0, 10) + '...'
+                : file.name;
 
-            fileName.value = file.name.length > 15 ? file.name.substring(0, 10) + '...' : file.name;
+            console.log('파일 이름:', fileName.value); // 디버깅용 로그
         }
     };
 
@@ -34,7 +29,7 @@ export function useTask() {
         isLoading.value = true;
 
         try {
-            const response = await axios.get('http://localhost:8253/api/v1/hr/eval/ind', {
+            const response = await springAPI.get('/hr/eval/ind', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                 },
@@ -73,51 +68,56 @@ export function useTask() {
     };
 
     const submitTask = async () => {
-        const evalIndicators = tableData.value.map(item => ({
-            evalListContent: item.evalListContent,
-            evalListScore: item.evalListScore,
-            evalIndSeq: item.evalIndSeq,
-        }));
-
         const formData = new FormData();
 
+        // 기본 DTO 생성
         const taskCreateDTO = {
             departmentSeq: departmentSeq.value,
             templateSeq: taskSubmitSeq.value,
             taskType: taskType.value,
             taskTitle: taskTitle.value,
             taskContent: taskContent.value,
-            evalIndicators: evalIndicators,
+            evalIndicators: tableData.value.map(item => ({
+                evalListContent: item.evalListContent,
+                evalListScore: item.evalListScore,
+                evalIndSeq: item.evalIndSeq,
+            })),
         };
 
-        formData.append('taskCreateDTO', JSON.stringify(taskCreateDTO));
-
+        // 파일 선택 여부에 따른 처리
         const fileInput = document.getElementById('fileInput');
-        if (fileInput.files[0]) {
-            formData.append('fileUrl', fileInput.files[0]);
-            formData.append('fileName', fileName.value);
-            console.log(fileInput.files[0]);
+        const file = fileInput.files[0];
+
+        // 파일이 있을 경우
+        if (file) {
+            taskCreateDTO.fileName = file.name; // 파일 이름을 taskCreateDTO에 추가
+            formData.append('fileUrl', file);   // 파일을 formData에 추가
         } else {
-            console.log('파일이 선택되지 않았습니다.');
-            formData.delete('fileUrl');
-            formData.delete('fileName');
+            // 파일이 없으면 fileName을 포함하지 않음
+            delete taskCreateDTO.fileName; // fileName 필드를 제거
         }
 
+        // taskCreateDTO를 formData에 추가
+        formData.append('taskCreateDTO', JSON.stringify(taskCreateDTO));
+
         try {
-            const response = await axios.post('http://localhost:8253/api/v1/task', formData, {
+            const response = await springAPI.post('/task', formData, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
                     'Content-Type': 'multipart/form-data',
                 },
             });
 
-            console.log('Task successfully registered:', response.data);
             alert('과제가 등록되었습니다.');
         } catch (error) {
-            console.error('API 요청 실패:', error);
             alert('과제 등록에 실패했습니다.');
+            console.error(error);
         }
     };
+
+
+
+
 
     return {
         taskType,
