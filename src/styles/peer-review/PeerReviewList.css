@@ -1,0 +1,77 @@
+/* peerReviewList.css */
+.peer-review-list-container {
+    width: 80vw;
+    margin: 0 auto;
+}
+
+.peer-review-list-container h1{
+    text-align: center;
+    margin: 50px 0;
+    font-size: 35px;
+    color: var(--black);
+    font-weight: bold;
+}
+
+.peer-review-list__white-box {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.peer-review-list__result-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.peer-review-list__column {
+    flex: 1;
+    text-align: center;
+}
+
+.peer-review-list__delete-btn, 
+.peer-review-list__add-btn, 
+.peer-review-list__confirm-btn, 
+.peer-review-list__cancel-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 8px;
+    color: var(--white);
+    cursor: pointer;
+}
+
+.peer-review-list__delete-btn {
+    background-color: var(--yellow);
+}
+
+.peer-review-list__confirm-btn {
+    background-color: var(--blue);
+    margin-right: 10px;
+}
+
+.peer-review-list__cancel-btn {
+    background-color: var(--gray);
+}
+
+.peer-review-list__add-btn {
+    background-color: var(--green);
+    font-size: 20px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.peer-review-list__add-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.peer-review-list__input-field {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 70%;
+    box-sizing: border-box;
+    text-align: center;
+}

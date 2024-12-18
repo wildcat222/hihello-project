@@ -27,7 +27,7 @@
                 <div v-if="quizResults.length > 0">
                     <list-component :items="quizResults">
                         <template #item="{ item }">
-                            <div class="quiz-result-item">
+                            <div class="hr-quiz-result-item">
                                 <div class="column item-number">{{ item.employeeId }}</div>
                                 <div class="column item-name">{{ item.name }}</div>
                                 <div class="column item-department">{{ item.department }}</div>
@@ -60,21 +60,6 @@ const quizResults = ref([]);
 const handleTabSelected = async (quizCategorySeq) => {
     try {
         const response = await fetchHrQuizResult(quizCategorySeq);
-        // 응답 형식 예시:
-        // {
-        //   "success": true,
-        //   "message": "카테고리 별 퀴즈 결과가 성공적으로 조회되었습니다.",
-        //   "data": [
-        //     {
-        //       "employeeNum": "E001",
-        //       "employeeName": "김멘티1",
-        //       "departmentName": "영업팀",
-        //       "quizQty": 23,
-        //       "quizCorrectQty": 16
-        //     },
-        //     ...
-        //   ]
-        // }
 
         if (response.success && response.data) {
             quizResults.value = response.data.map(item => ({
