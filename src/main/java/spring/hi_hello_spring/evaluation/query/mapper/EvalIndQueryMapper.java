@@ -6,6 +6,7 @@ import spring.hi_hello_spring.evaluation.query.dto.EvalIndAllQueryDTO;
 import java.util.List;
 
 @Mapper
-public interface EvalIndMapper {
+public interface EvalIndQueryMapper {
+
     List<EvalIndAllQueryDTO> findAllEvalIndList();
 }

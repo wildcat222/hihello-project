@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.hi_hello_spring.evaluation.query.dto.TaskEvalDetailsQueryDTO;
 import spring.hi_hello_spring.evaluation.query.dto.TaskEvalListQueryDTO;
-import spring.hi_hello_spring.evaluation.query.mapper.TaskEvalMapper;
+import spring.hi_hello_spring.evaluation.query.mapper.TaskEvalQueryMapper;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskEvalQueryService {
 
-    private final TaskEvalMapper taskEvalMapper;
+    private final TaskEvalQueryMapper taskEvalMapper;
 
     public List<TaskEvalListQueryDTO> getAllTaskEvals() {
         return taskEvalMapper.findAllTaskEvals();
