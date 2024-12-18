@@ -19,7 +19,7 @@
                 WHEN t.task_type = 'PERSONAL' THEN e.employee_seq
             END AS submitter_seq,
             CASE
-                WHEN t.task_type = 'GROUP' THEN CONCAT(tg.task_group_seq, '팀')
+                WHEN t.task_type = 'GROUP' THEN CONCAT(tg.task_group_num, '팀')
                 WHEN t.task_type = 'PERSONAL' THEN e.employee_name
             END AS submitter_name,
             ts.task_seq,

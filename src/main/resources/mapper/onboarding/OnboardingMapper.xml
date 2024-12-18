@@ -27,7 +27,8 @@
             t1.template_end_at AS templateEndAt,
             cs.checklist_seq AS checklistSeq,
             c.checklist_content AS checklistContent,
-            cs.list_checked_status AS listCheckedStatus
+            cs.list_checked_status AS listCheckedStatus,
+            cs.checklist_status_seq AS checklistStatusSeq
         FROM
             employee AS e
         JOIN
@@ -46,6 +47,8 @@
             task AS t2 ON t1.template_seq = t2.template_seq
         WHERE
             e.employee_seq = #{employeeSeq}
+        ORDER BY
+        t1.template_procedure;
     </select>
 
     <select id="getOnboardingListByMentor" parameterType="java.lang.Long" resultType="OnboardingDTO">

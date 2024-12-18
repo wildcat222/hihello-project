@@ -16,7 +16,7 @@ public interface EmployeeMapper {
 
     List<MentorAllQueryDTO> findAllMentor();
 
-    ReqEmplInfoQueryDTO findEmployeeInfo(Long employeeSeq);
+    ResEmplInfoQueryDTO findEmployeeInfo(Long employeeSeq);
 
     List<EmployeeListDTO> findEmployeeAll();
 
@@ -24,9 +24,9 @@ public interface EmployeeMapper {
 
     String findEmployeeName(Long employeeSeq);
 
-    ReqEmplInfoQueryDTO findMentorInfo(Long employeeSeq);
+    ResEmplInfoQueryDTO findMentorInfo(Long employeeSeq);
 
-    ReqEmplInfoQueryDTO findMenteeInfo(Long employeeSeq);
+    ResEmplInfoQueryDTO findMenteeInfo(Long employeeSeq);
 
     List<DepartmentListDTO> findAllDepartment();
 

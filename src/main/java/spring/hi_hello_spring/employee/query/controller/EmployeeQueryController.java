@@ -54,21 +54,21 @@ public class EmployeeQueryController {
     @Operation(summary = "내 프로필 조회", description = "사원은 본인의 프로필을 조회한다.")
     @GetMapping("/employee/info")
     public ApiResponse<?> getEmployeeInfo() {
-        ReqEmplInfoQueryDTO reqEmployeeInfoDTO = employeeQueryService.getEmployeeInfo();
+        ResEmplInfoQueryDTO reqEmployeeInfoDTO = employeeQueryService.getEmployeeInfo();
         return ResponseUtil.successResponse("내 정보가 성공적으로 조회되었습니다.", reqEmployeeInfoDTO).getBody();
     }
 
     @Operation(summary = "멘토 프로필 조회", description = "멘티가 멘토의 프로필을 조회한다.")
     @GetMapping("/mentee/mentor/info")
     public ApiResponse<?> getMenteeInfo() {
-        ReqEmplInfoQueryDTO reqEmployeeInfoDTO = employeeQueryService.getMentorInfo();
+        ResEmplInfoQueryDTO reqEmployeeInfoDTO = employeeQueryService.getMentorInfo();
         return ResponseUtil.successResponse("멘토의 프로필 정보가 성공적으로 조회되었습니다.", reqEmployeeInfoDTO).getBody();
     }
 
     @Operation(summary = "멘티 프로필 조회", description = "멘토가 멘티의 프로필을 조회한다.")
     @GetMapping("mentor/mentee/info")
     public ApiResponse<?> getMentorInfo() {
-        ReqEmplInfoQueryDTO reqEmployeeInfoDTO = employeeQueryService.getMenteeInfo();
+        ResEmplInfoQueryDTO reqEmployeeInfoDTO = employeeQueryService.getMenteeInfo();
         return ResponseUtil.successResponse("멘티의 프로필 정보가 성공적으로 조회되었습니다.", reqEmployeeInfoDTO).getBody();
     }
 

@@ -40,10 +40,10 @@
         </collection>
     </resultMap>
 
-    <select id="getPeerReviewResultDetail" resultMap="PeerReviewResultDetail">
+    <select id="getPeerReviewResultDetail" resultType="PeerReviewDetailQueryDTO">
         SELECT
-        l.peer_review_list_content, -- 항목 (key)
-        CAST(r.peer_review_score AS SIGNED) AS peer_review_score -- 점수 (value)
+        l.peer_review_list_content, -- 항목 내용
+        CAST(r.peer_review_score AS SIGNED) AS peer_review_score -- 점수
         FROM
         peer_review r
         JOIN peer_review_list l ON r.peer_review_list_seq = l.peer_review_list_seq
