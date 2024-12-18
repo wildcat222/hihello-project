@@ -10,6 +10,9 @@ import spring.hi_hello_spring.employee.query.dto.*;
 import spring.hi_hello_spring.employee.query.service.EmployeeQueryService;
 import spring.hi_hello_spring.employee.query.dto.DepartmentListDTO;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -83,7 +86,13 @@ public class EmployeeQueryController {
     @GetMapping("/hr/user/search")
     public ApiResponse<?> getEmployeeSearchQuery(@RequestParam String searchType, @RequestParam String keyword) {
 
-        List<EmployeeListDTO> employees = employeeQueryService.getEmployeeSearch(searchType, keyword);
+        String decodedWord = null;
+        try {
+            decodedWord = URLDecoder.decode(keyword, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        List<EmployeeListDTO> employees = employeeQueryService.getEmployeeSearch(searchType, decodedWord);
         return ResponseUtil.successResponse("성공적으로 사원을 검색하였습니다.", employees).getBody();
     }
 

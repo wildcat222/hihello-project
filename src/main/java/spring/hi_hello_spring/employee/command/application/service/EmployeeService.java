@@ -66,15 +66,15 @@ public class EmployeeService {
         Employee employee = employeeRepository.findByEmployeeSeq(employeeSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
 
-        // 기존 비밀번호와 DB내 비밀번호가 일치하는지 확인
-        if (!passwordEncoder.matches(modifyPwdDTO.getEmployeePassword(), employee.getEmployeePassword())) {
-            // 비밀번호가 맞지 않습니다.
-            throw new CustomException(ErrorCodeType.USER_PWD_INCORRECT);
-        }
         // 입력한 새 비밀번호와 확인용 새 비밀번호 일치 확인
-        else if (!modifyPwdDTO.getEmployeeNewPwd().equals(modifyPwdDTO.getCheckEmployeeNewPwd())) {
+        if (!modifyPwdDTO.getEmployeeNewPwd().equals(modifyPwdDTO.getCheckEmployeeNewPwd())) {
             // 새 비밀번호를 다시 확인해주세요
             throw new CustomException(ErrorCodeType.NEW_PWD_MISMATCH);
+        }
+        // 기존 비밀번호와 DB내 비밀번호가 일치하는지 확인
+        else if (!passwordEncoder.matches(modifyPwdDTO.getEmployeePassword(), employee.getEmployeePassword())) {
+            // 비밀번호가 맞지 않습니다.
+            throw new CustomException(ErrorCodeType.USER_PWD_INCORRECT);
         }
         // 새 비밀번호가 기존 비밀번호와 같으면 변경하지 않음
         else if (passwordEncoder.matches(modifyPwdDTO.getEmployeeNewPwd(), employee.getEmployeePassword())) {
@@ -85,7 +85,6 @@ public class EmployeeService {
             employee.modifyPwd(passwordEncoder.encode(modifyPwdDTO.getEmployeeNewPwd()));
             employeeRepository.save(employee);
         }
-
 
     }
 }
