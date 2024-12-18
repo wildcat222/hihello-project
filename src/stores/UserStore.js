@@ -129,13 +129,8 @@ export const useUserStore = defineStore('user', {
         },
         getTokenPayload() {
             const base64 = this.accessToken.split('.')[1];
-            console.log(base64);
 
             try {
-                // Base64 URL -> Base64 변환
-                // const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                // console.log(base64);
-                // Base64 디코딩
                 const decodedToken = atob(base64);
                 console.log(decodedToken);
                 // UTF-8 디코딩

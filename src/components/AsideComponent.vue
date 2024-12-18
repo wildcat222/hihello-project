@@ -122,9 +122,10 @@ const menus = ref([
   {name: '위키 관리', url: '/wiki/managing', role: 'MENTOR', position: '팀장'}
 ]);
 
+const employeeInfo = computed(() => userStore.getEmployeeInfo());
 const filteredMenus = computed(() => {
-  const role = userStore.getEmployeeInfo().employeeRole[0];
-  const positionName = userStore.getEmployeeInfo().employeePositionName;
+  const role = employeeInfo.value.employeeRole[0];
+  const positionName = employeeInfo.value.employeePositionName;
   return menus.value.filter(menu => menu.role === role || menu.position === positionName);
 })
 
