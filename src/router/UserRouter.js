@@ -1,7 +1,7 @@
 import LoginPage from "@/views/user/LoginPage.vue";
-import { useUserStore } from '@/stores/UserStore';
 import MentorInfoPage from "@/views/user/MentorInfoPage.vue";
 import MenteeInfoPage from "@/views/user/MenteeInfoPage.vue";
+import UpdatePassword from "@/views/user/hr/modal/employee/UpdatePassword.vue";
 
 export default[
     {
@@ -21,5 +21,9 @@ export default[
     {
         path: '/mentee/intro',
         component: MenteeInfoPage,
+    },
+    {
+        path: '/employee/:employeeSeq/password',
+        component: UpdatePassword,
     }
 ]
