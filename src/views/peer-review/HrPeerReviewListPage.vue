@@ -11,7 +11,7 @@
                     <div class="peer-review-list__column">순서</div>
                     <div class="peer-review-list__column">항목</div>
                     <div class="peer-review-list__column">배점</div>
-                    <div class="peer-review-list__column">액션</div>
+                    <div class="peer-review-list__column"></div>
                 </div>
 
                 <!-- 리스트 아이템 -->
