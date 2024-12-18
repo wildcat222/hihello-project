@@ -19,8 +19,7 @@ public class PeerReviewListController {
 
     @PostMapping
     @Operation(summary = "동료 평가 지표 생성", description = "동료 평가 지표 생성 로직입니다.")
-    public ApiResponse<?> createPeerReviewList(PeerReviewListCreateDTO createDTO){
-
+    public ApiResponse<?> createPeerReviewList(@RequestBody PeerReviewListCreateDTO createDTO){
         peerReviewListService.createPeerReviewList(createDTO);
         return ResponseUtil.successResponse("동료 평가 지표가 성공적으로 등록되었습니다.").getBody();
     }
