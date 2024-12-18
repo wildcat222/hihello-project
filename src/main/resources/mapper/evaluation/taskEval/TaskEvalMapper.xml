@@ -19,20 +19,20 @@
                 WHEN t.task_type = 'PERSONAL' THEN e.employee_seq
             END AS submitter_seq,
             CASE
-                WHEN t.task_type = 'GROUP' THEN CONCAT(tg.task_group_seq, '팀')
+                WHEN t.task_type = 'GROUP' THEN CONCAT(tg.task_group_num, '팀')
                 WHEN t.task_type = 'PERSONAL' THEN e.employee_name
             END AS submitter_name,
             ts.task_seq,
             t.task_content,
             SUM(te.task_score) AS task_total_score
         FROM
-            task_eval te
-        JOIN
             task_submit ts
-            ON ts.task_submit_seq = te.task_submit_seq
         JOIN
             task t
             ON t.task_seq = ts.task_seq
+        LEFT JOIN
+            task_eval te
+            ON ts.task_submit_seq = te.task_submit_seq
         JOIN
             template tem
             ON tem.template_seq = t.template_seq
@@ -47,9 +47,70 @@
         LEFT JOIN
             task_group tg
             ON t.task_type = 'GROUP'
-                AND tg.task_group_num = ts.task_submit_seq
+                AND tg.task_seq = ts.task_seq
+
         GROUP BY d.department_name, tem.template_task_round, submitter_seq, submitter_name
     </select>
+
+    <!--멘토가 멘티의 제출된 과제를 조회하는 SQL-->
+    <select id="findTaskEvalsByMentorSeq" resultType="TaskEvalListQueryDTO">
+        SELECT
+            d.department_seq,
+            CASE
+                WHEN d.department_seq IS NOT NULL THEN d.department_name
+                WHEN d.department_seq IS NULL THEN '공통'
+            END AS department_name,
+            t.template_seq,
+            tem.template_task_round,
+            ts.task_submit_seq,
+            CASE
+                WHEN t.task_type = 'GROUP' THEN tg.task_group_seq
+                WHEN t.task_type = 'PERSONAL' THEN e.employee_seq
+            END AS submitter_seq,
+            CASE
+                WHEN t.task_type = 'GROUP' THEN CONCAT(tg.task_group_num, '팀')
+                WHEN t.task_type = 'PERSONAL' THEN e.employee_name
+            END AS submitter_name,
+            ts.task_seq,
+            t.task_content,
+            SUM(te.task_score) AS task_total_score
+        FROM
+            task_submit ts
+        JOIN
+            task t
+            ON t.task_seq = ts.task_seq
+        LEFT JOIN
+            task_eval te
+            ON ts.task_submit_seq = te.task_submit_seq
+        JOIN
+            template tem
+            ON tem.template_seq = t.template_seq
+        LEFT JOIN
+            employee e
+            ON t.task_type = 'PERSONAL'
+                AND e.employee_seq = ts.employee_seq
+        LEFT JOIN
+            department d
+            ON t.department_seq IS NOT NULL
+                AND d.department_seq = t.department_seq
+        LEFT JOIN
+            task_group tg
+            ON t.task_type = 'GROUP'
+                AND tg.task_seq = ts.task_seq
+        LEFT JOIN
+            group_member gm
+            ON gm.task_group_seq = tg.task_group_seq
+        LEFT JOIN mentoring m
+            ON (
+                (t.task_type = 'PERSONAL' AND m.mentee_seq = e.employee_seq)
+            OR
+                (t.task_type = 'GROUP' AND m.mentee_seq = gm.employee_seq)
+            )
+        WHERE m.mentor_seq = 5 AND m.mentoring_active_status = TRUE
+        GROUP BY d.department_name, tem.template_task_round, submitter_seq, submitter_name, gm.employee_seq
+    </select>
+
+    <!--과제 평가 상세 내용을 조회하는 SQL-->
     <select id="findTaskEvalDetails" resultType="TaskEvalDetailsQueryDTO">
         SELECT
             te.task_eval_seq,
@@ -69,3 +130,4 @@
         WHERE ts.task_submit_seq = #{task_submit_seq}
     </select>
 </mapper>
+
