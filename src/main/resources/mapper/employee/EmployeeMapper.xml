@@ -56,9 +56,10 @@
     </select>
 
     <!-- 내 정보를 조회하는 SQL -->
-    <select id="findEmployeeInfo" parameterType="java.lang.Long" resultType="ReqEmplInfoQueryDTO">
+    <select id="findEmployeeInfo" parameterType="java.lang.Long" resultType="ResEmplInfoQueryDTO">
         SELECT
             e.employee_name AS employeeName,
+            e.employee_num AS employeeNum,
             d.department_name AS departmentName,
             p.position_name AS positionName,
             e.employee_phone AS employeePhone,
@@ -77,9 +78,10 @@
     </select>
 
     <!-- 멘토의 프로필 정보를 조회하는 SQL -->
-    <select id="findMentorInfo" parameterType="java.lang.Long" resultType="ReqEmplInfoQueryDTO">
+    <select id="findMentorInfo" parameterType="java.lang.Long" resultType="ResEmplInfoQueryDTO">
         SELECT
             mentor.employee_name AS employeeName,
+            mentor.employee_num AS employeeNum,
             mentor.employee_role AS employeeRole,
             d.department_name AS departmentName,
             p.position_name AS positionName,
@@ -103,10 +105,11 @@
     </select>
 
     <!-- 멘티의 프로필 정보를 조회하는 SQL -->
-    <select id="findMenteeInfo" parameterType="java.lang.Long" resultType="ReqEmplInfoQueryDTO">
+    <select id="findMenteeInfo" parameterType="java.lang.Long" resultType="ResEmplInfoQueryDTO">
         SELECT
             mentee.employee_name AS employeeName,
             mentee.employee_role AS employeeRole,
+            mentee.employee_num AS employeeNum,
             d.department_name AS departmentName,
             p.position_name AS positionName,
             mentee.employee_phone AS employeePhone,
