@@ -14,7 +14,7 @@
 
 .peer-review__header-wrapper {
     display: flex;
-    justify-content: space-between; /* 양쪽 끝으로 정렬 */
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
     margin-right: 5vw;
@@ -28,7 +28,7 @@
 .peer-review__dropdown {
     border: 1px solid #ccc;
     border-radius: 8px;
-    width: 12vw;
+    max-width: 20vw;
 }
 
 .peer-review__group-dropdown {
@@ -47,13 +47,13 @@
 }
 
 .peer-review__list-column {
-    flex: 1; /* 동일한 비율로 너비를 설정 */
+    flex: 1; 
     text-align: center;
     box-sizing: border-box;
 }
 
 .peer-review__detail-btn {
-    background-color: #8a4cfb;
+    background-color: var(--purple);
     color: white;
     border: none;
     border-radius: 8px;
@@ -64,16 +64,6 @@
 }
 
 .peer-review__detail-btn:hover {
-    background-color: #6e3fbf;
-}
-
-.peer-review__no-data {
-    color: gray;
-    margin-top: 20px;
-}
-
-.peer-review__white-box {
-    margin-top: 0;
-    padding-top: 1vw;
+    background-color: var(--blue);
 }
 
