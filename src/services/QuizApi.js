@@ -85,4 +85,15 @@ export const deleteHrQuiz = async (quizCategorySeq, quizSeq) => {
     throw error;
   }
 }
+
+// 담당자 카테고리 별 퀴즈 결과 조회
+export const fetchHrQuizResult = async (quizCategorySeq) => {
+  try{
+    const response = await springAPI.get(`/hr/quizCategory/${quizCategorySeq}/quiz/result`);
+    return response.data;
+  }catch (error) {
+    console.error("퀴즈 결과 조회 실패: ", error.response?.data || error.message);
+    throw error
+  }
+};
   
