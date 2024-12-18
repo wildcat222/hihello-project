@@ -9,11 +9,12 @@ import router from "@/router/index.js";
 const employeeInfo = ref(null);
 const employeeFileUrl = ref(null);
 const route = router;
-
+const emit = defineEmits(['shouldShowProfile']);
 // 클릭 이벤트로 라우팅 처리
 const navigateToUpdatePassword = () => {
   const employeeSeq = useUserStore().getEmployeeInfo().employeeSeq;
   route.push(`/employee/${employeeSeq}/password`);
+  emit('should-show-profile');
 };
 
 // 기본 프로필 이미지
