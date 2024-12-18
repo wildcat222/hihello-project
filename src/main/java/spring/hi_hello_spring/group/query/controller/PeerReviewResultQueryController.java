@@ -13,7 +13,7 @@ import spring.hi_hello_spring.group.query.service.PeerReviewResultQueryService;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/hr/{taskSeq}/group/{taskGroupSeq}")
+@RequestMapping("api/v1/hr/task/{taskSeq}/group/{taskGroupSeq}")
 @RequiredArgsConstructor
 @Tag(name = "PeerReviewResult API", description = "동료 평가 결과 관련 API")
 public class PeerReviewResultQueryController {
