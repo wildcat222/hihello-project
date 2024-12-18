@@ -9,7 +9,8 @@ export const useUserStore = defineStore('user', {
         accessToken: localStorage.getItem('accessToken') || null,
         refreshToken: localStorage.getItem('refreshToken') || null,
         isAuthenticated: !!localStorage.getItem('refreshToken'),
-        employeeInfo: null
+        employeeInfo: null,
+        interceptorsInitialized: false
     }),
     actions: {
         async login(employeeNum, employeePassword) {
@@ -23,9 +24,9 @@ export const useUserStore = defineStore('user', {
                 this.accessToken = response.headers['accesstoken'];
                 this.refreshToken = response.headers['refreshtoken'];
 
-                console.log('header : ', response.headers);
-                console.log('Access Token:', this.accessToken); // 디버깅용
-                console.log('Refresh Token:', this.refreshToken); // 디버깅용
+                // console.log('header : ', response.headers);
+                // console.log('Access Token:', this.accessToken); // 디버깅용
+                // console.log('Refresh Token:', this.refreshToken); // 디버깅용
 
                 if (this.accessToken && this.refreshToken) {
                     this.isAuthenticated = true;
@@ -49,7 +50,7 @@ export const useUserStore = defineStore('user', {
         },
         logout() {
             const performLogout = async () => {
-                console.log('엑세스 토큰 : ' + this.accessToken);
+                // console.log('엑세스 토큰 : ' + this.accessToken);
                 if (!this.accessToken) {
                     console.warn("이미 로그아웃된 상태입니다.");
                     return;
@@ -86,6 +87,9 @@ export const useUserStore = defineStore('user', {
             });
         },
         initializeInterceptors() {
+            // 한 번만 호출되도록 초기화 보장
+            if (this.interceptorsInitialized) return;
+            this.interceptorsInitialized = true;
             springAPI.interceptors.response.use(
                 (response) => response,
                 async (error) => {
@@ -128,9 +132,13 @@ export const useUserStore = defineStore('user', {
             );
         },
         getTokenPayload() {
-            const base64 = this.accessToken.split('.')[1];
+            if (!this.accessToken) {
+                // console.error("accessToken이 없어 Employee 정보를 가져올 수 없습니다.");
+                return;
+            }
 
             try {
+                const base64 = this.accessToken.split('.')[1];
                 const decodedToken = atob(base64);
                 console.log(decodedToken);
                 // UTF-8 디코딩
@@ -153,23 +161,6 @@ export const useUserStore = defineStore('user', {
                 };
                 return this.employeeInfo;
             }
-            console.error('Employee 정보가 존재하지 않습니다.');
-            return null;
-            // const payload = this.getTokenPayload();
-            // if (!payload) {
-            //     console.error('Employee 정보가 존재하지 않습니다.');
-            //     return null;
-            // }
-            //
-            // // 안전하게 정보 추출 (기본값 설정)
-            // this.employeeInfo = {
-            //     employeeSeq: payload.sub || null,
-            //     employeeRole: payload.employeeRole || 'UNKNOWN', // 기본값 'UNKNOWN'
-            //     departmentName: payload.employeeDeptartment || 'UNKNOWN', // 이름 수정
-            //     positionName: payload.employeePosition || 'UNKNOWN', // 이름 수정
-            // };
-            //
-            // return this.employeeInfo;
         },
 
     },
