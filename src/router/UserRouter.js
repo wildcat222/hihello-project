@@ -1,7 +1,7 @@
 import LoginPage from "@/views/user/LoginPage.vue";
 import MentorInfoPage from "@/views/user/MentorInfoPage.vue";
 import MenteeInfoPage from "@/views/user/MenteeInfoPage.vue";
-import UpdatePassword from "@/views/user/hr/modal/employee/UpdatePassword.vue";
+import UpdatePassword from "@/views/user/UpdatePassword.vue";
 
 export default[
     {
