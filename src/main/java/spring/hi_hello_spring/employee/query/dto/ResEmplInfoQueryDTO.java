@@ -10,9 +10,10 @@ import spring.hi_hello_spring.common.aggregate.entity.EmployeeRole;
 @Setter
 @RequiredArgsConstructor
 @ToString
-public class ReqEmplInfoQueryDTO {
+public class ResEmplInfoQueryDTO {
 
     private String employeeName;
+    private String employeeNum;
     @Enumerated(EnumType.STRING)
     private EmployeeRole employeeRole;
     private String departmentName;
