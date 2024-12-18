@@ -1,9 +1,8 @@
 import {defineStore} from 'pinia';
-import axios from 'axios';
 import {springAPI} from '@/services/axios';
-import {useRouter} from "vue-router";
+import router from "@/router/index.js";
 
-const router = useRouter();
+const route = router;
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -73,7 +72,9 @@ export const useUserStore = defineStore('user', {
                     localStorage.removeItem('refreshToken');
 
                     if (router.currentRoute.value.path !== "/") { // 이미 "/"에 있다면 이동하지 않음
-                        router.push("/").catch((error) => {
+                        route.push('/').then(() => {
+                            alert('로그아웃 되었습니다.');
+                        }).catch((error) => {
                             console.error("Navigation failed:", error);
                         });
                     }
@@ -118,7 +119,7 @@ export const useUserStore = defineStore('user', {
                         } catch (err) {
                             console.error('Token refresh failed:', err);
                             alert('세션이 만료되었습니다. 다시 로그인해주세요.');
-                            await router.push("/");
+                            await route.push("/");
                             return Promise.reject(err);
                         }
                     }
