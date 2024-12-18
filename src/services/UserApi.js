@@ -54,3 +54,20 @@ export const fetchMenteeInfo = async() => {
         throw error;
     }
 };
+
+// 사원 리스트 조회
+export const fetchEmployeeList = async () => {
+    try {
+        const response = await springAPI.get(`/hr/user`);
+        return response.data;
+    } catch (error) {
+        console.log("사원 목록을 불러오지 못했습니다.", error);
+    }
+}
+
+// 사원 검색
+export const searchEmployees = (searchType, keyword) => {
+    return springAPI.get(`/hr/user/search`, {
+        params: {searchType, keyword}
+    });
+}
