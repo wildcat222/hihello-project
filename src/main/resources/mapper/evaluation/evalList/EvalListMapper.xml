@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.evaluation.query.mapper.EvalListMapper">
+    <!-- 과제 평가 항목을 조회하는 SQL -->
+    <select id="findEvalListsByTaskSeq" resultType="EvalListsQueryDTO">
+        SELECT
+            ei.eval_ind_seq,
+            ei.eval_ind_content,
+            el.eval_list_seq,
+            el.eval_list_content,
+            el.eval_list_score
+        FROM
+            task t
+        JOIN
+            eval_list el
+            ON el.task_seq = t.task_seq
+        JOIN
+            eval_ind ei
+            ON ei.eval_ind_seq = el.eval_ind_seq
+        WHERE t.task_seq = #{task_seq}
+    </select>
+</mapper>
