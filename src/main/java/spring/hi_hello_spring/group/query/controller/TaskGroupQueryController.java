@@ -24,7 +24,7 @@ public class TaskGroupQueryController {
 
     /* 그룹 과제 별 그룹 리스트 조회 */
     @GetMapping("/group/task/{taskSeq}/group/list")
-    @Operation(summary = "동료 평가 지표 조회", description = "동료 평가 지표 조회 로직입니다.")
+    @Operation(summary = "그룹 과제 별 그룹 리스트 조회", description = "그룹 과제 별 그룹 리스트 조회 입니다")
     public ApiResponse<?> getTaskGroupList(@PathVariable Long taskSeq) {
 
         List<TaskGroupListQueryDTO> queryDTO = taskGroupQueryService.getTaskGroupList(taskSeq);
