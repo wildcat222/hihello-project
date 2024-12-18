@@ -39,7 +39,7 @@ onMounted(() => {
       <UserRollRectangle :text="employeeRole === 'MENTOR' ? '멘토' : '담당자'" />
     </div>
   </div>
-  <div class="body">
+  <div class="TaskListbody">
     <ListComponent :items="taskItems">
       <template #header>
         <div class="task-header">
