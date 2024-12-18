@@ -27,7 +27,8 @@
             t1.template_end_at AS templateEndAt,
             cs.checklist_seq AS checklistSeq,
             c.checklist_content AS checklistContent,
-            cs.list_checked_status AS listCheckedStatus
+            cs.list_checked_status AS listCheckedStatus,
+            cs.checklist_status_seq AS checklistStatusSeq
         FROM
             employee AS e
         JOIN
