@@ -3,9 +3,9 @@
     margin: 0 auto;
 }
 
-h1 {
+.hr-quiz-result-container h1 {
     text-align: center;
-    margin: 20px 0;
+    margin: 50px 0;
     font-size: 35px;
     color: #333;
     font-weight: bold;
@@ -33,17 +33,24 @@ h1 {
     overflow: hidden;
 }
 
+.hr-quiz-result-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1vw;
+    border-radius: 10px;
+    width: auto;
+    max-width: none;
+    white-space: nowrap;
+    overflow: visible;
+}
+
 .list-header,
 .list-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-}
-
-.list-header {
-    font-weight: bold;
-    font-size: 16px;
 }
 
 .column {
