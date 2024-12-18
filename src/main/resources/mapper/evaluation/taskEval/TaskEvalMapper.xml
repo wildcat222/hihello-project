@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="spring.hi_hello_spring.evaluation.query.mapper.TaskEvalMapper">
+<mapper namespace="spring.hi_hello_spring.evaluation.query.mapper.TaskEvalQueryMapper">
     <!-- 과제 평가 리스트를 조회하는 SQL -->
     <select id="findAllTaskEvals" resultType="TaskEvalListQueryDTO">
         SELECT
@@ -106,7 +106,7 @@
             OR
                 (t.task_type = 'GROUP' AND m.mentee_seq = gm.employee_seq)
             )
-        WHERE m.mentor_seq = 5 AND m.mentoring_active_status = TRUE
+        WHERE m.mentor_seq = #{mentor_seq} AND m.mentoring_active_status = TRUE
         GROUP BY d.department_name, tem.template_task_round, submitter_seq, submitter_name, gm.employee_seq
     </select>
 
@@ -130,4 +130,3 @@
         WHERE ts.task_submit_seq = #{task_submit_seq}
     </select>
 </mapper>
-

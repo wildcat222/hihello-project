@@ -10,7 +10,7 @@ import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
 import spring.hi_hello_spring.employee.command.domain.repository.EmployeeRepository;
 import spring.hi_hello_spring.evaluation.query.dto.TaskEvalDetailsQueryDTO;
 import spring.hi_hello_spring.evaluation.query.dto.TaskEvalListQueryDTO;
-import spring.hi_hello_spring.evaluation.query.mapper.TaskEvalMapper;
+import spring.hi_hello_spring.evaluation.query.mapper.TaskEvalQueryMapper;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskEvalQueryService {
 
+    private final TaskEvalQueryMapper taskEvalMapper;
     private final EmployeeRepository employeeRepository;
-    private final TaskEvalMapper taskEvalMapper;
 
     public List<TaskEvalListQueryDTO> getAllTaskEvals() {
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();

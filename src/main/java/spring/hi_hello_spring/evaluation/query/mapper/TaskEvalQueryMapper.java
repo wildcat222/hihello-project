@@ -7,7 +7,7 @@ import spring.hi_hello_spring.evaluation.query.dto.TaskEvalListQueryDTO;
 import java.util.List;
 
 @Mapper
-public interface TaskEvalMapper {
+public interface TaskEvalQueryMapper {
 
     List<TaskEvalListQueryDTO> findAllTaskEvals();
     List<TaskEvalListQueryDTO> findTaskEvalsByMentorSeq(Long mentorSeq);
