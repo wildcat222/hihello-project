@@ -24,13 +24,13 @@ onMounted(fetchData);
 </script>
 
 <template>
-  <div class="header">
+  <div class="taskAddHeader">
     <div class="header-title">
       과제 등록
     </div>
   </div>
-  <div class="body">
-    <div class="container">
+  <div class="taskAddBody">
+    <div class="taskAddContainer">
       <div class="container-line">
         <span class="task-name"> 과제 제목 </span>
         <input v-model="taskTitle" class="task-name-input">
