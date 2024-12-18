@@ -12,12 +12,23 @@ export const fetchName = async (employeeSeq) => {
 };
 
 // 내 정보 조회
-export  const fetchEmployeeInfo = async () => {
+export const fetchEmployeeInfo = async () => {
     try {
         const response = await springAPI.get(`/employee/info`);
         return response.data;
     } catch (error) {
         console.error("내 정보 조회 실패", error.response?.data || error.message);
+        throw error;
+    }
+}
+
+// 비밀번호 변경
+export const updatePassword = async (employeeSeq, inputValue) => {
+    try {
+        const response = await springAPI.put(`/employee/${employeeSeq}/password`, inputValue);
+        return response.data;
+    } catch (error) {
+        console.error('비밀번호 변경에 실패했습니다.', error);
         throw error;
     }
 }
