@@ -1,0 +1,79 @@
+
+.peer-review__container {
+    width: 80vw;
+    margin: 0 auto;
+}
+
+.peer-review__container h1{
+    text-align: center;
+    margin: 50px 0;
+    font-size: 35px;
+    color: var(--black);
+    font-weight: bold;
+}
+
+.peer-review__header-wrapper {
+    display: flex;
+    justify-content: space-between; /* 양쪽 끝으로 정렬 */
+    align-items: center;
+    margin-bottom: 10px;
+    margin-right: 5vw;
+}
+
+.peer-review__dropdown-wrapper {
+    display: flex;
+    gap: 10px;
+}
+
+.peer-review__dropdown {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 12vw;
+}
+
+.peer-review__group-dropdown {
+    width: 5vw;
+}
+
+.peer-review__list-wrapper {
+    margin-top: 10px;
+}
+
+.peer-review__list-header, .peer-review__result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.peer-review__list-column {
+    flex: 1; /* 동일한 비율로 너비를 설정 */
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.peer-review__detail-btn {
+    background-color: #8a4cfb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+}
+
+.peer-review__detail-btn:hover {
+    background-color: #6e3fbf;
+}
+
+.peer-review__no-data {
+    color: gray;
+    margin-top: 20px;
+}
+
+.peer-review__white-box {
+    margin-top: 0;
+    padding-top: 1vw;
+}
+
