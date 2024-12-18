@@ -61,7 +61,20 @@ export const fetchPeerReviewResult = async (taskSeq, taskGroupSeq) => {
         const response = await springAPI.get(`/hr/task/${taskSeq}/group/${taskGroupSeq}/review`);
         return response.data;
     } catch (error) {
-        console.error("그룹 과제 제목 리스트 조회에 실패했습니다:", error);
+        console.error("동료 평가 결과 리스트 조회에 실패했습니다:", error);
+        throw error;
+    }
+};
+
+// 담당자 동료 평가 결과 상세 조회
+export const fetchPeerReviewResultDetail = async (taskSeq, taskGroupSeq, employeeSeq) => {
+    try {
+        const response = await springAPI.get(`/hr/task/${taskSeq}/group/${taskGroupSeq}/review/detail`, {
+            params: { employeeSeq }, 
+        });
+        return response.data;
+    } catch (error) {
+        console.error("동료 평가 결과 상세 조회에 실패했습니다:", error);
         throw error;
     }
 };

@@ -5,14 +5,10 @@
 
         <!-- 리스트 헤더와 드롭다운 -->
         <div class="peer-review__header-wrapper">
-            <div></div> <!-- 빈 공간 (왼쪽 정렬을 위해) -->
+            <div></div>
             <div class="peer-review__dropdown-wrapper">
                 <!-- 과제 제목 선택 -->
-                <select
-                    class="peer-review__dropdown"
-                    v-model="selectedTask"
-                    @change="fetchGroupList"
-                >
+                <select class="peer-review__dropdown" v-model="selectedTask" @change="fetchGroupList">
                     <option value="" disabled>과제를 선택하세요</option>
                     <option v-for="task in taskList" :key="task.taskSeq" :value="task.taskSeq">
                         {{ task.taskContent }}
@@ -20,11 +16,7 @@
                 </select>
 
                 <!-- 그룹 리스트 -->
-                <select
-                    class="peer-review__dropdown peer-review__group-dropdown"
-                    v-model="selectedGroup"
-                    @change="fetchReviewResults"
-                >
+                <select class="peer-review__dropdown peer-review__group-dropdown" v-model="selectedGroup" @change="fetchReviewResults">
                     <option value="" disabled>그룹을 선택하세요</option>
                     <option v-for="group in groupList" :key="group.taskGroupSeq" :value="group.taskGroupSeq">
                         {{ group.taskGroupNum }}
@@ -43,6 +35,7 @@
                     <div class="peer-review__list-column">평가자</div>
                     <div class="peer-review__list-column">배점</div>
                     <div class="peer-review__list-column">점수</div>
+                    <div class="peer-review__list-column"></div>
                 </div>
 
                 <div v-if="reviewResults.length > 0">
@@ -55,6 +48,11 @@
                                 <div class="peer-review__list-column">{{ item.reviewerName || 'N/A' }}</div>
                                 <div class="peer-review__list-column">{{ item.peerReviewScoreListSum }}</div>
                                 <div class="peer-review__list-column">{{ item.peerReviewScoreSum }}</div>
+                                <div class="peer-review__list-column">
+                                    <button class="peer-review__detail-btn" @click="openModal(item)">
+                                        상세 조회
+                                    </button>
+                                </div>
                             </div>
                         </template>
                     </list-component>
@@ -64,6 +62,15 @@
                 </div>
             </div>
         </white-box>
+
+        <!-- 모달창 -->
+        <HrPeerReviewDetailModal 
+            v-if="isModalOpen"
+            :taskSeq="selectedTask"
+            :taskGroupSeq="selectedGroup"
+            :employeeSeq="selectedDetail?.employeeSeq"
+            @close="closeModal" 
+        />
     </div>
 </template>
 
@@ -71,15 +78,30 @@
 import "@/styles/peer-review/PeerReview.css";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
 import ListComponent from "@/components/ListComponent.vue";
+import HrPeerReviewDetailModal from "@/views/peer-review/HrPeerReviewDetailModal.vue";
 import { fetchGroupTaskTitle, fetchPeerReview, fetchPeerReviewResult } from "@/services/PeerReviewApi";
 import { ref, onMounted } from "vue";
 
-// 데이터 선언
-const taskList = ref([]);
-const groupList = ref([]);
-const selectedTask = ref("");
-const selectedGroup = ref("");
-const reviewResults = ref([]);
+
+const taskList = ref([]); 
+const groupList = ref([]); 
+const selectedTask = ref(""); 
+const selectedGroup = ref(""); 
+const reviewResults = ref([]); 
+
+const selectedDetail = ref(null); 
+const isModalOpen = ref(false); 
+
+
+const openModal = (item) => {
+    selectedDetail.value = item; 
+    isModalOpen.value = true; 
+};
+
+const closeModal = () => {
+    isModalOpen.value = false;
+    selectedDetail.value = null;
+};
 
 const fetchTaskTitle = async () => {
     try {
