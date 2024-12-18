@@ -31,7 +31,6 @@ const navigateToWikiNewPost = () => {
 }
 
 const navigateToWiki = (wikiSeq) => {
-  console.log(wikiSeq);
   router.push(`/wiki/${wikiSeq}`);
 }
 

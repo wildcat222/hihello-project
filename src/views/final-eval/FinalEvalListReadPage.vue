@@ -1,11 +1,12 @@
 <script setup>
-import "@/styles/final-eval/FinaleEvalListPage.css"
+import "@/styles/final-eval/FinalEvalListPage.css"
 import {onMounted, reactive, ref, watch} from "vue";
 import {fetchFinalEvalResultList, searchFinalEvalResultList} from "@/services/FinalEvalApi.js";
 
 import WhiteBoxComponent from "@/components/WhiteBoxComponent.vue";
 import ListComponent from "@/components/ListComponent.vue";
 import SearchBarComponent from "@/components/SearchBarComponent.vue";
+import router from "@/router/index.js";
 
 const finalEvalResultList = reactive([]);
 const searchedFinalEvalResultList = reactive([]);
@@ -55,6 +56,10 @@ const searchingFinalEvalResultList = async(keyword) => {
   }
 }
 
+const navigateToFinalEvalDetail = (employeeSeq) => {
+  router.push(`/final-eval/${employeeSeq}`);
+}
+
 watch(searchedFinalEvalResultList, (newList) => {
   isSearching.value = newList.length > 0;
 });
@@ -86,7 +91,7 @@ onMounted(() => {
             <div>{{ item.departmentName }}</div>
             <div>{{ item.totalFinalEvalScore }}</div>
             <div>
-              <button class="read-button">조회</button>
+              <button class="read-button" @click="navigateToFinalEvalDetail(item.employeeSeq)">조회</button>
             </div>
           </div>
         </template>
