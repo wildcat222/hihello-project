@@ -11,6 +11,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class PeerReviewResultAllQueryDTO {
 
+    private Long employeeSeq;
     private String employeeNum;
     private String departmentName;
     private String reviewerName;

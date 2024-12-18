@@ -1,6 +1,7 @@
 package spring.hi_hello_spring.group.query.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import spring.hi_hello_spring.group.query.dto.PeerReviewDetailQueryDTO;
 import spring.hi_hello_spring.group.query.dto.PeerReviewResultAllQueryDTO;
 import spring.hi_hello_spring.group.query.dto.PeerReviewResultDetailQueryDTO;
 
@@ -10,5 +11,5 @@ import java.util.List;
 public interface PeerReviewResultMapper {
     List<PeerReviewResultAllQueryDTO> getPeerReviewResult(Long taskGroupSeq);
 
-    PeerReviewResultDetailQueryDTO getPeerReviewResultDetail(Long employeeSeq);
+    List<PeerReviewDetailQueryDTO> getPeerReviewResultDetail(Long employeeSeq);
 }
