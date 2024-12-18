@@ -46,6 +46,8 @@
             task AS t2 ON t1.template_seq = t2.template_seq
         WHERE
             e.employee_seq = #{employeeSeq}
+        ORDER BY
+        t1.template_procedure;
     </select>
 
     <select id="getOnboardingListByMentor" parameterType="java.lang.Long" resultType="OnboardingDTO">
