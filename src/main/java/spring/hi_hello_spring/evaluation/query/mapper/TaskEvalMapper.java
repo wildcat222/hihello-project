@@ -10,6 +10,6 @@ import java.util.List;
 public interface TaskEvalMapper {
 
     List<TaskEvalListQueryDTO> findAllTaskEvals();
-
+    List<TaskEvalListQueryDTO> findTaskEvalsByMentorSeq(Long mentorSeq);
     List<TaskEvalDetailsQueryDTO> findTaskEvalDetails(Long taskSubmitSeq);
 }
