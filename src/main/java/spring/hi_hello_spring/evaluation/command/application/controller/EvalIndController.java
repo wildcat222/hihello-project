@@ -20,7 +20,7 @@ public class EvalIndController {
     /* 평가 지표 등록 */
     @PostMapping
     @Operation(summary = "평가 지표 생성", description = "평가 지표 생성 로직입니다.")
-    public ApiResponse<?> createEvalInd(EvalIndCreateDTO createDTO){
+    public ApiResponse<?> createEvalInd(@RequestBody EvalIndCreateDTO createDTO){
 
         evalIndService.createEvalInd(createDTO);
         return ResponseUtil.successResponse("평가 지표가 성공적으로 등록되었습니다.").getBody();
