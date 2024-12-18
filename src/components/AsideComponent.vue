@@ -8,11 +8,11 @@
     <!-- 메뉴 -->
     <ul>
       <!-- 김인턴 -->
-      <li class="menu-item menu-title">김인턴</li>
+      <li class="menu-item menu-title" @click="$emit('profile-modal')">{{ employeeName }}</li>
       <button @click="logout">로그아웃 버튼(임시)</button>
 
       <li v-for="menu in filteredMenus" :key="menu.name" class="menu-item">
-        <div :class="{ active: activeMenu === menu.name }" @click="toggleMenu(menu.name)">
+        <div :class="{ active: props.activeMenu === menu.name }" @click="toggleMenu(menu.name)">
           <router-link :to="menu.url">{{ menu.name }}</router-link>
         </div>
 
@@ -31,13 +31,29 @@
 import {computed, onMounted, onUnmounted, ref} from 'vue';
 import {useUserStore} from "@/stores/UserStore.js";
 import router from "@/router/index.js";
+import {fetchName} from "@/services/UserApi.js";
 
 const userStore = useUserStore();
-const activeMenu = ref(null);
 
 function logout() {
   userStore.logout();
 }
+
+const employeeSeq = ref(null);
+const employeeName = ref('');
+const loadName = async (employeeSeq) => {
+    try {
+        employeeName.value = await fetchName(employeeSeq);
+    } catch (error) {
+        employeeName.value = '';
+    }
+}
+
+// Props & Events
+const props = defineProps({
+  activeMenu: String,
+});
+const emit = defineEmits(['profile-modal', 'update-active-menu']);
 
 const menus = ref([
   // 멘티 ASIDE
@@ -114,41 +130,22 @@ const filteredMenus = computed(() => {
 
 // 토글 로직
 const toggleMenu = (menuName) => {
-  activeMenu.value = activeMenu.value === menuName ? null : menuName;
-};
+  const newActiveMenu = props.activeMenu === menuName ? null : menuName;
+  emit('update-active-menu', newActiveMenu);
 
-// 서브 메뉴 사용 방식 맘에 들면 삭제 예정
-//
-// // 서브 메뉴 활성화
-// const showSubMenu = (menuName) => {
-//   activeMenu.value = menuName;
-// }
-//
-// // 서브 메뉴 비활성화
-// const hideSubMenu = () => {
-//   activeMenu.value = null;
-// };
-
-// 외부를 클릭하면 서브 메뉴 비활성화
-const hideSubMenuOnOutsideClick = (event) => {
-  // 메뉴와 서브 메뉴가 아닌 곳을 클릭하면 비활성화
-  if (!event.target.closest('.menu-item')) {
-    activeMenu.value = null;
+  // SubMenu 활성화 시 Profile 비활성화
+  if (newActiveMenu) {
+    emit('profile-modal'); // Profile 강제 비활성화
   }
 };
 
 // 마운트 시 이벤트 추가, 언마운트 시 이벤트 제거
 onMounted(() => {
-  document.addEventListener('click', hideSubMenuOnOutsideClick);
-  // 라우터 이동 후 activeMenu 초기화
-  router.afterEach(() => {
-    activeMenu.value = null; // 서브메뉴 비활성화
-  });
+  router.afterEach(() => emit('update-active-menu', null));
+  employeeSeq.value = userStore.getEmployeeInfo().employeeSeq;
+  loadName(employeeSeq.value);
 });
 
-onUnmounted(() => {
-  document.removeEventListener('click', hideSubMenuOnOutsideClick);
-});
 </script>
 
 <style scoped>
@@ -164,6 +161,7 @@ onUnmounted(() => {
   background-color: var(--white);
   padding: 20px;
   box-sizing: border-box;
+  text-align: center;
 }
 
 .logo {
@@ -199,6 +197,7 @@ ul {
   margin-bottom: 100px;
   /* 김인턴과 나머지 메뉴 사이의 간격 */
   font-size: 18px;
+  cursor: pointer;
 }
 
 .menu-item a {
