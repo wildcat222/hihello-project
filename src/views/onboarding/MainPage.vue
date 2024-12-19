@@ -81,7 +81,7 @@ export default {
             templateType: item.templateType,
             checklistContent: [],
             onboardingCompletedStatus: item.onboardingCompletedStatus,
-            templateUrl:item.templateUrl
+            templateUrlName:item.templateUrlName
           };
           groupedItems.push(template);
         }
@@ -179,7 +179,7 @@ export default {
                 </div>
               </div>
               <div v-else>
-                <button class="tempateButton" @click="goToUrl(item.templateUrl)">
+                <button class="tempateButton" @click="goToUrl(item.templateUrlName)">
                   확인하기
                 </button>
               </div>
