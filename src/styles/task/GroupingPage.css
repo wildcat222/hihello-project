@@ -70,16 +70,7 @@
     align-items: center;
 
 }
-button {
-    background-color: red;
-    color: white;
-    border: none;
-    padding: 4px 8px;
-    cursor: pointer;
-}
-button:hover {
-    background-color: darkred;
-}
+
 ul li{
     list-style:none;
 }

@@ -184,3 +184,16 @@ export default {
     </WhiteBoxComponent>
   </div>
 </template>
+
+<style scoped>
+button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: darkred;
+}
+</style>
