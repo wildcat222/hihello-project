@@ -20,14 +20,11 @@ import { ref } from "vue";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
 import { addChatbotCategory } from "@/services/ChatbotApi";
 
-// Define Emits
 const emit = defineEmits(["close", "category-added"]);
 
-// Category Name Input State
 const categoryName = ref("");
 const isAdding = ref(false);
 
-// Add Category Function
 const handleAddCategory = async () => {
     if (!categoryName.value.trim()) {
         alert("카테고리 이름을 입력해주세요.");
@@ -35,10 +32,9 @@ const handleAddCategory = async () => {
     }
 
     try {
-        isAdding.value = true; // Start Loading State
+        isAdding.value = true; 
         const requestData = { ChatbotCategoryContent: categoryName.value };
 
-        // Call API to Add Category
         const response = await addChatbotCategory(requestData);
 
         if (response?.success) {

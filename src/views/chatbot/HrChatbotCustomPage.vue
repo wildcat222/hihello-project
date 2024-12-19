@@ -16,8 +16,12 @@
 
         <!-- 챗봇 카테고리 -->
         <div class="chatbot-category-container">
-            <chatbot-category ref="chatbotCategoryRef" :show-delete="true" @tab-selected="onTabSelected"
-                @delete-category="deleteCategory" />
+            <chatbot-category 
+                ref="chatbotCategoryRef" 
+                :show-delete="true" 
+                @tab-selected="onTabSelected" 
+                @delete-category="deleteCategory" 
+            />
             <button class="chatbot-add-button" @click="showAddCategoryModal = true">+</button>
         </div>
 
@@ -70,36 +74,36 @@ import ChatbotCategory from "@/views/chatbot/ChatbotCategoryComponent.vue";
 import AddCategoryModal from "@/views/chatbot/AddChatbotCategoryModal.vue";
 import AddChatbotModal from "@/views/chatbot/AddChatbotModal.vue";
 import UpdateChatbotModal from "@/views/chatbot/UpdateChatbotModal.vue";
-import { deleteChatbotCategory } from "@/services/ChatbotApi";
+import { deleteChatbotCategory, featchChatbotData, updateChatbotData } from "@/services/ChatbotApi";
 
 const showAddCategoryModal = ref(false);
 const showAddModal = ref(false);
 const showUpdateModal = ref(false);
 const selectedItem = ref(null);
 const chatbotCategoryRef = ref(null);
+const selectedCategorySeq = ref(null); 
 
-const chatbotItems = ref([
-    { id: 1, content: "안녕하세요! 무엇을 도와드릴까요?" },
-    { id: 2, content: "챗봇에 대한 설명을 듣고 싶으신가요?" },
-    { id: 3, content: "현재 날씨는 화창합니다." },
-    { id: 4, content: "오늘의 추천 메뉴는 파스타입니다." },
-    { id: 5, content: "궁금한 사항이 있다면 말씀해주세요." },
-]);
+const chatbotItems = ref([]);
 
 // 수정 모달 열기
 function openUpdateModal(item) {
-    selectedItem.value = { ...item };
+    console.log("열린 아이템:", item); // 디버깅 로그 추가
+    if (!item.id || !selectedCategorySeq.value) {
+        console.error("아이템 ID 또는 카테고리 ID가 누락되었습니다.");
+        return;
+    }
+
+    selectedItem.value = { 
+        ...item, 
+        categorySeq: selectedCategorySeq.value, // 선택된 카테고리 ID 추가
+    };
     showUpdateModal.value = true;
 }
 
-// 수정된 아이템 반영
-function updateItem(updatedItem) {
-    const index = chatbotItems.value.findIndex((item) => item.id === updatedItem.id);
-    if (index !== -1) {
-        chatbotItems.value[index] = { ...updatedItem };
-    }
-    showUpdateModal.value = false;
-}
+const onTabSelected = (categorySeq) => {
+    selectedCategorySeq.value = categorySeq;
+    fetchChatbotData(categorySeq); // 카테고리 선택 시 데이터 조회
+};
 
 const deleteCategory = async (categorySeq) => {
     if (!confirm("정말로 이 카테고리를 삭제하시겠습니까?")) return;
@@ -119,6 +123,52 @@ const deleteCategory = async (categorySeq) => {
         alert("카테고리 삭제 중 오류가 발생했습니다.");
     }
 };
+
+const fetchChatbotData = async (categorySeq) => {
+    try {
+        const response = await featchChatbotData(categorySeq);
+
+        if (response?.success && Array.isArray(response.data)) {
+            chatbotItems.value = response.data; // 데이터를 저장
+            console.log("저장된 chatbotItems:", chatbotItems.value);
+        } else {
+            chatbotItems.value = [];
+            alert("해당 카테고리에 데이터가 없습니다.");
+        }
+    } catch (error) {
+        console.error("챗봇 데이터 조회 실패:", error.response?.data || error.message);
+        alert("챗봇 데이터를 불러오는 중 오류가 발생했습니다.");
+    }
+};
+
+const updateItem = async (updatedItem) => {
+    console.log("수정된 아이템:", updatedItem); // 확인용 로그 추가
+
+    const categorySeq = selectedCategorySeq.value;
+    const chatbotSeq = updatedItem.id;
+
+    try {
+        const response = await updateChatbotData(categorySeq, chatbotSeq, updatedItem);
+
+        if (response?.success) {
+            const index = chatbotItems.value.findIndex((item) => item.id === chatbotSeq);
+            if (index !== -1) {
+                chatbotItems.value[index] = { ...chatbotItems.value[index], ...updatedItem };
+                console.log("수정 완료된 데이터:", chatbotItems.value[index]); // 확인용 로그
+            }
+            alert("데이터가 성공적으로 수정되었습니다.");
+        } else {
+            console.error("API 응답 실패:", response);
+            alert("데이터 수정에 실패했습니다.");
+        }
+    } catch (error) {
+        console.error("API 호출 실패:", error.response?.data || error.message);
+        alert("데이터 수정 중 오류가 발생했습니다.");
+    } finally {
+        showUpdateModal.value = false; // 수정 모달 닫기
+    }
+};
+
 
 onMounted(() => chatbotCategoryRef.value?.loadCategories());
 </script>
