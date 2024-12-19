@@ -8,5 +8,7 @@ public enum TemplateType {
     BREAK,
     CHECKLIST,
     VIDEO,
-    JOB
+    QUIZ,
+    TASK,
+    CF
 }

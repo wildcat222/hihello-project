@@ -11,7 +11,10 @@ import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.onboarding.command.application.dto.TeamplateOrderUpdateDTO;
 import spring.hi_hello_spring.onboarding.command.application.dto.TemplateCreateDTO;
+import spring.hi_hello_spring.onboarding.command.application.dto.TemplateUpdateList;
 import spring.hi_hello_spring.onboarding.command.application.service.TemplateService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/hr/onboarding")
@@ -24,7 +27,7 @@ public class TemplateController {
     /* 온보딩 스토리보드 등록 */
     @PostMapping
     @Operation(summary = "온보딩 스토리 보드 생성", description = "온보딩 스토리 보드 생성 로직입니다.")
-    public ApiResponse<?> createTemplate(TemplateCreateDTO createDTO){
+    public ApiResponse<?> createTemplate(@RequestBody TemplateCreateDTO createDTO){
 
         templateService.createTemplate(createDTO);
         return ResponseUtil.successResponse("온보딩 스토리보드가 성공적으로 등록되었습니다.").getBody();
@@ -32,7 +35,7 @@ public class TemplateController {
 
     /* 온보딩 스토리 보드 삭제 */
     @DeleteMapping("/{templateSeq}")
-    @Operation(summary = "온보딩 스토리 보드 생성", description = "온보딩 스토리 보드 생성 로직입니다.")
+    @Operation(summary = "온보딩 스토리 보드 삭제", description = "온보딩 스토리 보드 생성 로직입니다.")
     public ApiResponse<?> deleteTemplate(@PathVariable Long templateSeq){
 
         templateService.deleteTemplate(templateSeq);
@@ -40,11 +43,16 @@ public class TemplateController {
     }
 
     /* 온보딩 스토리보드 순서 변경 */
-    @PutMapping("/{templateSeq}")
+    @PutMapping("/updateTemplateProcedure")
     @Operation(summary = "온보딩 스토리 보드 순서 변경", description = "온보딩 스토리 보드 순서 변경 로직입니다.")
-    public ApiResponse<?> updateOrderTemplate(@PathVariable Long templateSeq, TeamplateOrderUpdateDTO updateDTO){
+    public ApiResponse<?> updateOrderTemplate(@RequestBody TemplateUpdateList templateList) {
+        // TemplateList에서 templates 목록을 추출
+        List<TeamplateOrderUpdateDTO> updateDTOs = templateList.getTemplates();
 
-        templateService.updateOrderTemplate(templateSeq, updateDTO);
+        // 템플릿 순서를 업데이트하는 서비스 호출
+        templateService.updateOrderTemplate(updateDTOs);
+
+        // 성공적인 응답 반환
         return ResponseUtil.successResponse("온보딩 스토리보드 순서가 성공적으로 수정되었습니다.").getBody();
     }
 }

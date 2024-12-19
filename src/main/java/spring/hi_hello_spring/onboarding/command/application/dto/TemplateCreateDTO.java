@@ -26,6 +26,5 @@ public class TemplateCreateDTO {
     private int templateQuizQty;
     private String templateTaskRound;
     private int templateProcedure;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     private LocalDateTime templateEndAt;
 }

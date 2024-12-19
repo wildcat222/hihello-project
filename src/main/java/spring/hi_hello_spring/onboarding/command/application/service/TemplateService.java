@@ -11,6 +11,9 @@ import spring.hi_hello_spring.onboarding.command.application.dto.TemplateCreateD
 import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.Template;
 import spring.hi_hello_spring.onboarding.command.domain.repository.TemplateRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class TemplateService {
@@ -41,12 +44,23 @@ public class TemplateService {
 
     /* 온보딩 스토리 보드 순서 변경 */
     @Transactional
-    public TeamplateOrderUpdateDTO updateOrderTemplate(Long templateSeq, TeamplateOrderUpdateDTO updateDTO){
+    public void updateOrderTemplate(List<TeamplateOrderUpdateDTO> updateDTOs) {
+        // 요청받은 각 템플릿 순서를 처리
+        for (TeamplateOrderUpdateDTO dto : updateDTOs) {
+            Optional<Template> templateOpt = templateRepository.findById(dto.getTemplateSeq()); // templateSeq로 템플릿 조회
 
-        Template template = templateRepository.findById(templateSeq)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
-        modelMapper.map(updateDTO, template);
+            if (templateOpt.isPresent()) {
+                Template template = templateOpt.get();
 
-        return modelMapper.map(template, TeamplateOrderUpdateDTO.class);
+                // ModelMapper를 사용해서 TeamplateOrderUpdateDTO를 Template 엔티티로 매핑
+                modelMapper.map(dto, template);
+
+                // 만약 필요한 다른 매핑 항목이 있다면 여기에 설정 가능
+                // 예: template.setTemplateProcedure(dto.getTemplateProcedure());
+
+                // 템플릿 저장
+                templateRepository.save(template);  // 변경된 템플릿 정보 저장
+            }
+        }
     }
 }
