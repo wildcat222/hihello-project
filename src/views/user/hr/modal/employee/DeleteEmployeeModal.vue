@@ -1,4 +1,21 @@
 <script setup>
+const props = defineProps({
+  employee: {
+    type: Object,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['close-modal', 'delete-employee']);
+
+const closeModal = () => {
+  emit('close-modal');
+}
+
+const isDelete = () => {
+  emit('delete-employee');
+}
+
 
 </script>
 
@@ -7,25 +24,25 @@
     <h2 class="confirmation-title">해당 사원을 삭제하시겠습니까?</h2>
     <div class="info-group">
       <div class="info-row">
-        <span class="info-label">사번</span>
-        <span class="info-value">20140991</span>
+        <div class="info">사번</div>
+        <div class="info-value">{{ employee.employeeNum}}</div>
       </div>
       <div class="info-row">
-        <span class="info-label">부서</span>
-        <span class="info-value">인사팀</span>
+        <div class="info">부서</div>
+        <div class="info-value">{{ employee.departmentName }}</div>
       </div>
       <div class="info-row">
-        <span class="info-label">직급</span>
-        <span class="info-value">사원</span>
+        <div class="info">직급</div>
+        <div class="info-value">{{ employee.positionName}}</div>
       </div>
       <div class="info-row">
-        <span class="info-label">이름</span>
-        <span class="info-value">홍길동</span>
+        <div class="info">이름</div>
+        <div class="info-value">{{ employee.employeeName }}</div>
       </div>
     </div>
     <div class="button-group">
-      <button class="delete-button">삭제</button>
-      <button class="cancel-button">취소</button>
+      <button class="delete-button" @click="isDelete">삭제</button>
+      <button class="cancel-button" @click="closeModal">취소</button>
     </div>
   </div>
 </template>
@@ -48,8 +65,11 @@
 }
 
 .info-group {
-  width: 60%;
+  width: 70%;
   margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
 .info-row {
@@ -58,7 +78,8 @@
   margin-bottom: 10px;
 }
 
-.info-label {
+.info {
+  width: 40px;
   font-weight: bold;
 }
 
@@ -67,8 +88,8 @@
 }
 
 .button-group {
-  display: flex;
   justify-content: center;
+  align-self: center;
   width: 100%;
 }
 
