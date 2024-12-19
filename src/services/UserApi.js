@@ -72,6 +72,18 @@ export const searchEmployees = async (searchType, keyword) => {
     });
 }
 
+// 사원 등록
+export const createEmployee = async (formData) => {
+    try {
+        const response = await springAPI.post(`hr/user`, formData);
+        console.log('api 에서의 log : ' + response.data);
+        return response.data;
+    } catch (error) {
+        console.log('api 에서의 error : ' + error);
+        throw error;
+    }
+}
+
 // 사원 삭제
 export const deleteEmployee = async (employeeSeq) => {
     try {
