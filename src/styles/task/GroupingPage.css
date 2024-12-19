@@ -70,16 +70,11 @@
     align-items: center;
 
 }
-button {
-    background-color: red;
-    color: white;
-    border: none;
-    padding: 4px 8px;
-    cursor: pointer;
+
+ul li{
+    list-style:none;
 }
-button:hover {
-    background-color: darkred;
-}
+
 .submit{
     border-radius: 10px;
     background: #7031FC;

@@ -2,16 +2,21 @@ import TaskAddPage from "@/views/task/TaskAddPage.vue";
 import TaskListPage from "@/views/task/TaskListPage.vue";
 import MentorTaskDetailReadPage from "@/views/task/MentorTaskDetailReadPage.vue";
 import GroupingPage from "@/views/task/GroupingPage.vue";
+import TaskModifyPage from "@/views/task/TaskModifyPage.vue";
 
 export default[
     {
-        path: '/TaskList',
+        path: '/task/list',
         component: TaskListPage,
     },
     {
-        path: '/TaskAdd',
+        path: '/task/add',
         name: 'TaskAddPage',
         component: TaskAddPage,
+    },
+    {
+        path: '/task/modify/:taskSeq',
+        component: TaskModifyPage
     },
     {
         path: '/task-submit/:taskSubmitSeq',

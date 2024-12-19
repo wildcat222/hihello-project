@@ -64,7 +64,7 @@ export default {
                     templateType: item.templateType,
                     checklistContent: [],
                     onboardingCompletedStatus: item.onboardingCompletedStatus,
-                    templateUrl: item.templateUrl
+                    templateUrlName: item.templateUrlName
                 };
                 groupedItems.push(template);
             }
