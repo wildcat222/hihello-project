@@ -8,6 +8,7 @@ import TaskRouter from '@/router/TaskRouter.js';
 import FinalEvalRouter from "@/router/FinalEvalRouter.js";
 import MentoringRouter from "@/router/MentoringRouter.js";
 import PeerReviewRouter from '@/router/PeerReviewRouter.js';
+import TaskIndRouter from "@/router/TaskIndRouter.js";
 
 const routes = [
     ...QuizRouter,
@@ -18,7 +19,8 @@ const routes = [
     ...TaskRouter,
     ...FinalEvalRouter,
     ...MentoringRouter,
-    ...PeerReviewRouter
+    ...PeerReviewRouter,
+    ...TaskIndRouter
 ]
 
 const router = createRouter({
