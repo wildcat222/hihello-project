@@ -1,7 +1,6 @@
 <script setup>
 import '@/styles/task/TaskAddPage.css'
 import { ref, onMounted } from 'vue';
-import axios from 'axios';
 import { useTask } from '@/services/TaskAdd.js';
 
 const {
@@ -18,6 +17,7 @@ const {
   fetchData,
   addRow,
   submitTask,
+  goToGroupingPage
 } = useTask();
 
 onMounted(fetchData);
@@ -61,7 +61,7 @@ onMounted(fetchData);
         </select>
 
         <!-- taskType이 "GROUP"일 때만 버튼이 보임 -->
-        <button v-if="taskType === 'GROUP'" class="task-group-button">
+        <button v-if="taskType === 'GROUP'" class="task-group-button" @click="goToGroupingPage">
           그룹 매칭
         </button>
       </div>
