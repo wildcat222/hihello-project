@@ -149,6 +149,8 @@
             department AS d ON e.department_seq = d.department_seq
         JOIN
             positions AS p ON e.position_seq = p.position_seq
+        WHERE
+            e.employee_deleted_status = false
     </select>
 
     <select id="getEmployeeSearch" parameterType="String" resultType="EmployeeListDTO">
@@ -168,6 +170,8 @@
         JOIN
             positions AS p ON e.position_seq = p.position_seq
         WHERE
+            e.employee_deleted_status = false
+        AND
         <choose>
             <when test="searchType == 'name'">
                 e.employee_name LIKE CONCAT('%', #{keyword}, '%')
