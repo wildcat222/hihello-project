@@ -75,11 +75,24 @@ export const searchEmployees = async (searchType, keyword) => {
 // 사원 등록
 export const createEmployee = async (formData) => {
     try {
-        const response = await springAPI.post(`hr/user`, formData);
-        console.log('api 에서의 log : ' + response.data);
-        return response.data;
+        return await springAPI.post(`hr/user`, formData);
     } catch (error) {
-        console.log('api 에서의 error : ' + error);
+        throw error;
+    }
+}
+
+// 사원 수정
+export const updateEmployee = async (employeeSeq, employeeRole) => {
+    try {
+        const modifyEmplReqDTO = {
+            employeeRole: employeeRole
+        };
+        await springAPI.put(`hr/user/${employeeSeq}`, modifyEmplReqDTO, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    } catch (error) {
         throw error;
     }
 }
