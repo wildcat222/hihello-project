@@ -28,15 +28,18 @@
         a.task_type,
         t.template_seq,
         a.task_content,
-        a.task_url,
         t.template_task_round,
-        t.template_end_at
+        t.template_end_at,
+        f.file_seq,
+        f.file_name,
+        f.file_url
         FROM task a
         JOIN department d ON d.department_seq = a.department_seq
         JOIN employee e
         ON d.department_seq = e.department_seq
         JOIN template t ON t.template_seq = a.template_seq
         JOIN onboarding_status os ON os.template_seq = t.template_seq
+        JOIN file f ON f.task_seq = a.task_seq
         WHERE os.employee_seq = #{employee_seq}
         AND a.task_seq = #{task_seq}
 
@@ -61,7 +64,9 @@
         <result property="templateSeq" column="template_seq"/>
         <result property="templateTaskRound" column="template_task_round"/>
         <result property="templateEndAt" column="template_end_at"/>
-        <result property="taskUrl" column="task_url"/>
+        <result property="fileSeq" column="file_seq"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileUrl" column="file_url"/>
         <collection property="evalList" ofType="EvalListQueryDTO">
             <result property="evalListContent" column="eval_list_content"/>
             <result property="evalListScore" column="eval_list_score"/>
@@ -72,17 +77,20 @@
         a.task_seq,
         a.task_type,
         a.task_title,
-        a.task_url,
         a.task_content,
         t.template_seq,
         t.template_end_at,
         t.template_task_round,
         tl.eval_list_content,
-        tl.eval_list_score
+        tl.eval_list_score,
+        f.file_seq,
+        f.file_name,
+        f.file_url
         FROM task a
         JOIN template t ON t.template_seq = a.template_seq
         JOIN department d ON a.department_seq = d.department_seq
         JOIN employee e ON d.department_seq = e.department_seq
+        JOIN file f ON f.task_seq = a.task_seq
         LEFT JOIN (
         SELECT
         m.mentor_seq,
@@ -163,6 +171,9 @@
         <result property="templateTaskRound" column="template_task_round"/>
         <result property="templateEndAt" column="template_end_at"/>
         <result property="templateUrlName" column="template_url_name"/>
+        <result property="fileSeq" column="file_seq"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileUrl" column="file_url"/>
         <collection property="evalList" ofType="TaskEvalQueryDTO">
             <result property="evalListSeq" column="eval_list_seq"/>
             <result property="evalListContent" column="eval_list_content"/>
@@ -189,12 +200,16 @@
         el.eval_list_content,
         el.eval_list_score,
         ei.eval_ind_seq,
-        ei.eval_ind_content
+        ei.eval_ind_content,
+        f.file_seq,
+        f.file_name,
+        f.file_url
         FROM task t
         LEFT JOIN template tm ON tm.template_seq = t.task_seq
         LEFT JOIN department dm ON dm.department_seq = t.department_seq
         LEFT JOIN eval_list el ON el.task_seq = t.task_seq
         LEFT JOIN eval_ind ei ON ei.eval_ind_seq = el.eval_ind_seq
+        LEFT JOIN file f ON f.task_seq = t.task_seq
         WHERE t.task_seq = #{task_seq};
     </select>
 </mapper>

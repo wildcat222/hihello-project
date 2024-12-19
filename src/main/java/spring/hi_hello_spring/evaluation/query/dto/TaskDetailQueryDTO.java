@@ -22,5 +22,8 @@ public class TaskDetailQueryDTO {
     private String templateType;
     private TaskType taskType;
     private String taskContent;
+    private Long fileSeq;
+    private String fileName;
+    private String fileUrl;
     private List<TaskEvalQueryDTO> evalList;
 }
