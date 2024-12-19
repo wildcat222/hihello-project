@@ -1,0 +1,100 @@
+.break-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.break-info {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.break-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+
+.break-form-group-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+.break-form-group-row .break-input {
+    flex: 0;
+    max-width: 10vw;
+}
+
+.break-form-group-row label {
+    font-weight: bold;
+    min-width: 80px;
+    text-align: left;
+}
+
+.break-days {
+    color: var(--purple);
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.break-form-group-row .break-input,
+.break-form-group-row .break-textarea {
+    flex: 1;
+}
+
+.break-date-range {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.break-separator {
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+}
+
+.break-input {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    width: auto;
+    box-sizing: border-box;
+}
+
+.break-textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.break-button-container {
+    text-align: center;
+}
+
+.break-submit-button {
+    background-color: #6b46c1;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.break-submit-button:hover {
+    background-color: #5a3ca1;
+}
