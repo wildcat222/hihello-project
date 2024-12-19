@@ -16,5 +16,5 @@ public interface TaskQueryMapper {
     List<GroupTaskAllQueryDTO> findGroupTaskTitle();
     List<TaskSearchQueryDTO> findSearchTask(String teskSearch);
     List<TaskGroupPartnerQueryDTO> findTaskGroupPartner(Long taskGroupSeq);
-
+    List<TaskDetailQueryDTO> findTaskDetail(Long taskSeq);
 }
