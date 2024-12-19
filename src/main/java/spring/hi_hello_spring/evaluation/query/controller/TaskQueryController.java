@@ -74,4 +74,12 @@ public class TaskQueryController {
         List<TaskGroupPartnerQueryDTO> taskGroupPartner = taskQueryService.getTaskGroupPartner(taskGroupSeq);
         return ResponseUtil.successResponse("그룹 과제 제목 리스트를 성공적으로 조회했습니다.", taskGroupPartner).getBody();
     }
+
+    @GetMapping("task/{taskSeq}")
+    @Operation(summary = "과제 수정에 필요한 조회", description = "과제 수정에 필요한 조회를 합니다.")
+    public ApiResponse<?> getTaskDetail(@PathVariable Long taskSeq) {
+        List<TaskDetailQueryDTO> taskDetailQueryDTO = taskQueryService.getTaskDetail(taskSeq);
+        return ResponseUtil.successResponse("그룹 과제 제목 리스트를 성공적으로 조회했습니다.", taskDetailQueryDTO).getBody();
+    }
+
 }

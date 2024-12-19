@@ -25,7 +25,7 @@ public class OnboardingDTO {
     private String templateTitle;
     private String templateSub;
     private String templateDetail;
-    private String templateUrl;
+    private String templateUrlName;
 
     private Long quizCategorySeq;
     private String quizCategoryName;
