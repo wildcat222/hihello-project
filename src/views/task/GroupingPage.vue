@@ -179,8 +179,12 @@ export default {
             </li>
           </ul>
         </div>
-
       </div>
     </WhiteBoxComponent>
   </div>
 </template>
+<style scoped>
+ul li{
+  list-style:none;
+}
+</style>

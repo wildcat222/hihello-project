@@ -80,9 +80,6 @@ button {
 button:hover {
     background-color: darkred;
 }
-ul li{
-    list-style:none;
-}
 .submit{
     border-radius: 10px;
     background: #7031FC;
