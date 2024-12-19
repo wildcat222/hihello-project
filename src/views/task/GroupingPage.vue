@@ -155,7 +155,7 @@ export default {
                 <ul class="inline">
                   <li v-for="(member, index) in group.members" :key="index" class="click">
                     {{ member.employeeName }}({{ member.employeeNum }})
-                    <button @click="removeFromGroup(group.id, member)" style="margin-left: 10px;">X</button>
+                    <button class="delete-button" @click="removeFromGroup(group.id, member)" style="margin-left: 10px;">X</button>
                   </li>
                 </ul>
               </div>

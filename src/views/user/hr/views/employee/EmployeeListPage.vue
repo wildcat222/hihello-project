@@ -4,8 +4,9 @@ import ListComponent from "@/components/ListComponent.vue";
 import SearchBarComponent from "@/components/SearchBarComponent.vue";
 import router from "@/router/index.js";
 import {onMounted, reactive, ref} from "vue";
-import {deleteEmployee, fetchEmployeeList, searchEmployees} from "@/services/UserApi.js";
+import {deleteEmployee, fetchEmployeeList, searchEmployees, updateEmployee} from "@/services/UserApi.js";
 import DeleteEmployeeModal from "@/views/user/hr/modal/employee/DeleteEmployeeModal.vue";
+import UpdateEmployeeModal from "@/views/user/hr/modal/employee/UpdateEmployeeModal.vue";
 
 const route = router;
 const employeeList = reactive([]);
@@ -75,20 +76,58 @@ const goToRegisterPage = () => {
 const shouldShowDelModal = ref(false);
 const employee = ref(null);
 const activeDelModal = (item) => {
+  if (shouldShowDelModal.value) {
+    shouldShowDelModal.value = false;
+    return;
+  }
   shouldShowDelModal.value = true;
   employee.value = {
     employeeSeq: item.employeeSeq,
     employeeName: item.employeeName,
-    employeeNum : item.employeeNum,
+    employeeNum: item.employeeNum,
     departmentName: item.departmentName,
     positionName: item.positionName
   }
   console.log(employee);
 }
 
-// 삭제 모달 숨기는 용도
+const shouldShowUpdateModal = ref(false);
+const activeUpdateModal = (item) => {
+  if (shouldShowUpdateModal.value) {
+    shouldShowUpdateModal.vale = false;
+    return;
+  }
+  shouldShowUpdateModal.value = true;
+  employee.value = {
+    employeeSeq: item.employeeSeq,
+    employeeName: item.employeeName,
+    employeeNum: item.employeeNum,
+    departmentName: item.departmentName,
+    positionName: item.positionName,
+    employeeRole: item.employeeRole
+  }
+}
+
+// 수정, 삭제 모달 숨기는 용도
 const visibleDelModal = () => {
-  shouldShowDelModal.value = false;
+  if (shouldShowDelModal.value) {
+    shouldShowDelModal.value = false;
+  } else if (shouldShowUpdateModal.value) {
+    shouldShowUpdateModal.value = false;
+  }
+}
+
+// 수정 모달 수정 버튼 클릭 시
+const modifyEmployee = async (employeeRole) => {
+  try {
+    await updateEmployee(employee.value.employeeSeq, employeeRole);
+    shouldShowUpdateModal.value = false;
+    alert('사원 정보를 수정하였습니다.');
+  } catch (error) {
+    console.error(error);
+    alert('사원 정보를 수정하는데 실패하였습니다.');
+  }
+  // location.reload();
 }
 
 // 삭제 모달 삭제 버튼 클릭 시
@@ -151,7 +190,7 @@ onMounted(async () => {
             <div class="left-title">{{ roleMap[item.employeeRole] }}</div>
 
             <div class="button-group">
-              <div class="update-btn">수정</div>
+              <div class="update-btn" @click="activeUpdateModal(item)">수정</div>
               <div class="delete-btn" @click="activeDelModal(item)">삭제</div>
             </div>
           </div>
@@ -160,7 +199,11 @@ onMounted(async () => {
     </WhiteBoxListComponent>
   </div>
 
-<!--  <UpdateEmployeeModal class="modal"/>-->
+  <UpdateEmployeeModal v-if="shouldShowUpdateModal" class="modal"
+                       :employee="employee"
+                       @close-modal="visibleDelModal"
+                       @update-employee="modifyEmployee"/>
+
   <DeleteEmployeeModal v-if="shouldShowDelModal" class="modal"
                        :employee="employee"
                        @close-modal="visibleDelModal"
