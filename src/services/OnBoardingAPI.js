@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {springAPI} from "@/services/axios.js";
 
 export default {
     async updateChecklistStatus(checklistStatusSeq, checklistSeq, listCheckedStatus) {
@@ -9,7 +10,7 @@ export default {
                 listCheckedStatus,
             };
 
-            const response = await axios.put('http://localhost:8253/api/v1/hr/onboarding/checklist', payload, {
+            const response = await springAPI.put('hr/onboarding/checklist', payload, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
                 },
@@ -27,7 +28,7 @@ export default {
 
     async fetchOnboardingData() {
         try {
-            const response = await axios.get('http://localhost:8253/api/v1/mentee/onboarding', {
+            const response = await springAPI.get('mentee/onboarding', {
                 params: { taskContent: this.query },
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
