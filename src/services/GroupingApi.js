@@ -7,6 +7,3 @@ export const fetchMenteesByDepartment = (departmentSeq) => {
 export const fetchAllMentors = () => {
     return springAPI.get('/hr/mentor');
 };
-export const saveGroupsAPI = (groupData) => {
-    return springAPI.post('/hr/matching/group', groupData);
-};

@@ -1,6 +1,7 @@
 <script>
+import '@/styles/task/GroupingPage.css'
 import { ref, computed, onMounted } from 'vue';
-import { fetchMenteesByDepartment, fetchAllMentors, saveGroupsAPI } from '@/services/GroupingApi.js';
+import { fetchMenteesByDepartment, fetchAllMentors } from '@/services/GroupingApi.js';
 import WhiteBoxComponent from "@/components/WhiteBoxComponent.vue";
 import router from "@/router/index.js";
 
@@ -81,24 +82,20 @@ export default {
     });
 
     const saveGroups = async () => {
+      // requestData에서 필요한 정보만 선택하여 넘김
       const requestData = {
         tasks: groups.value.map((group, index) => ({
-          taskSeq: templateSeq, // templateSeq를 사용
           members: group.members.map((member) => ({
             employeeSeq: member.employeeSeq,
           })),
         })),
       };
 
-      try {
-        const response = await saveGroupsAPI(requestData);
-        alert('그룹 생성 성공하였습니다.' + response.data.message);
-        router.push('/taskAdd')
-      } catch (error) {
-        console.error('그룹 저장 오류:', error);
-        alert('그룹 생성 중 오류가 발생했습니다.');
-      }
+      // taskAdd로 요청 데이터 전달, query를 사용해서 URL에 전달
+      alert(JSON.stringify({ name: 'TaskAddPage', query: { groupsData: JSON.stringify(requestData) } }));
+      router.push({ name: 'TaskAddPage', query: { groupsData: JSON.stringify(requestData) } });
     };
+
 
     // 그룹 개수 변경 시 새로운 그룹 갯수에 맞게 그룹 생성
     const onGroupCountChange = () => {
@@ -119,7 +116,7 @@ export default {
       allowDrop,
       removeFromGroup,
       saveGroups,
-      onGroupCountChange, // 그룹 개수 변경 핸들러
+      onGroupCountChange,
     };
   },
 };
@@ -167,7 +164,7 @@ export default {
             </div>
           </div>
         </div>
-<!--        -->
+
         <div class="line">
           <div class="sub-title">멘티 리스트</div>
           <ul>
@@ -187,101 +184,3 @@ export default {
     </WhiteBoxComponent>
   </div>
 </template>
-
-<style scoped>
-.group-name{
-  height: 100%;
-  background-color: white;
-  padding-right: 20px;
-  white-space: nowrap;
-}
-.group-num{
-  width: 50px;
-  height: 30px;
-  border-radius: 10px;
-  background-color: var(--ivory);
-  border: none;
-  padding-left: 20px;
-}
-.group-line{
-  display: flex;
-  align-items: center;
-  font-size: 15px;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-.line{
-  border-left: 2px solid var(--gray);
-}
-.submit-box{
-  display: flex;
-  justify-content: center;
-}
-.inline{
-  display: flex;
-  padding: 15px;
-  flex-wrap: wrap;
-}
-.sub-total-box{
-  display: flex;
-  justify-content: space-evenly;
-}
-.group-container{
-  display: flex;
-  flex-direction: column;
-  width: 70%;
-}
-.click{
-  display: flex;
-  white-space: nowrap;
-  align-items: center;
-  margin: 5px;
-}
-.total-box{
-  width: 80%;
-}
-.pagetitle{
-  font-size: 35px;
-  font-weight: 700;
-  text-align: center;
-  margin-top: 150px;
-  margin-bottom: 49px;
-}
-.groups {
-  display: flex;
-  gap: 20px;
-  flex-wrap: nowrap;
-  flex-direction: column;
-}
-.group {
-  flex: 1 1 30%;
-  background-color: var(--ivory);
-  text-align: center;
-  display: flex;
-  align-items: center;
-
-}
-button {
-  background-color: red;
-  color: white;
-  border: none;
-  padding: 4px 8px;
-  cursor: pointer;
-}
-button:hover {
-  background-color: darkred;
-}
-ul li{
-  list-style:none;
-}
-.submit{
-  border-radius: 10px;
-  background: #7031FC;
-  box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
-  width: 111px;
-  height: 43px;
-}
-.list{
-  margin-bottom: 5px;
-}
-</style>
