@@ -1,9 +1,12 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import {fetchWiki} from "@/services/WikiApi.js";
+import {onMounted, ref, watch, watchEffect} from "vue";
+import {deleteWiki, fetchWiki, fetchWikiByWikiModContentSeq} from "@/services/WikiApi.js";
 import {useRoute} from "vue-router";
 import WhiteBoxListComponent from "@/components/WhiteBoxListComponent.vue";
 import WikiHistoryModal from "@/views/wiki/WikiHistoryModal.vue";
+import router from "@/router/index.js";
 
 const route = useRoute();
 const wikiTitle = ref('');
@@ -39,6 +42,18 @@ const toggleModal = () => {
   isModalOpen.value = !isModalOpen.value;
 }
 
+const deletingWiki = async () => {
+  if (!confirm("위키를 삭제하시겠습니까?")) return;
+  try {
+    const wikiSeq = route.params.wikiSeq;
+    await deleteWiki(wikiSeq);
+    alert("위키가 삭제되었습니다.");
+  } catch (error) {
+    console.error("위키 삭제에 실패했습니다.");
+    throw error;
+  }
+}
+
 onMounted(async() => {
   const wikiSeq = route.params.wikiSeq;
   await fetchingWiki(wikiSeq);
@@ -55,6 +70,7 @@ onMounted(async() => {
           <button class="button purple-border" @click="toggleModal">히스토리</button>
           <button class="button purple-background">편집</button>
           <button class="button purple-background">삭제</button>
+          <button class="button purple-background" @click="deletingWiki">삭제</button>
         </div>
       </div>
       <WikiHistoryModal

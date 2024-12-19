@@ -47,3 +47,12 @@ export const updateWiki = async(wikiSeq, wikiData) => {
         console.error("위키를 수정하던 중 오류가 발생했습니다.", error);
     }
 }
+
+// 위키 삭제
+export const deleteWiki = async(wikiSeq) => {
+    try {
+        return await springAPI.delete(`/wiki/${wikiSeq}`);
+    } catch(error) {
+        console.error("위키를 삭제하던 중 오류가 발생했습니다.", error);
+    }
+}
