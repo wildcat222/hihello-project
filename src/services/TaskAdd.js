@@ -1,6 +1,6 @@
 import { ref } from 'vue';
-import axios from 'axios';
 import {springAPI} from "@/services/axios.js";
+import { useRouter } from 'vue-router'; // useRouter 가져오기
 
 export function useTask() {
     const taskType = ref('PERSONAL');
@@ -12,6 +12,7 @@ export function useTask() {
     const taskContent = ref('');
     const departmentSeq = ref(1);
     const round = ref('1주차');
+    const router = useRouter();
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -115,9 +116,32 @@ export function useTask() {
         }
     };
 
+    const template_type = ref('JOB'); // 예시 값: 'JOB' 또는 'NORMAL'
+    const selectedDepartmentSeq = ref(1); // 예시 값: department_seq (JOB에서 사용)
 
-
-
+    // 그룹 매칭 버튼 클릭 시 페이지 이동
+    const goToGroupingPage = () => {
+        if (template_type.value === 'JOB') {
+            // JOB일 때 department_seq와 templateSeq 함께 라우팅
+            router.push({
+                path: '/grouping',
+                query: {
+                    template_type: 'JOB',
+                    department_seq: selectedDepartmentSeq.value,
+                    template_seq: '2', // 나중에 값 받아오기
+                },
+            });
+        } else if (template_type.value === 'NORMAL') {
+            // NORMAL일 때는 template_type과 templateSeq만 넘김
+            router.push({
+                path: '/grouping',
+                query: {
+                    template_type: 'NORMAL',
+                    template_seq: '3', // 나중에 값 받아오기
+                },
+            });
+        }
+    };
 
     return {
         taskType,
@@ -133,5 +157,6 @@ export function useTask() {
         fetchData,
         addRow,
         submitTask,
+        goToGroupingPage
     };
 }

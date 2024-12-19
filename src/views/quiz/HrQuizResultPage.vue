@@ -10,7 +10,8 @@
 
         <!-- 퀴즈 카테고리 -->
         <div class="quiz-category-container">
-            <quiz-category :show-delete="false"></quiz-category>
+            <!-- tab-selected 이벤트를 받아 handleTabSelected 메서드 호출 -->
+            <quiz-category :show-delete="false" @tab-selected="handleTabSelected"></quiz-category>
         </div>
 
         <!-- 리스트 컴포넌트 -->
@@ -26,7 +27,7 @@
                 <div v-if="quizResults.length > 0">
                     <list-component :items="quizResults">
                         <template #item="{ item }">
-                            <div class="list-item">
+                            <div class="hr-quiz-result-item">
                                 <div class="column item-number">{{ item.employeeId }}</div>
                                 <div class="column item-name">{{ item.name }}</div>
                                 <div class="column item-department">{{ item.department }}</div>
@@ -50,12 +51,31 @@ import SearchBar from "@/components/SearchBarComponent.vue";
 import QuizCategory from "@/components/QuizCategoryComponent.vue";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
 import ListComponent from "@/components/ListComponent.vue";
+import { fetchHrQuizResult } from "@/services/QuizApi";
 
-const quizResults = ref([
-    { employeeId: '21102003', name: '김사원', department: '인사팀', correctAnswers: '7/10' },
-    { employeeId: '21102004', name: '박사원', department: '인사팀', correctAnswers: '8/10' },
-    { employeeId: '21102005', name: '이사원', department: '총무팀', correctAnswers: '6/10' }
-]);
+// quizResults 초기값 빈배열
+const quizResults = ref([]);
+
+// 퀴즈 카테고리 변경 시 호출되는 메서드
+const handleTabSelected = async (quizCategorySeq) => {
+    try {
+        const response = await fetchHrQuizResult(quizCategorySeq);
+
+        if (response.success && response.data) {
+            quizResults.value = response.data.map(item => ({
+                employeeId: item.employeeNum,
+                name: item.employeeName,
+                department: item.departmentName,
+                correctAnswers: `${item.quizCorrectQty}/${item.quizQty}`,
+            }));
+        } else {
+            quizResults.value = [];
+        }
+    } catch (error) {
+        console.error("퀴즈 결과 조회 실패:", error);
+        quizResults.value = [];
+    }
+};
 </script>
 
 <style scoped>

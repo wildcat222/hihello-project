@@ -61,7 +61,8 @@ onUnmounted(() => {
                     @profile-modal="toggleProfile"
                     :active-menu="activeMenu"
                     @update-active-menu="activeMenu = $event"/>
-    <EmployeeProfile class="profile" v-if="shouldShowProfile"/>
+    <EmployeeProfile class="profile" v-if="shouldShowProfile"
+                     @should-show-profile="toggleProfile"/>
     <div class="router-container">
       <router-view />
     </div>
