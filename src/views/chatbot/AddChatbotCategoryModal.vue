@@ -3,9 +3,11 @@
         <div class="modal-content">
             <h2>카테고리 추가</h2>
             <white-box>
-                <input v-model="categoryContent" type="text" placeholder="챗봇 카테고리 입력" />
+                <input v-model="categoryName" type="text" placeholder="챗봇 카테고리 입력" />
                 <div class="button-group">
-                    <button @click="addCategory" class="chatbot-category-add-button">추가</button>
+                    <button @click="handleAddCategory" class="chatbot-category-add-button">
+                        {{ isAdding ? "추가 중..." : "추가" }}
+                    </button>
                     <button @click="$emit('close')" class="chatbot-category-close-button">닫기</button>
                 </div>
             </white-box>
@@ -16,24 +18,43 @@
 <script setup>
 import { ref } from "vue";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
+import { addChatbotCategory } from "@/services/ChatbotApi";
 
+// Define Emits
 const emit = defineEmits(["close", "category-added"]);
-const categoryName = ref("");
 
-const addCategory = async () => {
+// Category Name Input State
+const categoryName = ref("");
+const isAdding = ref(false);
+
+// Add Category Function
+const handleAddCategory = async () => {
     if (!categoryName.value.trim()) {
         alert("카테고리 이름을 입력해주세요.");
         return;
     }
+
     try {
-        // await postQuizCategory(categoryName.value);
-        alert("카테고리가 성공적으로 추가되었습니다.");
-        emit("category-added");
-        emit("close");
-        categoryName.value = "";
+        isAdding.value = true; // Start Loading State
+        const requestData = { ChatbotCategoryContent: categoryName.value };
+
+        // Call API to Add Category
+        const response = await addChatbotCategory(requestData);
+
+        if (response?.success) {
+            alert("카테고리가 성공적으로 추가되었습니다.");
+            emit("category-added"); // Notify Parent Component
+            emit("close"); // Close Modal
+            categoryName.value = ""; // Reset Input
+        } else {
+            alert("카테고리 추가에 실패했습니다.");
+            console.error("API 응답 실패:", response);
+        }
     } catch (error) {
-        console.error("카테고리 추가 실패:", error.message);
+        console.error("카테고리 추가 오류:", error.response?.data || error.message);
         alert("카테고리 추가 중 오류가 발생했습니다.");
+    } finally {
+        isAdding.value = false; // End Loading State
     }
 };
 </script>
@@ -82,6 +103,11 @@ input {
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.chatbot-category-add-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }
 
 .chatbot-category-close-button {
