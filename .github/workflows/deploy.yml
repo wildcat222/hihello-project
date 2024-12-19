@@ -10,6 +10,7 @@ on:
       - "develop"
     types:
       - opened # PR이 병합될 때 실행
+      - reopened
 
 jobs:
   build:
@@ -19,7 +20,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.12
+      - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
@@ -33,9 +34,9 @@ jobs:
       - name: Grant execute permission for scripts
         run: chmod +x ./scripts/* || echo "No scripts to make executable"
 
-      - name: Start Time 기록
-        id: start_time
-        run: echo "START_TIME=$(date +%s)" >> $GITHUB_ENV
+      - name: Record Start Time
+        id: record_start
+        run: echo "::set-output name=start_time::$(date +%s)"
 
       - name: Install Dependencies with Poetry
         run: poetry install --no-root
@@ -43,9 +44,9 @@ jobs:
       - name: Calculate Duration
         id: calculate_duration
         run: |
+          START_TIME=${{ steps.record_start.outputs.start_time }}
           END_TIME=$(date +%s)
-          DURATION=$((END_TIME - START_TIME))
-          echo "DURATION=$DURATION" >> $GITHUB_ENV
+          echo "::set-output name=duration::$((END_TIME - START_TIME))"
 
       - name: Notify Discord
         run: |
