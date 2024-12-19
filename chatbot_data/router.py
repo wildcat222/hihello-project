@@ -42,7 +42,6 @@ def get_chatbot_data_by_category(categorySeq: int, db: Session = Depends(get_db)
     """
     API to fetch all chatbot data for a specific category.
     """
-    # Check if the category exists
     category = db.query(ChatbotCategory).filter_by(chatbot_category_seq=categorySeq).first()
     if not category:
         raise HTTPException(
@@ -53,19 +52,20 @@ def get_chatbot_data_by_category(categorySeq: int, db: Session = Depends(get_db)
             }
         )
 
-    # Fetch all chatbot data for the given category
     chatbot_data = db.query(Chatbot).filter_by(chatbot_category_seq=categorySeq).all()
     if not chatbot_data:
-        return []
+        return {"success": True, "data": []}
 
-    # Transform data into the required format
-    return [
-        {
-            "chatbotSeq": data.chatbot_seq,
-            "chatbotData": data.chatbot_data
-        }
-        for data in chatbot_data
-    ]
+    return {
+        "success": True,
+        "data": [
+            {
+                "id": data.chatbot_seq,
+                "content": data.chatbot_data  # 키 이름 변경
+            }
+            for data in chatbot_data
+        ]
+    }
 
 # 챗봇 데이터 수정
 @router.put("/category/{categorySeq}/data/{chatbotSeq}")
@@ -75,7 +75,6 @@ def update_chatbot_data(
         request_body: ChatbotUpdateRequest,
         db: Session = Depends(get_db)
 ):
-
     chatbot_data_content = request_body.chatbotData
 
     # Validate category existence
@@ -101,10 +100,14 @@ def update_chatbot_data(
         )
 
     # Update chatbot data
-    chatbot_data.chatbot_data = chatbot_data_content
-    db.commit()
+    chatbot_data.chatbot_data = chatbot_data_content  # Update the content
+    db.commit()  # Commit the changes to the database
 
-    return {"message": "Chatbot data updated successfully."}
+    # Return success message with HTTP status 200
+    return {
+        "message": "Chatbot data updated successfully."
+    }, 200  # Return HTTP status code 200 (OK)
+
 
 # 챗봇 데이터 삭제
 @router.delete("/category/{categorySeq}/data/{chatbotSeq}")
