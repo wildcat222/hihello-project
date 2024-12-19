@@ -1,5 +1,6 @@
 import TaskAddPage from "@/views/task/TaskAddPage.vue";
 import TaskListPage from "@/views/task/TaskListPage.vue";
+import MentorTaskDetailReadPage from "@/views/task/MentorTaskDetailReadPage.vue";
 import GroupingPage from "@/views/task/GroupingPage.vue";
 
 export default[
@@ -11,6 +12,10 @@ export default[
         path: '/TaskAdd',
         name: 'TaskAddPage',
         component: TaskAddPage,
+    },
+    {
+        path: '/task-submit/:taskSubmitSeq',
+        component: MentorTaskDetailReadPage
     },
     {
         path: '/grouping',
