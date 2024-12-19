@@ -22,7 +22,7 @@ public class TemplateCreateDTO {
     private String templateTitle;
     private String templateSub;
     private String templateDetail;
-    private String templateUrl;
+    private String templateUrlName;
     private int templateQuizQty;
     private String templateTaskRound;
     private int templateProcedure;

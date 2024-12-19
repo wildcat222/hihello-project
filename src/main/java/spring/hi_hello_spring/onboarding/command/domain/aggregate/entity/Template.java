@@ -38,7 +38,7 @@ public class Template extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String templateDetail;
 
-    private String templateUrl;
+    private String templateUrlName;
 
     private Integer templateQuizQty;
 

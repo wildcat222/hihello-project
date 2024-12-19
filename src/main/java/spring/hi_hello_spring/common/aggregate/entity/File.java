@@ -32,13 +32,15 @@ public class File extends BaseTimeEntity{
     private String fileUrl;
 
     @Builder
-    public File(Long taskSeq, Long taskSubmitSeq, Long planningSeq, String fileName, String fileUrl) {
+    public File(Long taskSeq,Long templateSeq, Long taskSubmitSeq, Long planningSeq, String fileName, String fileUrl) {
         this.taskSeq = taskSeq;
+        this.templateSeq = templateSeq;
         this.taskSubmitSeq = taskSubmitSeq;
         this.planningSeq = planningSeq;
         this.fileName = fileName;
         this.fileUrl = fileUrl;
     }
+
 
 
 }

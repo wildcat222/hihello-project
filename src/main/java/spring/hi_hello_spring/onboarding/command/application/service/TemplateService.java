@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.hi_hello_spring.common.aggregate.entity.File;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
+import spring.hi_hello_spring.common.repository.FileRepository;
 import spring.hi_hello_spring.onboarding.command.application.dto.TeamplateOrderUpdateDTO;
 import spring.hi_hello_spring.onboarding.command.application.dto.TemplateCreateDTO;
 import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.Template;
@@ -19,14 +21,22 @@ import java.util.Optional;
 public class TemplateService {
 
     private final TemplateRepository templateRepository;
+    private final FileRepository fileRepository;
     private final ModelMapper modelMapper;
 
     /* 온보딩 스토리 보드 등록 */
     @Transactional
-    public TemplateCreateDTO createTemplate(TemplateCreateDTO createDTO){
+    public TemplateCreateDTO createTemplate(TemplateCreateDTO createDTO, String uploadFile){
 
         Template template = modelMapper.map(createDTO, Template.class);
-        templateRepository.save(template);
+        Template savedTemplate = templateRepository.save(template);
+
+        File file = File.builder()
+                .templateSeq(savedTemplate.getTemplateSeq())
+                .fileName(createDTO.getTemplateUrlName())
+                .fileUrl(uploadFile)
+                .build();
+        fileRepository.save(file);
         return createDTO;
     }
 
