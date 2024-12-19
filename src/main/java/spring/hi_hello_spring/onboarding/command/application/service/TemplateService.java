@@ -8,10 +8,15 @@ import spring.hi_hello_spring.common.aggregate.entity.File;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.common.repository.FileRepository;
+import spring.hi_hello_spring.onboarding.command.application.dto.CheckListCreateDTO;
 import spring.hi_hello_spring.onboarding.command.application.dto.TeamplateOrderUpdateDTO;
 import spring.hi_hello_spring.onboarding.command.application.dto.TemplateCreateDTO;
+import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.Checklist;
 import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.Template;
+import spring.hi_hello_spring.onboarding.command.domain.repository.CheckListStatusRepository;
+import spring.hi_hello_spring.onboarding.command.domain.repository.ChecklistRepository;
 import spring.hi_hello_spring.onboarding.command.domain.repository.TemplateRepository;
+import spring.hi_hello_spring.onboarding.command.infrastructure.repository.JpaChecklistRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +28,7 @@ public class TemplateService {
     private final TemplateRepository templateRepository;
     private final FileRepository fileRepository;
     private final ModelMapper modelMapper;
+    private final JpaChecklistRepository checklistRepository;
 
     /* 온보딩 스토리 보드 등록 */
     @Transactional
@@ -70,6 +76,25 @@ public class TemplateService {
 
                 // 템플릿 저장
                 templateRepository.save(template);  // 변경된 템플릿 정보 저장
+            }
+        }
+    }
+    @Transactional
+    public void createCheckListTemplate(TemplateCreateDTO createDTO) {
+
+        Template template = modelMapper.map(createDTO, Template.class);
+        Template savedTemplate = templateRepository.save(template);
+        System.out.println("hihihihi"+createDTO.getChecklistContent());
+        if (createDTO.getChecklistContent() != null && !createDTO.getChecklistContent().isEmpty()) {
+            for (CheckListCreateDTO checkList : createDTO.getChecklistContent()) {
+                // 체크리스트 엔티티 생성 (Builder 사용)
+                System.out.println("hihi"+checkList.getChecklistContent());
+                Checklist checkListEntity = Checklist.builder()
+                        .checklistContent(checkList.getChecklistContent())  // 체크리스트 내용 설정
+                        .templateSeq(savedTemplate.getTemplateSeq())  // 템플릿과 연결
+                        .build();
+
+                checklistRepository.save(checkListEntity);  // 체크리스트 저장
             }
         }
     }

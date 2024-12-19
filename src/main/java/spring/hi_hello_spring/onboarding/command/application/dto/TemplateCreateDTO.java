@@ -8,6 +8,7 @@ import lombok.ToString;
 import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.TemplateType;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,4 +28,5 @@ public class TemplateCreateDTO {
     private String templateTaskRound;
     private int templateProcedure;
     private LocalDateTime templateEndAt;
+    private List<CheckListCreateDTO> checklistContent;
 }
