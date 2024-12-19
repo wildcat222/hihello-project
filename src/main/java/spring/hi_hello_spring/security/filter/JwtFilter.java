@@ -65,6 +65,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (!response.isCommitted()) { // 응답이 커밋되지 않았을 때만 에러 전송
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "사용할 수 없는 토큰입니다.");
             }
+            return;
         }
 
         Optional<String> accessToken = jwtUtil.getToken(request, "access");
