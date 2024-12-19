@@ -1,36 +1,70 @@
 <script setup>
+import {ref} from 'vue';
+
+const props = defineProps({
+  employee: {
+    type: Object,
+    required: true,
+  },
+});
+
+const roles = [
+  {label: '멘티', value: 'MENTEE'},
+  {label: '멘토', value: 'MENTOR'},
+  {label: '담당자', value: 'HR'},
+  {label: '사원', value: 'STAFF'}
+];
+
+// 기본 선택된 역할
+const selectedRole = ref(props.employee.employeeRole);
+
+const emit = defineEmits(['close-modal', 'update-employee']);
+
+const closeModal = () => {
+  emit('close-modal');
+};
+
+const updateEmployeeInfo = () => {
+  emit('update-employee', selectedRole.value);
+}
+
 
 </script>
 
 <template>
   <div class="confirmation-container">
     <h2 class="confirmation-title">해당 사원의 정보를 수정하시겠습니까?</h2>
+
     <div class="info-group">
       <div class="info-row">
         <span class="info">사번</span>
-        <span class="info-value">20140991</span>
+        <span class="info-value">{{ employee.employeeNum }}</span>
       </div>
       <div class="info-row">
         <span class="info">부서</span>
-        <span class="info-value">인사팀</span>
+        <span class="info-value">{{ employee.departmentName }}</span>
       </div>
       <div class="info-row">
         <span class="info">직급</span>
-        <span class="info-value">사원</span>
+        <span class="info-value">{{ employee.positionName }}</span>
       </div>
       <div class="info-row">
         <span class="info">이름</span>
-        <span class="info-value">홍길동</span>
+        <span class="info-value">{{ employee.employeeName }}</span>
       </div>
-
       <div class="info-row">
         <label class="info">역할</label>
-        <input type="text" class="input-position"/>
+        <select v-model="selectedRole" class="select-role">
+          <option v-for="role in roles" :value="role.value" :key="role.value">
+            {{ role.label }}
+          </option>
+        </select>
       </div>
     </div>
+
     <div class="button-group">
-      <button class="update-button">수정</button>
-      <button class="cancel-button">취소</button>
+      <button @click="updateEmployeeInfo" class="update-button">수정</button>
+      <button @click="closeModal" class="cancel-button">취소</button>
     </div>
   </div>
 </template>
