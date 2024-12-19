@@ -1,0 +1,74 @@
+.left {
+    text-align: left;
+}
+
+.light-gray-hr {
+    border: 1px solid var(--light-gray);
+}
+
+.white-box-component {
+    padding: 2rem 3rem;
+    min-width: 720px;
+}
+
+.task-info-container {
+    margin-bottom: 2.5rem;
+}
+
+.task-info-container > div {
+    margin: 1rem 0;
+}
+
+.mentor-task-page-title {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.task-file-text {
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.task-file-name-container {
+    background-color: var(--light-gray);
+    color: var(--gray);
+    border-radius: 15px;
+    padding: 0.8rem 1rem;
+    margin-left: 1rem;
+}
+
+.mentor-task-content {
+    font-size: 18px;
+}
+
+.mentor-task-submit-container, .mentor-eval-container {
+    margin: 2.5rem 0;
+}
+
+.mentor-task-submit-container > div {
+    margin: 1rem 0;
+}
+
+.mentor-task-eval-table {
+    width: 95%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 18px;
+}
+
+
+.task-eval-score-input {
+    width: 60%;
+    height: 35px;
+    border: 1px solid var(--gray);
+    border-radius: 15px;
+    align-items: center;
+    margin-right: 0.5rem;
+    text-align: center;
+    font-weight: bold;
+}
+.task-eval-score-input::placeholder {
+    color: var(--gray);
+    font-weight: bold;
+    text-align: center;
+}
