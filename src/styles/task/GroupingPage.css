@@ -68,11 +68,6 @@
     text-align: center;
     display: flex;
     align-items: center;
-
-}
-
-ul li{
-    list-style:none;
 }
 
 .submit{

@@ -66,7 +66,3 @@ onMounted(async () => {
   await readingWiki(seq);
 })
 </script>
-
-<style scoped>
-
-</style>

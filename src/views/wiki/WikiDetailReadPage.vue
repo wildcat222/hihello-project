@@ -81,6 +81,7 @@ onMounted(async() => {
   text-align: center;
   margin: 6.565rem 0 2.88rem 0;
 }
+
 .wiki-title {
   font-size: 2rem;
   font-weight: bold;

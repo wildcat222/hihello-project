@@ -61,6 +61,7 @@ const creatingWiki = async () => {
   width: 100%;
   padding: 1.5rem 1rem;
   font-size: 28px;
+  font-weight: bold;
   border: none;
   background-color: #f9f9f9;
   border-radius: 8px;
