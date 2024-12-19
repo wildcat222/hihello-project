@@ -7,3 +7,7 @@ export const springAPI = axios.create({
 export const lambdaAPI = axios.create({
   baseURL: import.meta.env.VITE_LAMBDA_API_BASE_URL,
 });
+
+export const fastAPI = axios.create({
+  baseURL: import.meta.env.VITE_FAST_API_BASE_URL,
+})
