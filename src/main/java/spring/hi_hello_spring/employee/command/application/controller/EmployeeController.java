@@ -35,10 +35,10 @@ public class EmployeeController {
         try {
             employeeService.modifyPwd(employeeSeq, modifyPwdDTO);
         } catch (CustomException e) {
-            if (e.getErrorCode().equals(ErrorCodeType.USER_PWD_INCORRECT)) {
-                return ResponseUtil.failureResponse("비밀번호가 올바르지 않습니다.", "USER_ERROR_004").getBody();
-            } else if (e.getErrorCode().equals(ErrorCodeType.NEW_PWD_MISMATCH)) {
+            if (e.getErrorCode().equals(ErrorCodeType.NEW_PWD_MISMATCH)) {
                 return ResponseUtil.failureResponse("새 비밀번호 확인 시 일치하지 않습니다.", "USER_ERROR_005").getBody();
+            } else if (e.getErrorCode().equals(ErrorCodeType.USER_PWD_INCORRECT)) {
+                return ResponseUtil.failureResponse("비밀번호가 올바르지 않습니다.", "USER_ERROR_004").getBody();
             } else if (e.getErrorCode().equals(ErrorCodeType.PWD_SAME_AS_OLD)) {
                 return ResponseUtil.failureResponse("기존 비밀번호와 새 비밀번호가 동일합니다.", "USER_ERROR_006").getBody();
             }

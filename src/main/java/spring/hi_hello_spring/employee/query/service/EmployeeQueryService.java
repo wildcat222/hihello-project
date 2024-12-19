@@ -59,10 +59,10 @@ public class EmployeeQueryService {
         return employeeMapper.findEmployeeAll();
     }
 
-    public List<EmployeeListDTO> getEmployeeSearch(String searchType, String keyword) {
+    public List<EmployeeListDTO> getEmployeeSearch(String searchType, String decodedWord) {
 
-        List<EmployeeListDTO> employees = employeeMapper.getEmployeeSearch(searchType, keyword);
-        if (employees == null) {
+        List<EmployeeListDTO> employees = employeeMapper.getEmployeeSearch(searchType, decodedWord);
+        if (employees.isEmpty()) {
             throw new CustomException(ErrorCodeType.DATA_NOT_FOUND);
         }
         return employees;
