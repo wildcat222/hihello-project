@@ -5,11 +5,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class TeamplateOrderUpdateDTO {
-    private Long templateSeq; // 템플릿의 고유 ID
-    private Integer templateProcedure; // 템플릿 순서 정보
+public class TemplateUpdateList {
+    private List<TeamplateOrderUpdateDTO> templates;
 }

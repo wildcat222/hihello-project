@@ -11,5 +11,7 @@
             template_procedure
         FROM
             template
+        ORDER BY
+            template_procedure ASC;
     </select>
 </mapper>
