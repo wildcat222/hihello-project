@@ -20,10 +20,12 @@ public class TaskMentorDetailQueryDTO {
     @Enumerated
     private TaskType taskType;
     private String taskTitle;
-    private String taskUrl;
     private Long templateSeq;
     private String taskContent;
     private String templateTaskRound;
     private LocalDateTime templateEndAt;
+    private Long fileSeq;
+    private String fileName;
+    private String fileUrl;
     private List<EvalListQueryDTO> evalList;
 }
