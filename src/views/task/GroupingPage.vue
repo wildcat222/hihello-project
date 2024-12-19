@@ -179,13 +179,16 @@ export default {
             </li>
           </ul>
         </div>
-
       </div>
     </WhiteBoxComponent>
   </div>
 </template>
 
 <style scoped>
+ul li{
+  list-style:none;
+}
+
 button {
   background-color: red;
   color: white;
@@ -193,7 +196,7 @@ button {
   padding: 4px 8px;
   cursor: pointer;
 }
+
 button:hover {
   background-color: darkred;
-}
 </style>
