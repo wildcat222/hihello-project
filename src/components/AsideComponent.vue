@@ -119,7 +119,7 @@ const menus = ref([
     ]
   },
   {name: '최종 평가', url: '/final-eval', role: 'MENTOR', position: '팀장'},
-  {name: '위키 관리', url: '/wiki/managing', role: 'MENTOR', position: '팀장'}
+  {name: '위키 관리', url: '/wiki', role: 'MENTOR', position: '팀장'}
 ]);
 
 const employeeInfo = computed(() => userStore.getEmployeeInfo());

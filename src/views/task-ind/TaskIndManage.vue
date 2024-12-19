@@ -52,7 +52,7 @@
 </template>
 
 <script setup>
-import { useEvalItems } from '@/services/taskIndManage.js'; // 새로 만든 파일에서 import
+import { useEvalItems } from '@/services/TaskIndManageApi.js'; // 새로 만든 파일에서 import
 import ListComponent from '@/components/ListComponent.vue';
 import '@/styles/task-Ind/TaskIndManage.css';
 

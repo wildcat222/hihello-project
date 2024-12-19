@@ -53,6 +53,7 @@ onMounted(async () => {
   width: 210px;
   height: 270px;
   text-align: left;
+  z-index: 1000;
 }
 
 .employee_image {

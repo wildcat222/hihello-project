@@ -4,7 +4,8 @@ import ListComponent from "@/components/ListComponent.vue";
 import SearchBarComponent from "@/components/SearchBarComponent.vue";
 import router from "@/router/index.js";
 import {onMounted, reactive, ref} from "vue";
-import {fetchEmployeeList, searchEmployees} from "@/services/UserApi.js";
+import {deleteEmployee, fetchEmployeeList, searchEmployees} from "@/services/UserApi.js";
+import DeleteEmployeeModal from "@/views/user/hr/modal/employee/DeleteEmployeeModal.vue";
 
 const route = router;
 const employeeList = reactive([]);
@@ -71,6 +72,36 @@ const goToRegisterPage = () => {
   route.push(`/employee-management/create`);
 };
 
+const shouldShowDelModal = ref(false);
+const employee = ref(null);
+const activeDelModal = (item) => {
+  shouldShowDelModal.value = true;
+  employee.value = {
+    employeeSeq: item.employeeSeq,
+    employeeName: item.employeeName,
+    employeeNum : item.employeeNum,
+    departmentName: item.departmentName,
+    positionName: item.positionName
+  }
+  console.log(employee);
+}
+
+// 삭제 모달 숨기는 용도
+const visibleDelModal = () => {
+  shouldShowDelModal.value = false;
+}
+
+// 삭제 모달 삭제 버튼 클릭 시
+const deleteEmployeeBySeq = async () => {
+  try {
+    await deleteEmployee(employee.value.employeeSeq);
+    alert('사원을 삭제하였습니다.');
+  } catch (error) {
+    alert('사원 삭제에 실패하였습니다.')
+  }
+  location.reload();
+}
+
 onMounted(async () => {
   await loadEmployeeList();
 });
@@ -101,8 +132,8 @@ onMounted(async () => {
         <template #header>
           <div class="employee-list-row-container">
             <div>이름/사번</div>
-            <div>직급</div>
             <div>부서</div>
+            <div>직급</div>
             <div>연락처</div>
             <div>이메일</div>
             <div>역할</div>
@@ -121,19 +152,26 @@ onMounted(async () => {
 
             <div class="button-group">
               <div class="update-btn">수정</div>
-              <div class="delete-btn">삭제</div>
+              <div class="delete-btn" @click="activeDelModal(item)">삭제</div>
             </div>
           </div>
         </template>
       </ListComponent>
     </WhiteBoxListComponent>
   </div>
+
+<!--  <UpdateEmployeeModal class="modal"/>-->
+  <DeleteEmployeeModal v-if="shouldShowDelModal" class="modal"
+                       :employee="employee"
+                       @close-modal="visibleDelModal"
+                       @delete-employee="deleteEmployeeBySeq"/>
 </template>
 
 <style scoped>
 .employee-list-container {
   width: 70%;
   margin: 0 auto;
+  position: relative;
 }
 
 .page-title {
@@ -144,6 +182,7 @@ onMounted(async () => {
 }
 
 .employee-list-row-container {
+  position: relative;
   width: 100%;
   text-align: center;
   display: grid;
@@ -228,5 +267,10 @@ onMounted(async () => {
   padding: 10px 15px;
   cursor: pointer;
   margin-right: 5px;
+}
+
+.modal {
+  position: fixed;
+  margin-top: 3vw;
 }
 </style>

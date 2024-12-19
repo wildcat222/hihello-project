@@ -189,7 +189,7 @@
 }
 .bar,
 .bar2{
-    width: 330px;
+    width: 300px;
     height: auto;
 }
 .alarm-button,
@@ -209,6 +209,7 @@
 .alarm-button-img:hover{
     margin:0;
     cursor: pointer;
+    background-color: #fdfdfd;
 }
 
 

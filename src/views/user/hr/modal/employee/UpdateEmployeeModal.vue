@@ -7,29 +7,29 @@
     <h2 class="confirmation-title">해당 사원의 정보를 수정하시겠습니까?</h2>
     <div class="info-group">
       <div class="info-row">
-        <span class="info-label">사번</span>
+        <span class="info">사번</span>
         <span class="info-value">20140991</span>
       </div>
       <div class="info-row">
-        <span class="info-label">부서</span>
+        <span class="info">부서</span>
         <span class="info-value">인사팀</span>
       </div>
       <div class="info-row">
-        <span class="info-label">직급</span>
+        <span class="info">직급</span>
         <span class="info-value">사원</span>
       </div>
       <div class="info-row">
-        <span class="info-label">이름</span>
+        <span class="info">이름</span>
         <span class="info-value">홍길동</span>
       </div>
 
       <div class="info-row">
-        <label class="info-label">역할</label>
+        <label class="info">역할</label>
         <input type="text" class="input-position"/>
       </div>
     </div>
     <div class="button-group">
-      <button class="delete-button">수정</button>
+      <button class="update-button">수정</button>
       <button class="cancel-button">취소</button>
     </div>
   </div>
@@ -63,7 +63,8 @@
   margin-bottom: 10px;
 }
 
-.info-label {
+.info {
+  width: 40px;
   font-weight: bold;
 }
 
@@ -73,7 +74,7 @@
 
 .input-position {
   width: 30%;
-  height: 8px;
+  height: 1vw;
   margin-left: 50px;
 }
 
@@ -81,9 +82,10 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  align-self: center;
 }
 
-.delete-button {
+.update-button {
   width: 40%;
   background-color: var(--purple);
   color: var(--white);

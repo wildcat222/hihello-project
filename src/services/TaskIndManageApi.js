@@ -1,6 +1,7 @@
-// taskIndManage.js
+// TaskIndManageApi.js
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import {springAPI} from "@/services/axios.js";
 
 export function useEvalItems() {
     const evalItems = ref([]);
@@ -11,7 +12,7 @@ export function useEvalItems() {
 
     const loadEvalItems = async () => {
         try {
-            const response = await axios.get('http://localhost:8253/api/v1/hr/eval/ind', {
+            const response = await springAPI.get('hr/eval/ind', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
                 },
@@ -44,8 +45,8 @@ export function useEvalItems() {
         }
 
         try {
-            const response = await axios.post(
-                'http://localhost:8253/api/v1/hr/eval/ind',
+            const response = await springAPI.post(
+                'hr/eval/ind',
                 { evalIndContent: newItem.value.evalIndContent, evalIndScore: newItem.value.evalIndScore },
                 {
                     headers: {
@@ -77,8 +78,8 @@ export function useEvalItems() {
         }
 
         try {
-            const response = await axios.delete(
-                `http://localhost:8253/api/v1/hr/eval/ind/${evalIndSeq}`,
+            const response = await springAPI.delete(
+                `hr/eval/ind/${evalIndSeq}`,
                 {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,

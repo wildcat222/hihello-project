@@ -1,7 +1,8 @@
 <script setup>
 import '@/styles/task/TaskAddPage.css'
 import { ref, onMounted } from 'vue';
-import { useTask } from '@/services/TaskAddApi.js';
+import { useTask } from '@/services/TaskModifyApi.js';
+import {useRoute} from "vue-router";
 
 const {
   taskType,
@@ -12,21 +13,32 @@ const {
   taskTitle,
   taskContent,
   departmentSeq,
-  round,
+  templateSeq,
   handleFileChange,
   fetchData,
   addRow,
-  submitTask,
-  goToGroupingPage
+  updateTask,
+  goToGroupingPage,
+  fetchTaskData // 새로 추가한 fetchTaskData 함수
 } = useTask();
 
-onMounted(fetchData);
+const route = useRoute(); // useRoute 훅을 사용하여 URL 파라미터 접근
+
+// 컴포넌트가 마운트되면 URL에서 taskSeq 값을 받아와서 해당 데이터를 가져오기
+onMounted(() => {
+  const taskSeq = route.params.taskSeq; // URL에서 taskSeq 파라미터를 가져옵니다.
+  if (taskSeq) {
+    fetchTaskData(taskSeq); // taskSeq를 API 요청에 넘겨서 데이터 조회
+  } else {
+    console.error("taskSeq가 URL에 존재하지 않습니다.");
+  }
+});
 </script>
 
 <template>
   <div class="taskAddHeader">
     <div class="header-title">
-      과제 등록
+      과제 수정
     </div>
   </div>
   <div class="taskAddBody">
@@ -48,9 +60,9 @@ onMounted(fetchData);
       <div class="container-line">
         <span class="task-round">과제 지정</span>
         <select v-model="templateSeq" class="task-round-input">
-          <option value="1">1주차</option>
-          <option value="2">2주차</option>
-          <option value="3">3주차</option>
+          <option value="1주차">1주차</option>
+          <option value="2주차">2주차</option>
+          <option value="3주차">3주차</option>
         </select>
       </div>
       <div class="container-line">
@@ -104,8 +116,15 @@ onMounted(fetchData);
         </div>
       </div>
     </div>
-      <div class="submitButton-container">
-        <button @click="submitTask" class="task-submit-button">과제 등록</button>
-      </div>
+    <div class="submitButton-container">
+      <button @click="updateTask" class="task-submit-button">수정 등록</button>
+    </div>
   </div>
 </template>
+
+<style scoped>
+button:hover{
+  background-color: #5a1dc2; /* 마우스 호버 시 배경색 변경 */
+  cursor:pointer;
+}
+</style>

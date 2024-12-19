@@ -70,20 +70,11 @@
     align-items: center;
 
 }
-.delete-button {
-    background-color: red;
-    color: white;
-    border: none;
-    padding: 4px 8px;
-    cursor: pointer;
-}
-.delete-button:hover {
-    background-color: darkred;
-}
 
 ul li{
     list-style:none;
 }
+
 .submit{
     border-radius: 10px;
     background: #7031FC;

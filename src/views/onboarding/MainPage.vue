@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios';
 import "@/styles/user/MenteeOnboardingPage.css"
+import {springAPI} from "@/services/axios.js";
 
 export default {
   data() {
@@ -25,7 +26,7 @@ export default {
           listCheckedStatus,
         };
 
-        const response = await axios.put('http://localhost:8253/api/v1/hr/onboarding/checklist', payload, {
+        const response = await springAPI.put('hr/onboarding/checklist', payload, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
           },
@@ -43,7 +44,7 @@ export default {
 
     async fetchOnboardingData() {
       try {
-        const response = await axios.get('http://localhost:8253/api/v1/mentee/onboarding', {
+        const response = await springAPI.get('mentee/onboarding', {
           params: { taskContent: this.query },
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
@@ -80,7 +81,7 @@ export default {
             templateType: item.templateType,
             checklistContent: [],
             onboardingCompletedStatus: item.onboardingCompletedStatus,
-            templateUrl:item.templateUrl
+            templateUrlName:item.templateUrlName
           };
           groupedItems.push(template);
         }
@@ -178,7 +179,7 @@ export default {
                 </div>
               </div>
               <div v-else>
-                <button class="tempateButton" @click="goToUrl(item.templateUrl)">
+                <button class="tempateButton" @click="goToUrl(item.templateUrlName)">
                   확인하기
                 </button>
               </div>
