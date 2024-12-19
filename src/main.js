@@ -5,6 +5,7 @@ import { createPinia } from 'pinia';
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate';
 import './styles/reset.css';
 import 'normalize.css';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 document.title = import.meta.env.VITE_APP_TITLE || 'Default Title';
 

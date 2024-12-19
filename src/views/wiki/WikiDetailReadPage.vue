@@ -51,7 +51,7 @@ onMounted(async() => {
     <WhiteBoxListComponent>
       <div class="wiki-header-container">
         <div class="wiki-title"> {{ wikiTitle }}</div>
-        <div>
+        <div class="flex">
           <button class="button purple-border" @click="toggleModal">히스토리</button>
           <button class="button purple-background">편집</button>
           <button class="button purple-background">삭제</button>
@@ -71,6 +71,7 @@ onMounted(async() => {
 <style scoped>
 .wiki-container {
   width: 70%;
+  min-width: 640px;
   margin: 0 auto;
 }
 
@@ -100,8 +101,8 @@ onMounted(async() => {
 .button {
   border: transparent;
   border-radius: 10px;
-  width: 70px;
-  height: 32px;
+  width: 5rem;
+  height: 2.2rem;
   font-size: 15px;
   margin: 0 0.1rem;
   cursor: pointer;
