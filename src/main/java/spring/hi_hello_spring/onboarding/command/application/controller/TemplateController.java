@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,16 +33,21 @@ public class TemplateController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "온보딩 스토리 보드 생성", description = "온보딩 스토리 보드 생성 로직입니다.")
-    public ApiResponse<?> createTemplate(@RequestPart TemplateCreateDTO createDTO , @RequestPart("productImgUrl") MultipartFile fileUrl){
-
+    public ApiResponse<?> createTemplate(@RequestPart("createDTO") @Validated TemplateCreateDTO createDTO,
+                                         @RequestPart(value = "productImgUrl", required = false) MultipartFile fileUrl) {
         try {
-            String uploadFile = fileUploadUtil.uploadFile(fileUrl);
-            templateService.createTemplate(createDTO, uploadFile);
+            if (fileUrl != null && !fileUrl.isEmpty()) {
+                String uploadFile = fileUploadUtil.uploadFile(fileUrl);
+                templateService.createTemplate(createDTO, uploadFile);
+            } else {
+                templateService.createCheckListTemplate(createDTO);
+            }
         } catch (IOException e) {
             throw new RuntimeException("파일 업로드 중 오류 발생", e);
         }
         return ResponseUtil.successResponse("온보딩 스토리보드가 성공적으로 등록되었습니다.").getBody();
     }
+
 
     /* 온보딩 스토리 보드 삭제 */
     @DeleteMapping("/{templateSeq}")
