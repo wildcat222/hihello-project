@@ -1,6 +1,6 @@
 <script>
 import { ref, computed, onMounted } from 'vue';
-import { fetchMenteesByDepartment, fetchAllMentors, saveGroupsAPI } from '@/services/GroupingApi.js';
+import { fetchMenteesByDepartment, fetchAllMentors } from '@/services/GroupingApi.js';
 import WhiteBoxComponent from "@/components/WhiteBoxComponent.vue";
 import router from "@/router/index.js";
 
@@ -81,24 +81,20 @@ export default {
     });
 
     const saveGroups = async () => {
+      // requestData에서 필요한 정보만 선택하여 넘김
       const requestData = {
         tasks: groups.value.map((group, index) => ({
-          taskSeq: templateSeq, // templateSeq를 사용
           members: group.members.map((member) => ({
             employeeSeq: member.employeeSeq,
           })),
         })),
       };
 
-      try {
-        const response = await saveGroupsAPI(requestData);
-        alert('그룹 생성 성공하였습니다.' + response.data.message);
-        router.push('/taskAdd')
-      } catch (error) {
-        console.error('그룹 저장 오류:', error);
-        alert('그룹 생성 중 오류가 발생했습니다.');
-      }
+      // taskAdd로 요청 데이터 전달, query를 사용해서 URL에 전달
+      alert(JSON.stringify({ name: 'TaskAddPage', query: { groupsData: JSON.stringify(requestData) } }));
+      router.push({ name: 'TaskAddPage', query: { groupsData: JSON.stringify(requestData) } });
     };
+
 
     // 그룹 개수 변경 시 새로운 그룹 갯수에 맞게 그룹 생성
     const onGroupCountChange = () => {
@@ -119,7 +115,7 @@ export default {
       allowDrop,
       removeFromGroup,
       saveGroups,
-      onGroupCountChange, // 그룹 개수 변경 핸들러
+      onGroupCountChange,
     };
   },
 };
@@ -167,7 +163,7 @@ export default {
             </div>
           </div>
         </div>
-<!--        -->
+
         <div class="line">
           <div class="sub-title">멘티 리스트</div>
           <ul>

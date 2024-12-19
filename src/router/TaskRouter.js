@@ -9,6 +9,7 @@ export default[
     },
     {
         path: '/TaskAdd',
+        name: 'TaskAddPage',
         component: TaskAddPage,
     },
     {
