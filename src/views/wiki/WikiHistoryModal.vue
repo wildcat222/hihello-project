@@ -1,7 +1,8 @@
 <script setup>
-import {fetchWikiHistory} from "@/services/WikiApi.js";
+import {fetchWikiByWikiModContentSeq, fetchWikiHistory} from "@/services/WikiApi.js";
 import {onMounted, reactive} from "vue";
 import {useRoute} from "vue-router";
+import router from "@/router/index.js";
 
 const route = useRoute();
 const wikiHistoryList = reactive([]);
@@ -10,7 +11,6 @@ const fetchingWikiHistory = async(wikiSeq) => {
   try {
     const response = await fetchWikiHistory(wikiSeq);
 
-    console.log(response)
     response.data.forEach(wikiHistory => {
       wikiHistoryList.push({
         editorNum: wikiHistory.employeeNum,
@@ -28,12 +28,27 @@ const formattingDateTime = (dateTime) => {
   return dateTime.replace("T", " ");
 }
 
-defineProps({
+const navigateToRestoredWiki = async(wikiModContentSeq) => {
+  const wikiSeq = props.wikiSeq;
+  closeModal();
+  await router.push(`/wiki/${wikiSeq}/ver/${wikiModContentSeq}`);
+  await fetchWikiByWikiModContentSeq(wikiSeq, wikiModContentSeq);
+}
+
+const props = defineProps({
   wikiSeq: {
     type: [String, Number],
     required: true
   }
 })
+
+// Emit 정의
+const emit = defineEmits(["close"]);
+
+// 모달 닫기
+const closeModal = () => {
+  emit("close");
+};
 
 onMounted(async() => {
   const wikiSeq = route.params.wikiSeq;
@@ -47,7 +62,7 @@ onMounted(async() => {
       <div>{{ formattingDateTime(wikiHistory.latestModDate) }}</div>
       <div>{{ wikiHistory.editorNum }}</div>
       <div>{{ wikiHistory.editorName }}</div>
-      <button class="yellow-button">보기</button>
+      <button class="yellow-button" @click="navigateToRestoredWiki(wikiHistory.wikiModContentSeq)">보기</button>
     </div>
   </div>
 </template>

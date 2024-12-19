@@ -49,20 +49,16 @@ const updatingWiki = async (seq) => {
     const wikiData = {
       wikiModContent: wikiContent.value
     }
-
-    const response = await updateWiki(seq, wikiData);
-    if (response.status === 200) { // 백엔드의 성공 상태 코드 확인
-      alert("위키가 성공적으로 수정되었습니다.");
-    } else {
-      alert("위키 수정 도중 오류가 발생했습니다.");
-    }
+    await updateWiki(seq, wikiData);
+    alert("위키가 성공적으로 수정되었습니다.");
   } catch (error) {
     alert("위키 수정 도중 오류가 발생했습니다.");
+    throw error;
   }
 }
 
 onMounted(async () => {
-  const { wikiSeq:seq } = route.params;  // wikiSeq라는 속성 값을 seq라는 변수에 저장 (const seq = route.params.wikiSeq 와 같다.)
+  const {wikiSeq: seq} = route.params;  // wikiSeq라는 속성 값을 seq라는 변수에 저장 (const seq = route.params.wikiSeq 와 같다.)
   await readingWiki(seq);
 })
 </script>
