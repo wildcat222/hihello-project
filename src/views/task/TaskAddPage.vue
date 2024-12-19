@@ -1,7 +1,7 @@
 <script setup>
 import '@/styles/task/TaskAddPage.css'
 import { ref, onMounted } from 'vue';
-import { useTask } from '@/services/TaskAdd.js';
+import { useTask } from '@/services/TaskAddApi.js';
 
 const {
   taskType,
