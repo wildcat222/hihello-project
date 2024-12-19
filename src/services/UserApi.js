@@ -66,8 +66,18 @@ export const fetchEmployeeList = async () => {
 }
 
 // 사원 검색
-export const searchEmployees = (searchType, keyword) => {
-    return springAPI.get(`/hr/user/search`, {
+export const searchEmployees = async (searchType, keyword) => {
+    return await springAPI.get(`/hr/user/search`, {
         params: {searchType, keyword}
     });
+}
+
+// 사원 삭제
+export const deleteEmployee = async (employeeSeq) => {
+    try {
+        return await springAPI.delete(`/hr/user/${employeeSeq}`);
+    } catch (error) {
+        console.error('사원 삭제를 실패하였습니다.', error);
+        throw error;
+    }
 }
