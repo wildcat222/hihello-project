@@ -54,7 +54,7 @@ CREATE TABLE `template` (
                             `template_title`   VARCHAR(20)   NOT NULL,
                             `template_sub`   VARCHAR(50)   NULL,
                             `template_detail`   TEXT   NULL,
-                            `template_url`   VARCHAR(255)   NULL,
+                            `template_url_name`   VARCHAR(255)   NULL,
                             `template_quiz_qty`   INT   NULL,
                             `template_task_round` VARCHAR(10) NULL,
                             `template_procedure`   INT   NOT NULL,
