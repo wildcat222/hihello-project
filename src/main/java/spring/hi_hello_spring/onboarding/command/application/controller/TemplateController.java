@@ -3,17 +3,21 @@ package spring.hi_hello_spring.onboarding.command.application.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
+import spring.hi_hello_spring.common.s3.FileUploadUtil;
 import spring.hi_hello_spring.onboarding.command.application.dto.TeamplateOrderUpdateDTO;
 import spring.hi_hello_spring.onboarding.command.application.dto.TemplateCreateDTO;
 import spring.hi_hello_spring.onboarding.command.application.dto.TemplateUpdateList;
 import spring.hi_hello_spring.onboarding.command.application.service.TemplateService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,13 +27,19 @@ import java.util.List;
 public class TemplateController {
 
     private final TemplateService templateService;
-
+    private final FileUploadUtil fileUploadUtil;
     /* 온보딩 스토리보드 등록 */
-    @PostMapping
-    @Operation(summary = "온보딩 스토리 보드 생성", description = "온보딩 스토리 보드 생성 로직입니다.")
-    public ApiResponse<?> createTemplate(@RequestBody TemplateCreateDTO createDTO){
 
-        templateService.createTemplate(createDTO);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(summary = "온보딩 스토리 보드 생성", description = "온보딩 스토리 보드 생성 로직입니다.")
+    public ApiResponse<?> createTemplate(@RequestPart TemplateCreateDTO createDTO , @RequestPart("productImgUrl") MultipartFile fileUrl){
+
+        try {
+            String uploadFile = fileUploadUtil.uploadFile(fileUrl);
+            templateService.createTemplate(createDTO, uploadFile);
+        } catch (IOException e) {
+            throw new RuntimeException("파일 업로드 중 오류 발생", e);
+        }
         return ResponseUtil.successResponse("온보딩 스토리보드가 성공적으로 등록되었습니다.").getBody();
     }
 
