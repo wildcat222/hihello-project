@@ -9,7 +9,7 @@ on:
     branches:
       - "develop"
     types:
-      - opened # PR이 병합될 때 실행
+      - opened
       - reopened
 
 jobs:
@@ -17,39 +17,64 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 코드 체크아웃
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # Python 3.11 설정
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
+      # Poetry 설치
       - name: Install Poetry
         run: |
           curl -sSL https://install.python-poetry.org | python3 -
           export PATH="$HOME/.local/bin:$PATH"
           poetry --version
 
+      # 환경변수 설정
+      - name: Set Environment Variables
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+          echo "PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }}" >> $GITHUB_ENV
+          echo "PINECONE_ENV=${{ secrets.PINECONE_ENV }}" >> $GITHUB_ENV
+          echo "PINECONE_HOST=${{ secrets.PINECONE_HOST }}" >> $GITHUB_ENV
+          echo "UPSTAGE_API_KEY=${{ secrets.UPSTAGE_API_KEY }}" >> $GITHUB_ENV
+
+      # 스크립트 실행 권한 부여
       - name: Grant execute permission for scripts
         run: chmod +x ./scripts/* || echo "No scripts to make executable"
 
+      # 시작 시간 기록
       - name: Record Start Time
         id: record_start
-        run: echo "::set-output name=start_time::$(date +%s)"
+        run: echo "start_time=$(date +%s)" >> $GITHUB_ENV
 
+      # Poetry로 의존성 설치
       - name: Install Dependencies with Poetry
         run: poetry install --no-root
 
+      # 실행 시간 계산
       - name: Calculate Duration
         id: calculate_duration
         run: |
-          START_TIME=${{ steps.record_start.outputs.start_time }}
+          START_TIME=$(cat $GITHUB_ENV | grep start_time | cut -d'=' -f2)
           END_TIME=$(date +%s)
-          echo "::set-output name=duration::$((END_TIME - START_TIME))"
+          echo "duration=$((END_TIME - START_TIME))" >> $GITHUB_ENV
 
+      # Discord 알림 전송
       - name: Notify Discord
+        if: always() # 항상 실행
         run: |
+          # 빌드 상태 가져오기
+          if [ "${{ job.status }}" = "success" ]; then
+            BUILD_STATUS="success"
+          else
+            BUILD_STATUS="failure"
+          fi
+
           # PR 제목 또는 커밋 메시지 가져오기
           if [ -n "${{ github.event.pull_request.title }}" ]; then
             PR_TITLE="${{ github.event.pull_request.title }}"
@@ -61,13 +86,10 @@ jobs:
           SAFE_PR_TITLE=$(echo "$PR_TITLE" | jq -R .)
 
           # 기본값 설정
-          if [ -z "${DURATION}" ]; then
-            DURATION="알 수 없음"
-          fi
-
+          DURATION=${{ env.duration:-"알 수 없음" }}
           ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
-          # Discord Webhook 호출
+          # Discord Webhook 호출 함수
           send_discord_notification() {
             local status="$1" # success or failure
             local title=""
@@ -116,8 +138,4 @@ jobs:
           }
 
           # 빌드 성공 및 실패에 따라 Discord 알림 전송
-          if [ ${{ job.status }} = "success" ]; then
-            send_discord_notification "success"
-          else
-            send_discord_notification "failure"
-          fi
+          send_discord_notification "$BUILD_STATUS"
