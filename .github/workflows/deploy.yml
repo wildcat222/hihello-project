@@ -74,28 +74,32 @@ jobs:
           else
             BUILD_STATUS="failure"
           fi
-
+            
           # PR 제목 또는 커밋 메시지 가져오기
           if [ -n "${{ github.event.pull_request.title }}" ]; then
             PR_TITLE="${{ github.event.pull_request.title }}"
           else
             PR_TITLE="${{ github.event.head_commit.message }}"
           fi
-
+            
           # JSON-safe 포맷으로 변환
           SAFE_PR_TITLE=$(echo "$PR_TITLE" | jq -R .)
-
+            
           # 기본값 설정
-          DURATION=${{ env.duration:-"알 수 없음" }}
+          DURATION="${{ env.duration }}"
+          if [ -z "$DURATION" ]; then
+            DURATION="알 수 없음"
+          fi
+            
           ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-
+            
           # Discord Webhook 호출 함수
           send_discord_notification() {
             local status="$1" # success or failure
             local title=""
             local color=""
             local description=""
-
+            
             if [ "$status" = "success" ]; then
               title="✅ 빌드 성공 알림"
               color=3066993
@@ -105,7 +109,7 @@ jobs:
               color=15158332
               description="빌드에 실패했어핑. 😢\\n\\n"
             fi
-
+            
             # Discord Webhook 호출
             curl -H "Content-Type: application/json" \
               -d "{
@@ -136,6 +140,6 @@ jobs:
                   }" \
               ${{ secrets.DISCORD_WEBHOOK_URL }}
           }
-
+            
           # 빌드 성공 및 실패에 따라 Discord 알림 전송
           send_discord_notification "$BUILD_STATUS"
