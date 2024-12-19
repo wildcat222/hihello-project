@@ -18,7 +18,6 @@ const fetchingTaskEvalDetailResult = async (taskSubmitSeq) => {
         taskScore: taskEvalDetail.taskScore,
       });
     });
-    console.log(response)
   } catch (error) {
     alert("과제 평가 조회 상세 결과를 조회하던 도중 오류가 발생했습니다.");
   }
@@ -45,7 +44,6 @@ const groupingTaskEvalDetailResult = computed(() => {
   });
   return groups;
 });
-
 
 // Props 정의
 const props = defineProps({
