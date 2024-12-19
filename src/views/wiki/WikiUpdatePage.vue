@@ -1,14 +1,18 @@
 <template>
-  <div>
+  <div class="wiki-update-page-container">
+    <div class="wiki-update-page-title">인턴위키 수정</div>
     <div>
-      <div>{{ wikiTitle }}</div>
+      <div class="wiki-update-page-wiki-title">{{ wikiTitle }}</div>
       <Editor v-model="wikiContent"></Editor>
-      <button @click="updatingWiki(wikiSeq)">수정하기</button>
+      <div class="wiki-update-button-container">
+        <button @click="updatingWiki(wikiSeq)" class="wiki-update-button">수정하기</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import "@/styles/wiki/WikiUpdatePage.css"
 import Editor from '@/components/EditorComponent.vue';
 import {onMounted, ref} from "vue";
 import {fetchWiki, updateWiki} from "@/services/WikiApi.js";
