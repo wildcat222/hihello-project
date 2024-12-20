@@ -45,7 +45,7 @@ const onLogin = async () => {
 
 <style scoped>
 .white-box{
-    width: auto;
-    min-width: 25vw;
+    width: 35vw;
+    padding: 3vw;
 }
 </style>

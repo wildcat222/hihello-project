@@ -11,7 +11,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: auto;
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--white);
+    border-radius: 10px;
 }
 
 .login-title {
@@ -26,7 +31,7 @@
     flex-direction: column;
     gap: 20px;
     align-items: center;
-    width: auto;
+    width: 100%;
 }
 
 .login-form-group {
@@ -35,23 +40,22 @@
     align-items: flex-start;
     gap: 5px;
     width: 100%;
-
 }
 
-.login-form .form-group label {
-    font-weight: bold; 
+.login-form .login-form-group label {
+    font-weight: bold;
     font-size: 1rem;
     margin-bottom: 10px;
 }
 
-.form-group input {
-    width: 95%;
+.login-form-group input {
+    width: 100%; /* 입력 필드가 부모 요소의 전체 너비를 채움 */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: var(--ivory);
     font-size: 0.9rem;
-    
+    box-sizing: border-box; /* 패딩과 보더 포함한 너비 계산 */
 }
 
 input:focus {
@@ -78,3 +82,36 @@ input:focus {
 .login-button:hover {
     background-color: var(--blue);
 }
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .login-form-container {
+        padding: 15px;
+        max-width: 90%;
+    }
+
+    .login-title {
+        font-size: 1.5rem;
+    }
+
+    .login-form-group input {
+        font-size: 0.85rem;
+    }
+
+    .login-button {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-title {
+        font-size: 1.2rem;
+    }
+
+    .login-button {
+        font-size: 0.8rem;
+        padding: 8px;
+    }
+}
+
