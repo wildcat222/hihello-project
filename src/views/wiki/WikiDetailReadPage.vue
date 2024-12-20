@@ -5,11 +5,18 @@ import {useRoute} from "vue-router";
 import WhiteBoxListComponent from "@/components/WhiteBoxListComponent.vue";
 import WikiHistoryModal from "@/views/wiki/WikiHistoryModal.vue";
 import router from "@/router/index.js";
+import {useUserStore} from "@/stores/UserStore.js";
 
 const route = useRoute();
+
+const userStore = useUserStore();
+const employeeInfo = userStore.getEmployeeInfo();
+const employeeRole = employeeInfo.employeeRole[0];
+
 const wikiTitle = ref('');
 const latestModDate = ref('');
 const wikiContent = ref('');
+const tableOfContents = ref([]);  // 목차 데이터
 
 defineProps({
   wikiSeq: {
@@ -40,6 +47,20 @@ const fetchingWikiByWikiModContentSeq = async(wikiSeq, wikiModContentSeq) => {
   } catch (error) {
     alert("위키를 조회하던 도중 오류가 발생했습니다.");
   }
+}
+
+// 목차를 생성하는 메서드
+const generateTableOfContents = (wikiContent) => {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = wikiContent;
+
+  // h1 ~ h6 태그를 찾아서 목차 목록 생성
+  const headers = tempDiv.querySelectorAll('h1, h2, h3, h4, h5, h6');
+  tableOfContents.value = Array.from(headers).map((header) => ({
+    tag: header.tagName,  // 태그 이름 가져오기
+    text: header.textContent,  // 태그 내의 내용 가져오기
+    id: header.id || header.textContent.replace(/\s+/g, '-').toLowerCase()
+  }));
 }
 
 const formattingDateTime = (dateTime) => {
@@ -84,6 +105,11 @@ watch(() => route.params.wikiSeq, async () => {
   }
 });
 
+// 콘텐츠가 변경될 때마다 목차를 새로 생성
+watch(() => wikiContent.value, (newContent) => {
+  generateTableOfContents(newContent);
+});
+
 // 라우트 변경 시 데이터 새로고침 (watchEffect 사용)
 watchEffect(async () => {
   const wikiSeq = route.params.wikiSeq;
@@ -105,6 +131,7 @@ onMounted(async () => {
   } else {
     await fetchingWikiByWikiModContentSeq(wikiSeq, wikiModContentSeq);
   }
+  generateTableOfContents(wikiContent.value);
 })
 </script>
 
@@ -117,7 +144,7 @@ onMounted(async () => {
         <div class="flex">
           <button class="button purple-border" @click="toggleModal">히스토리</button>
           <button class="button purple-background" @click="navigateToWikiUpdatePage">편집</button>
-          <button class="button purple-background" @click="deletingWiki">삭제</button>
+          <button v-if="employeeRole === 'HR'" class="button purple-background" @click="deletingWiki">삭제</button>
         </div>
       </div>
       <WikiHistoryModal
@@ -127,6 +154,15 @@ onMounted(async () => {
           @click.stop
       />
       <div class="latest-mod-date">최근 수정 시각: {{ formattingDateTime(latestModDate) }}</div>
+      <!-- 목차 표시 -->
+      <div v-if="tableOfContents.length > 0" class="toc-container">
+        <div class="toc-title">목차</div>
+        <ul>
+          <li v-for="(item, index) in tableOfContents" :key="index">
+            <a :href="'#' + item.id">{{ item.text }}</a>
+          </li>
+        </ul>
+      </div>
       <div v-html="wikiContent" class="wiki-content"></div>
     </WhiteBoxListComponent>
   </div>
@@ -182,5 +218,31 @@ onMounted(async () => {
 .purple-background {
   background-color: var(--purple);
   color: var(--white);
+}
+
+.toc-container {
+  border: 1px solid var(--light-gray);
+  margin-top: 1rem;
+  padding: 1rem 1.5rem;
+  display: inline-block;
+}
+
+.toc-title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.toc-container > ul {
+  list-style: none;
+  padding: 0;
+}
+
+.toc-container li {
+  margin: 0.5rem 0;
+}
+
+.toc-container a {
+  text-decoration: none;
+  color: var(--black);
 }
 </style>

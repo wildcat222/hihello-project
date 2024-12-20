@@ -174,7 +174,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style>
+<style lang="scss">
 blockquote {
   border-left: 4px solid var(--yellow);
   padding-left: 1rem;
@@ -206,5 +206,4 @@ sup {
   color: var(--purple);
   font-weight: bold;
 }
-
 </style>
