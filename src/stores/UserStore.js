@@ -111,17 +111,10 @@ export const useUserStore = defineStore('user', {
 
                             springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
 
-                            const response = await springAPI.request({
-                                ...error.config,
-                                headers: {
-                                    Authorization: `Bearer ${this.accessToken}`
-                                }
-                            });
-
-                            return response;
+                            return await springAPI.request;
 
                         } catch (err) {
-                            console.error('Token refresh failed:', err);
+                            console.error('인터셉터 과정 중 에러 발생:', err);
                             alert('세션이 만료되었습니다. 다시 로그인해주세요.');
                             await route.push("/");
                             return Promise.reject(err);
