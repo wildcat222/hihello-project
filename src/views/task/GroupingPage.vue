@@ -186,7 +186,7 @@ export default {
 
 <style scoped>
 ul li{
-  list-style:none;
+  list-style: none;
 }
 
 button {

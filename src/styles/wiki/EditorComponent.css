@@ -1,7 +1,9 @@
 .container {
     width: 100%;
     margin: 0 auto;
-    height: 36rem;
+    height: 90%;
+    min-height: 15rem;
+    max-height: 200rem;
     padding: 1rem;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -60,18 +62,19 @@
 }
 
 .editor-container {
-    height: 100%;
+    height: 90%;
+    max-height: 200rem;
 }
 
 .editor-content {
     background: var(--white);
     border: 1px solid var(--light-gray);
     border-radius: 8px;
-    padding: 1rem;
+    padding: 0 1.5rem;
     font-size: 1rem;
     line-height: 1.5;
     white-space: pre-wrap;
-    height: 80%;
+    height: 90%;
 }
 
 blockquote {
