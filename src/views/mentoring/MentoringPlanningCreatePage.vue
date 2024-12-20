@@ -94,7 +94,7 @@ const submitMentoringPlan = async () => {
           <div class="file_name">파일</div>
           <label for="file" class="file_button">
             <img
-                src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/62dd909f-f788-4694-bd9b-6e01e7806fa2_attach_file.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241217T021443Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241217%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=521920dac44120fdaec406215d16562aeaa600321a67418e622977c8e0652355"
+                src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/a66dd4ac-e739-4954-b754-f981f66a0b32_attach_file.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241220T015006Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241220%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=3c518a60aa9f192a49d922c21d25773d32783486add47de80dede36d97b158df"
                 id="file-button"
             />
             <p v-if="mentoringPlanForm.fileName" id="file-name">{{ mentoringPlanForm.fileName }}</p>
@@ -180,7 +180,7 @@ form {
 
 #file-name {
   font-size: 14px;
-  color: #333;
+  color: var(--gray);
   margin-top: 10px;
 }
 textarea{
