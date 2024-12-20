@@ -4,7 +4,7 @@
             <h2>데이터 수정</h2>
             <white-box>
                 <input type="text" v-model="localItem.content" placeholder="내용을 입력하세요" />
-                <div class="button-group">
+                <div class="chatbot-button-group">
                     <button @click="updateContent" class="chatbot-add-button">저장</button>
                     <button @click="$emit('close')" class="chatbot-close-button">닫기</button>
                 </div>
@@ -77,7 +77,7 @@ input {
     font-size: 14px;
 }
 
-.button-group {
+.chatbot-button-group {
     display: flex;
     justify-content: center;
     gap: 10px;

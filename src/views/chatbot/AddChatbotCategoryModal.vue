@@ -4,7 +4,7 @@
             <h2>카테고리 추가</h2>
             <white-box>
                 <input v-model="categoryName" type="text" placeholder="챗봇 카테고리 입력" />
-                <div class="button-group">
+                <div class="chatbot-button-group">
                     <button @click="handleAddCategory" class="chatbot-category-add-button">
                         {{ isAdding ? "추가 중..." : "추가" }}
                     </button>
@@ -86,7 +86,7 @@ input {
     font-size: 14px;
 }
 
-.button-group {
+.chatbot-button-group {
     display: flex;
     justify-content: center;
     gap: 10px;
