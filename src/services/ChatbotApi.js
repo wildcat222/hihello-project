@@ -47,13 +47,35 @@ export const featchChatbotData = async (categorySeq) => {
     }
 };
 
+// 담당자 챗봇 데이터 추가
+export const addChatbotData = async (categorySeq, data) => {
+    try {
+        const response = await fastAPI.post(`/hr/chatbot/category/${categorySeq}/data`, data);
+        return response.data;
+    } catch (error) {
+        console.error("챗봇 데이터 추가 실패: ", error.response?.data || error.message);
+        throw error;
+    }
+};
+
 // 담당자 챗봇 데이터 수정
 export const updateChatbotData = async (categorySeq, chatbotSeq, data) => {
     try {
         const response = await fastAPI.put(`/hr/chatbot/category/${categorySeq}/data/${chatbotSeq}`, data);
         return response.data;
     } catch (error) {
-        console.error("챗봇 데이터 조회 실패:", error.response?.data || error.message);
+        console.error("챗봇 데이터 수정 실패:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+// 담당자 챗봇 데이터 삭제
+export const deleteChatbotData = async (categorySeq, chatbotSeq) => {
+    try {
+        const response = await fastAPI.delete(`/hr/chatbot/category/${categorySeq}/data/${chatbotSeq}`);
+        return response.data;
+    } catch (error) {
+        console.error("챗봇 데이터 삭제 실패:", error.response?.data || error.message);
         throw error;
     }
 };

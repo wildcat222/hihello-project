@@ -12,16 +12,13 @@
         </div>
 
         <!-- 데이터 추가 모달 -->
-        <add-chatbot-modal v-if="showAddModal" @close="showAddModal = false" />
+        <add-chatbot-modal v-if="showAddModal" :category-seq="selectedCategorySeq" @close="showAddModal = false"
+            @data-added="fetchChatbotData(selectedCategorySeq)" />
 
         <!-- 챗봇 카테고리 -->
         <div class="chatbot-category-container">
-            <chatbot-category 
-                ref="chatbotCategoryRef" 
-                :show-delete="true" 
-                @tab-selected="onTabSelected" 
-                @delete-category="deleteCategory" 
-            />
+            <chatbot-category ref="chatbotCategoryRef" :show-delete="true" @tab-selected="onTabSelected"
+                @delete-category="deleteCategory" />
             <button class="chatbot-add-button" @click="showAddCategoryModal = true">+</button>
         </div>
 
@@ -74,35 +71,33 @@ import ChatbotCategory from "@/views/chatbot/ChatbotCategoryComponent.vue";
 import AddCategoryModal from "@/views/chatbot/AddChatbotCategoryModal.vue";
 import AddChatbotModal from "@/views/chatbot/AddChatbotModal.vue";
 import UpdateChatbotModal from "@/views/chatbot/UpdateChatbotModal.vue";
-import { deleteChatbotCategory, featchChatbotData, updateChatbotData } from "@/services/ChatbotApi";
+import { deleteChatbotCategory, featchChatbotData, updateChatbotData, deleteChatbotData } from "@/services/ChatbotApi";
 
 const showAddCategoryModal = ref(false);
 const showAddModal = ref(false);
 const showUpdateModal = ref(false);
 const selectedItem = ref(null);
 const chatbotCategoryRef = ref(null);
-const selectedCategorySeq = ref(null); 
+const selectedCategorySeq = ref(null);
 
 const chatbotItems = ref([]);
 
-// 수정 모달 열기
 function openUpdateModal(item) {
-    console.log("열린 아이템:", item); // 디버깅 로그 추가
     if (!item.id || !selectedCategorySeq.value) {
         console.error("아이템 ID 또는 카테고리 ID가 누락되었습니다.");
         return;
     }
 
-    selectedItem.value = { 
-        ...item, 
-        categorySeq: selectedCategorySeq.value, // 선택된 카테고리 ID 추가
+    selectedItem.value = {
+        ...item,
+        categorySeq: selectedCategorySeq.value, 
     };
     showUpdateModal.value = true;
 }
 
 const onTabSelected = (categorySeq) => {
     selectedCategorySeq.value = categorySeq;
-    fetchChatbotData(categorySeq); // 카테고리 선택 시 데이터 조회
+    fetchChatbotData(categorySeq);
 };
 
 const deleteCategory = async (categorySeq) => {
@@ -113,7 +108,7 @@ const deleteCategory = async (categorySeq) => {
 
         if (response?.success) {
             alert("카테고리가 성공적으로 삭제되었습니다.");
-            chatbotCategoryRef.value?.loadCategories(); // 삭제 후 카테고리 목록 갱신
+            chatbotCategoryRef.value?.loadCategories();
         } else {
             alert("카테고리 삭제에 실패했습니다.");
             console.error("API 응답 실패:", response);
@@ -129,8 +124,7 @@ const fetchChatbotData = async (categorySeq) => {
         const response = await featchChatbotData(categorySeq);
 
         if (response?.success && Array.isArray(response.data)) {
-            chatbotItems.value = response.data; // 데이터를 저장
-            console.log("저장된 chatbotItems:", chatbotItems.value);
+            chatbotItems.value = response.data;
         } else {
             chatbotItems.value = [];
             alert("해당 카테고리에 데이터가 없습니다.");
@@ -142,30 +136,42 @@ const fetchChatbotData = async (categorySeq) => {
 };
 
 const updateItem = async (updatedItem) => {
-    console.log("수정된 아이템:", updatedItem); // 확인용 로그 추가
 
     const categorySeq = selectedCategorySeq.value;
     const chatbotSeq = updatedItem.id;
 
     try {
         const response = await updateChatbotData(categorySeq, chatbotSeq, updatedItem);
-
-        if (response?.success) {
-            const index = chatbotItems.value.findIndex((item) => item.id === chatbotSeq);
-            if (index !== -1) {
-                chatbotItems.value[index] = { ...chatbotItems.value[index], ...updatedItem };
-                console.log("수정 완료된 데이터:", chatbotItems.value[index]); // 확인용 로그
-            }
-            alert("데이터가 성공적으로 수정되었습니다.");
-        } else {
-            console.error("API 응답 실패:", response);
-            alert("데이터 수정에 실패했습니다.");
+        if (response.message === "Chatbot data updated successfully.") {
+            alert("데이터가 성공적으로 수정되었습니다."); 
+            window.location.reload(); 
         }
     } catch (error) {
-        console.error("API 호출 실패:", error.response?.data || error.message);
+        console.error("수정 실패:", error.response?.data || error.message);
         alert("데이터 수정 중 오류가 발생했습니다.");
     } finally {
-        showUpdateModal.value = false; // 수정 모달 닫기
+        showUpdateModal.value = false; 
+    }
+};
+
+const deleteItem = async (index) => {
+    const categorySeq = selectedCategorySeq.value;
+    const chatbotSeq = chatbotItems.value[index].id;
+
+    if (!confirm("정말로 이 데이터를 삭제하시겠습니까?")) {
+        return; 
+    }
+
+    try {
+        const response = await deleteChatbotData(categorySeq, chatbotSeq);
+
+        if (response?.message === "Chatbot data deleted successfully.") {
+            alert("데이터가 성공적으로 삭제되었습니다.");
+            window.location.reload(); 
+        }
+    } catch (error) {
+        console.error("데이터 삭제 실패:", error.response?.data || error.message);
+        alert("데이터 삭제 중 오류가 발생했습니다.");
     }
 };
 

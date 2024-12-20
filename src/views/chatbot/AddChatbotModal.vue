@@ -4,7 +4,7 @@
             <h2>데이터 추가</h2>
             <white-box>
                 <input v-model="chatbotContent" type="text" placeholder="챗봇 데이터 입력" />
-                <div class="button-group">
+                <div class="chatbot-button-group">
                     <button @click="addContent" class="chatbot-add-button">추가</button>
                     <button @click="$emit('close')" class="chatbot-close-button">닫기</button>
                 </div>
@@ -16,8 +16,17 @@
 <script setup>
 import { ref } from "vue";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
+import { addChatbotData } from "@/services/ChatbotApi";
 
-const emit = defineEmits(["close", "category-added"]);
+// Props 정의
+const props = defineProps({
+    categorySeq: {
+        type: Number,
+        required: true,
+    },
+});
+
+const emit = defineEmits(["close", "data-added"]);
 const chatbotContent = ref("");
 
 const addContent = async () => {
@@ -25,14 +34,20 @@ const addContent = async () => {
         alert("데이터를 입력해주세요.");
         return;
     }
+
     try {
-        // await postQuizCategory(categoryName.value);
-        alert("데이터가 성공적으로 추가되었습니다.");
-        emit("category-added");
-        emit("close");
-        categoryName.value = "";
+        const response = await addChatbotData(props.categorySeq, {
+            chatbotData: chatbotContent.value,
+        });
+
+        if (response.message === "Chatbot data added successfully.") {
+            alert("데이터가 성공적으로 추가되었습니다.");
+            emit("data-added"); // 데이터 추가 완료 이벤트 발생
+            emit("close"); // 모달 닫기
+            chatbotContent.value = ""; // 입력 필드 초기화
+        }
     } catch (error) {
-        console.error("데이터 추가 실패:", error.message);
+        console.error("데이터 추가 실패:", error.response?.data || error.message);
         alert("데이터 추가 중 오류가 발생했습니다.");
     }
 };
@@ -69,7 +84,7 @@ input {
     font-size: 14px;
 }
 
-.button-group {
+.chatbot-button-group {
     display: flex;
     justify-content: center;
     gap: 10px;
