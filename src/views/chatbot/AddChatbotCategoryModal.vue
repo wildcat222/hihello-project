@@ -4,7 +4,7 @@
             <h2>카테고리 추가</h2>
             <white-box>
                 <input v-model="categoryName" type="text" placeholder="챗봇 카테고리 입력" />
-                <div class="button-group">
+                <div class="chatbot-button-group">
                     <button @click="handleAddCategory" class="chatbot-category-add-button">
                         {{ isAdding ? "추가 중..." : "추가" }}
                     </button>
@@ -20,14 +20,11 @@ import { ref } from "vue";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
 import { addChatbotCategory } from "@/services/ChatbotApi";
 
-// Define Emits
 const emit = defineEmits(["close", "category-added"]);
 
-// Category Name Input State
 const categoryName = ref("");
 const isAdding = ref(false);
 
-// Add Category Function
 const handleAddCategory = async () => {
     if (!categoryName.value.trim()) {
         alert("카테고리 이름을 입력해주세요.");
@@ -35,10 +32,9 @@ const handleAddCategory = async () => {
     }
 
     try {
-        isAdding.value = true; // Start Loading State
+        isAdding.value = true; 
         const requestData = { ChatbotCategoryContent: categoryName.value };
 
-        // Call API to Add Category
         const response = await addChatbotCategory(requestData);
 
         if (response?.success) {
@@ -90,7 +86,7 @@ input {
     font-size: 14px;
 }
 
-.button-group {
+.chatbot-button-group {
     display: flex;
     justify-content: center;
     gap: 10px;
