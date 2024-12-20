@@ -1,8 +1,7 @@
 <script setup>
- import {ref} from "vue";
-
- const COMMON = 'COMMON';
- const JOB = 'JOB';
+import '@/styles/onboarding/OnboardingData.css'
+const COMMON = 'COMMON';
+const JOB = 'JOB';
 import {
   templateForm,
   templateList,
@@ -47,10 +46,11 @@ loadTemplates(); // 화면 로드시 템플릿 리스트 불러오기
 
     <!-- 템플릿 생성 폼 -->
     <div class="form">
-      <h2>템플릿 생성</h2>
-      <form @submit.prevent="submitTemplate">
-        <div>
-          <label>템플릿 유형</label>
+      <form @submit.prevent="submitTemplate" class="onboarding-data-form">
+        <div class="onboarding-data-line">
+          <div class="onboarding-data-label">
+            <label>템플릿 유형</label>
+          </div>
           <select v-model="templateForm.templateType" @change="resetTemplateData">
             <option value="NORMAL">글,파일 탬플릿</option>
             <option value="BREAK">휴가 신청 탬플릿</option>
@@ -61,68 +61,108 @@ loadTemplates(); // 화면 로드시 템플릿 리스트 불러오기
             <option value="QUIZ">퀴즈</option>
           </select>
         </div>
-        <div>
-          <label>체크 필요 여부</label>
-          <input type="radio" :value="true" v-model="templateForm.templateCheckRequiredStatus" /> 예
-          <input type="radio" :value="false" v-model="templateForm.templateCheckRequiredStatus" /> 아니오
+        <div class="onboarding-data-line">
+          <div class="onboarding-data-label">
+            <label>체크 필요 여부</label>
+          </div>
+          <div class="onboarding-data-line">
+            <input type="radio" :value="true" v-model="templateForm.templateCheckRequiredStatus" /> 예
+          </div>
+          <div class="onboarding-data-line">
+            <input type="radio" :value="false" v-model="templateForm.templateCheckRequiredStatus" /> 아니오
+          </div>
         </div>
-        <div>
-          <label>템플릿 종료일</label>
+        <div class="onboarding-data-line">
+          <div class="onboarding-data-label">
+            <label>템플릿 종료일</label>
+          </div>
           <input type="datetime-local" v-model="templateForm.templateEndAt" required />
         </div>
 
         <!-- NORMAL Form -->
         <div v-if="templateForm.templateType === 'NORMAL'">
-          <h3>NORMAL Form</h3>
-          <div>
-            <label>공통 교육</label>
-            <input type="radio" :value="COMMON" v-model="templateForm.templateTrainingType" />공통 교육
-            <input type="radio" :value="JOB" v-model="templateForm.templateTrainingType" />실무 교육
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>공통 교육</label>
+            </div>
+            <div class="onboarding-data-line">
+              <input type="radio" :value="COMMON" v-model="templateForm.templateTrainingType" />공통 교육
+            </div>
+            <div class="onboarding-data-line">
+              <input type="radio" :value="JOB" v-model="templateForm.templateTrainingType" />실무 교육
+            </div>
           </div>
-          <div>
-            <label>제목</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>제목</label>
+            </div>
             <input type="text" v-model="templateForm.templateTitle" required/>
           </div>
-          <div>
-            <label>서브내용</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>서브내용</label>
+            </div>
             <input type="text" v-model="templateForm.templateSub" required>
           </div>
-          <div>
-            <label>파일입력</label>
-            <input type="file" accept=".jpg, .png, .pdf" @change="handleFileChange">
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>파일입력</label>
+            </div>
+            <label for="file" class="file_button">
+              <img
+                  src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/a66dd4ac-e739-4954-b754-f981f66a0b32_attach_file.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241220T015006Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241220%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=3c518a60aa9f192a49d922c21d25773d32783486add47de80dede36d97b158df"
+                  id="file-button"
+              />
+              <p v-if="templateForm.templateUrlName" id="file-name">{{ templateForm.templateUrlName }}</p>
+            </label>
+            <input id="file" type="file" accept=".jpg, .png, .pdf" @change="handleFileChange" style="display: none;">
           </div>
-          <div>
-            <label>상세 내용</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>상세 내용</label>
+            </div>
             <textarea v-model="templateForm.templateDetail"></textarea>
           </div>
         </div>
 
         <!-- CHECKLIST Form -->
         <div v-if="templateForm.templateType === 'CHECKLIST'">
-          <h3>CHECKLIST Form</h3>
-          <div>
-            <label>공통 교육</label>
-            <input type="radio" value="COMMON" v-model="templateForm.templateTrainingType" />공통 교육
-            <input type="radio" value="JOB" v-model="templateForm.templateTrainingType" />실무 교육
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>공통 교육</label>
+            </div>
+            <div class="onboarding-data-line">
+              <input type="radio" :value="COMMON" v-model="templateForm.templateTrainingType" />공통 교육
+            </div>
+            <div class="onboarding-data-line">
+              <input type="radio" :value="JOB" v-model="templateForm.templateTrainingType" />실무 교육
+            </div>
           </div>
-          <div>
-            <label>제목</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>제목</label>
+            </div>
             <input type="text" v-model="templateForm.templateTitle" required />
           </div>
 
-          <div>
-            <label>리스트 추가</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>리스트 추가</label>
+            </div>
             <!-- 새로운 항목을 위한 입력 필드 (실시간 바인딩 아님) -->
             <input
                 type="text"
                 v-model="newChecklistItem"
                 placeholder="항목 이름"
             />
-            <button type="button" @click="addChecklistItem">항목 추가</button>
           </div>
-
-          <!-- 동적으로 추가된 입력 필드 리스트 -->
           <div>
+            <button type="button" @click="addChecklistItem" class="onboarding-check-list-add-button">
+              <img src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/190b59ac-dec7-4879-b6b2-f36d2682df5d_plus.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241220T022346Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241220%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=8d94d6d1ea506d0d50bdeef4e53583f346c26fafb8a81e028909e53cbccfea39">
+              항목 추가</button>
+          </div>
+          <!-- 동적으로 추가된 입력 필드 리스트 -->
+          <div class="onboarding-data-line">
             <ul>
               <li v-for="(item, index) in templateForm.checklistContent" :key="index">
                 {{ item.checklistContent }}
@@ -134,139 +174,140 @@ loadTemplates(); // 화면 로드시 템플릿 리스트 불러오기
 
         <!-- VIDEO Form -->
         <div v-if="templateForm.templateType === 'VIDEO'">
-          <h3>VIDEO Form</h3>
-          <div>
-            <label>공통 교육</label>
-            <input type="radio" :value="COMMON" v-model="templateForm.templateTrainingType" />공통 교육
-            <input type="radio" :value="JOB" v-model="templateForm.templateTrainingType" />실무 교육
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>공통 교육</label>
+            </div>
+            <div class="onboarding-data-line">
+              <input type="radio" :value="COMMON" v-model="templateForm.templateTrainingType" />공통 교육
+            </div>
+            <div class="onboarding-data-line">
+              <input type="radio" :value="JOB" v-model="templateForm.templateTrainingType" />실무 교육
+            </div>
           </div>
-          <div>
-            <label>제목</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>제목</label>
+            </div>
             <input type="text" v-model="templateForm.templateTitle" required/>
           </div>
-          <div>
-            <label>서브내용</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>서브내용</label>
+            </div>
             <input type="text" v-model="templateForm.templateSub" required>
           </div>
-          <div>
-            <label>URL입력</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>URL입력</label>
+            </div>
             <input type="text" required/>
           </div>
-          <div>
-            <label>상세 내용</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>상세 내용</label>
+            </div>
             <textarea v-model="templateForm.templateDetail"></textarea>
           </div>
         </div>
 
         <!-- TASK Form -->
         <div v-if="templateForm.templateType === 'TASK'">
-          <h3>JOB Form</h3>
-          <div>
-            <label>공통 교육</label>
-            <input type="radio" :value="COMMON" v-model="templateForm.templateTrainingType" />공통 교육
-            <input type="radio" :value="JOB" v-model="templateForm.templateTrainingType" />실무 교육
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>공통 교육</label>
+            </div>
+            <div class="onboarding-data-line">
+              <input type="radio" :value="COMMON" v-model="templateForm.templateTrainingType" />공통 교육
+            </div>
+            <div class="onboarding-data-line">
+              <input type="radio" :value="JOB" v-model="templateForm.templateTrainingType" />실무 교육
+            </div>
           </div>
-          <div>
-            <label>차수</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>차수</label>
+            </div>
             <input type="text" v-model="templateForm.templateTaskRound"/>
           </div>
-          <div>
-            <label>제목</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>제목</label>
+            </div>
             <input type="text" v-model="templateForm.templateTitle" required/>
           </div>
-          <div>
-            <label>서브내용</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>서브내용</label>
+            </div>
             <input type="text" v-model="templateForm.templateSub" required>
           </div>
         </div>
 
-        <!-- COMMONTASK Form -->
-        <div v-if="templateForm.templateType === 'COMMONTASK'">
-          <h3>JOB Form</h3>
-          <div>
-            <label>제목</label>
+        <!-- QUIZ Form -->
+        <div v-if="templateForm.templateType === 'QUIZ'">
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>제목</label>
+            </div>
             <input type="text" v-model="templateForm.templateTitle" required/>
           </div>
-          <div>
-            <label>서브내용</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>서브내용</label>
+            </div>
             <input type="text" v-model="templateForm.templateSub" required>
           </div>
-          <div>
-            <label>퀴즈 카테고리</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>퀴즈 카테고리</label>
+            </div>
             <select v-model="templateForm.quizCategorySeq">
 <!--   추후 API 연동 할 것           -->
-              <option value=""></option>
+              <option value="1">안전 관리</option>
+              <option value="1">소방 관리</option>
             </select>
           </div>
-          <div>
-            <label>문제 개수</label>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>문제 개수</label>
+            </div>
             <input type="text" v-model="templateForm.templateQuizQty">
           </div>
         </div>
 
-        <button type="submit">템플릿 저장</button>
+        <div v-if="templateForm.templateType === 'BREAK' || templateForm.templateType === 'CF'">
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>제목</label>
+            </div>
+            <input type="text" v-model="templateForm.templateTitle" required/>
+          </div>
+          <div class="onboarding-data-line">
+            <div class="onboarding-data-label">
+              <label>서브내용</label>
+            </div>
+            <input type="text" v-model="templateForm.templateSub" required>
+          </div>
+        </div>
+
+
+
+        <div class="onboarding-data-submit-container">
+          <button type="submit" class="onboarding-data-submit">템플릿 저장</button>
+        </div>
+
       </form>
     </div>
   </div>
 </template>
 
 <style scoped>
-.onboarding-page-title{
-  font-weight: 700;
-  font-size: 20px;
-}
-.small-notice{
-  font-weight: 400;
-  font-size: 10px;
-  color: var(--gray);
-}
-.onboarding-total-container{
-  display: flex;
-  width: 80%;
-}
-.onboarding-list-delete{
-  color: var(--red);
-  border: none;
-  border-radius: 100%;
-  background-color: var(--white);
-
-}
-.onboarding-title{
-  font-size: 15px;
-}
-.onboarding-ul{
-  padding: 0;
-  margin: 0;
-}
-.onboarding-li{
-  display: flex;
-  align-items: center;
-}
-.sidebar {
-  width: 25%;
-  background: var(--white);
-  padding: 20px;
-  padding-left: 50px;
-  border-radius: 10px 0px 0px 10px;
-  border-right: 2px solid var(--gray);
-}
 .form {
   width: 70%;
   padding: 20px;
   background: var(--white);
   border-radius: 0px 10px 10px 0px;
 }
-.onboarding-order{
-  list-style: none;
-  padding: 7px;
-  background-color: var(--purple);
-  border-radius: 100%;
-  height: 20px;
-  width: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  margin: 10px;
-}
+
 </style>
