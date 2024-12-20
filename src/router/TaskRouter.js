@@ -3,6 +3,7 @@ import TaskListPage from "@/views/task/TaskListPage.vue";
 import MentorTaskDetailReadPage from "@/views/task/MentorTaskDetailReadPage.vue";
 import GroupingPage from "@/views/task/GroupingPage.vue";
 import TaskModifyPage from "@/views/task/TaskModifyPage.vue";
+import MenteeTaskDetailReadPage from "@/views/task/MenteeTaskDetailReadPage.vue";
 
 export default[
     {
@@ -21,6 +22,10 @@ export default[
     {
         path: '/task-submit/:taskSubmitSeq',
         component: MentorTaskDetailReadPage
+    },
+    {
+        path: '/task/:taskSeq',
+        component: MenteeTaskDetailReadPage
     },
     {
         path: '/grouping',
