@@ -6,6 +6,7 @@ import {fetchSubmittedTask} from "@/services/TaskApi.js";
 import {useRoute} from "vue-router";
 import {fetchEvalLists} from "@/services/EvalListApi.js";
 import {createTaskEval} from "@/services/TaskEvalApi.js";
+import {downloadFile} from "@/services/FileApi.js";
 
 const route = useRoute();
 
@@ -112,7 +113,7 @@ onMounted(async() => {
       <div class="left">
         <div class="task-info-container">
           <div class="mentor-task-page-title">{{ taskTitle }}</div>
-          <div class="flex">
+          <div class="flex" @click="downloadFile(taskFileUrl, taskFileName)">
             <div class="task-file-text">과제 파일</div>
             <div class="task-file-name-container">{{ taskFileName }}</div>
           </div>
@@ -121,7 +122,7 @@ onMounted(async() => {
         <hr class="light-gray-hr">
         <div class="mentor-task-submit-container">
           <div class="mentor-task-page-title">과제 제출</div>
-          <div v-if="taskSubmitFileUrl !== null" class="flex">
+          <div v-if="taskSubmitFileUrl !== null" class="flex" @click="downloadFile(taskSubmitFileName, taskSubmitFileUrl)">
             <div class="task-file-text">제출 파일</div>
             <div class="task-file-name-container">{{ taskSubmitFileName }}</div>
           </div>
