@@ -1,4 +1,5 @@
 <script setup>
+import "@/styles/task-eval/TaskEvalResultDetailReadModal.css"
 import { fetchTaskEvalDetailResult } from "@/services/TaskEvalResultApi.js";
 import { computed, reactive, watch } from "vue";
 
@@ -82,24 +83,32 @@ watch(
     <div class="modal-content-container" @click.stop>
       <table class="font18">
         <tbody>
-          <tr class="table-row">
+          <tr class="task-eval-result-detail-read-modal-table-row">
             <td>제출자</td>
-            <td class="flex">
-              <div>{{ props.taskData.submitterName }}</div>
-              <button class="button purple-button">그룹조회</button>
+            <td>
+              <div class="flex task-eval-result-detail-result-modal-td">
+                <div>{{ props.taskData.submitterName }}</div>
+                <button class="button purple-button">그룹조회</button>
+              </div>
             </td>
           </tr>
-          <tr class="table-row">
+          <tr class="task-eval-result-detail-read-modal-table-row">
             <td>과제 부서</td>
-            <td>{{ props.taskData.departmentName }}</td>
+            <td>
+              <div class="flex task-eval-result-detail-result-modal-td">{{ props.taskData.departmentName }}</div>
+            </td>
           </tr>
-          <tr class="table-row">
+          <tr class="task-eval-result-detail-read-modal-table-row">
             <td>과제 지정</td>
-            <td>{{ props.taskData.templateTaskRound }}</td>
+            <td>
+              <div class="flex task-eval-result-detail-result-modal-td">{{ props.taskData.templateTaskRound }}</div>
+            </td>
           </tr>
-          <tr class="table-row">
+          <tr class="task-eval-result-detail-read-modal-table-row">
             <td>과제 내용</td>
-            <td>{{ props.taskData.taskContent }}</td>
+            <td>
+              <div class="flex task-eval-result-detail-result-modal-td">{{ props.taskData.taskContent }}</div>
+            </td>
           </tr>
         </tbody>
       </table>
