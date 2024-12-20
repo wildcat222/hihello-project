@@ -16,8 +16,9 @@
       <!-- 메뉴 리스트 -->
       <li v-for="menu in filteredMenus" :key="menu.name" class="menu-item">
         <div :class="{ active: props.activeMenu === menu.name }" @click="toggleMenu(menu.name)">
-          <router-link :to="menu.url">{{ menu.name }}</router-link>
-        </div>
+  <router-link v-if="menu.url" :to="menu.url">{{ menu.name }}</router-link>
+  <span v-else>{{ menu.name }}</span>
+</div>
 
         <!-- 서브 메뉴 -->
         <ul v-if="menu.subMenus && activeMenu === menu.name" class="sub-menu">
@@ -70,8 +71,8 @@ const menus = ref([
   // 멘티 ASIDE
   { name: "인턴 위키", url: "/wiki", role: "MENTEE" },
   { name: "멘토 소개", url: "/mentor/intro", role: "MENTEE" },
-  { name: "멘토 채팅", url: "/mentor-chat", role: "MENTEE" },
-  { name: "보고서 작성", url: "/report-write", role: "MENTEE" },
+  // { name: "멘토 채팅", url: "/mentor-chat", role: "MENTEE" },
+  // { name: "보고서 조회", url: "/mnetoring/report", role: "MENTEE" },
 
   // 담당자 ASIDE
   { name: "사원 관리", url: "/employee-management", role: "HR" },
@@ -81,7 +82,7 @@ const menus = ref([
     subMenus: [
       { name: "멘토링 매칭", url: "/mentoring/matching" },
       { name: "멘토링 계획서", url: "/mentoring/planning" },
-      { name: "멘토링 보고서", url: "/mentoring/report" },
+      // { name: "멘토링 보고서", url: "/mentoring/report" },
     ],
   },
   { name: "온보딩 설계", url: "/onboarding/design", role: "HR" },
@@ -89,24 +90,24 @@ const menus = ref([
     name: "온보딩 데이터 입력",
     role: "HR",
     subMenus: [
-      { name: "퀴즈 관리", url: "/onboarding/quiz" },
-      { name: "과제 등록", url: "/onboarding/task" },
-      { name: "평가 관리", url: "/onboarding/eval" },
-      { name: "평가 지표 관리", url: "/onboarding/eval-ind" },
+      { name: "퀴즈 관리", url: "/hr/quiz" },
+      { name: "과제 등록", url: "/task/add" },
+      { name: "동료 평가 지표 관리", url: "/hr/peer/review/list" },
+      { name: "공통 평가 지표 관리", url: "/taskInd/manage" },
     ],
   },
   {
     name: "온보딩 결과 조회",
     role: "HR",
     subMenus: [
-      { name: "퀴즈 결과 조회", url: "/onboarding/result/quiz" },
+      { name: "퀴즈 결과 조회", url: "/hr/quiz/result" },
       { name: "과제 평가 조회", url: "/task-eval" },
-      { name: "동료 평가 조회", url: "/onboarding/peer-review" },
+      { name: "동료 평가 조회", url: "/hr/peer/review" },
     ],
   },
   { name: "최종 평가", url: "/final-eval", role: "HR" },
-  { name: "위키 관리", url: "/wiki/managing", role: "HR" },
-  { name: "챗봇 커스텀", url: "/chatbot/custom", role: "HR" },
+  { name: "위키 관리", url: "/wiki", role: "HR" },
+  { name: "챗봇 커스텀", url: "/hr/chatbot", role: "HR" },
 
   // 멘토, 팀장 ASIDE
   {
@@ -115,31 +116,26 @@ const menus = ref([
     position: "팀장",
     subMenus: [
       { name: "멘토링 계획서", url: "/mentoring/planning" },
-      { name: "멘토링 보고서", url: "/mentoring/report" },
+      // { name: "멘토링 보고서", url: "/mentoring/report" },
     ],
   },
   {
-    name: "온보딩 데이터 입력",
+    name: "온보딩 과제 관리",
     role: "MENTOR",
     position: "팀장",
-    subMenus: [
-      { name: "과제 등록", url: "/onboarding/task" },
-      { name: "평가 관리", url: "/onboarding/eval" },
-    ],
+    url: "/task/add",
   },
   {
     name: "온보딩 결과 조회",
     role: "MENTOR",
     position: "팀장",
     subMenus: [
-      { name: "퀴즈 결과 조회", url: "/onboarding/result/quiz" },
       { name: "과제 평가 조회", url: "/task-eval" },
-      { name: "멘토링 보고서 조회", url: "/onboarding/report" },
-      { name: "동료 평가 조회", url: "/onboarding/peer-review" },
+      // { name: "멘토링 보고서 조회", url: "/onboarding/report" },
     ],
   },
   { name: "최종 평가", url: "/final-eval", role: "MENTOR", position: "팀장" },
-  { name: "위키 관리", url: "/wiki", role: "MENTOR", position: "팀장" },
+  { name: "위키 조회", url: "/wiki", role: "MENTOR", position: "팀장" },
 ]);
 
 const employeeInfo = computed(() => userStore.getEmployeeInfo());
@@ -175,7 +171,6 @@ onMounted(() => {
 
   flex-direction: column;
   align-items: center;
-  /* 수평 가운데 정렬 */
   background-color: var(--white);
   padding: 20px;
   box-sizing: border-box;
@@ -186,9 +181,7 @@ onMounted(() => {
   font-size: 35px;
   font-weight: 700;
   font-family: 'Inter', sans-serif;
-  /* Inter 폰트 적용 */
   margin-bottom: 60px;
-  /* 로고와 김인턴 간 간격 */
 }
 
 ul {
@@ -196,12 +189,10 @@ ul {
   padding: 0;
   margin: 0;
   width: 100%;
-  /* 메뉴의 가로 너비를 채우기 위해 */
 }
 
 .menu-item {
   margin-bottom: 30px;
-  /* 메뉴 항목 간 간격 */
   font-size: 20px;
   font-weight: bold;
   text-align: center;
@@ -212,14 +203,12 @@ ul {
 
 .menu-title {
   margin-bottom: 60px;
-  /* 김인턴과 나머지 메뉴 사이의 간격 */
 }
 
 .menu-item a {
   text-decoration: none;
   color: var(--black);
   font-family: 'Inter', sans-serif;
-  /* Inter 폰트 적용 */
 }
 
 .menu-item a:hover,
