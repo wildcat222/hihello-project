@@ -103,10 +103,8 @@ def update_chatbot_data(
     chatbot_data.chatbot_data = chatbot_data_content  # Update the content
     db.commit()  # Commit the changes to the database
 
-    # Return success message with HTTP status 200
-    return {
-        "message": "Chatbot data updated successfully."
-    }, 200  # Return HTTP status code 200 (OK)
+    # Return success message
+    return {"message": "Chatbot data updated successfully."}
 
 
 # 챗봇 데이터 삭제
