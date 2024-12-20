@@ -73,7 +73,7 @@
           <label for="file-input" class="custom-upload">
             <i class="fa-regular fa-image"></i>
           </label>
-          <input id="file-input" type="file" @change="handleFileUpload"/>
+          <input id="file-input" type="file" @change="handleFileUpload" class="editor-component-file"/>
         </div>
       </div>
     </div>
