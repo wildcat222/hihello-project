@@ -30,13 +30,26 @@
     border-radius: 8px;
 }
 
+.modal-content-container {
+    align-items: center;
+}
+
+.modal-content-container > table:first-child {
+    width: 95%;
+    margin: 2rem auto;
+}
+
 /* 클릭 시 모달 닫기, 버튼과 모달 외부 클릭 방지*/
 .modal-content-container, .modal-container {
     pointer-events: auto;
 }
 
-.table-row td {
-    padding: 0 5rem 1.5rem 0;
+.task-eval-result-detail-read-modal-table-row > td:first-child {
+    width: 20%;
+}
+
+.task-eval-result-detail-result-modal-td {
+    margin: 0 1rem;
 }
 
 .gray-hr {
