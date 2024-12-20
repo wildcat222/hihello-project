@@ -22,10 +22,10 @@ const handleClick = () => {
 
 <template>
   <div class="add-button" @click="handleClick">
-    <img
-        src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/4bbe8df4-8f32-47a8-bf29-d04f1198cd42_plus-icon.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241217T064323Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241217%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=1ae7a4d9e0574c673608ca68d39c389dc84724811d83bbbc9bfb4bac197dbce5"
-         class="plus-icon"
-         alt="플러스 아이콘">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bibi-plus-circle" viewBox="0 0 16 16">
+      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+      <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+    </svg>
     <div class="button-text">
       {{ buttonText }}
     </div>
@@ -55,5 +55,10 @@ const handleClick = () => {
   font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.bibi-plus-circle{
+  margin-top: 5px;
+  margin-right: 7px;
 }
 </style>

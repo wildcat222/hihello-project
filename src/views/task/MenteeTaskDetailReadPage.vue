@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { downloadFile } from "@/services/FileApi.js";
-import { formatDate, fetchTaskDetail, submitTask, formatContent } from '@/services/MenteeTaskDetailReadPage.js';
+import { formatDate, fetchTaskDetail, submitTask, formatContent } from '@/services/MenteeTaskDetailReadApi.js';
 import "@/styles/task/MenteeTaskDetailReadPage.css"
 
 // 컴포넌트 상태를 저장할 ref 변수

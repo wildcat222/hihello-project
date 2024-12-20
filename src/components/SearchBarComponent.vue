@@ -28,10 +28,9 @@ const handleKeyUp = (event) => {
 <template>
   <div class="search_bar">
     <div class="search_bar_image_container">
-      <img
-          src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/c0802cd3-1389-4ce5-b539-8d6bc35ea23d_search-icon.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241217T064206Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241217%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=1b23fdb117f1613d5f57811c81340adbbe9e06de499cee383931e3c331829169"
-          class="search_bar_image"
-          alt="검색 이미지">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi-bi-search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+      </svg>
     </div>
     <div class="input_container">
       <input
@@ -79,5 +78,8 @@ const handleKeyUp = (event) => {
   padding: 0;
   height: 50px;
   width: 100%;
+}
+.bi-bi-search{
+  margin-top: 5px;
 }
 </style>
