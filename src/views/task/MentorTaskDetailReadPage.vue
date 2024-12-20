@@ -92,6 +92,7 @@ const creatingTaskEvals = async() => {
     }))
 
     await createTaskEval(taskSubmitSeq, taskEvalsData);
+    alert("과제 평가가 성공적으로 등록되었습니다.");
   } catch(error) {
     alert("과제 평가 등록 중 오류가 발생했습니다.");
   }
@@ -120,7 +121,7 @@ onMounted(async() => {
         <hr class="light-gray-hr">
         <div class="mentor-task-submit-container">
           <div class="mentor-task-page-title">과제 제출</div>
-          <div class="flex">
+          <div v-if="taskSubmitFileUrl !== null" class="flex">
             <div class="task-file-text">제출 파일</div>
             <div class="task-file-name-container">{{ taskSubmitFileName }}</div>
           </div>

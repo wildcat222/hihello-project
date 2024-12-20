@@ -72,6 +72,31 @@ export const searchEmployees = async (searchType, keyword) => {
     });
 }
 
+// 사원 등록
+export const createEmployee = async (formData) => {
+    try {
+        return await springAPI.post(`hr/user`, formData);
+    } catch (error) {
+        throw error;
+    }
+}
+
+// 사원 수정
+export const updateEmployee = async (employeeSeq, employeeRole) => {
+    try {
+        const modifyEmplReqDTO = {
+            employeeRole: employeeRole
+        };
+        await springAPI.put(`hr/user/${employeeSeq}`, modifyEmplReqDTO, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    } catch (error) {
+        throw error;
+    }
+}
+
 // 사원 삭제
 export const deleteEmployee = async (employeeSeq) => {
     try {

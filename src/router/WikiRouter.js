@@ -14,6 +14,11 @@ export default [
         props: true
     },
     {
+        path: '/wiki/:wikiSeq/ver/:wikiModContentSeq',
+        component: WikiDetailReadPage,
+        props: true
+    },
+    {
         path: '/wiki/newpost',
         component: WikiCreatePage
     },

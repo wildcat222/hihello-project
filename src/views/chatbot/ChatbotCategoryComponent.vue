@@ -14,29 +14,42 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { fetchChatbotCategory } from "@/services/ChatbotApi";
 
 // Props
 defineProps({
     showDelete: {
         type: Boolean,
-        default: false, 
+        default: false,
     },
 });
 
 // Emits
 const emit = defineEmits(["tab-selected", "delete-category"]);
 
-const categories = ref([
-    { chatbotCategorySeq: 1, chatbotCategoryContent: "일반 문의" },
-    { chatbotCategorySeq: 2, chatbotCategoryContent: "기술 지원" },
-    { chatbotCategorySeq: 3, chatbotCategoryContent: "제품 안내" },
-    { chatbotCategorySeq: 4, chatbotCategoryContent: "기타" }
-]);
+const categories = ref([]);
 const activeTab = ref(null);
 
 // 카테고리 불러오기
 const loadCategories = async () => {
+    try {
+        // API 호출
+        const response = await fetchChatbotCategory();
 
+        // 응답 데이터가 배열인지 확인 후 처리
+        if (Array.isArray(response) && response.length > 0) {
+            categories.value = response; // API 응답 배열 그대로 설정
+            activeTab.value = categories.value[0]?.chatbotCategorySeq || null;
+
+            if (activeTab.value) {
+                emit("tab-selected", activeTab.value); // 첫 번째 탭 선택 이벤트 전달
+            }
+        } else {
+            console.error("API 응답 실패: 데이터가 없습니다.");
+        }
+    } catch (error) {
+        console.error("카테고리 로드 실패:", error);
+    }
 };
 
 const selectCategory = (categorySeq) => {

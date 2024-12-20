@@ -4,7 +4,7 @@
             <h2>데이터 수정</h2>
             <white-box>
                 <input type="text" v-model="localItem.content" placeholder="내용을 입력하세요" />
-                <div class="button-group">
+                <div class="chatbot-button-group">
                     <button @click="updateContent" class="chatbot-add-button">저장</button>
                     <button @click="$emit('close')" class="chatbot-close-button">닫기</button>
                 </div>
@@ -37,15 +37,12 @@ const updateContent = () => {
         alert("내용을 입력해주세요.");
         return;
     }
-    try {
-        // 수정된 데이터 부모 컴포넌트에 전달
-        emit("update", localItem.value);
-        alert("데이터가 성공적으로 수정되었습니다.");
-        emit("close");
-    } catch (error) {
-        console.error("데이터 수정 실패:", error.message);
-        alert("데이터 수정 중 오류가 발생했습니다.");
-    }
+    emit("update", { 
+        id: localItem.value.id,
+        categorySeq: localItem.value.categorySeq,
+        chatbotData: localItem.value.content // 'content'를 'chatbotData'로 변경
+    });
+    emit("close");
 };
 </script>
 
@@ -80,7 +77,7 @@ input {
     font-size: 14px;
 }
 
-.button-group {
+.chatbot-button-group {
     display: flex;
     justify-content: center;
     gap: 10px;

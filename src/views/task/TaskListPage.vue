@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted } from 'vue';
-import { useTask } from "@/services/TaskList.js";
+import { useTask } from "@/services/TaskListApi.js";
 import SearchBarComponent from "@/components/SearchBarComponent.vue";
 import AddTask from "@/components/AddTask.vue";
 import UserRollRectangle from "@/components/UserRollRectangle.vue";

@@ -1,13 +1,18 @@
 <template>
-  <div>
+  <div class="wiki-create-page-container">
+    <div class="wiki-create-page-title">인턴위키 등록</div>
     <div>
       <input
           v-model="wikiTitle"
           type="text"
-          placeholder="제목을 입력하세요">
+          placeholder="제목을 입력하세요"
+          class="wiki-title-input"
+      >
     </div>
-    <Editor v-model="wikiContent" />
-    <button @click="creatingWiki">등록하기</button>
+    <Editor v-model="wikiContent"/>
+    <div class="wiki-create-button-container">
+      <button @click="creatingWiki" class="wiki-create-button">등록하기</button>
+    </div>
   </div>
 </template>
 
@@ -40,5 +45,44 @@ const creatingWiki = async () => {
 }
 </script>
 
-<style lang="scss">
+<style scoped>
+.wiki-create-page-container {
+  width: 70%;
+}
+
+.wiki-create-page-title {
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center;
+  margin: 6.562rem 0 2.88rem 0;
+}
+
+.wiki-title-input {
+  width: 100%;
+  padding: 1.5rem 1rem;
+  font-size: 28px;
+  font-weight: bold;
+  border: none;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);;
+}
+
+.wiki-create-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.wiki-create-button {
+  width: 6.5rem;
+  height: 2.3rem;
+  cursor: pointer;
+  border-radius: 15px;
+  border: none;
+  background-color: var(--purple);
+  color: var(--white);
+  font-size: 16px;
+}
 </style>
