@@ -2,7 +2,7 @@
 import WhiteBoxListComponent from "@/components/WhiteBoxListComponent.vue";
 import ListComponent from "@/components/ListComponent.vue";
 
-import '@/styles/task-eval/TaskEvalResultDetailReadPage.css'
+import '@/styles/task-eval/TaskEvalResultDetailReadModal.css'
 
 import {onMounted, reactive, ref} from "vue";
 import {fetchTaskEvalResultList} from "@/services/TaskEvalResultApi.js";
