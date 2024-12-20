@@ -14,8 +14,8 @@ const searchCategory = ref("title"); // 기본 검색 카테고리
 
 const userStore = useUserStore();
 const employeeInfo = userStore.getEmployeeInfo();
-const employRole = employeeInfo.employeeRole;
-
+const employeeRole = employeeInfo.employeeRole;
+alert(employeeRole)
 // 멘토링 계획서 리스트 가져오기
 const fetchingMentoringPlanningList = async () => {
   try {
@@ -99,8 +99,8 @@ onMounted(async () => {
           <option value="title">제목</option>
           <option value="name">기안자</option>
         </select>
-        <div class="yellow-box" v-if="employRole === 'MENTOR'"  @click="goToRegisterPage">
-          <img src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/8d64cbf7-77f8-4670-8ddf-40e43d7bc481_plus.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241216T063855Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241216%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=7b785c3af1fdf24cef7127814d2d0327e29824719c832902b14f72af28fb0af6">
+        <div class="yellow-box" v-if="employeeRole[0] === 'MENTOR'" @click="goToRegisterPage">
+        <img src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/8d64cbf7-77f8-4670-8ddf-40e43d7bc481_plus.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241216T063855Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241216%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=7b785c3af1fdf24cef7127814d2d0327e29824719c832902b14f72af28fb0af6">
           <div>계획서 등록</div>
         </div>
       </div>
