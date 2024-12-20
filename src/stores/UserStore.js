@@ -133,7 +133,7 @@ export const useUserStore = defineStore('user', {
             try {
                 const base64 = this.accessToken.split('.')[1];
                 const decodedToken = atob(base64);
-                console.log(decodedToken);
+                // console.log(decodedToken);
                 // UTF-8 디코딩
                 const bytes = new Uint8Array(decodedToken.split('').map(char => char.charCodeAt(0)));
                 const decodedText = new TextDecoder('utf-8').decode(bytes);
