@@ -42,10 +42,7 @@ def create_chatbot_category(
     db.commit()
     db.refresh(new_category)
 
-    return {
-        "ChatbotCategorySeq": new_category.chatbot_category_seq,
-        "ChatbotCategoryContent": new_category.chatbot_category_content
-    }
+    return {"success": True, "data": new_category}
 
 # 챗봇 카테고리 전체 조회
 @router.get("/category")
@@ -75,7 +72,6 @@ def get_chatbot_categories(db: Session = Depends(get_db)):
 # 챗봇 카테고리 삭제
 @router.delete("/category/{categorySeq}")
 def delete_chatbot_category(categorySeq: int, db: Session = Depends(get_db)):
-
     try:
         # Find the category by ID
         category = db.query(ChatbotCategory).filter_by(chatbot_category_seq=categorySeq).first()
@@ -92,7 +88,7 @@ def delete_chatbot_category(categorySeq: int, db: Session = Depends(get_db)):
         db.delete(category)
         db.commit()
 
-        return {"message": "Chatbot category deleted successfully."}
+        return {"success": True, "message": "Chatbot category deleted successfully."}
 
     except Exception as e:
         raise HTTPException(
