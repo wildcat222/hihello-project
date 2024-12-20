@@ -55,7 +55,7 @@ public class WikiService {
         // 변경 내역 기록(처음 위키 등록 시에는 전체 내용을 수정된 것으로 간주하고 저장)
         WikiModContent wikiModContent = WikiModContent.builder()
                 .wikiSeq(wiki.getWikiSeq())
-                .employeeSeq(1L)
+                .employeeSeq(employeeSeq)
                 .wikiSnapshotSeq(wikiSnapshot.getWikiSnapshotSeq())
                 .modContent(modContent)
                 .build();
@@ -128,7 +128,7 @@ public class WikiService {
         // 변경 내역 기록(처음 위키 등록 시에는 전체 내용을 수정된 것으로 간주하고 저장)
         WikiModContent wikiModContent = WikiModContent.builder()
                 .wikiSeq(wiki.getWikiSeq())
-                .employeeSeq(1L)
+                .employeeSeq(employeeSeq)
                 .wikiSnapshotSeq(latestWikiSnapshotSeq)
                 .modContent(wikiModContentJson)
                 .build();
