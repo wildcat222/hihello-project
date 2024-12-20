@@ -21,8 +21,7 @@ export const loadTemplates = async () => {
 
         // 템플릿 리스트가 갱신된 후, 가장 큰 templateProcedure 값을 갱신
         setMaxTemplateProcedure();
-        console.log("가장 큰 templateProcedure 값:", maxTemplateProcedure.value);
-
+        
         // 가장 큰 templateProcedure 값을 사용하여 폼 데이터 설정
         updateTemplateProcedureOnLoad();
 
