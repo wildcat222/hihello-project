@@ -61,3 +61,43 @@ export const fetchMentorsByDepartment = (departmentSeq) => {
 export const fetchMenteeByDepartment = (departmentSeq) => {
     return springAPI.get(`/hr/mentee/${departmentSeq}`)
 }
+
+// (담당자) 멘토링 보고서 검색
+export const searchReports = (searchType, keyword) => {
+    return springAPI.get(`/hr/report/search`, {
+        params: {
+            searchType: searchType.value,
+            keyword: keyword
+        }
+    });
+}
+
+// (팀장) 멘토링 보고서 검색
+export const searchReportsByLeader = (searchType, keyword) => {
+    return springAPI.get(`/leader/report/search`, {
+        params: {
+            searchType: searchType.value,
+            keyword: keyword
+        }
+    });
+}
+
+// (멘토) 멘토링 보고서 목록 조회
+export const fetchReportListByMentor = () => {
+    return springAPI.get(`mentor/report`);
+};
+
+// (멘티) 멘토링 보고서 목록 조회
+export const fetchReportListByMentee = () => {
+    return springAPI.get(`mentee/report`);
+}
+
+// (담당자) 멘토링 보고서 목록 조회
+export const fetchReportListByHR = () => {
+    return springAPI.get(`hr/report`);
+}
+
+// (팀장) 멘토링 보고서 목록 조회
+export const fetchReportListByLeader = () => {
+    return springAPI.get(`leader/report`);
+}
