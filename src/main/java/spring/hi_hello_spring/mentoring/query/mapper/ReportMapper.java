@@ -22,4 +22,6 @@ public interface ReportMapper {
     List<MenteeReportListQueryDTO> findReportListByMentee(Long employeeSeq);
 
     List<MenteeReportListQueryDTO> getReportSearch(@Param("searchType") String searchType, @Param("keyword") String keyword);
+
+    List<MenteeReportListQueryDTO> getReportSearchByLeader(@Param("employeeSeq") Long employeeSeq, @Param("searchType") String searchType, @Param("keyword") String keyword);
 }

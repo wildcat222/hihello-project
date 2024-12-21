@@ -113,8 +113,32 @@
             AND e.employee_name LIKE CONCAT('%', #{keyword}, '%')
         </if>
         <if test="searchType == 'num'">
-            AND e.employee_num = #{keyword}
+            AND e.employee_num LIKE CONCAT('%', #{keyword}, '%')
         </if>
     </select>
 
+    <!-- 팀장 검색 -->
+    <select id="getReportSearchByLeader" resultType="ReportListQueryDTO">
+        SELECT
+        r.report_seq AS reportSeq,
+        r.report_week AS reportWeek,
+        e.employee_name AS menteeName,
+        r.reg_date AS regDate
+        FROM
+        report AS r
+        JOIN
+        mentoring AS m ON r.mentoring_seq = m.mentoring_seq
+        JOIN
+        employee AS e ON m.mentee_seq = e.employee_seq
+        JOIN
+        employee AS login_user ON login_user.employee_seq = #{employeeSeq}
+        WHERE 1 = 1
+        AND e.department_seq = login_user.department_seq
+        <if test="searchType == 'name'">
+            AND e.employee_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="searchType == 'num'">
+            AND e.employee_num LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </select>
 </mapper>

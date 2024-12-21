@@ -61,12 +61,21 @@ public class ReportQueryController {
         return ResponseUtil.successResponse("멘토링 보고서 리스트를 조회하였습니다.", reportList).getBody();
     }
 
-    @Operation(summary = "(담당자, 팀장) 멘토링 보고서 검색", description = "멘토링 보고서를 검색하여 조회한다.")
-    @GetMapping("/report/search")
+    @Operation(summary = "(담당자) 멘토링 보고서 검색", description = "멘토링 보고서를 검색하여 조회한다.")
+    @GetMapping("/hr/report/search")
     public ApiResponse<?> getReportSearch(@RequestParam String searchType, @RequestParam String keyword) {
 
         List<MenteeReportListQueryDTO> reportList = reportQueryService.getReportSearch(searchType, keyword);
         return ResponseUtil.successResponse("성공적으로 멘토링 보고서를 검색하였습니다.", reportList).getBody();
     }
+
+    @Operation(summary = "(팀장) 멘토링 보고서 검색", description = "멘토링 보고서를 검색하여 조회한다.")
+    @GetMapping("/leader/report/search")
+    public ApiResponse<?> getReportSearchByLeader(@RequestParam String searchType, @RequestParam String keyword) {
+
+        List<MenteeReportListQueryDTO> reportList = reportQueryService.getReportSearchByLeader(searchType, keyword);
+        return ResponseUtil.successResponse("성공적으로 멘토링 보고서를 검색하였습니다.", reportList).getBody();
+    }
+
 
 }
