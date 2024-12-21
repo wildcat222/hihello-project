@@ -50,9 +50,17 @@ public class ReportQueryService {
         return reportMapper.findReportListByMentee(employeeSeq);
     }
 
+    // 담당자 검색
     public List<MenteeReportListQueryDTO> getReportSearch(String searchType, String keyword) {
 
         return reportMapper.getReportSearch(searchType, keyword);
+    }
+
+    // 팀장 검색
+    public List<MenteeReportListQueryDTO> getReportSearchByLeader(String searchType, String keyword) {
+
+        Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
+        return reportMapper.getReportSearchByLeader(employeeSeq, searchType, keyword);
     }
 
     public int getMentoringWeek() {
