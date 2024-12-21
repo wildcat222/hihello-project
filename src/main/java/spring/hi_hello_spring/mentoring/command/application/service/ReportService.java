@@ -30,11 +30,12 @@ public class ReportService {
         Mentoring mentoring = mentoringRepository.findByMenteeSeq(employeeSeq);
         Report report = modelMapper.map(writeReportDTO, Report.class);
 
-        Optional<Report> recentReportOpt = reportRepository.findByMentoringSeqOrderByReportWeekDesc(mentoring.getMentoringSeq());
+        Optional<Report> recentReportOpt = reportRepository.findFirstByMentoringSeqOrderByReportWeekDesc(mentoring.getMentoringSeq());
 
-        int week = recentReportOpt.map(Report::getReportWeek).orElse(0) + 1;
-        report.forGroup(mentoring.getMentoringSeq(), week);
-
+        if (recentReportOpt.isPresent() && recentReportOpt.get().getReportWeek() == report.getReportWeek()) {
+            throw new CustomException(ErrorCodeType.DUPLICATE_DATA);
+        }
+        report.forGroup(mentoring.getMentoringSeq());
         reportRepository.save(report);
     }
 

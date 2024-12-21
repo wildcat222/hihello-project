@@ -34,7 +34,7 @@ public class ReportQueryController {
     public ApiResponse<?> getReportListAll() {
 
         List<ReportListQueryDTO> reportList = reportQueryService.getReportListAll();
-        return ResponseUtil.successResponse("멘토링 보고서 리스트를 조회하였습니다.",reportList).getBody();
+        return ResponseUtil.successResponse("멘토링 보고서 리스트를 조회하였습니다.", reportList).getBody();
     }
 
     @Operation(summary = "(팀장) 멘토링 보고서 리스트 조회", description = "팀장은 멘토링 보고서 리스트를 조회한다.")
@@ -77,5 +77,12 @@ public class ReportQueryController {
         return ResponseUtil.successResponse("성공적으로 멘토링 보고서를 검색하였습니다.", reportList).getBody();
     }
 
+    @Operation(summary = "멘토링 주차 조회", description = "멘토링 주차를 조회한다.")
+    @GetMapping("/mentee/mentoring/week")
+    public ApiResponse<?> getReportMentoringWeek() {
+
+        int mentoringWeek = reportQueryService.getMentoringWeek();
+        return ResponseUtil.successResponse("멘토링 주차를 조회하였습니다.", mentoringWeek).getBody();
+    }
 
 }
