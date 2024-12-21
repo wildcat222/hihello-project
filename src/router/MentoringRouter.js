@@ -3,6 +3,7 @@ import MentoringPlanningCreatePage from "@/views/mentoring/MentoringPlanningCrea
 import MentoringPlanningDetailPage from "@/views/mentoring/MentoringPlanningDetailPage.vue";
 import MentoringMatchingCreatePage from "@/views/mentoring/MentoringMatchingCreatePage.vue";
 import MentoringReportListPage from "@/views/mentoring/report/MentoringReportListPage.vue";
+import MentoringCreateReportPage from "@/views/mentoring/report/MentoringCreateReportPage.vue";
 
 export default [
     {
@@ -25,5 +26,10 @@ export default [
     {
         path: '/mentoring/report',
         component: MentoringReportListPage
+    },
+    {
+        path: '/report/create',
+        component: MentoringCreateReportPage
     }
+
 ]

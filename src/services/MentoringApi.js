@@ -89,15 +89,25 @@ export const fetchReportListByMentor = () => {
 
 // (멘티) 멘토링 보고서 목록 조회
 export const fetchReportListByMentee = () => {
-    return springAPI.get(`mentee/report`);
+    return springAPI.get(`/mentee/report`);
 }
 
 // (담당자) 멘토링 보고서 목록 조회
 export const fetchReportListByHR = () => {
-    return springAPI.get(`hr/report`);
+    return springAPI.get(`/hr/report`);
 }
 
 // (팀장) 멘토링 보고서 목록 조회
 export const fetchReportListByLeader = () => {
-    return springAPI.get(`leader/report`);
+    return springAPI.get(`/leader/report`);
+}
+
+// (멘티) 멘토링 시작 날짜 조회
+export const getMentoringWeek = () => {
+    return springAPI.get(`/mentee/mentoring/week`);
+}
+
+// (멘티) 멘토링 보고서 작성
+export const CreateReport = (employeeSeq, reportData) => {
+    return springAPI.post(`/mentee/${employeeSeq}/report`, reportData);
 }
