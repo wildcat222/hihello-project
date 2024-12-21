@@ -2,6 +2,7 @@ package spring.hi_hello_spring.mentoring.query.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import spring.hi_hello_spring.mentoring.command.domain.aggregate.entity.Mentoring;
 import spring.hi_hello_spring.mentoring.query.dto.MenteeReportListQueryDTO;
 import spring.hi_hello_spring.mentoring.query.dto.ReportListQueryDTO;
 import spring.hi_hello_spring.mentoring.query.dto.ResMentoringReportDTO;
@@ -22,4 +23,6 @@ public interface ReportMapper {
     List<MenteeReportListQueryDTO> findReportListByMentee(Long employeeSeq);
 
     List<MenteeReportListQueryDTO> getReportSearch(@Param("searchType") String searchType, @Param("keyword") String keyword);
+
+    Mentoring getMentoringRegDateByMentee(Long employeeSeq);
 }

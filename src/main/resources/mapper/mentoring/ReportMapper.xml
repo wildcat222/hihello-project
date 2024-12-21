@@ -117,4 +117,12 @@
         </if>
     </select>
 
+    <select id="getMentoringRegDateByMentee" resultType="Mentoring">
+        SELECT
+            reg_date AS mentoringRegDate
+        FROM
+            mentoring
+        WHERE
+            mentee_seq = #{employeeSeq}
+    </select>
 </mapper>
