@@ -72,7 +72,7 @@ const menus = ref([
   { name: "인턴 위키", url: "/wiki", role: "MENTEE" },
   { name: "멘토 소개", url: "/mentor/intro", role: "MENTEE" },
   // { name: "멘토 채팅", url: "/mentor-chat", role: "MENTEE" },
-  // { name: "보고서 조회", url: "/mnetoring/report", role: "MENTEE" },
+  { name: "보고서 조회", url: "/mentoring/report", role: "MENTEE" },
 
   // 담당자 ASIDE
   { name: "사원 관리", url: "/employee-management", role: "HR" },
@@ -82,7 +82,7 @@ const menus = ref([
     subMenus: [
       { name: "멘토링 매칭", url: "/mentoring/matching" },
       { name: "멘토링 계획서", url: "/mentoring/planning" },
-      // { name: "멘토링 보고서", url: "/mentoring/report" },
+      { name: "멘토링 보고서", url: "/mentoring/report" },
     ],
   },
   { name: "온보딩 설계", url: "/onboarding/design", role: "HR" },
@@ -116,7 +116,7 @@ const menus = ref([
     position: "팀장",
     subMenus: [
       { name: "멘토링 계획서", url: "/mentoring/planning" },
-      // { name: "멘토링 보고서", url: "/mentoring/report" },
+      { name: "멘토링 보고서", url: "/mentoring/report" },
     ],
   },
   {
@@ -131,7 +131,7 @@ const menus = ref([
     position: "팀장",
     subMenus: [
       { name: "과제 평가 조회", url: "/task-eval" },
-      // { name: "멘토링 보고서 조회", url: "/onboarding/report" },
+      { name: "멘토링 보고서 조회", url: "/onboarding/report" },
     ],
   },
   { name: "최종 평가", url: "/final-eval", role: "MENTOR", position: "팀장" },

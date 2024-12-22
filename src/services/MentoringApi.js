@@ -102,7 +102,7 @@ export const fetchReportListByLeader = () => {
     return springAPI.get(`/leader/report`);
 }
 
-// (멘티) 멘토링 시작 날짜 조회
+// (멘티) 멘토링 주차 조회
 export const getMentoringWeek = () => {
     return springAPI.get(`/mentee/mentoring/week`);
 }
@@ -110,4 +110,26 @@ export const getMentoringWeek = () => {
 // (멘티) 멘토링 보고서 작성
 export const CreateReport = (employeeSeq, reportData) => {
     return springAPI.post(`/mentee/${employeeSeq}/report`, reportData);
+}
+
+// 보고서 상세조회
+export const getReportDetail = (reportSeq) => {
+    return springAPI.get(`/report/detail`, {
+        params: {
+            reportSeq: reportSeq
+        }
+    });
+}
+
+// (멘티) 보고서 수정
+export const updateReport = (employeeSeq, reportSeq, updateData) => {
+    const response = springAPI.put(`/mentee/${employeeSeq}/report/${reportSeq}`, updateData);
+    return response;
+}
+
+// (멘토) 피드백 작성/수정
+export const updateFeedback = (employeeSeq, reportSeq, reportFeedbackContent) => {
+    return springAPI.put(`/mentor/${employeeSeq}/report/${reportSeq}`, {
+        reportFeedbackContent: reportFeedbackContent
+    });
 }
