@@ -64,10 +64,15 @@ const handleSearch = async (keyword) => {
   }
 };
 
-// 라우팅 처리 함수
+// 라우팅 처리 함수(보고서 작성)
 const goToRegisterPage = () => {
-  router.push('/report/create');
+  router.push('/report/edit');
 };
+
+// 라우팅 처리 함수(상세 조회)
+const goToDetail = (reportSeq) => {
+  router.push(`/mentoring/report/${reportSeq}`);
+}
 
 // 초기 데이터 로드
 onMounted(async () => {
@@ -87,11 +92,11 @@ onMounted(async () => {
         <option value="name">이름</option>
         <option value="num">사번</option>
       </select>
-      <div class="yellow-box" @click="goToRegisterPage">
-        <img
-            src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/8d64cbf7-77f8-4670-8ddf-40e43d7bc481_plus.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241216T063855Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241216%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=7b785c3af1fdf24cef7127814d2d0327e29824719c832902b14f72af28fb0af6"/>
-        <div>보고서 등록</div>
-      </div>
+    </div>
+    <div class="yellow-box" @click="goToRegisterPage" v-if="employeeRole[0] === 'MENTEE'">
+      <img
+          src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/8d64cbf7-77f8-4670-8ddf-40e43d7bc481_plus.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241216T063855Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241216%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=7b785c3af1fdf24cef7127814d2d0327e29824719c832902b14f72af28fb0af6"/>
+      <div>보고서 등록</div>
     </div>
 
     <ListComponent :items="reports">
@@ -103,7 +108,7 @@ onMounted(async () => {
       </template>
 
       <template #item="{ item, index }">
-        <div class="list-row">
+        <div @click="goToDetail(item.reportSeq)" class="list-row">
           <div class="list-cell">{{ index + 1 }}</div>
           <div class="list-cell">{{ item.reportWeek }}</div>
           <div class="list-cell" v-if="employeeRole[0] !== 'MENTEE' && employeeRole[0] !== 'MENTOR'">{{ item.menteeName }}</div>
@@ -160,6 +165,7 @@ onMounted(async () => {
 .list-row {
   display: flex;
   padding: 10px 20px;
+  cursor: pointer;
 }
 
 .list-cell {
