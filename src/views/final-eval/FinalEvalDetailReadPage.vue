@@ -46,6 +46,7 @@ onMounted(async () => {
 </script>
 
 <template>
+  <div class="final-eval-detail-read">
   <div class="page-container">
     <div class="page-title">최종 평가 조회</div>
     <WhiteBoxComponent class="white-box-component">
@@ -57,8 +58,8 @@ onMounted(async () => {
             </div>
             <div class="employee-info-container">
               <div class="font-25-bold">{{ employeeName }}</div>
-              <div>{{ employeePhone }}</div>
-              <div>{{ employeeEmail }}</div>
+              <div class="user-info-data">{{ employeePhone }}</div>
+              <div class="user-info-data">{{ employeeEmail }}</div>
             </div>
           </div>
           <div class="employee-sub-info">
@@ -92,5 +93,6 @@ onMounted(async () => {
         <button class="close-button flex">닫기</button>
       </div>
     </WhiteBoxComponent>
+  </div>
   </div>
 </template>

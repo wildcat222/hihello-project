@@ -1,5 +1,5 @@
 <template>
-  <div v-if="editor" class="container">
+  <div v-if="editor" class="editor-component-container">
     <div class="control-group">
       <div class="button-group">
         <button @click="editor.chain().focus().toggleBold().run()"
@@ -174,7 +174,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 blockquote {
   border-left: 4px solid var(--yellow);
   padding-left: 1rem;

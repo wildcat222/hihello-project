@@ -1,44 +1,37 @@
-.header {
-    margin: 0 0 0 100px;
-    font-family: "Noto Sans KR", sans-serif;
-}
-.TaskListbody{
-    font-family: "Noto Sans KR", sans-serif;
-}
-.underline {
+.task-list-page-container .underline {
     text-decoration: underline;
     text-decoration-color: #7031FC; /* 밑줄 색상 */
     text-decoration-thickness: 2px;
     font-weight: bold; /* 글씨 두껍게 */
 }
-.user-roll{
+.task-list-page-container .user-roll{
     margin:0 0 13px 0;
 }
-.search-bar {
+.task-list-page-container .search-bar {
     width: 900px;
     display: flex;
     margin:0 0 21px 0;
 }
-.list-item{
+.task-list-page-container .list-item{
     display: flex;
     margin: 0 0 0 17px;
 }
 
-.task-header {
+.task-list-page-container .task-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px; /* 기본 간격 */
     width: 100%;
 }
-.task-header, .list-item {
+.task-list-page-container .task-header, .list-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
     width: 100%;
 }
-.list-button-delete{
+.task-list-page-container .list-button-delete{
     width: 47px;
     height: 25px;
     border-radius: 10px;
@@ -47,7 +40,7 @@
     font-size: 12px;
     color: #FFF;
 }
-.list-button-revise{
+.task-list-page-container .list-button-revise{
     width: 47px;
     height: 25px;
     border-radius: 10px;
@@ -57,65 +50,63 @@
     color: #FFF;
     margin: 0 4px 0 0;
 }
-.task-num-title{
+.task-list-page-container .task-num-title{
     flex: 1;
     text-align: center;
     margin-right: 10px;
 }
-.list-item-num {
+.task-list-page-container .list-item-num {
     flex: 1; /* 과제 번호 */
     text-align: center;
 }
 
-.task-depart-title{
+.task-list-page-container .task-depart-title{
     flex:1;
     text-align: center;
     margin-right: 10px;
 }
-.list-item-departmentName {
+.task-list-page-container .list-item-departmentName {
     flex: 1; /* 과제 부서 */
     text-align: center;
 }
-.task-round-title{
+.task-list-page-container .task-round-title{
     flex:1;
     text-align: center;
 }
-.list-item-taskRound {
+.task-list-page-container .list-item-taskRound {
     flex: 1; /* 과제 지정 */
     text-align: center;
 }
-.list-item-title{
+.task-list-page-container .list-item-title{
     flex: 3.4; /* 과제 제목 */
     padding: 0 0 0 20px;
     text-align: center;
 }
-.task-name-title {
+.task-list-page-container .task-name-title {
     flex: 4; /* 과제 제목 */
     text-align: center;
     padding-left: 10px; /* 내부에서 오른쪽으로 20px 이동 */
 }
-.task-title-box{
+.task-list-page-container .task-title-box{
     flex: 0.6;
 
 }
-.list-button{
+.task-list-page-container .list-button{
     flex:1;
 }
-.TaskListbody{
+.task-list-page-container .TaskListbody{
     border-radius:10px;
     box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.25);
     background: #FDFDFD;
-    width: 68%;
-    margin: 0 0 0 95px;
     padding: 47px 46.17px 12px 43px;
 }
-.add-task {
+.task-list-page-container .add-task {
     text-align: center;
     margin: 0 0 0 35px;
     border-radius: 10px;
     color: white;
 }
-.title {
+.task-list-page-container .title {
     text-align: center;
     font-weight: bold;
     font-size: 35px;

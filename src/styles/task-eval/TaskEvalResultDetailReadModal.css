@@ -1,14 +1,13 @@
-.flex {
+.task-eval-result-list-container .flex {
     display: flex;
     align-items: center;
 }
 
-.font18 {
+.task-eval-result-list-container .font18 {
     font-size: 18px;
-    font-weight: bold;
 }
 
-.modal-container {
+.task-eval-result-list-container .modal-container {
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
@@ -19,10 +18,12 @@
     left: 0;
     z-index: 999;
 }
-
-.modal-content-container {
-    width: 80%;
-    max-width: 60rem;
+.task-eval-result-detail-read-modal-table-row .table-left{
+    font-weight: 600;
+}
+.task-eval-result-list-container .modal-content-container {
+    width: 60%;
+    height: 600px;
     background-color: var(--white);
     padding: 4.8rem;
     box-sizing: border-box;
@@ -30,33 +31,33 @@
     border-radius: 8px;
 }
 
-.modal-content-container {
+.task-eval-result-list-container .modal-content-container {
     align-items: center;
 }
 
-.modal-content-container > table:first-child {
+.task-eval-result-list-container .modal-content-container > table:first-child {
     width: 95%;
     margin: 2rem auto;
 }
 
 /* 클릭 시 모달 닫기, 버튼과 모달 외부 클릭 방지*/
-.modal-content-container, .modal-container {
+.task-eval-result-list-container .modal-content-container, .modal-container {
     pointer-events: auto;
 }
 
-.task-eval-result-detail-read-modal-table-row > td:first-child {
+.task-eval-result-list-container .task-eval-result-detail-read-modal-table-row > td:first-child {
     width: 20%;
 }
 
-.task-eval-result-detail-result-modal-td {
+.task-eval-result-list-container .task-eval-result-detail-result-modal-td {
     margin: 0 1rem;
 }
 
-.gray-hr {
+.task-eval-result-list-container .gray-hr {
     border: 1px solid var(--gray);
 }
 
-.button {
+.task-eval-result-list-container .button {
     width: 6.5rem;
     height: 2.3rem;
     cursor: pointer;
@@ -64,30 +65,30 @@
     border: none;
 }
 
-.purple-button {
+.task-eval-result-list-container .purple-button {
     background-color: var(--purple);
     color: var(--white);
     margin-left: 2rem;
     font-size: 16px;
 }
 
-.task-eval-table {
+.task-eval-result-list-container .task-eval-table {
     width: 95%;
     border-collapse: collapse;
     margin: 2.5rem auto;
 }
 
-.task-eval-table th, .task-eval-table td {
+.task-eval-result-list-container .task-eval-table th, .task-eval-table td {
     border: 2px solid var(--light-gray);
     padding: 8px;
     text-align: center;
 }
 
-.yellow-button-container {
+.task-eval-result-list-container .yellow-button-container {
     text-align: center;
 }
 
-.yellow-button {
+.task-eval-result-list-container .yellow-button {
     background-color: var(--yellow);
     color: var(--black);
 }

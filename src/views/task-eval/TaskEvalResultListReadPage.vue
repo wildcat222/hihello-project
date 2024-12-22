@@ -114,7 +114,7 @@ onMounted(async () => {
   font-size: 35px;
   font-weight: bold;
   text-align: center;
-  margin: 6.562rem 0 2.88rem 0;
+  margin: 105px 0px 49px 0px;
 }
 
 .white-box-list-component {

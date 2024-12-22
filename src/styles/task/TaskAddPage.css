@@ -1,20 +1,20 @@
-.taskAddBody{
+.task-add-page-container .taskAddBody{
     font-family: "Noto Sans KR", sans-serif;
     background-color: var(--white);
     border-radius: 10px;
     padding: 0 0 40px 0;
     margin: 0 0 20px 0;
 }
-.taskAddHeader{
+.task-add-page-container .taskAddHeader{
     font-family: "Noto Sans KR", sans-serif;
 }
 
-.submitButton-container{
+.task-add-page-container .submitButton-container{
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.task-submit-button {
+.task-add-page-container .task-submit-button {
     background-color: #7031FC;
     color: white;
     padding: 10px 20px;
@@ -24,14 +24,14 @@
     cursor: pointer;
 
 }
-.evalContent{
+.task-add-page-container .evalContent{
     width: 250px;
     height: 25px;
     border-radius: 10px;
     border: 1px #ccc solid;
     text-align: center;
 }
-.evalButton{
+.task-add-page-container .evalButton{
     width: 80px;
     height: 30px;
     border-radius: 10px;
@@ -39,52 +39,52 @@
     background: #7031FC;
     color: white;
 }
-.evalscore{
+.task-add-page-container .evalscore{
     width: 50px;
     height: 25px;
     border-radius: 10px;
     border: 1px #ccc solid;
     text-align: center;
 }
-table {
+.task-add-page-container table {
     width: 100%;
     border-collapse: collapse; /* 테이블 경계선 합치기 */
 }
 
-th, td {
+.task-add-page-container th, td {
     border: 1px solid #ccc;
     padding: 10px;
     text-align: center;
 }
 
-th {
+.task-add-page-container th {
     background-color: #f4f4f4;
     font-weight: bold;
 }
-.table-detail{
+.task-add-page-container .table-detail{
     display: flex;
     flex-direction: column;
     margin: 10px 0 0 10px;
     padding: 0 100px 0 0;
 }
 
-.header-title {
+.task-add-page-container .header-title {
     text-align: center;
     font-weight: bold;
     font-size: 35px;
     margin: 105px 0 46px 0;
 }
-.taskAddContainer {
+.task-add-page-container .taskAddContainer {
     display: flex;
     flex-direction: column;
     padding: 62px 0 0 132px;
     gap: 19px;
 
 }
-.container-line {
+.task-add-page-container .container-line {
     display: flex;
 }
-.task-name,
+.task-add-page-container .task-name,
 .task-depart,
 .task-round,
 .task-type,
@@ -98,7 +98,7 @@ th {
     justify-content: center;
     margin-top: 3px;
 }
-.task-attach {
+.task-add-page-container .task-attach {
     margin-right: 24px;
     color: #000;
     font-size: 20px;
@@ -108,10 +108,10 @@ th {
     justify-content: center;
     margin-top: 3px;
 }
-.task-attach-input {
+.task-add-page-container .task-attach-input {
     display: none; /* 기본 파일 선택 버튼 숨기기 */
 }
-.file-name {
+.task-add-page-container .file-name {
     margin-left: 10px;
     font-size: 16px;
     color: #333;
@@ -119,7 +119,7 @@ th {
     display: inline-block;
     align-content: center;
 }
-.file-upload-label {
+.task-add-page-container .file-upload-label {
     display: inline-block;
     padding: 7px 10px;
     background-color: #7031FC; /* 버튼 배경색 */
@@ -131,17 +131,17 @@ th {
     text-align: center;
     transition: background-color 0.3s ease; /* 배경색 변화 효과 */
 }
-.file-upload-label:hover {
+.task-add-page-container .file-upload-label:hover {
     background-color: #5a1dc2; /* 마우스 호버 시 배경색 변경 */
 }
-.file-name {
+.task-add-page-container .file-name {
     margin-left: 10px;
     font-size: 16px;
     color: #333;
     font-weight: 500;
     display: inline-block;
 }
-.task-name-input {
+.task-add-page-container .task-name-input {
     width: 60%;
     height: 15px;
     padding: 5px;
@@ -150,7 +150,7 @@ th {
     border-radius: 10px;
     font-size: 14px;
 }
-.task-content-input {
+.task-add-page-container .task-content-input {
     width: 60%;
     height: 202px; /* 과제 내용 입력란의 높이 */
     padding: 5px;
@@ -159,11 +159,11 @@ th {
     border-radius: 10px;
     font-size: 14px;
 }
-.table-container{
+.task-add-page-container .table-container{
     margin:20px 0 40px 0;
 }
 
-.task-round-input,
+.task-add-page-container .task-round-input,
 .task-type-input {
     width: 100px;
     height: 30px;
@@ -174,7 +174,7 @@ th {
     font-size: 14px;
 }
 
-.task-depart-input {
+.task-add-page-container .task-depart-input {
     width: 100px;
     height: 30px;
     padding: 3px;
@@ -184,7 +184,7 @@ th {
     font-size: 14px;
 }
 
-.task-group-button {
+.task-add-page-container .task-group-button {
     margin-left: 10px;
     padding: 5px 10px;
     background-color: #7031FC;

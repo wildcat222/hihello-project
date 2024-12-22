@@ -102,6 +102,7 @@ const handleAdd = async () => {
         await postPeerReviewList(requestData);
         isAdding.value = false;
         newItem.value = { name: "", score: null };
+        alert("평가 지표 등록 성공");
         await loadPeerReviewList();
     } catch (error) {
         console.error("동료 평가 지표 추가 실패:", error?.response?.data || error.message);
@@ -111,6 +112,7 @@ const handleAdd = async () => {
 const handleDelete = async (peerReviewListSeq) => {
     try {
         await deletePeerReviewList(peerReviewListSeq);
+        alert("평가 지표 삭제 성공");
         await loadPeerReviewList();
     } catch (error) {
         console.error("동료 평가 지표 삭제 실패:", error);

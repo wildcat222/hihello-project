@@ -54,11 +54,11 @@
 }
 
 .peer-review-list__add-btn {
-    background-color: var(--green);
+    background-color: var(--purple);
     font-size: 20px;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    border-radius: 10px;
+    width: 80%;
+    height: 33px;
 }
 
 .peer-review-list__add-button-container {
@@ -66,7 +66,6 @@
     justify-content: center;
     margin-top: 10px;
 }
-
 .peer-review-list__input-field {
     padding: 8px;
     border: 1px solid #ddd;

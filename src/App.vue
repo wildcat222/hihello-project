@@ -72,20 +72,19 @@ onUnmounted(() => {
 <style scoped>
 #app {
   display: flex;
-  height: 100vh;
+  height: 100%;
   background-color: var(--ivory);
 }
 
 .router-container {
   flex-grow: 1;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .aside {
-  height: 100vh;
+  height: 100%;
   position: relative;
 }
 

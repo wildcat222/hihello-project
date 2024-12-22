@@ -86,7 +86,7 @@ onMounted(() => {
 
 .modal-content {
     width: 25vw;
-    padding: 20px;
+    padding: 50px;
     border-radius: 8px;
     position: relative;
 }
@@ -98,12 +98,12 @@ onMounted(() => {
     background: none;
     border: none;
     font-size: 20px;
-    color: #888;
+    color: var(--black);
     cursor: pointer;
 }
 
 .modal-close-btn:hover {
-    color: #333;
+    color: var(--red);
 }
 
 .modal-title {
@@ -128,7 +128,9 @@ onMounted(() => {
     display: flex;
     justify-content: space-between;
     font-weight: bold;
-    margin-top: 30px;
+    margin-top: 15px;
+    padding-top: 10px;
     font-size: 17px;
+    border-top: 2px solid var(--purple);
 }
 </style>

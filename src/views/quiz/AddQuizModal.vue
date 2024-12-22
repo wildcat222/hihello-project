@@ -17,11 +17,11 @@
       <div class="form-group">
         <label>정답</label>
         <div class="answer-options">
-          <label>
+          <label class="quiz-add-answer-line">
             <input type="radio" value="true" v-model="quizAnswer" />
             <span class="radio-custom"></span> O
           </label>
-          <label>
+          <label class="quiz-add-answer-line">
             <input type="radio" value="false" v-model="quizAnswer" />
             <span class="radio-custom"></span> X
           </label>
@@ -114,7 +114,10 @@ const registerQuiz = async () => {
 
 
 <style scoped>
-/* 모달 스타일 */
+.quiz-add-answer-line{
+  display: flex;
+  align-items: center;
+}
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -196,6 +199,7 @@ input[type="radio"] {
     position: relative;
     cursor: pointer;
     transition: all 0.3s ease;
+    margin-right: 10px;
 }
 
 input[type="radio"]:checked + .radio-custom {
@@ -234,22 +238,22 @@ input[type="radio"]:checked + .radio-custom::after {
 }
 
 .save-button {
-    background-color: #7a5af5;
-    color: #fff;
+    background-color: var(--purple);
+    color: var(--white);
 }
 
 .save-button:disabled {
-    background-color: #ccc;
-    color: #888;
+    background-color: var(--light-gray);
+    color: var(--gray);
 }
 
 .cancel-button {
-    background-color: #f5f5f5;
-    color: #555;
+    background-color: var(--light-gray);
+    color: var(--black);
 }
 
 .cancel-button:hover {
-    background-color: #e0e0e0;
+    background-color: var(--gray);
 }
 
 @keyframes fadeIn {

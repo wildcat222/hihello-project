@@ -2,16 +2,21 @@
   <aside class="aside-menu">
     <!-- 로고 클릭 시 /main으로 이동 -->
     <div class="logo">
-      <router-link to="/main">HiHello</router-link>
+      <router-link to="/main" class="logo-style">HiHello</router-link>
     </div>
 
     <!-- 메뉴 -->
-    <ul>
+    <ul class="aside-menu-list">
       <!-- 이름 조회 -->
-      <li class="menu-item" @click.stop="openProfileModal">{{ employeeName }}</li>
+      <li class="aside-login-name" @click.stop="openProfileModal"><svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+      </svg>{{ employeeName }} 님</li>
 
       <!-- 로그아웃 메뉴 -->
-      <li class="menu-item menu-title" @click="logout">로그아웃</li>
+      <li class="aside-logout-button" @click="logout"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+        <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+      </svg>로그아웃</li>
 
       <!-- 메뉴 리스트 -->
       <li v-for="menu in filteredMenus" :key="menu.name" class="menu-item">
@@ -164,11 +169,28 @@ onMounted(() => {
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-
+.aside-login-name{
+  font-weight: 600;
+  font-size: 20px;
+  display: flex;
+  gap: 10px;
+  margin-left: -3px;
+}
+.aside-logout-button{
+  margin-top: 10px;
+  margin-bottom: 30px;
+  color: var(--gray);
+  display: flex;
+  gap: 10px;
+}
+.aside-menu-list{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 .aside-menu {
   width: 200px;
   height: 100vh;
-
   flex-direction: column;
   align-items: center;
   background-color: var(--white);
@@ -178,12 +200,16 @@ onMounted(() => {
 }
 
 .logo {
+  margin-top: 50px;
   font-size: 35px;
   font-weight: 700;
   font-family: 'Inter', sans-serif;
   margin-bottom: 60px;
 }
-
+.logo-style{
+  text-decoration: none;
+  color: var(--black);
+}
 ul {
   list-style: none;
   padding: 0;
@@ -192,9 +218,9 @@ ul {
 }
 
 .menu-item {
-  margin-bottom: 30px;
-  font-size: 20px;
-  font-weight: bold;
+  margin-bottom: 20px;
+  font-size: 17px;
+  font-weight: 600;
   text-align: center;
   white-space: nowrap;
   position: relative;

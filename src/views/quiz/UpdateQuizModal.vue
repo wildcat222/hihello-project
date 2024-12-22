@@ -13,11 +13,11 @@
             <div class="form-group">
                 <label>정답</label>
                 <div class="answer-options">
-                    <label>
+                    <label class="quiz-update-answer-line">
                         <input type="radio" :value="true" v-model="quizAnswer" />
                         <span class="radio-custom"></span> O
                     </label>
-                    <label>
+                    <label class="quiz-update-answer-line">
                         <input type="radio" :value="false" v-model="quizAnswer" />
                         <span class="radio-custom"></span> X
                     </label>
@@ -96,7 +96,9 @@ const updateQuiz = async () => {
 </script>
 
 <style scoped>
-/* 모달 스타일 */
+.quiz-update-answer-line{
+  display: flex;
+}
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -123,7 +125,7 @@ const updateQuiz = async () => {
 .modal-title {
     margin-bottom: 20px;
     font-size: 1.8rem;
-    color: #333;
+    color: var(--black);
     text-align: center;
 }
 
@@ -138,7 +140,7 @@ label {
     flex: 0 0 100px;
     font-size: 1rem;
     font-weight: 600;
-    color: #555;
+    color: var(--black);
 }
 
 textarea,
@@ -146,7 +148,7 @@ textarea,
     flex: 1;
     width: 100%;
     padding: 10px 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--gray);
     border-radius: 6px;
     outline: none;
     font-size: 0.95rem;
@@ -157,7 +159,6 @@ textarea:focus {
     border-color: #7a5af5;
     box-shadow: 0 0 5px rgba(122, 90, 245, 0.4);
 }
-
 
 .answer-options {
     display: flex;
@@ -180,6 +181,7 @@ input[type="radio"] {
     position: relative;
     cursor: pointer;
     transition: all 0.3s ease;
+    margin-right: 10px;
 }
 
 input[type="radio"]:checked+.radio-custom {

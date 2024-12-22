@@ -37,7 +37,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 1vw;
+    padding: 7px;
     border-radius: 10px;
     width: auto;
     max-width: none;
@@ -65,4 +65,11 @@
 
 .header-score, .item-score {
     flex: 1;
+}
+.hr-quiz-result-page-title{
+    font-size: 35px;
+    font-weight: 600;
+    margin-top: 105px;
+    margin-bottom: 49px;
+    text-align: center;
 }
