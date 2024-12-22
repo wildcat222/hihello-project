@@ -22,8 +22,8 @@ public class ReportQueryController {
     private final ReportQueryService reportQueryService;
 
     @Operation(summary = "멘토링 보고서 상세 조회", description = "멘토링 보고서를 상세 조회한다.")
-    @GetMapping("/report/{reportSeq}")
-    public ApiResponse<?> getReportDetail(@PathVariable Long reportSeq) {
+    @GetMapping("/report/detail")
+    public ApiResponse<?> getReportDetail(@RequestParam Long reportSeq) {
 
         ResMentoringReportDTO reqMentoringReportDTO = reportQueryService.findReportDetail(reportSeq);
         return ResponseUtil.successResponse("멘토링 보고서를 성공적으로 조회하였습니다.", reqMentoringReportDTO).getBody();

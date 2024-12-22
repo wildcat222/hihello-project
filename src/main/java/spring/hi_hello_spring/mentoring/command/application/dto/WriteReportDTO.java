@@ -11,7 +11,6 @@ import lombok.ToString;
 @ToString
 public class WriteReportDTO {
 
-    private Long mentoringSeq;
     private String reportContent;
     private String reportFeeling;
     private int reportWeek;
