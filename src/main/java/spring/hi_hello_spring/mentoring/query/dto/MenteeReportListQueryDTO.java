@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -15,5 +15,5 @@ public class MenteeReportListQueryDTO {
 
     private Long reportSeq;
     private int reportWeek;
-    private LocalDateTime regDate;  // 보고서 생성 날짜
+    private LocalDate regDate;  // 보고서 생성 날짜
 }
