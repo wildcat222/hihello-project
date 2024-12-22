@@ -1,7 +1,7 @@
 <template>
     <div class="peer-review__container">
         <!-- 헤더 -->
-        <h1>동료 평가 조회</h1>
+        <div class="peer-review-page-title">동료 평가 조회</div>
 
         <!-- 리스트 헤더와 드롭다운 -->
         <div class="peer-review__header-wrapper">

@@ -29,6 +29,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <div class="task-list-page-container">
   <div class="header">
     <div class="title">과제 목록</div>
     <div class="search-bar">
@@ -73,5 +74,6 @@ onMounted(() => {
         </div>
       </template>
     </ListComponent>
+  </div>
   </div>
 </template>

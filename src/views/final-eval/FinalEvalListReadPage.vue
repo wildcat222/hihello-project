@@ -70,7 +70,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="page-container">
+  <div class=" final-eval-result-list">
+  <div class=" page-container">
     <div class="page-title">최종 평가 조회</div>
     <SearchBarComponent @search="searchingFinalEvalResultList"/>
     <WhiteBoxComponent class="white-box-component">
@@ -97,5 +98,6 @@ onMounted(() => {
         </template>
       </ListComponent>
     </WhiteBoxComponent>
+  </div>
   </div>
 </template>

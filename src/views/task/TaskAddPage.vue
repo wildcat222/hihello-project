@@ -24,6 +24,7 @@ onMounted(fetchData);
 </script>
 
 <template>
+  <div class="task-add-page-container">
   <div class="taskAddHeader">
     <div class="header-title">
       과제 등록
@@ -107,5 +108,6 @@ onMounted(fetchData);
       <div class="submitButton-container">
         <button @click="submitTask" class="task-submit-button">과제 등록</button>
       </div>
+  </div>
   </div>
 </template>

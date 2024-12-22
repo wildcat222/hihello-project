@@ -5,7 +5,6 @@
     margin: 0 0 0 125px;
 }
 .taskInd-full-container {
-    font-family: "Noto Sans KR", sans-serif;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -13,7 +12,7 @@
 }
 .taskInd-header {
     display: flex;
-    margin: 105px 20px 46px 20px;
+    margin: 105px 0px 49px 0px;
     justify-content: space-between;
     text-align: center;
     font-weight: bold;
@@ -31,7 +30,7 @@
     width: 60px;
     height: 23px;
     border-radius: 10px;
-    background: #FFC107;
+    background: var(--yellow);
     border: 0px;
     box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25);
     color: white;
@@ -113,7 +112,7 @@
 .taskIndAddButtonContainer{
     width:auto;
 }
-.taskIndAddButton:hober{
+.taskIndAddButton:hover{
     cursor:pointer;
 }
 .taskInd-item-container{

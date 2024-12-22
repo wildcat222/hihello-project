@@ -21,7 +21,7 @@
     box-sizing: border-box;
 }
 
-.register-button {
+.hr-quiz-container .register-button {
     background-color:  var(--purple);
     color: var(--white);
     border: none;
@@ -42,7 +42,7 @@
     width: 90%;
 }
 
-.add-button {
+.hr-quiz-container .main-add-button {
     background-color: var(--yellow);
     color: var(--black);
     border: none;

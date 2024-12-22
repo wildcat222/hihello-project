@@ -22,9 +22,10 @@ loadTemplates(); // 화면 로드시 템플릿 리스트 불러오기
 </script>
 
 <template>
+  <div class="onboarding-data-page-title">온보딩 설계</div>
   <div class="onboarding-total-container">
     <!-- 왼쪽 리스트 -->
-    <div class="sidebar">
+    <div class="onboarding-data-sidebar">
       <div class="onboarding-page-title">온보딩 절차</div>
       <div class="small-notice">드래그해서 순서를 변경해보세요.</div>
       <ul class="onboarding-ul">
@@ -45,7 +46,7 @@ loadTemplates(); // 화면 로드시 템플릿 리스트 불러오기
     </div>
 
     <!-- 템플릿 생성 폼 -->
-    <div class="form">
+    <div class="form" >
       <form @submit.prevent="submitTemplate" class="onboarding-data-form">
         <div class="onboarding-data-line">
           <div class="onboarding-data-label">
@@ -305,9 +306,8 @@ loadTemplates(); // 화면 로드시 템플릿 리스트 불러오기
 <style scoped>
 .form {
   width: 70%;
-  padding: 20px;
+  padding: 30px;
   background: var(--white);
   border-radius: 0px 10px 10px 0px;
 }
-
 </style>

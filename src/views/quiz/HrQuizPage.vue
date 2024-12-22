@@ -36,7 +36,7 @@
                 @tab-selected="onTabSelected" 
                 @delete-category="deleteCategory" 
             />
-            <button class="add-button" @click="showAddCategoryModal = true">+</button>
+            <button class="main-add-button" @click="showAddCategoryModal = true">+</button>
         </div>
 
         <!-- 카테고리 추가 모달 -->

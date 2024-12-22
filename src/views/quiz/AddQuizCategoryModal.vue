@@ -65,7 +65,7 @@ input {
     padding: 10px;
     width: 80%;
     margin-bottom: 15px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--gray);
     border-radius: 4px;
     font-size: 14px;
 }
@@ -74,23 +74,25 @@ input {
     display: flex;
     justify-content: center;
     gap: 10px;
+    white-space: nowrap;
+    height: 33px;
 }
 
 .add-button {
-    background-color: #6c5ce7;
-    color: white;
+    background-color: var(--purple);
+    color: var(--white);
     border: none;
-    padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    width: 50px;
 }
 
 .close-button {
-    background-color: #ccc;
-    color: black;
+    background-color: var(--gray);
+    color: var(--black);
     border: none;
-    padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    width: 50px;
 }
 </style>

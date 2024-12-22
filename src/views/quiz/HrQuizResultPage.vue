@@ -1,7 +1,7 @@
 <template>
     <div class="hr-quiz-result-container">
         <!-- 헤더 -->
-        <h1>퀴즈 결과 조회</h1>
+        <div class="hr-quiz-result-page-title">퀴즈 결과 조회</div>
 
         <!-- 검색 바 -->
         <div class="search-container">

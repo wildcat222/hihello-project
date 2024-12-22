@@ -18,7 +18,7 @@ export default {
 
     const data = ref([]); // 전체 데이터 저장
     const groups = ref([]); // 그룹 리스트
-    const groupCount = ref(2); // 그룹 개수 (기본값: 3)
+    const groupCount = ref(2); // 그룹 개수 (기본값: 2)
     const loading = ref(true); // 로딩 상태
     const error = ref(null); // 에러 상태
 
@@ -123,7 +123,7 @@ export default {
 </script>
 
 <template>
-  <div class="total-box">
+  <div class="grouping-page-total-box">
     <div class="pagetitle">그룹 매칭</div>
     <div v-if="loading">로딩 중입니다...</div>
     <div v-if="error">{{ error }}</div>
@@ -132,7 +132,7 @@ export default {
         <!-- 그룹 개수 입력 -->
         <div class="group-container">
           <div class="group-line">
-            <label for="groupCount">그룹 개수</label>
+            <label for="groupCount" class="group-count-label">그룹 개수</label>
             <input
                 type="number"
                 v-model="groupCount"
@@ -166,8 +166,10 @@ export default {
         </div>
 
         <div class="line">
-          <div class="sub-title">멘티 리스트</div>
-          <ul>
+          <div class="sub-title"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+            <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/>
+          </svg> 멘티 리스트</div>
+          <ul class="grouping-list-ul">
             <li
                 v-for="(item, index) in draggableItems"
                 :key="index"

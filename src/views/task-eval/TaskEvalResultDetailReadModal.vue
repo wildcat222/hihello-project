@@ -79,12 +79,13 @@ watch(
 </script>
 
 <template>
-  <div v-if="isOpen" class="modal-container flex" @click="closeModalOutside">
-    <div class="modal-content-container" @click.stop>
-      <table class="font18">
-        <tbody>
+  <div class="task-eval-result-list-container">
+    <div v-if="isOpen" class="modal-container flex" @click="closeModalOutside">
+      <div class="modal-content-container" @click.stop>
+        <table class="font18">
+          <tbody>
           <tr class="task-eval-result-detail-read-modal-table-row">
-            <td>제출자</td>
+            <td class="table-left">제출자</td>
             <td>
               <div class="flex task-eval-result-detail-result-modal-td">
                 <div>{{ props.taskData.submitterName }}</div>
@@ -93,40 +94,40 @@ watch(
             </td>
           </tr>
           <tr class="task-eval-result-detail-read-modal-table-row">
-            <td>과제 부서</td>
+            <td class="table-left">과제 부서</td>
             <td>
               <div class="flex task-eval-result-detail-result-modal-td">{{ props.taskData.departmentName }}</div>
             </td>
           </tr>
           <tr class="task-eval-result-detail-read-modal-table-row">
-            <td>과제 지정</td>
+            <td class="table-left">과제 지정</td>
             <td>
               <div class="flex task-eval-result-detail-result-modal-td">{{ props.taskData.templateTaskRound }}</div>
             </td>
           </tr>
           <tr class="task-eval-result-detail-read-modal-table-row">
-            <td>과제 내용</td>
+            <td class="table-left">과제 내용</td>
             <td>
               <div class="flex task-eval-result-detail-result-modal-td">{{ props.taskData.taskContent }}</div>
             </td>
           </tr>
-        </tbody>
-      </table>
-      <hr class="gray-hr">
-      <table class="task-eval-table">
-        <colgroup>
-          <col style="width: 15%;">
-          <col style="width: 54%;">
-          <col style="width: 10%;">
-        </colgroup>
-        <thead>
+          </tbody>
+        </table>
+        <hr class="gray-hr">
+        <table class="task-eval-table">
+          <colgroup>
+            <col style="width: 15%;">
+            <col style="width: 54%;">
+            <col style="width: 10%;">
+          </colgroup>
+          <thead>
           <tr>
             <th>평가 지표</th>
             <th>평가 항목</th>
             <th>점수</th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           <template v-if="groupingTaskEvalDetailResult.length > 0">
             <template
                 v-for="(group, groupIndex) in groupingTaskEvalDetailResult"
@@ -144,11 +145,13 @@ watch(
           <tr v-else>
             <td colspan="3">데이터가 없습니다.</td>
           </tr>
-        </tbody>
-      </table>
-      <div class="yellow-button-container">
-        <button @click="closeModal" class="button yellow-button">닫기</button>
+          </tbody>
+        </table>
+        <div class="yellow-button-container">
+          <button @click="closeModal" class="button yellow-button">닫기</button>
+        </div>
       </div>
     </div>
   </div>
+
 </template>

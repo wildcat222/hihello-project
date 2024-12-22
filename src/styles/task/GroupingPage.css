@@ -1,10 +1,11 @@
-.group-name{
+.grouping-page-total-box .group-name{
     height: 100%;
     background-color: white;
     padding-right: 20px;
     white-space: nowrap;
+    font-weight: 600;
 }
-.group-num{
+.grouping-page-total-box .group-num{
     width: 50px;
     height: 30px;
     border-radius: 10px;
@@ -12,57 +13,58 @@
     border: none;
     padding-left: 20px;
 }
-.group-line{
+.grouping-page-total-box .group-line{
     display: flex;
     align-items: center;
     font-size: 15px;
     gap: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
-.line{
+.grouping-page-total-box .line{
     border-left: 2px solid var(--gray);
+    padding-left: 20px;
 }
-.submit-box{
+.grouping-page-total-box .submit-box{
     display: flex;
     justify-content: center;
 }
-.inline{
+.grouping-page-total-box .inline{
     display: flex;
     padding: 15px;
     flex-wrap: wrap;
 }
-.sub-total-box{
+.grouping-page-total-box .sub-total-box{
     display: flex;
     justify-content: space-evenly;
 }
-.group-container{
+.grouping-page-total-box .group-container{
     display: flex;
     flex-direction: column;
     width: 70%;
 }
-.click{
+.grouping-page-total-box .click{
     display: flex;
     white-space: nowrap;
     align-items: center;
     margin: 5px;
 }
-.total-box{
+.grouping-page-total-box{
     width: 80%;
 }
-.pagetitle{
+.grouping-page-total-box .pagetitle{
     font-size: 35px;
     font-weight: 700;
     text-align: center;
     margin-top: 150px;
     margin-bottom: 49px;
 }
-.groups {
+.grouping-page-total-box .groups {
     display: flex;
     gap: 20px;
     flex-wrap: nowrap;
     flex-direction: column;
 }
-.group {
+.grouping-page-total-box .group {
     flex: 1 1 30%;
     background-color: var(--ivory);
     text-align: center;
@@ -70,13 +72,26 @@
     align-items: center;
 }
 
-.submit{
+.grouping-page-total-box .submit{
     border-radius: 10px;
     background: #7031FC;
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
     width: 111px;
     height: 43px;
 }
-.list{
-    margin-bottom: 5px;
+.grouping-page-total-box .list{
+    margin: 10px;
+}
+.grouping-page-total-box .group-count-label{
+    font-weight: 600;
+}
+
+.grouping-page-total-box .sub-title{
+    font-weight: 600;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+.grouping-page-total-box .grouping-list-ul{
+    padding-left: 0;
+    margin: 0 auto;
 }

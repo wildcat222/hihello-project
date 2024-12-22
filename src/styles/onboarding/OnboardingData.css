@@ -28,10 +28,10 @@
     display: flex;
     align-items: center;
 }
-.sidebar {
+.onboarding-data-sidebar {
     width: 25%;
     background: var(--white);
-    padding: 20px;
+    padding: 30px;
     padding-left: 50px;
     border-radius: 10px 0px 0px 10px;
     border-right: 2px solid var(--gray);
@@ -85,23 +85,21 @@
 .onboarding-data-form input[type="text"] {
     width: 50%;
 }
-.file_button {
+.onboarding-data-line .file_button {
     border-radius: 10px;
-    width: 70%;
     background-color: var(--ivory);
     padding-left: 15px;
     display: flex;
     align-items: center;
     height: 33px;
+    width: 50%;
 }
-#file-name {
+.onboarding-data-line #file-name {
     font-size: 14px;
     color: var(--gray);
     margin-top: 10px;
 }
-.onboarding-data-line .file_button{
-    width: 50%;
-}
+
 .onboarding-check-list-add-button{
     background: var(--yellow);
     border: none;
@@ -126,4 +124,13 @@
     border-radius: 10px;
     background-color: var(--ivory);
     border:none;
+}
+.onboarding-data-page-title{
+    font-size: 35px;
+    font-weight: 700;
+    margin-top: 105px;
+    margin-bottom: 49px;
+}
+.onboarding-data-insert-container{
+    margin: 30px 0px;
 }
