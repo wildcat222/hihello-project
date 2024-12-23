@@ -1,8 +1,11 @@
-import {defineStore} from 'pinia';
+import {createPinia, defineStore} from 'pinia';
 import {springAPI} from '@/services/axios';
 import router from "@/router/index.js";
+import {useSSEStore} from "@/stores/sse.js";
 
 const route = router;
+const pinia = createPinia()
+const sseStore = useSSEStore(pinia);
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -37,6 +40,7 @@ export const useUserStore = defineStore('user', {
 
                     // Axios 기본 헤더 설정
                     springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
+                    await sseStore.connectSSE();
 
                 } else {
                     console.error('Tokens are missing in the response headers');
@@ -71,6 +75,8 @@ export const useUserStore = defineStore('user', {
 
                     localStorage.removeItem('accessToken');
                     localStorage.removeItem('refreshToken');
+
+                    sseStore.disconnectSSE();
 
                     if (router.currentRoute.value.path !== "/") { // 이미 "/"에 있다면 이동하지 않음
                         route.push('/').then(() => {
