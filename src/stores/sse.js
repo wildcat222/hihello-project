@@ -31,6 +31,7 @@ export const useSSEStore = defineStore('sse', () => {
             notification.onclick = () => {
                 window.focus()
                 if (data.notiUrl) {
+                    data.alramReadStatus = true;
                     window.location.href = data.notiUrl
                 }
             }
