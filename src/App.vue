@@ -15,14 +15,19 @@ const shouldShowProfile = ref(false);
 const activeMenu = ref(null);
 
 // Aside에서 이벤트 발생 시 프로필 활성화/비활성화
-const toggleProfile = () => {
-  shouldShowProfile.value = !shouldShowProfile.value;
+const toggleProfile = (data) => {
+  shouldShowProfile.value = data;
 
   // Profile 활성화 시 SubMenu 비활성화
   if (shouldShowProfile.value) {
     activeMenu.value = null;
   }
-};
+}
+
+const toggleMenu = (data) => {
+  shouldShowProfile.value = false;
+  activeMenu.value = data;
+}
 
 // 외부 클릭 시 Profile/SubMenu 비활성화
 const hideComponentsOnOutsideClick = (event) => {
@@ -60,7 +65,7 @@ onUnmounted(() => {
     <AsideComponent class="aside" v-if="shouldShowAside"
                     @profile-modal="toggleProfile"
                     :active-menu="activeMenu"
-                    @update-active-menu="activeMenu = $event"/>
+                    @update-active-menu="toggleMenu"/>
     <EmployeeProfile class="profile" v-if="shouldShowProfile"
                      @should-show-profile="toggleProfile"/>
     <div class="router-container">

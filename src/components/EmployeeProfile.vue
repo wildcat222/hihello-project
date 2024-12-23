@@ -14,7 +14,7 @@ const emit = defineEmits(['shouldShowProfile']);
 const navigateToUpdatePassword = () => {
   const employeeSeq = useUserStore().getEmployeeInfo().employeeSeq;
   route.push(`/employee/${employeeSeq}/password`);
-  emit('should-show-profile');
+  emit('should-show-profile', false);
 };
 
 // 기본 프로필 이미지
