@@ -1,5 +1,8 @@
 package spring.hi_hello_spring.notify.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,7 +50,12 @@ public class NotifyServiceImpl implements NotifyService {
 
         // 503 에러를 방지하기 위한 더미 이벤트 전송
         String eventId = makeTimeIncludeId(employeeSeq);
-        sendNotification(emitter, eventId, emitterId, "EventStream Created. [userEmail=" + employeeSeq + "]");
+        sendNotification(emitter, eventId, emitterId,
+                Map.of(
+                        "type", "connection",
+                        "message", "EventStream Created. [employeeSeq = " + employeeSeq + "]"
+                )
+        );
 
         // 클라이언트가 미수신한 Event 목록이 존재할 경우 전송하여 Event 유실을 예방
         if (hasLostData(lastEventId)) {
@@ -67,7 +75,7 @@ public class NotifyServiceImpl implements NotifyService {
         try {
             emitter.send(SseEmitter.event()
                     .id(eventId)
-                    .name("sse")
+//                    .name("sse")
                     .data(data));
         } catch (IOException e) {
             log.error("SSE 전송 실패: eventId={}, emitterId={}", eventId, emitterId, e);
@@ -113,7 +121,7 @@ public class NotifyServiceImpl implements NotifyService {
                     createNotification(receiver, notiType, notiType.getMessage(), url, senderSeq)
             );
 
-            log.debug(String.valueOf("Created notification: {}"), notification);
+            log.debug("Created notification: {}", notification);
 
             String receiverSeq = String.valueOf(receiver.getEmployeeSeq());
             String eventId = makeTimeIncludeId(receiverSeq);
@@ -122,7 +130,16 @@ public class NotifyServiceImpl implements NotifyService {
             emitters.forEach((key, emitter) -> {
                 emitterRepository.saveEventCache(key, notification);
                 Long employeeSeq = Long.parseLong(senderSeq);
-                sendNotification(emitter, eventId, key, NotifyDTO.createResponse(notification, employeeSeq));
+//                sendNotification(emitter, eventId, key, NotifyDTO.createResponse(notification, employeeSeq));
+                ObjectMapper objectMapper = new ObjectMapper(); // Spring Boot에서는 주입받아 사용하는 것을 권장
+                objectMapper.registerModule(new JavaTimeModule());
+                String jsonData = null;
+                try {
+                    jsonData = objectMapper.writeValueAsString(NotifyDTO.createResponse(notification, employeeSeq));
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+                sendNotification(emitter, eventId, key, jsonData);
             });
         });
     }
