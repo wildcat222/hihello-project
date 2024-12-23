@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import spring.hi_hello_spring.notify.entity.NotiType;
 import spring.hi_hello_spring.notify.entity.Notify;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,7 @@ public class NotifyDTO {
     private Long notiSeq;         // 알림 고유 Seq
     private Long employeeSeq;     // 수신자 Seq
     private Long senderSeq;       // 발신자 Seq
-    private Long templateSeq;     // 템플릿 Seq
+    private NotiType notiType;     // 알림 타입
     private String notiContent;   // 알림 내용
     private String notiUrl;       // 알림 URL
     private boolean alarmReadStatus; // 읽음 상태
@@ -28,6 +29,7 @@ public class NotifyDTO {
     public NotifyDTO(Notify notify) {
         this.notiSeq = notify.getNotiSeq();
         this.employeeSeq = notify.getEmployeeSeq();
+        this.notiType = notify.getNotiType();
         this.notiContent = notify.getNotiContent();
         this.notiUrl = notify.getNotiUrl();
         this.alarmReadStatus = notify.isAlarmReadStatus();
@@ -40,6 +42,7 @@ public class NotifyDTO {
         return NotifyDTO.builder()
                 .notiSeq(notify.getNotiSeq())
                 .employeeSeq(notify.getEmployeeSeq())
+                .notiType(notify.getNotiType())
                 .senderSeq(senderSeq)
                 .notiContent(notify.getNotiContent())
                 .notiUrl(notify.getNotiUrl())

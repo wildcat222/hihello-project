@@ -16,7 +16,7 @@ import spring.hi_hello_spring.notify.service.NotifyServiceImpl;
 import java.util.List;
 
 @RestController
-@RequestMapping("/notify")
+@RequestMapping("api/v1/notify")
 @RequiredArgsConstructor
 @Tag(name = "SSE 연결과 알림", description = "SSE 연결과 알림")
 @Slf4j
@@ -29,9 +29,11 @@ public class NotifyController {
     public SseEmitter subscribe(@RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId){
 
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
-        log.info("지금 로그인 시퀀스 : {}", employeeSeq);
+//        log.info("지금 로그인 시퀀스 : {}", employeeSeq);
 
-        return notifyService.subscribe(String.valueOf(employeeSeq), lastEventId);
+        SseEmitter sseEmitter = notifyService.subscribe(String.valueOf(employeeSeq), lastEventId);
+        log.info("알림 전송 테스트 로그 : {}", sseEmitter.toString());
+        return sseEmitter;
     }
 
 
