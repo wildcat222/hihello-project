@@ -34,8 +34,7 @@ public class Report extends BaseTimeEntity {
     private String reportFeedbackContent;
 
 
-    public void forGroup(Long mentoringSeq, int reportWeek) {
+    public void forGroup(Long mentoringSeq) {
         this.mentoringSeq = mentoringSeq;
-        this.reportWeek = reportWeek;
     }
 }

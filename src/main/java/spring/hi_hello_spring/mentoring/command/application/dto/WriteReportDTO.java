@@ -13,4 +13,5 @@ public class WriteReportDTO {
 
     private String reportContent;
     private String reportFeeling;
+    private int reportWeek;
 }

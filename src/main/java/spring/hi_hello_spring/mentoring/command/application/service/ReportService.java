@@ -2,19 +2,26 @@ package spring.hi_hello_spring.mentoring.command.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
+import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
+import spring.hi_hello_spring.employee.command.domain.repository.EmployeeRepository;
 import spring.hi_hello_spring.mentoring.command.application.dto.WriteFeedbackDTO;
 import spring.hi_hello_spring.mentoring.command.application.dto.WriteReportDTO;
 import spring.hi_hello_spring.mentoring.command.domain.aggregate.entity.Mentoring;
 import spring.hi_hello_spring.mentoring.command.domain.aggregate.entity.Report;
 import spring.hi_hello_spring.mentoring.command.domain.repository.MentoringRepository;
 import spring.hi_hello_spring.mentoring.command.domain.repository.ReportRepository;
+import spring.hi_hello_spring.notify.entity.NotiType;
+import spring.hi_hello_spring.notify.service.NotifyService;
 
 import java.util.Objects;
 import java.util.Optional;
+
+import static spring.hi_hello_spring.notify.entity.NotiType.WRITTEN_REPORT_BY_MENTEE;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +30,9 @@ public class ReportService {
     public final MentoringRepository mentoringRepository;
     public final ReportRepository reportRepository;
     public final ModelMapper modelMapper;
+    public final NotifyService notifyService;
+    public final EmployeeRepository employeeRepository;
+    private final LettuceConnectionFactory redisConnectionFactoryVirtualThreads;
 
     @Transactional
     public void createReport(Long employeeSeq, WriteReportDTO writeReportDTO) {
@@ -30,12 +40,21 @@ public class ReportService {
         Mentoring mentoring = mentoringRepository.findByMenteeSeq(employeeSeq);
         Report report = modelMapper.map(writeReportDTO, Report.class);
 
-        Optional<Report> recentReportOpt = reportRepository.findByMentoringSeqOrderByReportWeekDesc(mentoring.getMentoringSeq());
+        Optional<Report> recentReportOpt = reportRepository.findFirstByMentoringSeqOrderByReportWeekDesc(mentoring.getMentoringSeq());
 
-        int week = recentReportOpt.map(Report::getReportWeek).orElse(0) + 1;
-        report.forGroup(mentoring.getMentoringSeq(), week);
+        if (recentReportOpt.isPresent() && recentReportOpt.get().getReportWeek() == report.getReportWeek()) {
+            throw new CustomException(ErrorCodeType.DUPLICATE_DATA);
+        }
+        report.forGroup(mentoring.getMentoringSeq());
+        Report currentReport = reportRepository.save(report);
 
-        reportRepository.save(report);
+        Employee sender = employeeRepository.findByEmployeeSeq(employeeSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
+        Employee receiver = employeeRepository.findByEmployeeSeq(mentoring.getMentorSeq())
+                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
+
+        notifyService.send(sender, receiver, WRITTEN_REPORT_BY_MENTEE
+                , "http://localhost:5173/mentoring/report/" + currentReport.getReportSeq());
     }
 
     @Transactional

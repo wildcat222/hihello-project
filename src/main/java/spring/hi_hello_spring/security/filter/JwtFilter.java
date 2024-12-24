@@ -76,10 +76,13 @@ public class JwtFilter extends OncePerRequestFilter {
                     jwtUtil.saveAuthentication(Long.parseLong(jwtUtil.getEmployeeSeq(accessToken.get())));
 //                log.info("accessToken {} ", accessToken.get());
                     filterChain.doFilter(request, response); // 다음 필터로 요청 전달
-                    return;
+                }
+            } else {
+                // 토큰이 없는 경우 처리
+                if (!response.isCommitted()) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰이 존재하지 않습니다.");
                 }
             }
-            filterChain.doFilter(request, response); // 다음 필터로 요청 전달
         } catch (ExpiredJwtException e) {
             // 만료된 토큰 처리
             log.error("Expired JWT Token: {}", e.getMessage());

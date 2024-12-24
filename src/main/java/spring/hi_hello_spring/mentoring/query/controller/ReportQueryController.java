@@ -22,8 +22,8 @@ public class ReportQueryController {
     private final ReportQueryService reportQueryService;
 
     @Operation(summary = "멘토링 보고서 상세 조회", description = "멘토링 보고서를 상세 조회한다.")
-    @GetMapping("/report/{reportSeq}")
-    public ApiResponse<?> getReportDetail(@PathVariable Long reportSeq) {
+    @GetMapping("/report/detail")
+    public ApiResponse<?> getReportDetail(@RequestParam Long reportSeq) {
 
         ResMentoringReportDTO reqMentoringReportDTO = reportQueryService.findReportDetail(reportSeq);
         return ResponseUtil.successResponse("멘토링 보고서를 성공적으로 조회하였습니다.", reqMentoringReportDTO).getBody();
@@ -34,7 +34,7 @@ public class ReportQueryController {
     public ApiResponse<?> getReportListAll() {
 
         List<ReportListQueryDTO> reportList = reportQueryService.getReportListAll();
-        return ResponseUtil.successResponse("멘토링 보고서 리스트를 조회하였습니다.",reportList).getBody();
+        return ResponseUtil.successResponse("멘토링 보고서 리스트를 조회하였습니다.", reportList).getBody();
     }
 
     @Operation(summary = "(팀장) 멘토링 보고서 리스트 조회", description = "팀장은 멘토링 보고서 리스트를 조회한다.")
@@ -61,12 +61,28 @@ public class ReportQueryController {
         return ResponseUtil.successResponse("멘토링 보고서 리스트를 조회하였습니다.", reportList).getBody();
     }
 
-    @Operation(summary = "(담당자, 팀장) 멘토링 보고서 검색", description = "멘토링 보고서를 검색하여 조회한다.")
-    @GetMapping("/report/search")
+    @Operation(summary = "(담당자) 멘토링 보고서 검색", description = "멘토링 보고서를 검색하여 조회한다.")
+    @GetMapping("/hr/report/search")
     public ApiResponse<?> getReportSearch(@RequestParam String searchType, @RequestParam String keyword) {
 
         List<MenteeReportListQueryDTO> reportList = reportQueryService.getReportSearch(searchType, keyword);
         return ResponseUtil.successResponse("성공적으로 멘토링 보고서를 검색하였습니다.", reportList).getBody();
+    }
+
+    @Operation(summary = "(팀장) 멘토링 보고서 검색", description = "멘토링 보고서를 검색하여 조회한다.")
+    @GetMapping("/leader/report/search")
+    public ApiResponse<?> getReportSearchByLeader(@RequestParam String searchType, @RequestParam String keyword) {
+
+        List<MenteeReportListQueryDTO> reportList = reportQueryService.getReportSearchByLeader(searchType, keyword);
+        return ResponseUtil.successResponse("성공적으로 멘토링 보고서를 검색하였습니다.", reportList).getBody();
+    }
+
+    @Operation(summary = "멘토링 주차 조회", description = "멘토링 주차를 조회한다.")
+    @GetMapping("/mentee/mentoring/week")
+    public ApiResponse<?> getReportMentoringWeek() {
+
+        int mentoringWeek = reportQueryService.getMentoringWeek();
+        return ResponseUtil.successResponse("멘토링 주차를 조회하였습니다.", mentoringWeek).getBody();
     }
 
 }
