@@ -128,6 +128,7 @@ export const useUserStore = defineStore('user', {
                         } catch (err) {
                             console.error('인터셉터 과정 중 에러 발생:', err);
                             alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+                            this.logout();
                             await route.push("/");
                             return Promise.reject(err);
                         }
