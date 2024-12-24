@@ -20,7 +20,7 @@ spring:
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
     mongodb:
-      uri: mongodb://${MONGO_USER_NANE}:${MONGO_PASSWORD}@${MONGO_HOST}:{MONGO_PORT}/${MONGO_DATABASE}?authSource=admin
+      uri: mongodb://${MONGO_USER_NANE}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=admin
     elasticsearch:
       repositories:
         enabled: true
