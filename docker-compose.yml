@@ -55,6 +55,41 @@ services:
     volumes:
       - redis_data:/data # 데이터 지속성을 위한 볼륨 설정
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
+    container_name: elasticsearch
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9200:9200" # Elasticsearch API 접근 포트
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - elk
+
+  kibana:
+    container_name: kibana_beauty4u
+    image: docker.elastic.co/kibana/kibana:7.14.1
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
+
 volumes:
   mongodb_data:
   redis_data:
+  elasticsearch_data:
+
+networks:
+  elk:
+    driver: bridge

@@ -21,6 +21,9 @@ spring:
       password: ${REDIS_PASSWORD}
     mongodb:
       uri: mongodb://${MONGO_USER_NANE}:${MONGO_PASSWORD}@localhost:27017/hihello?authSource=admin
+    elasticsearch:
+      repositories:
+        enabled: true
   jpa:
     show-sql: true
     hibernate:
@@ -53,8 +56,13 @@ spring:
     accept-topic-name: an-accept
   server:
     port: 8253
-
-
+  elasticsearch:
+    uris: ${ELASTIC_URIS}
+    username: ${ELASTIC_USER}
+    password: ${ELASTIC_PASSWORD}
+    wiki:
+      index:
+        name: wiki
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

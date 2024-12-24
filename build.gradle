@@ -74,6 +74,8 @@ dependencies {
 	// Jsoup (wiki에서 html 파싱)
 	implementation group: 'org.jsoup', name: 'jsoup', version: '1.15.3'
 
+	// Elasticsearch
+	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 }
 
 bootRun {
