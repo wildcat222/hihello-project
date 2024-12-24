@@ -29,7 +29,7 @@
             ON f1.task_seq = t.task_seq
         LEFT JOIN
             file f2
-            ON f2.task_submit_seq = f2.task_submit_seq
+            ON ts.task_submit_seq = f2.task_submit_seq
         WHERE ts.task_submit_seq = #{task_submit_seq}
     </select>
 </mapper>
