@@ -12,6 +12,7 @@ import spring.hi_hello_spring.wiki.query.elasticsearch.document.WikiDocument;
 import spring.hi_hello_spring.wiki.query.elasticsearch.repository.WikiDocumentRepository;
 import spring.hi_hello_spring.wiki.query.mapper.WikiMapper;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -114,11 +115,13 @@ public class WikiQueryService {
         // DB에서 모든 위키 데이터 조회
         List<Wiki> wikiList = wikiRepository.findAll();
 
-        // WikiDocument로 변환
-        List<WikiDocument> wikiDocumentList = wikiList
-                .stream()
-                .map(WikiDocument::from)
-                .toList();
+        // WikiDocument 리스트 생성
+        List<WikiDocument> wikiDocumentList = new ArrayList<>();
+        for (Wiki wiki : wikiList) {
+            LocalDateTime latestModDate = wikiMapper.findWikiLatestModDateByWikiSeq(wiki.getWikiSeq());
+            WikiDocument wikiDocument = WikiDocument.from(wiki,latestModDate);
+            wikiDocumentList.add(wikiDocument);
+        }
 
         // 엘라스틱 서치 저장
         wikiDocumentRepository.saveAll(wikiDocumentList);

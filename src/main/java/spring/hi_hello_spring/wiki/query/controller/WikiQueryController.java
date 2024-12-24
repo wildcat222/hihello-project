@@ -61,4 +61,11 @@ public class WikiQueryController {
         List<WikiDocument> wikiDocumentList = wikiQueryService.searchWiki(keyword);
         return ResponseUtil.successResponse("위키 검색 결과가 성공적으로 조회되었습니다.", wikiDocumentList).getBody();
     }
+
+    @PostMapping("/index")
+    @Operation(summary = "위키 엘라스틱 서치 인덱스 생성", description = "위키 DB 데이터를 엘라스틱 서치에 동기화하는 로직입니다.")
+    public ApiResponse<?> indexWiki() {
+        wikiQueryService.indexAllWiki();
+        return ResponseUtil.successResponse("위키 엘라스틱 서치 인덱스가 성공적으로 생성되었습니다.").getBody();
+    }
 }
