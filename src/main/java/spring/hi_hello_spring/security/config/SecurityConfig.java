@@ -43,6 +43,9 @@ public class SecurityConfig {
                         // 추후 api 명세서 작성 후 추가 예정
 //                        authz.requestMatchers(new AntPathRequestMatcher("/users/**", "POST")).permitAll()
                         authz.requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/mentee/**")).hasAuthority("MENTEE")
+                                .requestMatchers(new AntPathRequestMatcher("/mentor/**")).hasAuthority("MENTOR")
+                                .requestMatchers(new AntPathRequestMatcher("/hr/**")).hasAuthority("HR")
                                 .anyRequest().authenticated() // 나머지 요청은 필터를 거쳐야한다.
                 )
 
