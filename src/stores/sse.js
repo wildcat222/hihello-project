@@ -1,11 +1,14 @@
 import { defineStore } from 'pinia'
 import {computed, ref} from 'vue'
 import { EventSourcePolyfill } from 'event-source-polyfill'
+import {springAPI} from "@/services/axios.js";
+import {useUserStore} from "@/stores/UserStore.js";
 
 export const useSSEStore = defineStore('sse', () => {
     const notifications = ref([])
     const connectionStatus = ref('disconnected')
     let eventSource = null
+    let userStore = null;
 
     // 알림 권한 요청
     const requestNotificationPermission = async () => {
@@ -51,19 +54,22 @@ export const useSSEStore = defineStore('sse', () => {
         // 알림 권한 요청
         await requestNotificationPermission()
 
-        const token = localStorage.getItem('accessToken')
-        if (!token) {
-            connectionStatus.value = 'disconnected'
-            return;
-        }
-
-        const options = {
-            headers: { 'Authorization': `Bearer ${token}` },
-            withCredentials: true,
-            heartbeatTimeout: 3600000
-        }
-
         try {
+            // 토큰 유효성 검사를 위해 간단한 API 요청
+            // 이 요청은 apiClient의 인터셉터를 통해 처리되므로
+            // 토큰이 만료되었다면 자동으로 갱신됨
+            userStore = useUserStore();
+            const employeeSeq = userStore.getEmployeeInfo().employeeSeq;
+            await springAPI.get(`/${employeeSeq}/name`);
+
+            const options = {
+                headers: {
+                    'Authorization': `Bearer ${userStore.accessToken}`
+                },
+                withCredentials: true,
+                heartbeatTimeout: 3600000
+            }
+
             eventSource = new EventSourcePolyfill('http://localhost:8253/api/v1/notify/connect', options)
 
             eventSource.onopen = () => {
