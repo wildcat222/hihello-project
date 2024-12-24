@@ -1,4 +1,4 @@
-name: eb-proj-service
+name: spring-project-develop
 
 permissions:
   contents: read
@@ -16,6 +16,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: develop
 
     steps:
       - name: Checkout code
@@ -49,6 +50,17 @@ jobs:
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
           S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
           S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+          MONGO_USER_NAME: ${{ secrets.MONGO_USER_NAME }}
+          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+          MONGO_HOST: ${{ secrets.MONGO_HOST }}
+          MONGO_PORT: ${{ secrets.MONGO_PORT }}
+          MONGO_DATABASE: ${{ secrets.MONGO_DATABASE }}
+          MONGO_CONTAINER_NAME: ${{ secrets.MONGO_CONTAINER_NAME }}
+          KAFKA_BOOTSTRAP_SERVER: ${{ secrets.KAFKA_BOOTSTRAP_SERVER }}
+          ELASTIC_URIS: ${{ secrets.ELASTIC_URIS }}
+          ELASTIC_USER: ${{ secrets.ELASTIC_USER }}
+          ELASTIC_PASSWORD: ${{ secrets.ELASTIC_PASSWORD }}
         run: ./gradlew clean build -x test
 
       - name: Calculate Duration
