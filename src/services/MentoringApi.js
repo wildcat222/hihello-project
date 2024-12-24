@@ -84,7 +84,7 @@ export const searchReportsByLeader = (searchType, keyword) => {
 
 // (멘토) 멘토링 보고서 목록 조회
 export const fetchReportListByMentor = () => {
-    return springAPI.get(`mentor/report`);
+    return springAPI.get(`/mentor/report`);
 };
 
 // (멘티) 멘토링 보고서 목록 조회

@@ -57,6 +57,7 @@ import {computed, onMounted, ref} from "vue";
 import {useUserStore} from "@/stores/UserStore.js";
 import router from "@/router/index.js";
 import {fetchName} from "@/services/UserApi.js";
+import {springAPI} from "@/services/axios.js";
 
 const userStore = useUserStore();
 const shouldShowProfile = ref(false);
@@ -177,6 +178,7 @@ const toggleMenu = (menuName) => {
 // 마운트 시 초기화
 onMounted(() => {
   router.afterEach(() => emit("update-active-menu", null));
+  springAPI.defaults.headers.common['Authorization'] = `Bearer ${userStore.accessToken}`;
   employeeSeq.value = userStore.getEmployeeInfo().employeeSeq;
   loadName(employeeSeq.value);
 });
