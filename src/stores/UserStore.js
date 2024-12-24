@@ -105,6 +105,7 @@ export const useUserStore = defineStore('user', {
                             const res = await springAPI.request({
                                 ...error.config,
                                 headers: {
+                                    ...error.config.headers,
                                     RefreshToken: `Bearer ${this.refreshToken}`,
                                 }
                             });
