@@ -78,28 +78,28 @@ public class ChatRoomService {
     }
 
 
-    public void saveChatMessage(String roomId, ChatRequestMessage requestMessage) {
-        ChatMessage chatMessage = ChatMessage.builder()
-                .roomId(roomId)
-                .userCode(requestMessage.getUserCode())
-                .message(requestMessage.getMessage())
-                .createdAt(requestMessage.getCreatedAt())
-                .build();
-
-        chatMessageMongoRepository.save(chatMessage);  // MongoDB에 메시지 저장
-        System.out.println("mongoDB에 채팅 내용 저장 됨: " + chatMessage.getMessage());
-    }
-
-
-    public List<ChatResponseMessage> chattingMessageList(String roomId) {
-        // MongoDB에서 roomId에 해당하는 메시지 목록을 가져옵니다
-        List<ChatMessage> chatMessages = chatMessageMongoRepository.findByRoomId(roomId);
-
-        // ChatResponseMessage 형태로 변환
-        return chatMessages.stream()
-                .map(message -> new ChatResponseMessage(message.getUserCode(), message.getMessage(), message.getCreatedAt()))
-                .collect(Collectors.toList());
-    }
+//    public void saveChatMessage(String roomId, ChatRequestMessage requestMessage) {
+//        ChatMessage chatMessage = ChatMessage.builder()
+//                .roomId(roomId)
+//                .userCode(requestMessage.getUserCode())
+//                .message(requestMessage.getMessage())
+//                .createdAt(requestMessage.getCreatedAt())
+//                .build();
+//
+//        chatMessageMongoRepository.save(chatMessage);  // MongoDB에 메시지 저장
+//        System.out.println("mongoDB에 채팅 내용 저장 됨: " + chatMessage.getMessage());
+//    }
+//
+//
+//    public List<ChatResponseMessage> chattingMessageList(String roomId) {
+//        // MongoDB에서 roomId에 해당하는 메시지 목록을 가져옵니다
+//        List<ChatMessage> chatMessages = chatMessageMongoRepository.findByRoomId(roomId);
+//
+//        // ChatResponseMessage 형태로 변환
+//        return chatMessages.stream()
+//                .map(message -> new ChatResponseMessage(message.getUserCode(), message.getMessage(), message.getCreatedAt()))
+//                .collect(Collectors.toList());
+//    }
 
 }
 

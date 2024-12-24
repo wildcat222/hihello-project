@@ -44,9 +44,17 @@ jobs:
 
       - name: Build with Gradle
         env:
-          RDS_DATABASE_URL: ${{ secrets.RDS_DATABASE_URL }}
+          SERVER_PORT: ${{ secrets.SERVER_PORT }}
+          RDS_DOMAIN: ${{ secrets.RDS_DOMAIN }}
+          RDS_URL: ${{ secrets.RDS_URL }}
+          RDS_PORT: ${{ secrets.RDS_PORT }}
+          RDS_DB_NAME: ${{ secrets.RDS_DB_NAME }}
           RDS_USERNAME: ${{ secrets.RDS_USERNAME }}
           RDS_PASSWORD: ${{ secrets.RDS_PASSWORD }}
+          RDS_DRIVER_CLASS_NAME: ${{ secrets.RDS_DRIVER_CLASS_NAME }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
           S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
           S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
