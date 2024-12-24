@@ -1,36 +1,54 @@
 version: '3.9'
 services:
-  # 서비스 명
+  # Zookeeper 서비스
   zookeeper:
-    # 사용할 이미지
     image: wurstmeister/zookeeper
-    # 컨테이너명 설정
     container_name: zookeeper
-    # 접근 포트 설정 (컨테이너 외부:컨테이너 내부)
     ports:
       - "2181:2181"
-  # 서비스 명
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    networks:
+      - kafka-net
+
+  # Kafka 서비스
   kafka:
-    # 사용할 이미지
     image: wurstmeister/kafka
-    # 컨테이너명 설정
     container_name: kafka
-    # 접근 포트 설정 (컨테이너 외부:컨테이너 내부)
     ports:
       - "9092:9092"
-    # 환경 변수 설정
+      - "10000:10000"
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: ${KAFKA_HOST_NAME}
-      KAFKA_CREATE_TOPICS: "chat-messages:1:2"
-      KAFKA_LISTENER_PORT: 9092
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9092, EXTERNAL://0.0.0.0:10000
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9092, EXTERNAL://localhost:10000
+      KAFKA_LISTENER_NAMES: INSIDE,EXTERNAL
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT, EXTERNAL:PLAINTEXT
+      KAFKA_LISTENER_SECURITY_PROTOCOL: PLAINTEXT
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_DELETE_TOPIC_ENABLE: "true"
-    # 볼륨 설정
-    volumes:
-      - /var/run/docker.sock
-    # 의존 관계 설정
+      KAFKA_LISTENER_PORT: 9092
+      KAFKA_LISTENER_EXTERNAL_PORT: 10000
+      KAFKA_LISTENERS_INTER_BROKER: INSIDE://0.0.0.0:9092  # 브로커 간 통신을 위한 리스너 설정 (여기서는 INSIDE 리스너를 사용)
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
     depends_on:
       - zookeeper
+    volumes:
+      - /var/run/docker.sock
+    networks:
+      - kafka-net
+
+  # Kafka UI 서비스
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    depends_on:
+      - kafka
+    ports:
+      - "9091:8080"  # Kafka UI의 포트 8080을 외부 9091로 바인딩
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092  # Kafka 주소 설정
+    networks:
+      - kafka-net
 
   mongodb:
     image: mongo:latest
@@ -58,3 +76,7 @@ services:
 volumes:
   mongodb_data:
   redis_data:
+
+networks:
+  kafka-net:
+    driver: bridge
