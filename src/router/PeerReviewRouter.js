@@ -13,7 +13,7 @@ export default[
         component: HrPeerReviewPage,
     },
     {
-        path: '/onboarding/groupEval',
+        path: '/onboarding/groupEval/:taskGroupSeq',
         component: GroupEval,
     },
 ]

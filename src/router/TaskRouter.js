@@ -17,7 +17,8 @@ export default[
     },
     {
         path: '/task/modify/:taskSeq',
-        component: TaskModifyPage
+        component: TaskModifyPage,
+        props: true,  // URL 파라미터를 컴포넌트에 props로 전달
     },
     {
         path: '/task-submit/:taskSubmitSeq',
