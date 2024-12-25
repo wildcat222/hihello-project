@@ -106,6 +106,7 @@ services:
 volumes:
   mongodb_data:
   redis_data:
+  elasticsearch_data:
 
 networks:
   kafka-net:
