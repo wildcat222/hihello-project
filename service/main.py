@@ -55,11 +55,28 @@ INDEX_NAME = "hihello-db-index"
 index = pinecone.Index(index_name = INDEX_NAME, api_key = PINECONE_API_KEY, host=host)
 print(f"Index '{INDEX_NAME}' is ready to use.")
 
-# 프롬프트를 자유롭게 수정해 보세요!
-RAG_PROMPT_TEMPLATE = """당신은 질문에 친절하게 답변하는 hihelloAI 입니다. 검색된 다음 문맥을 사용하여 질문에 답하세요. 답을 모른다면 모른다고 답변하세요.
-Question: {question} 
-Context: {context} 
-Answer:"""
+RAG_PROMPT_TEMPLATE = """
+
+You are hihelloAI, a helpful assistant. Respond concisely and accurately to the user's question in 2 lines or less.
+
+- If the user's input explicitly matches greetings like "안녕", "안녕하세요", "ㅎㅇ", "하이", "헬로우", "hi", or similar, respond with:
+  "안녕하세요! 무엇을 도와드릴까요? 😊."
+
+- For questions about introducing yourself like "너에 대해 설명해줘", "너에 대해 말해봐", "넌 누구야", "너에 대해 말해", "너에 대해 말해줘", "너에 대해 설명해", "너에 대해 설명해봐", or similar, respond with:
+  "저는 hihelloAI입니다. Ollama, Llama3, Pinecone 으로 구현된 자체 모델을 바탕으로 RAG 시스템을 이용하여 커스터마이징 된 답변을 출력할 수 있습니다. 저의 지식을 바탕으로 여러분의 인턴 생활을 최대한 도와드릴게요!"
+
+- If the user's question is unrelated to the retrieved context or if the answer is not found in the context, respond with:
+  "죄송합니다. 해당 내용은 학습되지 않았습니다. 다른 질문을 해주세요!"
+
+- If you don't know the answer, respond with:
+  "죄송합니다. 해당 내용은 학습되지 않았습니다. 다른 질문을 해주세요!"
+
+Do not include any additional context, references, or links in your answer unless explicitly asked by the user. 
+
+Question: {question}
+Context: {context}
+Answer:
+"""
 
 st.set_page_config(page_title="HiHello ChatBot", page_icon="💬")
 st.title("HiHello ChatBot")
@@ -212,7 +229,7 @@ if user_input := st.chat_input():
             if search_results is None or all(result.metadata is None for result in search_results):
                 # DB에서 결과가 없으면 기본 응답 처리
                 if user_input.lower() in ["안녕", "넌 누구야", "어떻게 지내", "hi"]:
-                    response = "안녕! 나는 HiHello AI야. 무엇을 도와줄까? 😊"
+                    response = "안녕하세요! 여러분의 인턴생활에 도움을 드릴 HiHello AI입니다. 무엇을 도와드릴까요? 😊"
                     chat_container.markdown(response)
                     add_history("ai", response)
                 else:
