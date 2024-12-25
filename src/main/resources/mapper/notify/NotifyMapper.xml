@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.notify.query.mapper.NotifyMapper">
+
+    <select id="findAllByEmployeeSeq" parameterType="java.lang.Long" resultType="ReadNotifyDTO">
+        SELECT
+            noti_seq AS notiSeq,
+            employee_seq AS employeeSeq,
+            noti_content AS notiContent,
+            noti_url AS notiUrl,
+            alarm_read_status AS alarmReadStatus,
+            reg_date AS regDate
+        FROM
+            noti
+        WHERE
+            employee_seq = #{employeeSeq}
+        ORDER BY
+            reg_date DESC;
+    </select>
+
+
+
+
+</mapper>

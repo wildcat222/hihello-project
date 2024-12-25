@@ -15,13 +15,12 @@ import spring.hi_hello_spring.mentoring.command.domain.aggregate.entity.Mentorin
 import spring.hi_hello_spring.mentoring.command.domain.aggregate.entity.Report;
 import spring.hi_hello_spring.mentoring.command.domain.repository.MentoringRepository;
 import spring.hi_hello_spring.mentoring.command.domain.repository.ReportRepository;
-import spring.hi_hello_spring.notify.entity.NotiType;
-import spring.hi_hello_spring.notify.service.NotifyService;
+import spring.hi_hello_spring.notify.command.application.service.NotifyService;
 
 import java.util.Objects;
 import java.util.Optional;
 
-import static spring.hi_hello_spring.notify.entity.NotiType.WRITTEN_REPORT_BY_MENTEE;
+import static spring.hi_hello_spring.notify.command.domain.aggregate.entity.NotiType.WRITTEN_REPORT_BY_MENTEE;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +53,7 @@ public class ReportService {
                 .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
 
         notifyService.send(sender, receiver, WRITTEN_REPORT_BY_MENTEE
-                , "http://localhost:5173/mentoring/report/" + currentReport.getReportSeq());
+                , "/mentoring/report/" + currentReport.getReportSeq());
     }
 
     @Transactional
