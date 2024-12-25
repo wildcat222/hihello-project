@@ -1,5 +1,5 @@
 <script setup>
-import {ref, defineEmits} from 'vue';
+import {ref, defineEmits, watch} from 'vue';
 
 // 검색어 상태 변수
 const searchQuery = ref('');
@@ -23,6 +23,10 @@ const handleKeyUp = (event) => {
     onSearch();
   }
 };
+
+watch(searchQuery, () => {
+  emit('update:searchQuery', searchQuery.value)
+})
 </script>
 
 <template>
@@ -46,8 +50,7 @@ const handleKeyUp = (event) => {
 
 <style scoped>
 .search_bar {
-  width: 100%;
-  max-width: 780px;
+  width: 80%;
   height: 50px;
   background-color: var(--white);
   box-shadow: 2px 2px 4px 0 var(--gray);
