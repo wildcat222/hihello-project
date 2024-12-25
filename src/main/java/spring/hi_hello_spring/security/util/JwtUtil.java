@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -48,15 +49,24 @@ public class JwtUtil {
     /* accessToken 검증(Bearer 토큰이 넘어왔고, 우리 사이트의 secret key로 만들어 졌는가, 만료되었는지와 내용이 비어있진 않은지) */
     public boolean validateAccessToken(String accessToken) {
 
-        accessToken = accessToken.replaceAll("\\s+", "");
-
         log.info("엑세스 토큰 검증 도중 확인 : " + accessToken);
+
+        String savedToken = "";
 
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken);
 
             // 레디스 내 블랙리스트 토큰과 비교 검증 로직 추가
+            String EmployeeSeqInAccessToken = getEmployeeSeq(accessToken);
 
+            // 레디스에 저장된 해당 사원이 이전에 발급 받았던 엑세스 토큰 조회
+
+
+            savedToken = redisService.getToken(EmployeeSeqInAccessToken + 'a');
+            log.info("레디스에서 조회한 엑세스 토큰 : {}", savedToken);
+            if (Objects.equals(savedToken, accessToken)) {
+                return false;
+            }
             return true;
         } catch (ExpiredJwtException e) {
             throw e;
@@ -119,7 +129,7 @@ public class JwtUtil {
 //        log.info("employee 정보 : " + employeePositionName + " + " + employeeDepartmentName);
 
 //        long expirationTime = (long) 1000 * 60 * 30; // 30분
-//        long expirationTime = (long) 3000; // 토큰 테스트 용
+//        long expirationTime = (long) 5000; // 토큰 테스트 용
         long expirationTime = (long) 1000 * 60 * 120; // 프론트 개발 용 2시간
 
         /* 권한을 꺼내 List<String> 으로 변환 */

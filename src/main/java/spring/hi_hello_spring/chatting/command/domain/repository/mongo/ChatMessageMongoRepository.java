@@ -10,5 +10,7 @@ import java.util.List;
 @Repository
 public interface ChatMessageMongoRepository extends MongoRepository<ChatMessage, String> {
 
-    List<ChatMessage> findByRoomId(String roomId);
+    List<ChatMessage> findChatContentByRoomId(String roomId);
+
+    ChatMessage findByMessageId(String messageId);
 }
