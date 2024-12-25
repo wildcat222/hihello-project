@@ -48,8 +48,8 @@
         </ul>
       </li>
     </ul>
-
   </aside>
+  <AlarmModal class="alarm-modal" v-if="false"/>
 </template>
 
 <script setup>
@@ -58,6 +58,7 @@ import {useUserStore} from "@/stores/UserStore.js";
 import router from "@/router/index.js";
 import {fetchName} from "@/services/UserApi.js";
 import {springAPI} from "@/services/axios.js";
+import AlarmModal from "@/components/AlarmModal.vue";
 
 const userStore = useUserStore();
 const shouldShowProfile = ref(false);
@@ -75,9 +76,13 @@ function logout() {
 const employeeSeq = ref(null);
 const employeeName = ref("");
 const loadName = async (employeeSeq) => {
+  if (!employeeSeq) return;
+
   try {
-    employeeName.value = await fetchName(employeeSeq);
+    const name = await fetchName(employeeSeq);
+    if (name) employeeName.value = name;
   } catch (error) {
+    console.error('Error loading name:', error);
     employeeName.value = "";
   }
 };
@@ -176,18 +181,29 @@ const toggleMenu = (menuName) => {
 };
 
 // 마운트 시 초기화
-onMounted(() => {
+onMounted(async () => {
   router.afterEach(() => emit("update-active-menu", null));
+
+  await userStore.$state.initialized;
+
   springAPI.defaults.headers.common['Authorization'] = `Bearer ${userStore.accessToken}`;
   employeeSeq.value = userStore.getEmployeeInfo().employeeSeq;
-  loadName(employeeSeq.value);
+
+  // 이름 로딩 전에 employeeSeq 유효성 확인
+  if (employeeSeq.value) {
+    await loadName(employeeSeq.value);
+  } else {
+    console.error('employeeSeq is not available');
+  }
 });
+
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
 .aside-login-name {
+  position: relative;
   font-weight: 600;
   font-size: 20px;
   display: flex;
@@ -282,5 +298,15 @@ ul {
   display: flex;
   margin-top: 3px;
   cursor: pointer;
+}
+
+.alarm-modal {
+  position: absolute;
+  z-index: 1000;
+  top: 180px;
+  left: 220px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
 }
 </style>

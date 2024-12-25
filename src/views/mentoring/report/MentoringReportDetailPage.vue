@@ -26,7 +26,6 @@ const mentorName = ref('');
 const loadReportDetail = async () => {
   try {
     const response = await getReportDetail(reportSeq.value);
-    console.log(response);
     menteeName.value = response.data.data.menteeName;
     mentorName.value = response.data.data.mentorName;
     reportWeek.value = response.data.data.reportWeek;
@@ -43,11 +42,6 @@ const loadReportDetail = async () => {
 // 멘토 피드백 수정 모드 상태
 const isMentorFeedbackEditing = ref(false);
 const isReportEditing = ref(false);
-
-// 라우팅 핸들러
-// const navigateToReportEdit = () => {
-//   router.push('/report/edit');
-// }
 
 // 멘티 보고서 수정 핸들러
 const handleReportEdit = async () => {
