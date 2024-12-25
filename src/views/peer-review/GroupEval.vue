@@ -8,7 +8,7 @@ import "@/styles/peer-review/GroupEval.css"
 
 // taskGroupSeq를 URL 쿼리 파라미터로부터 추출
 const route = useRoute();
-const taskGroupSeq = route.query.taskGroupSeq;
+const taskGroupSeq = route.params.taskGroupSeq;
 
 if (!taskGroupSeq) {
   console.error('taskGroupSeq가 URL에 존재하지 않습니다.');

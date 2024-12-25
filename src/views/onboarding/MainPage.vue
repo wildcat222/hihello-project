@@ -11,6 +11,8 @@ export default {
       query: 'example',    // query 값
       completedCount: 0,   // 완료된 항목의 개수
       totalCount: 0,       // 전체 항목의 개수
+      isModalOpen: false, // 모달을 열고 닫을 수 있는 상태 변수
+      selectedItem: null,  // 선택된 항목을 저장
     };
   },
   mounted() {
@@ -66,6 +68,33 @@ export default {
         this.loading = false;
       }
     },
+    openModal(item) {
+      console.log(item);
+      this.selectedItem = {
+        taskSeq: item.taskSeq,
+        taskGroupSeq: item.taskGroupSeq
+      };  // taskSeq와 taskGroupSeq를 객체로 저장
+      console.log(this.selectedItem);
+      this.isModalOpen = true;    // 모달 열기
+    },
+    closeModal() {
+      this.isModalOpen = false;   // 모달 닫기
+    },
+    goToTaskPage() {
+      if (this.selectedItem) {
+        this.$router.push(`/task/${this.selectedItem}`);
+      } else {
+        console.error('taskSeq 값이 없습니다.');
+      }
+    },
+    goToGroupEvalPage() {
+      if (this.selectedItem && this.selectedItem.taskGroupSeq) {
+        // taskGroupSeq를 URL 파라미터로 전달
+        this.$router.push(`/onboarding/groupEval/${this.selectedItem.taskGroupSeq}`);
+      } else {
+        console.error('taskGroupSeq 값이 없습니다.');
+      }
+    },
 
     // checklist 항목들을 templateSub을 기준으로 그룹화하는 함수
     groupChecklistByTemplate(onboardingList) {
@@ -76,12 +105,15 @@ export default {
 
         if (!template) {
           template = {
+            templateTitle: item.templateTitle,
             templateSub: item.templateSub,
             templateDetail: item.templateDetail,
             templateType: item.templateType,
             checklistContent: [],
             onboardingCompletedStatus: item.onboardingCompletedStatus,
-            templateUrlName:item.templateUrlName
+            templateUrlName:item.templateUrlName,
+            taskSeq:item.taskSeq,
+            taskGroupSeq: item.taskGroupSeq
           };
           groupedItems.push(template);
         }
@@ -95,6 +127,7 @@ export default {
           });
         }
       });
+
 
       return groupedItems;
     },
@@ -155,10 +188,10 @@ export default {
           >
             <div class="item-box-inner">
             <div class="item-header">
-              <div class="templateTitle">{{ item.templateSub }}</div>
+              <div class="templateTitle">{{ item.templateTitle }}</div>
             </div>
             <div class="item-content" :class="{ completed: item.onboardingCompletedStatus }">
-              <div class="templateDetail">{{ item.templateDetail }}</div>
+              <div class="templateDetail">{{ item.templateSub }}</div>
 
               <div v-if="item.templateType === 'CHECKLIST'" class="checklist-bigBox">
                 <div v-if="Array.isArray(item.checklistContent) && item.checklistContent.length > 0" class="checklist-container">
@@ -179,9 +212,36 @@ export default {
                 </div>
               </div>
               <div v-else>
-                <button class="tempateButton" @click="goToUrl(item.templateUrlName)">
-                  확인하기
-                </button>
+                <div>
+                  <button class="tempateButton" @click="openModal(item)">
+                    확인하기
+                  </button>
+
+                  <!-- 모달 -->
+                  <div v-if="isModalOpen" class="modal">
+                    <div class="modal-content">
+                      <p>{{ item.templateDetail }}</p>
+                      <div class="onboarding-button-container">
+                        <button
+                            v-if="selectedItem && selectedItem.taskSeq !== null"
+                            @click="goToTaskPage(selectedItem)"
+                            class="check-task-button">
+                          과제확인
+                        </button>
+
+                        <button
+                            v-if="selectedItem.taskGroupSeq !== null"
+                            @click="goToGroupEvalPage"
+                            class="cw-eval-button">
+                          동료평가
+                        </button>
+
+                        <button @click="closeModal" class="close-button">닫기</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             </div>

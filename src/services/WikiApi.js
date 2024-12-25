@@ -66,3 +66,14 @@ export const deleteWiki = async(wikiSeq) => {
         console.error("위키를 삭제하던 중 오류가 발생했습니다.", error);
     }
 }
+
+// 위키 검색
+export const searchWiki = async(keyword) => {
+    try {
+        return await springAPI.get(`/wiki/search`, {
+            params: {keyword}
+        });
+    } catch(error) {
+        console.error("위키를 검색하던 중 오류가 발생했습니다.", error);
+    }
+}
