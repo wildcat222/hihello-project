@@ -119,7 +119,7 @@ export const useUserStore = defineStore('user', {
                             springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
 
                             // 수정된 부분: 원래 요청을 새로운 액세스 토큰으로 재시도
-                            return await springAPI({
+                            return await springAPI.request({
                                 method: error.config.method,
                                 url: error.config.url,
                                 data: error.config.data,
