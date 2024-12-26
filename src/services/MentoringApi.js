@@ -39,7 +39,7 @@ export const fetchMentoringPlanDetail = async (planningSeq) => {
 
 // 멘토링 계획서 상태 처리 (팀장)
 export const updateMentoringPlanStatus = (planningSeq, planningStatus) => {
-    return springAPI.put(`/mentor/planning/${planningSeq}`, { planningStatus });
+    return springAPI.put(`/leader/planning/${planningSeq}`, { planningStatus });
 };
 
 // 멘토링 그룹 생성
