@@ -105,11 +105,11 @@
 
 .group-eval-main-container .group-eval-cowList-inner {
     display: flex;
-    margin-left: 15%;
+    margin-left: 20%;
 }
 
 .group-eval-main-container .group-eval-list {
-    width: 70%;
+    width: 60%;
     justify-content: center;
     padding: 26px 40px;
     background-color: var(--white);

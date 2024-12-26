@@ -14,11 +14,15 @@ const {
   taskContent,
   departmentSeq,
   templateSeq,
+  taskRounds,
+  departments,
+  fetchDepartments,
   handleFileChange,
   fetchData,
   addRow,
   updateTask,
   goToGroupingPage,
+  fetchTaskRounds,
   fetchTaskData // 새로 추가한 fetchTaskData 함수
 } = useTask();
 
@@ -32,6 +36,8 @@ onMounted(() => {
   } else {
     console.error("taskSeq가 URL에 존재하지 않습니다.");
   }
+  fetchDepartments();
+  fetchTaskRounds();  // 새로운 호출
 });
 </script>
 
@@ -50,20 +56,22 @@ onMounted(() => {
         </div>
         <div class="container-line">
           <span class="task-depart"> 과제 부서 </span>
-          <select v-model="departmentSeq" class="task-depart-input">
-            <option value="1">교육팀</option>
-            <option value="2">영업팀</option>
-            <option value="3">총무팀</option>
-            <option value="4">SW개발팀</option>
-            <option value="5">인사팀</option>
+          <select v-model="departmentSeq" id="departmentSelect" class="task-depart-input">
+            <option v-for="department in departments"
+                    :key="department.departmentSeq"
+                    :value="department.departmentSeq">
+              {{ department.departmentName || '부서 없음' }} <!-- 이름 확인용 -->
+            </option>
           </select>
         </div>
         <div class="container-line">
           <span class="task-round">과제 지정</span>
           <select v-model="templateSeq" class="task-round-input">
-            <option value="1주차">1주차</option>
-            <option value="2주차">2주차</option>
-            <option value="3주차">3주차</option>
+            <option v-for="taskRound in taskRounds"
+                    :key="taskRound.templateSeq"
+                    :value="taskRound.templateSeq">
+              {{ taskRound.templateTaskRound || '차수 없음'}}
+            </option>
           </select>
         </div>
         <div class="container-line">
@@ -80,7 +88,7 @@ onMounted(() => {
         </div>
         <div class="container-line">
           <span class="task-content"> 과제 내용 </span>
-          <input v-model="taskContent" class="task-content-input">
+          <textarea v-model="taskContent" class="task-content-input"></textarea>
         </div>
         <div class="container-line">
           <span class="task-attach"> 과제 참고 자료 </span>

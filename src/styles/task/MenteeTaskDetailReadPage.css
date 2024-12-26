@@ -4,16 +4,24 @@
     font-weight: bold;
     justify-content: center;
     margin: 105px 0 49px 0;
+    width: 100%;
+}
+.task-detail-container{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
 }
 
 .task-detail-container .task-detail-body {
     margin-top: 20px;
     display: flex;
     justify-content: center;
+    width: 100%;
+
 }
 
 .task-detail-container .task-detail-body-container {
-    width: 60%;
+    width: 100%;
     min-width: 100%;
     padding: 47px 61px 40px 61px;
     background-color: white;
@@ -24,6 +32,7 @@
     font-size: 30px;
     font-weight: bold;
     margin: 0 0 13px 0;
+    width: 100%;
 }
 
 .task-detail-container .task-detail-body-url button {
@@ -36,6 +45,19 @@
     border-radius: 10px;
 }
 
+.task-detail-body-url{
+    display: flex;
+    align-items: flex-end;
+    height:30px;
+}
+
+.task-detail-body-url button {
+    display: flex;
+    align-items: center;
+    height: 30px;
+
+}
+
 .task-detail-container .task-detail-body-url button:hover {
     background-color: #5a1dc2;
 }
@@ -44,7 +66,7 @@
     margin-top: 20px;
     font-weight: bold;
     font-size: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 2px;
 }
 
 .task-detail-container input[type="file"] {
@@ -132,5 +154,5 @@
     padding: 10px 20px;
     width: 120px;
     border-radius: 10px;
-    margin-left: 85%;
+    margin-left: 83%;
 }

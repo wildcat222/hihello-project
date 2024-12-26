@@ -45,7 +45,7 @@ const handleClick = () => {
 }
 
 .add-button {
-  background-color: #FFC107;
+  background-color: var(--yellow);
   width: 125px;
   height: 50px;
   display: flex;
@@ -55,6 +55,9 @@ const handleClick = () => {
   font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
+}
+.add-button:hover{
+  background: var(--purple)
 }
 
 .bibi-plus-circle{

@@ -45,6 +45,7 @@ export function useTask() {
         }
     };
 
+
     const handleSearch = async (query) => {
         try {
             const response = await springAPI.get('/task', {
@@ -75,6 +76,7 @@ export function useTask() {
         deleteMessage.value = `과제 번호&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${taskSeq}\n과제 부서&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${departmentName}\n과제 유형&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${templateTaskRound}\n과제 제목&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${taskTitle}`;
         isDeleteModalVisible.value = true;
     };
+
 
     const deleteTask = async () => {
         try {
