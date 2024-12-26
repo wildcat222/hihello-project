@@ -44,7 +44,7 @@ onMounted(() => {
   font-family: "Noto Sans KR", sans-serif;
   flex-grow: 1;
   height: 100vh;
-  //overflow: hidden;
+  overflow: auto;
   flex-direction: column;
   align-items: center;
 }

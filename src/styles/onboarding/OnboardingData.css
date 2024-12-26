@@ -148,13 +148,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(1px); /* 배경에 블러 효과 추가 */
-    -webkit-backdrop-filter: blur(1px); /* Safari 지원 */
+    backdrop-filter: blur(3px); /* 배경에 블러 효과 추가 */
+    -webkit-backdrop-filter: blur(3px); /* Safari 지원 */
 }
 
 .modal-content {
     background-color: white;
-    padding: 20px;
+    padding: 36px;
     border-radius: 5px;
     position: relative;
     z-index: 10; /* 모달 내용이 블러 배경 위에 올 수 있도록 */
@@ -163,4 +163,5 @@
 .onboarding-button-container{
     display:flex;
     flex-direction: column;
+    align-items: center;
 }
