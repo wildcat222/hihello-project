@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.evaluation.query.mapper.TaskSubmitQueryMapper">
+    <!-- 과제 내용과 제출된 과제 정보를 불러오는 SQL  -->
+    <select id="findSubmittedTask" resultType="SubmittedTaskQueryDTO">
+        SELECT
+            t.task_seq,
+            t.task_title,
+            f1.file_name AS task_file_name,
+            f1.file_url AS task_file_url,
+            t.task_content,
+            ts.task_submit_seq,
+            ts.task_submit_content,
+            f2.file_name AS task_submit_file_name,
+            f2.file_url AS task_submit_file_url,
+            ts.reg_date AS task_submit_date
+        FROM
+            task_submit ts
+        JOIN
+            task t
+            ON t.task_seq = ts.task_seq
+        LEFT JOIN
+            department d
+            ON d.department_seq = t.department_seq
+        LEFT JOIN
+            file f1
+            ON f1.task_seq = t.task_seq
+        LEFT JOIN
+            file f2
+            ON ts.task_submit_seq = f2.task_submit_seq
+        WHERE ts.task_submit_seq = #{task_submit_seq}
+    </select>
+</mapper>

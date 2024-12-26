@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.finalEval.query.mapper.FinalEvalMapper">
+    <!-- 최종 평가 목록을 조회하는 SQL -->
+    <select id="findAllFinalEvals" resultType="FinalEvalsQueryDTO">
+        SELECT
+            e.employee_seq,
+            e.employee_num,
+            e.employee_name,
+            d.department_seq,
+            d.department_name,
+            SUM(fe.employee_score) AS total_final_eval_score
+        FROM
+            final_eval fe
+        JOIN
+            employee e ON fe.employee_seq = e.employee_seq
+        JOIN
+            department d ON e.department_seq = d.department_seq
+        GROUP BY e.employee_seq
+    </select>
+
+    <!--최종 평가 목록을 검색하는 SQL-->
+    <select id="searchFinalEvals" resultType="FinalEvalsQueryDTO">
+        SELECT
+            e.employee_seq,
+            e.employee_num,
+            e.employee_name,
+            d.department_seq,
+            d.department_name,
+            SUM(fe.employee_score) AS total_final_eval_score
+        FROM
+            final_eval fe
+        JOIN
+            employee e ON fe.employee_seq = e.employee_seq
+        JOIN
+            department d ON e.department_seq = d.department_seq
+        WHERE
+        e.employee_num LIKE (CONCAT('%', #{keyword}, '%')) OR
+        e.employee_name LIKE (CONCAT('%', #{keyword}, '%')) OR
+        d.department_name LIKE (CONCAT('%', #{keyword}, '%'))
+        GROUP BY e.employee_seq
+    </select>
+
+    <!--최종 평가 상세 내용을 조회하는 SQL-->
+    <!--회원 정보 부분-->
+    <select id="findEmployeeInfo" resultType="FinalEvalDetailQueryDTO">
+        SELECT
+            file_seq,
+            f.file_url AS profile_img_url,
+            e.employee_seq,
+            e.employee_name,
+            e.employee_phone,
+            e.employee_email,
+            d.department_name,
+            e.employee_num
+        FROM
+            employee e
+        LEFT JOIN
+            file f ON e.employee_seq = f.employee_seq
+        JOIN
+            department d ON e.department_seq = d.department_seq
+        WHERE
+            e.employee_seq = #{employee_seq}
+    </select>
+
+    <!--최종 평가 결과 부분-->
+    <select id="findFinalEvalResult" resultType="FinalEvalResultQueryDTO">
+        SELECT
+            CASE
+                WHEN fe.eval_ind_seq IS NOT NULL AND fe.final_eval_ind_seq IS NULL THEN ei.eval_ind_seq
+                WHEN fe.eval_ind_seq IS NULL AND fe.final_eval_ind_seq IS NOT NULL THEN fei.final_eval_ind_seq
+            END AS final_eval_ind_seq,
+            CASE
+                WHEN fe.eval_ind_seq IS NOT NULL AND fe.final_eval_ind_seq IS NULL THEN ei.eval_ind_content
+                WHEN fe.eval_ind_seq IS NULL AND fe.final_eval_ind_seq IS NOT NULL THEN fei.final_eval_ind_name
+            END AS final_eval_ind_name,
+            fe.employee_score AS final_eval_score
+        FROM
+            final_eval fe
+        LEFT JOIN eval_ind ei
+            ON fe.eval_ind_seq IS NOT NULL
+                AND fe.final_eval_ind_seq IS NULL
+                AND fe.eval_ind_seq = ei.eval_ind_seq
+        LEFT JOIN final_eval_ind fei
+            ON fe.eval_ind_seq IS NULL
+                AND fe.final_eval_ind_seq IS NOT NULL
+                AND fe.final_eval_ind_seq = fei.final_eval_ind_seq
+        WHERE fe.employee_seq = #{employee_seq}
+    </select>
+</mapper>

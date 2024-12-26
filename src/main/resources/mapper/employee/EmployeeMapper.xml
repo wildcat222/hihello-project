@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.employee.query.mapper.EmployeeMapper">
+
+    <!-- 모든 멘티 데이터를 가져오는 SQL -->
+    <select id="findAllMentee" resultType="MenteeAllQueryDTO">
+        SELECT
+            e.employee_name,
+            e.employee_num,
+            d.department_name
+        FROM
+            employee AS e
+        JOIN
+            department AS d
+        ON
+            e.department_seq = d.department_seq
+        WHERE
+            e.employee_role = "MENTEE"
+    </select>
+
+    <!-- 해당 부서의 멘티를 조회하는 SQL   -->
+    <select id="findMenteeByDep" parameterType="long" resultType="MenteeDepQueryDTO">
+        SELECT
+            e.employee_seq,
+            e.employee_name,
+            e.employee_num,
+            d.department_name
+        FROM
+            employee AS e
+        JOIN
+            department AS d
+        ON
+            e.department_seq = d.department_seq
+        WHERE
+            e.department_seq = #{departmentSeq}
+        AND
+            e.employee_role = "MENTEE"
+    </select>
+
+    <!-- 모든 멘토 데이터를 가져오는 SQL -->
+    <select id="findAllMentor" resultType="MentorAllQueryDTO">
+        SELECT
+            e.employee_name,
+            e.employee_num,
+            d.department_name
+        FROM
+            employee AS e
+        JOIN
+            department AS d
+        ON
+            e.department_seq = d.department_seq
+        WHERE
+            e.employee_role = "MENTOR"
+    </select>
+
+    <!-- 내 정보를 조회하는 SQL -->
+    <select id="findEmployeeInfo" parameterType="java.lang.Long" resultType="ResEmplInfoQueryDTO">
+        SELECT
+            e.employee_name AS employeeName,
+            e.employee_num AS employeeNum,
+            d.department_name AS departmentName,
+            p.position_name AS positionName,
+            e.employee_phone AS employeePhone,
+            e.employee_email AS employeeEmail,
+            f.file_url AS fileUrl
+        FROM
+            employee AS e
+        JOIN
+            department AS d ON e.department_seq = d.department_seq
+        JOIN
+            positions AS p ON e.position_seq = p.position_seq
+        LEFT JOIN
+            file AS f ON e.employee_seq = f.employee_seq
+        WHERE
+            e.employee_seq = #{employeeSeq}
+    </select>
+
+    <!-- 멘토의 프로필 정보를 조회하는 SQL -->
+    <select id="findMentorInfo" parameterType="java.lang.Long" resultType="ResEmplInfoQueryDTO">
+        SELECT
+            mentor.employee_name AS employeeName,
+            mentor.employee_num AS employeeNum,
+            mentor.employee_role AS employeeRole,
+            d.department_name AS departmentName,
+            p.position_name AS positionName,
+            mentor.employee_phone AS employeePhone,
+            mentor.employee_email AS employeeEmail,
+            f.file_url AS fileUrl
+        FROM
+            employee AS mentee
+        JOIN
+            mentoring AS m ON mentee.employee_seq = m.mentee_seq
+        JOIN
+            employee AS mentor ON m.mentor_seq = mentor.employee_seq
+        JOIN
+            department AS d ON mentor.department_seq = d.department_seq
+        JOIN
+            positions AS p ON mentor.position_seq = p.position_seq
+        LEFT JOIN
+            file AS f ON mentor.employee_seq = f.employee_seq
+        WHERE
+            mentee.employee_seq = #{employeeSeq}
+    </select>
+
+    <!-- 멘티의 프로필 정보를 조회하는 SQL -->
+    <select id="findMenteeInfo" parameterType="java.lang.Long" resultType="ResEmplInfoQueryDTO">
+        SELECT
+            mentee.employee_name AS employeeName,
+            mentee.employee_role AS employeeRole,
+            mentee.employee_num AS employeeNum,
+            d.department_name AS departmentName,
+            p.position_name AS positionName,
+            mentee.employee_phone AS employeePhone,
+            mentee.employee_email AS employeeEmail,
+            f.file_url AS fileUrl
+        FROM
+            employee AS mentor
+        JOIN
+            mentoring AS m ON mentor.employee_seq = m.mentor_seq
+        JOIN
+            employee AS mentee ON m.mentee_seq = mentee.employee_seq
+        JOIN
+            department AS d ON mentee.department_seq = d.department_seq
+        JOIN
+            positions AS p ON mentee.position_seq = p.position_seq
+        LEFT JOIN
+            file AS f ON mentee.employee_seq = f.employee_seq
+        WHERE
+            mentor.employee_seq = #{employeeSeq}
+        AND
+            m.mentoring_active_status = true
+    </select>
+
+    <select id="findEmployeeAll" resultType="EmployeeListDTO">
+        SELECT
+            e.employee_seq AS employeeSeq,
+            e.employee_num AS employeeNum,
+            e.employee_name AS employeeName,
+            d.department_name AS departmentName,
+            p.position_name AS positionName,
+            e.employee_phone AS employeePhone,
+            e.employee_email AS employeeEmail,
+            e.employee_role AS employeeRole
+        FROM
+            employee AS e
+        JOIN
+            department AS d ON e.department_seq = d.department_seq
+        JOIN
+            positions AS p ON e.position_seq = p.position_seq
+        WHERE
+            e.employee_deleted_status = false
+    </select>
+
+    <select id="getEmployeeSearch" parameterType="String" resultType="EmployeeListDTO">
+        SELECT
+            e.employee_seq AS employeeSeq,
+            e.employee_num AS employeeNum,
+            e.employee_name AS employeeName,
+            d.department_name AS departmentName,
+            p.position_name AS positionName,
+            e.employee_phone AS employeePhone,
+            e.employee_email AS employeeEmail,
+            e.employee_role AS employeeRole
+        FROM
+            employee AS e
+        JOIN
+            department AS d ON e.department_seq = d.department_seq
+        JOIN
+            positions AS p ON e.position_seq = p.position_seq
+        WHERE
+            e.employee_deleted_status = false
+        AND
+        <choose>
+            <when test="searchType == 'name'">
+                e.employee_name LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="searchType == 'num'">
+                e.employee_num LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <otherwise>
+                1 = 0
+            </otherwise>
+            </choose>
+    </select>
+
+    <select id="findEmployeeName" parameterType="java.lang.Long" resultType="java.lang.String">
+        SELECT
+            employee_name AS employeeName
+        FROM
+            employee
+        WHERE
+            employee_seq = #{employeeSeq}
+    </select>
+
+    <!-- 부서 조회 -->
+    <select id="findAllDepartment" resultType="DepartmentListDTO">
+        SELECT
+            department_seq,
+            department_name
+        FROM
+            department
+    </select>
+
+    <!-- 해당 부서의 멘토를 조회하는 SQL   -->
+    <select id="findMentorByDep" parameterType="long" resultType="MentorDepQueryDTO">
+        SELECT
+        e.employee_seq,
+        e.employee_name,
+        e.employee_num,
+        d.department_name
+        FROM
+        employee AS e
+        JOIN
+        department AS d
+        ON
+        e.department_seq = d.department_seq
+        WHERE
+        e.department_seq = #{departmentSeq}
+        AND
+        e.employee_role = "MENTOR"
+    </select>
+
+    <select id="findEmployeeRole" parameterType="long" resultType="EmployeeRoleDTO">
+        SELECT
+        e.employee_role
+        FROM employee e
+        WHERE employee_seq = #{employeeSeq}
+    </select>
+</mapper>

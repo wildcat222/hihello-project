@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.wiki.query.mapper.WikiMapper">
+    <!-- 위키 리스트를 조회하는 SQL -->
+    <select id="findAllWikis" resultType="WikiListQueryDTO">
+        SELECT
+            w.wiki_seq,
+            w.wiki_title,
+            wmc.employee_seq AS editor_seq,
+            e.employee_num AS editor_num,
+            e.employee_name AS editor_name,
+            wmc.reg_date AS latest_mod_date
+        FROM
+            wiki w
+        JOIN
+            (SELECT
+                *,
+                ROW_NUMBER() OVER (PARTITION BY wiki_seq ORDER BY reg_date DESC) AS seq
+            FROM
+                wiki_mod_content
+            ) wmc ON wmc.wiki_seq = w.wiki_seq
+        JOIN
+            employee e ON wmc.employee_seq = e.employee_seq
+        WHERE
+            seq = 1 AND w.wiki_deleted_status = false
+        ORDER BY latest_mod_date DESC
+    </select>
+
+    <!--위키 히스토리를 조회하는 SQL-->
+    <select id="findWikiHistories" resultType="WikiHistoryListQueryDTO">
+        SELECT
+            wm.employee_seq,
+            e.employee_num,
+            e.employee_name,
+            wm.wiki_mod_content_seq,
+            wm.reg_date
+        FROM
+            wiki_mod_content wm
+        JOIN
+            employee e ON wm.employee_seq = e.employee_seq
+        WHERE wm.wiki_seq = #{wikiSeq}
+        ORDER BY reg_date DESC
+    </select>
+
+    <!--위키 내용을 조회하는 SQL-->
+    <select id="findWikiSnapshotByWikiSeq" resultType="WikiSnapshotQueryDTO">
+        SELECT
+            w.wiki_seq,
+            w.wiki_title,
+            ws.wiki_snapshot_seq,
+            ws.wiki_snapshot_ver,
+            ws.wiki_snapshot_content
+        FROM
+            wiki w
+        JOIN
+            wiki_snapshot ws ON w.wiki_seq = ws.wiki_seq
+        WHERE
+            w.wiki_seq = #{wiki_seq} AND ws.wiki_snapshot_ver &lt;= (w.wiki_current_ver - 1) / 10 + 1
+        ORDER BY ws.wiki_snapshot_ver DESC
+        LIMIT 1
+    </select>
+
+    <!--위키 수정 내용을 조회하는 SQL-->
+    <select id="findWikiModContentsByWikiSeqAndWikiSnapshotSeq" resultType="WikiModContentQueryDTO">
+        SELECT
+            wiki_mod_content_seq,
+            wiki_seq,
+            wiki_snapshot_seq,
+            mod_content AS wikiModContent
+        FROM
+            wiki_mod_content
+        WHERE
+            wiki_seq = #{wikiSeq} AND wiki_snapshot_seq = #{wikiSnapshotSeq}
+        ORDER BY wiki_mod_content_seq
+    </select>
+
+    <!--위키 최신 수정 날짜를 조회하는 SQL-->
+    <select id="findWikiLatestModDateByWikiSeq" resultType="java.time.LocalDateTime">
+        SELECT
+            reg_date
+        FROM
+            wiki_mod_content
+        ORDER BY wiki_mod_content_seq DESC
+        LIMIT 1
+    </select>
+
+    <!--wikiModContentSeq 기준 가장 최신 snapshot 찾기(서브쿼리는 복원하고자 하는 위키의 version을 select)-->
+    <select id="findLatestWikiSnapshot" resultType="WikiSnapshotQueryDTO">
+        SELECT
+            wmc.wiki_seq,
+            w.wiki_title,
+            ws.wiki_snapshot_seq,
+            ws.wiki_snapshot_ver,
+            ws.wiki_snapshot_content
+        FROM
+            wiki_mod_content wmc
+        JOIN
+            wiki_snapshot ws ON wmc.wiki_snapshot_seq = ws.wiki_snapshot_seq
+        JOIN
+            wiki w ON w.wiki_seq = wmc.wiki_seq
+        WHERE
+            wmc.wiki_seq = #{wikiSeq}
+                AND ws.wiki_snapshot_ver &lt;=
+                    ((SELECT COUNT(*)
+                    FROM wiki_mod_content wmc_sub
+                    WHERE wmc_sub.wiki_seq = wmc.wiki_seq
+                        AND wmc_sub.wiki_mod_content_seq &lt;= #{wikiModContentSeq}) - 1) / 10 + 1
+        ORDER BY
+            ws.wiki_snapshot_ver DESC
+        LIMIT 1
+    </select>
+
+    <!--현재 조회하려는 버전 이전의 수정 리스트를 조회하는 SQL-->
+    <select id="findWikiModContentsLessThanWikiModContentSeq" resultType="WikiModContentQueryDTO">
+        SELECT
+            wiki_mod_content_seq,
+            wiki_seq,
+            wiki_snapshot_seq,
+            mod_content AS wiki_mod_content
+        FROM
+            wiki_mod_content
+        WHERE
+            wiki_seq = #{wikiSeq}
+            AND wiki_snapshot_seq = #{wikiSnapshotSeq}
+            AND wiki_mod_content_seq &lt;= #{wikiModContentSeq}
+        ORDER BY wiki_mod_content_seq
+    </select>
+</mapper>

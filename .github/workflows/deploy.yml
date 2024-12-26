@@ -1,20 +1,30 @@
-name: eb-proj-service
+name: spring-project-produce
 
 permissions:
   contents: read
   pull-requests: write
 
 on:
+  pull_request:
+    branches:
+      - "master"
+    types:
+      - opened
+      - reopened
+      - synchronize
+
   push:
     branches:
-      - "main" # main 브랜치에 코드가 푸시될 때 실행
+      - "master"
 
 jobs:
-  build:
+  build-and-test:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    environment: produce
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
@@ -30,6 +40,36 @@ jobs:
         id: start_time
         run: echo "START_TIME=$(date +%s)" >> $GITHUB_ENV
 
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss
+          utcOffset: "+09:00"
+
+      - name: Generate deployment package
+        run: |
+          mkdir -p deploy
+          cp build/libs/*.jar deploy/application.jar
+          cp Procfile deploy/Procfile
+          cp -r .ebextensions deploy/.ebextensions
+          cp -r .platform deploy/.platform
+          cd deploy && zip -r deploy.zip .
+          
+      - name: Beanstalk Deploy
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: hihello
+          environment_name: Hihello-env
+          version_label: github-action-${{steps.current-time.outputs.formattedTime}}
+          region: ap-northeast-2
+          deployment_package: deploy/deploy.zip
+          use_existing_version_if_available: false
+          wait_for_deployment: true
+          wait_for_environment_recovery: 300
+
       - name: Validate application.yml
         run: |
           if [ ! -f src/main/resources/application.yml ]; then
@@ -37,17 +77,34 @@ jobs:
             exit 1
           fi
 
-      - name: Build with Gradle
+      - name: Build and Test with Gradle
         env:
-          RDS_HOSTNAME: ${{ secrets.RDS_HOSTNAME }}
+          SERVER_PORT: ${{ secrets.SERVER_PORT }}
+          RDS_DOMAIN: ${{ secrets.RDS_DOMAIN }}
+          RDS_URL: ${{ secrets.RDS_URL }}
           RDS_PORT: ${{ secrets.RDS_PORT }}
           RDS_DB_NAME: ${{ secrets.RDS_DB_NAME }}
           RDS_USERNAME: ${{ secrets.RDS_USERNAME }}
           RDS_PASSWORD: ${{ secrets.RDS_PASSWORD }}
+          RDS_DRIVER_CLASS_NAME: ${{ secrets.RDS_DRIVER_CLASS_NAME }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          REDIS_PORT: ${{ secrets.REDIS_PORT }}
+          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
           S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
           S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
-        run: ./gradlew clean build -x test
+          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+          MONGO_USER_NAME: ${{ secrets.MONGO_USER_NAME }}
+          MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
+          MONGO_HOST: ${{ secrets.MONGO_HOST }}
+          MONGO_PORT: ${{ secrets.MONGO_PORT }}
+          MONGO_DATABASE: ${{ secrets.MONGO_DATABASE }}
+          MONGO_CONTAINER_NAME: ${{ secrets.MONGO_CONTAINER_NAME }}
+          KAFKA_BOOTSTRAP_SERVER: ${{ secrets.KAFKA_BOOTSTRAP_SERVER }}
+          ELASTIC_URIS: ${{ secrets.ELASTIC_URIS }}
+          ELASTIC_USER: ${{ secrets.ELASTIC_USER }}
+          ELASTIC_PASSWORD: ${{ secrets.ELASTIC_PASSWORD }}
+        run: ./gradlew clean build test
 
       - name: Calculate Duration
         id: calculate_duration
@@ -56,82 +113,92 @@ jobs:
           DURATION=$((END_TIME - START_TIME))
           echo "DURATION=$DURATION" >> $GITHUB_ENV
 
-      - name: Notify Discord on Success
-        if: success() # 빌드가 성공했을 때만 실행
+      - name: Notify Discord
+        if: always()
         run: |
-          if [ -n "${{ github.event.pull_request.title }}" ]; then
-            PR_TITLE="${{ github.event.pull_request.title }}"
-          else
-            PR_TITLE="${{ github.event.head_commit.message }}"
-          fi
-          ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          DURATION=$((DURATION)) # 초 단위 실행 시간
-          curl -H "Content-Type: application/json" \
-            -d "{
-                  \"embeds\": [
-                    {
-                      \"title\": \"✅ 빌드 성공 알림\",
-                      \"description\": \"빌드가 성공했어핑! 🎉\\n\\n\",
-                      \"color\": 3066993,
-                      \"fields\": [
-                        {
-                          \"name\": \"📝 작업 제목\",
-                          \"value\": \"${PR_TITLE}\\n\\n\",
-                          \"inline\": false
-                        },
-                        {
-                          \"name\": \"⏱️ 실행 시간\",
-                          \"value\": \"${DURATION}초\\n\\n\",
-                          \"inline\": false
-                        },
-                        {
-                          \"name\": \"🔗 디버그 URL\",
-                          \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\\n\\n\",
-                          \"inline\": false
-                        }
-                      ]
-                    }
-                  ]
-                }" \
-            ${{ secrets.DISCORD_WEBHOOK_URL }}
+          echo "Job Status: ${{ job.status }}"
+          DURATION=${DURATION:-"알 수 없음"}
 
-      - name: Notify Discord on Failure
-        if: failure() # 빌드가 실패했을 때만 실행
-        run: |
           if [ -n "${{ github.event.pull_request.title }}" ]; then
             PR_TITLE="${{ github.event.pull_request.title }}"
           else
             PR_TITLE="${{ github.event.head_commit.message }}"
           fi
+
+          SAFE_PR_TITLE=$(echo "$PR_TITLE" | jq -R .)
+
           ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          DURATION=$((DURATION)) # 초 단위 실행 시간
+
+          send_discord_notification() {
+            local status="$1"
+            local title=""
+            local color=""
+            local description=""
+
+            if [ "$status" = "success" ]; then
+              title="🚀 프로덕션 빌드 성공!"
+              color=3066993
+              description="프로덕션 빌드가 성공했어요! 🎉\\n\\n"
+            else
+              title="⚠️ 프로덕션 빌드 실패"
+              color=15158332
+              description="프로덕션 빌드에 실패했어요. 😢\\n\\n"
+            fi
+
+            curl -H "Content-Type: application/json" \
+              -d "{
+                    \"embeds\": [
+                      {
+                        \"title\": \"$title\",
+                        \"description\": \"$description\",
+                        \"color\": $color,
+                        \"fields\": [
+                          {
+                            \"name\": \"📝 작업 제목\",
+                            \"value\": $SAFE_PR_TITLE,
+                            \"inline\": false
+                          },
+                          {
+                            \"name\": \"⏱️ 실행 시간\",
+                            \"value\": \"${DURATION}초\\n\\n\",
+                            \"inline\": false
+                          },
+                          {
+                            \"name\": \"🔗 디버그 URL\",
+                            \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\\n\\n\",
+                            \"inline\": false
+                          }
+                        ]
+                      }
+                    ]
+                  }" \
+              ${{ secrets.DISCORD_WEBHOOK_URL }}
+          }
+
+          if [ "${{ job.status }}" = "success" ]; then
+            send_discord_notification "success"
+          else
+            send_discord_notification "failure"
+          fi
+
+  notify-on-merge:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: produce
+
+    steps:
+      - name: Notify Discord on Merge
+        run: |
+          echo "Merge Notification"
+          ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           curl -H "Content-Type: application/json" \
             -d "{
                   \"embeds\": [
                     {
-                      \"title\": \"❌ 빌드 실패 알림\",
-                      \"description\": \"빌드가 실패했어핑. 😢\\n\\n\",
-                      \"color\": 15158332,
-                      \"fields\": [
-                        {
-                          \"name\": \"📝 작업 제목\",
-                          \"value\": \"${PR_TITLE}\\n\\n\",
-                          \"inline\": false
-                        },
-                        {
-                          \"name\": \"⏱️ 실행 시간\",
-                          \"value\": \"${DURATION}초\\n\\n\",
-                          \"inline\": false
-                        },
-                        {
-                          \"name\": \"🔗 디버그 URL\",
-                          \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\\n\\n\",
-                          \"inline\": false
-                        }
-                      ]
+                      \"title\": \"🎉 Master 브랜치 Merge 성공!\",
+                      \"description\": \"Master 브랜치에 성공적으로 머지되었어요! 🚀\\n\\n[Actions 로그 보기](${ACTIONS_URL})\",
+                      \"color\": 3066993
                     }
                   ]
                 }" \
             ${{ secrets.DISCORD_WEBHOOK_URL }}
-    
-      
