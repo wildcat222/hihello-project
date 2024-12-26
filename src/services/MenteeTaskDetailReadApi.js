@@ -22,7 +22,10 @@ export const fetchTaskDetail = async (taskSeq, taskDetail, getAuthHeader) => {
         const response = await springAPI.get(`/mentee/task/${taskSeq}`, {
             headers: getAuthHeader(),
         });
-        if (response.data.success) {
+
+        console.log(response); // 응답 구조를 확인하기 위해 추가
+
+        if (response.data.success && Array.isArray(response.data.data) && response.data.data.length > 0) {
             const { taskTitle, taskContent, templateEndAt, fileName, fileUrl } = response.data.data[0];
             taskDetail.value = {
                 taskTitle,
@@ -31,11 +34,14 @@ export const fetchTaskDetail = async (taskSeq, taskDetail, getAuthHeader) => {
                 fileName,
                 fileUrl,
             };
+        } else {
+            console.error("응답 데이터가 없거나 형식이 잘못되었습니다.");
         }
     } catch (error) {
         console.error('API 호출 실패:', error);
     }
 };
+
 
 // 파일 첨부 버튼 클릭 시 input[type=file]을 클릭하도록 처리
 export const triggerFileInput = (fileInput) => {
