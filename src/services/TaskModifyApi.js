@@ -95,28 +95,33 @@ export function useTask() {
                 },
             });
 
-            const taskData = response.data.data[0];
-            console.log('taskData:', taskData); // taskData 로그로 확인
 
+
+            if (!response.data || !response.data.data) {
+                console.error('올바르지 않은 API 응답 구조:', response);
+                return;
+            }
+
+            const taskData = response.data.data[0]; // 데이터 구조 확인 후 수정 필요
+
+            // 데이터 매핑
             taskTitle.value = taskData.taskTitle || '';
             taskContent.value = taskData.taskContent || '';
-            departmentSeq.value = taskData.departmentSeq || 1;
-            templateSeq.value = taskData.templateSeq || 1;  // 수정된 부분
-            round.value = taskData.templateTaskRound || '1주차';
+            departmentSeq.value = taskData.departmentSeq || null;
+            templateSeq.value = taskData.templateSeq || null;
+            round.value = taskData.templateTaskRound || null;
             taskType.value = taskData.taskType || 'PERSONAL';
             fileName.value = taskData.fileName || '';
             fileUrl.value = taskData.fileUrl || '';
 
-            // 평가 항목 리스트 설정
             tableData.value = taskData.evalList.map(item => ({
                 evalIndSeq: item.evalIndSeq,
                 evalIndContent: item.evalIndContent,
-                evalListContent: item.evalListContent,
-                evalListScore: item.evalListScore,
+                evalListContent: item.evalListContent || '',
+                evalListScore: item.evalListScore || 0,
             }));
-            fileName.value = taskData.fileName || '';  // 파일 이름 로드
         } catch (error) {
-            console.error('과제 데이터 조회 실패:', error);
+            console.error('과제 데이터 조회 실패:', error.response?.data || error);
         }
     };
 
@@ -134,7 +139,6 @@ export function useTask() {
             console.error('taskSeq가 존재하지 않습니다.');
             return;
         }
-
         const formData = new FormData();
         const updateTaskDTO = {
             departmentSeq: departmentSeq.value,
@@ -148,11 +152,9 @@ export function useTask() {
                 evalIndSeq: item.evalIndSeq,
             })),
         };
-
         // 파일 선택 여부에 따른 처리
         const fileInput = document.getElementById('fileInput');
         const file = fileInput.files[0];
-
         // 파일이 있을 경우
         if (file) {
             updateTaskDTO.fileName = file.fileName; // 파일 이름을 updateTaskDTO에 추가
@@ -161,10 +163,8 @@ export function useTask() {
             // 파일이 없으면 fileName을 포함하지 않음
             delete updateTaskDTO.fileName; // fileName 필드를 제거
         }
-
         // updateTaskDTO를 formData에 추가
         formData.append('updateTaskDTO', JSON.stringify(updateTaskDTO));
-
         try {
             const response = await springAPI.put(`/task/${taskSeq.value}`, formData, {
                 headers: {
@@ -172,9 +172,7 @@ export function useTask() {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
             alert('과제 수정이 성공하였습니다.');
-            console.log('taskSeq:', taskSeq.value);
         } catch (error) {
             alert('과제 수정에 실패했습니다.');
             console.error('API Error:', error.response?.data || error);
@@ -184,7 +182,7 @@ export function useTask() {
     // API 호출 함수
     const fetchDepartments = async () => {
         try {
-            const response = await axios.get('http://localhost:8253/api/v1/hr/department', {
+            const response = await springAPI.get('/hr/department', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
                     'Content-Type': 'multipart/form-data',
@@ -202,12 +200,11 @@ export function useTask() {
 
     const fetchTaskRounds = async () => {
         try {
-            const response = await axios.get('http://localhost:8253/api/v1/hr/onboarding/template', {
+            const response = await springAPI.get('/hr/onboarding/template', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
                 },
             });
-            console.log('API 응답:', response.data); // 디버깅용 로그
 
             if (response.data.success) {
                 if (response.data.data.length === 0) {
@@ -215,7 +212,6 @@ export function useTask() {
                 } else {
                     // 데이터 저장
                     taskRounds.value = response.data.data;
-                    console.log('taskRounds 값:', taskRounds.value); // 데이터가 잘 저장되었는지 확인
                 }
             } else {
                 console.error('차수 정보를 가져오는 데 실패했습니다:', response.data.message);

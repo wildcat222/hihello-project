@@ -70,8 +70,6 @@ onMounted(() => {
           <option value="PERSONAL">개인과제</option>
           <option value="GROUP">그룹과제</option>
         </select>
-
-        <!-- taskType이 "GROUP"일 때만 버튼이 보임 -->
         <button v-if="taskType === 'GROUP'" class="task-group-button" @click="goToGroupingPage">
           그룹 매칭
         </button>
