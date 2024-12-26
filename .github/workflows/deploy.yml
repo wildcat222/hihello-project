@@ -106,6 +106,16 @@ jobs:
           ELASTIC_PASSWORD: ${{ secrets.ELASTIC_PASSWORD }}
         run: ./gradlew clean build test
 
+      - name: Debug build directory
+        run: ls -R build
+
+      - name: Validate JAR file
+        run: |
+          if [ ! -f build/libs/*.jar ]; then
+            echo "Error: No JAR file found!"
+            exit 1
+          fi
+
       - name: Calculate Duration
         id: calculate_duration
         run: |
