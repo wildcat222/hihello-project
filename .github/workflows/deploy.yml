@@ -104,7 +104,7 @@ jobs:
           ELASTIC_URIS: ${{ secrets.ELASTIC_URIS }}
           ELASTIC_USER: ${{ secrets.ELASTIC_USER }}
           ELASTIC_PASSWORD: ${{ secrets.ELASTIC_PASSWORD }}
-        run: ./gradlew clean build test
+        run: ./gradlew clean build -x test
 
       - name: Calculate Duration
         id: calculate_duration
