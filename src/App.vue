@@ -83,10 +83,10 @@ onUnmounted(() => {
 
 .router-container {
   flex-grow: 1;
-  display: flex;
+  height: 100vh;
+  overflow: hidden;
   flex-direction: column;
   align-items: center;
-  overflow-y: scroll;
 }
 
 .aside {

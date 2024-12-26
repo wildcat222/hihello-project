@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onMounted, reactive} from 'vue';
+import {onMounted, reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {springAPI} from '@/services/axios.js';
 import '@/styles/user/MenteeOnboardingPage.css';
@@ -163,7 +163,6 @@ const toggleChecklistStatus = (item, content) => {
   content.listCheckedStatus = updatedStatus; // 상태 변경
 };
 
-
 /* 온보딩 박스 위치 및 선 연결에 관한 메서드들 */
 const updateBoxPositions = () => {
   const savedPositions = localStorage.getItem('boxPositions');
@@ -203,42 +202,64 @@ const updateBoxPositions = () => {
   }
 };
 
-const updateLines = () => {
+const calculatePath = (startCard, endCard) => {
+  if (!startCard || !endCard) return '';
+
+  const startRect = startCard.getBoundingClientRect();
+  const endRect = endCard.getBoundingClientRect();
   const canvasRect = canvas.value.getBoundingClientRect();
+  const canvasScrollLeft = canvas.value.scrollLeft;
+  const canvasScrollTop = canvas.value.scrollTop;
 
-  if (boxPositions.length !== onboardingList.value.length) {
-    updateBoxPositions();
-  }
+  const startX = startRect.left + startRect.width / 2 - canvasRect.left + canvasScrollLeft;
+  const startY = startRect.top + startRect.height / 2 - canvasRect.top + canvasScrollTop;
+  const endX = endRect.left + endRect.width / 2 - canvasRect.left + canvasScrollLeft;
+  const endY = endRect.top + endRect.height / 2 - canvasRect.top + canvasScrollTop;
 
-  lines.value = [];
-  onboardingList.value.forEach((_, index) => {
-    if (index === 0) return;
+  const curveOffset = 400;
+  return `M ${startX} ${startY} C ${startX + curveOffset} ${startY}, ${endX - curveOffset} ${endY}, ${endX} ${endY}`;
+};
 
-    const prevCard = boxPositions[index - 1];
-    const currentCard = boxPositions[index];
+const updateLines = (movedIndex) => {
+  const linesToUpdate = [];
 
-    if (!prevCard || !currentCard) return;
+  if (movedIndex !== undefined) {
+    // 이동한 박스 앞선 연결 선 업데이트
+    if (movedIndex > 0) {
+      const prevCard = document.querySelector(`#item-${movedIndex - 1}`);
+      const currentCard = document.querySelector(`#item-${movedIndex}`);
+      const path = calculatePath(prevCard, currentCard);
+      if (path) {
+        linesToUpdate.push({ index: movedIndex, d: path });
+      }
+    }
 
-    const cardWidth = 300;
-    const cardHeight = 140;
+    // 이동한 박스 뒷선 연결 업데이트
+    if (movedIndex < onboardingList.value.length - 1) {
+      const prevCard = document.querySelector(`#item-${movedIndex}`);
+      const currentCard = document.querySelector(`#item-${movedIndex + 1}`);
+      const path = calculatePath(prevCard, currentCard);
+      if (path) {
+        linesToUpdate.push({ index: movedIndex + 1, d: path });
+      }
+    }
 
-    const startX = prevCard.left + index * cardWidth + canvasRect.left;
-    const startY = prevCard.top + (cardHeight / 2) + canvasRect.top;
-
-    const endX = currentCard.left + index * cardWidth + canvasRect.left;
-    const endY = currentCard.top + (cardHeight / 2) + canvasRect.top;
-
-    const curveOffset = 50;
-    const path = `M ${startX} ${startY}
-                  C ${startX + curveOffset} ${startY},
-                    ${endX - curveOffset} ${endY},
-                    ${endX} ${endY}`;
-
-    lines.value.push({
-      index,
-      d: path.replace(/\s+/g, ' ').trim()
+    // 기존 선과 겹치는 선만 갱신
+    lines.value = lines.value.filter(line => !linesToUpdate.some(updatedLine => updatedLine.index === line.index));
+    lines.value.push(...linesToUpdate);
+  } else {
+    // 전체 선을 그리는 경우
+    lines.value = [];
+    onboardingList.value.forEach((_, index) => {
+      if (index === 0) return;
+      const prevCard = document.querySelector(`#item-${index - 1}`);
+      const currentCard = document.querySelector(`#item-${index}`);
+      const path = calculatePath(prevCard, currentCard);
+      if (path) {
+        lines.value.push({ index, d: path });
+      }
     });
-  });
+  }
 };
 
 const startDrag = (index, event) => {
@@ -266,8 +287,8 @@ const stopDrag = () => {
 
 onMounted(async () => {
   await fetchOnboardingData();
-  updateBoxPositions()
-  updateLines();
+  await updateBoxPositions()
+  await updateLines();
   window.addEventListener('scroll', updateLines);
 });
 </script>
@@ -297,84 +318,82 @@ onMounted(async () => {
       </div>
     </div>
     <div class="onboarding-body-container">
-      <!--      <div class="bar"/>-->
-      <div class="onboarding-body">
-        <div ref="canvas" class="canvas">
-          <svg class="line-container">
-            <path
-                v-for="(line, index) in lines"
-                :key="index"
-                :d="line.d"
-                stroke="var(--purple)"
-                stroke-width="5"
-                fill="transparent"
-                stroke-dasharray="9, 10"
-                stroke-linecap="round"
-            />
-          </svg>
-          <div
-              class="item-box"
-              v-for="(item, index) in onboardingList"
+      <div ref="canvas" class="canvas">
+        <svg class="line-container">
+          <path
+              v-for="(line, index) in lines"
               :key="index"
-              :style="{
+              :d="line.d"
+              stroke="var(--purple)"
+              stroke-width="5"
+              fill="transparent"
+              stroke-dasharray="9, 10"
+              stroke-linecap="round"
+          />
+        </svg>
+        <div
+            v-for="(item, index) in onboardingList"
+            :key="index"
+            :id="`item-${index}`"
+            class="item-box"
+            :style="{
                 top: boxPositions[index] && boxPositions[index].top ? boxPositions[index].top + 'px' : '0px',
                 left: boxPositions[index] && boxPositions[index].left ? boxPositions[index].left + 'px' : '0px'
               }"
-              @mousedown="startDrag(index, $event)"
-              :class="{
+            @mousedown="startDrag(index, $event)"
+            :class="{
               'first-item': index === 0,
               'last-item': index === onboardingList.length - 1
             }"
-          >
-            <div class="item-box-inner">
-              <div class="item-header">
-                <div class="templateTitle">{{ item.templateTitle }}</div>
-              </div>
-              <div class="item-content" :class="{ completed: item.onboardingCompletedStatus }">
-                <div class="templateDetail">{{ item.templateSub }}</div>
-                <div v-if="item.templateType === 'CHECKLIST'" class="checklist-bigBox">
-                  <div v-if="Array.isArray(item.checklistContent) && item.checklistContent.length > 0"
-                       class="checklist-container">
-                    <div class="checklist-content" v-for="(content, index) in item.checklistContent" :key="index">
-                      <label class="checklist-label">
-                        <input
-                            type="checkbox"
-                            class="checklist-checkbox"
-                            :checked="content.listCheckedStatus"
-                            @change="toggleChecklistStatus(item, content)"
-                        />
-                      </label>
-                      <div class="checklist-inner">{{ content.checklistContent }}</div>
-                    </div>
-                  </div>
-                  <div v-else>
-                    <div class="templateContent">{{ item.checklistContent || '체크리스트 항목이 없습니다.' }}</div>
+        >
+          <div class="item-box-inner">
+            <div class="item-header">
+              <div class="templateTitle">{{ item.templateTitle }}</div>
+            </div>
+            <div class="item-content" :class="{ completed: item.onboardingCompletedStatus }">
+              <div class="templateDetail">{{ item.templateSub }}</div>
+              <div v-if="item.templateType === 'CHECKLIST'" class="checklist-bigBox">
+                <div v-if="Array.isArray(item.checklistContent) && item.checklistContent.length > 0"
+                     class="checklist-container">
+                  <div class="checklist-content" v-for="(content, index) in item.checklistContent" :key="index">
+                    <label class="checklist-label">
+                      <input
+                          type="checkbox"
+                          class="checklist-checkbox"
+                          :checked="content.listCheckedStatus"
+                          @change="toggleChecklistStatus(item, content)"
+                      />
+                    </label>
+                    <div class="checklist-inner">{{ content.checklistContent }}</div>
                   </div>
                 </div>
                 <div v-else>
-                  <div>
-                    <button class="tempateButton" @click="openModal(item)">
-                      확인하기
-                    </button>
-                    <!-- 모달 -->
-                    <div v-if="isModalOpen" class="modal">
-                      <div class="modal-content">
-                        <p>{{ item.templateDetail }}</p>
-                        <div class="onboarding-button-container">
-                          <button
-                              v-if="selectedItem && selectedItem.taskSeq !== null"
-                              @click="goToTaskPage(selectedItem)"
-                              class="check-task-button">
-                            과제확인
-                          </button>
-                          <button
-                              v-if="selectedItem.taskGroupSeq !== null"
-                              @click="goToGroupEvalPage"
-                              class="cw-eval-button">
-                            동료평가
-                          </button>
-                          <button @click="closeModal" class="close-button">닫기</button>
-                        </div>
+                  <div class="templateContent">{{ item.checklistContent || '체크리스트 항목이 없습니다.' }}</div>
+                </div>
+              </div>
+              <div v-else>
+                <div>
+                  <button class="tempateButton" @click="openModal(item)">
+                    확인하기
+                  </button>
+                  <!-- 모달 -->
+                  <div v-if="isModalOpen" class="modal">
+                    <div class="modal-content">
+                      <p>{{ item.templateDetail }}</p>
+                      <div class="onboarding-button-container">
+                        <button
+                            v-if="selectedItem && selectedItem.taskSeq !== null"
+                            @click="goToTaskPage(selectedItem)"
+                            class="check-task-button">
+                          과제확인
+                        </button>
+                        <button
+                            v-if="selectedItem.taskGroupSeq !== null"
+                            @click="goToGroupEvalPage"
+                            class="cw-eval-button">
+                          동료평가
+                        </button>
+                        <button @click="closeModal" class="close-button">닫기</button>
                       </div>
                     </div>
                   </div>

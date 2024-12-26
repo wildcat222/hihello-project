@@ -114,10 +114,12 @@
     margin-left: 155px;
     margin-top: 10px;
 }
+
 .onboarding-data-submit-container{
     display: flex;
     justify-content: center;
 }
+
 .onboarding-data-line textarea{
     width: 52%;
     height: 150px;
@@ -125,15 +127,18 @@
     background-color: var(--ivory);
     border:none;
 }
+
 .onboarding-data-page-title{
     font-size: 35px;
     font-weight: 700;
     margin-top: 105px;
     margin-bottom: 49px;
 }
+
 .onboarding-data-insert-container{
     margin: 30px 0px;
 }
+
 .modal {
     position: fixed;
     top: 0;
@@ -153,7 +158,6 @@
     border-radius: 5px;
     position: relative;
     z-index: 10; /* 모달 내용이 블러 배경 위에 올 수 있도록 */
-
 }
 
 .onboarding-button-container{
