@@ -1,4 +1,4 @@
-package spring.hi_hello_spring.notify.repository;
+package spring.hi_hello_spring.notify.command.domain.repository;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;

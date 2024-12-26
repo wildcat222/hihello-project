@@ -1,7 +1,7 @@
-package spring.hi_hello_spring.notify.service;
+package spring.hi_hello_spring.notify.command.application.service;
 
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
-import spring.hi_hello_spring.notify.entity.NotiType;
+import spring.hi_hello_spring.notify.command.domain.aggregate.entity.NotiType;
 
 import java.util.List;
 

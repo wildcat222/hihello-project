@@ -1,4 +1,4 @@
-package spring.hi_hello_spring.notify.entity;
+package spring.hi_hello_spring.notify.command.domain.aggregate.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

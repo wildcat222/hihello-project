@@ -1,4 +1,4 @@
-package spring.hi_hello_spring.notify.controller;
+package spring.hi_hello_spring.notify.command.application.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,10 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.common.util.CustomUserUtils;
-import spring.hi_hello_spring.notify.dto.NotifyDTO;
-import spring.hi_hello_spring.notify.service.NotifyServiceImpl;
-
-import java.util.List;
+import spring.hi_hello_spring.notify.command.application.service.NotifyServiceImpl;
 
 @RestController
 @RequestMapping("api/v1/notify")
@@ -29,25 +26,11 @@ public class NotifyController {
     public SseEmitter subscribe(@RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId){
 
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
-//        log.info("지금 로그인 시퀀스 : {}", employeeSeq);
-
-        SseEmitter sseEmitter = notifyService.subscribe(String.valueOf(employeeSeq), lastEventId);
-        log.info("알림 전송 테스트 로그 : {}", sseEmitter.toString());
-        return sseEmitter;
-    }
-
-
-    @Operation(summary = "알림 전체 조회", description = "내게 온 알림들을 조회한다.(삭제 상태 제외)")
-    @GetMapping
-    public ApiResponse<?> notiAll() {
-
-        Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
-        List<NotifyDTO> alarms = notifyService.notiAll(employeeSeq);
-        return ResponseUtil.successResponse("알림을 성공적으로 조회하였습니다.", alarms).getBody();
+        return notifyService.subscribe(String.valueOf(employeeSeq), lastEventId);
     }
 
     @Operation(summary = "알림 단일 읽음", description = "알림을 읽음 처리 한다.")
-    @GetMapping("/{notiSeq}")
+    @PutMapping("/{notiSeq}")
     public ApiResponse<?> readNoti(@PathVariable Long notiSeq) {
 
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
@@ -65,7 +48,7 @@ public class NotifyController {
     }
 
     @Operation(summary = "알림 전체 읽음",description = "나한테 온 알림들을 전체 읽음처리한다.")
-    @GetMapping("/read")
+    @PutMapping("/read")
     public ApiResponse<?> readAllNoti() {
 
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();

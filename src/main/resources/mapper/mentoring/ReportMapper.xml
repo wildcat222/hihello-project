@@ -23,7 +23,7 @@
         JOIN
         employee AS e2 ON m.mentor_seq = e2.employee_seq
         WHERE
-        r.report_seq = #{reportSeq};
+        r.report_seq = #{reportSeq}
     </select>
 
     <!-- 멘토링 보고서 리스트 조회(담당자) -->
