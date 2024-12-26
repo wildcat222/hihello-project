@@ -31,11 +31,7 @@ const route = useRoute(); // useRoute 훅을 사용하여 URL 파라미터 접�
 // 컴포넌트가 마운트되면 URL에서 taskSeq 값을 받아와서 해당 데이터를 가져오기
 onMounted(() => {
   const taskSeq = route.params.taskSeq; // URL에서 taskSeq 파라미터를 가져옵니다.
-  if (taskSeq) {
-    fetchTaskData(taskSeq); // taskSeq를 API 요청에 넘겨서 데이터 조회
-  } else {
-    console.error("taskSeq가 URL에 존재하지 않습니다.");
-  }
+  fetchData();
   fetchDepartments();
   fetchTaskRounds();  // 새로운 호출
 });
@@ -99,7 +95,7 @@ onMounted(() => {
               @change="handleFileChange"
           >
           <label for="fileInput" class="file-upload-label">파일 선택</label>
-          <span v-if="fileName" class="file-name">{{ fileName }}</span> <!-- 파일 이름을 표시하는 부분 -->
+          <span v-if="fileName" class="file-name">{{ fileName }}</span>
         </div>
         <div class="table-container">
           <div class="table-detail">
