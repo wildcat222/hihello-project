@@ -1,8 +1,8 @@
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 import {computed, ref} from 'vue'
-import { EventSourcePolyfill } from 'event-source-polyfill'
-import {springAPI} from "@/services/axios.js";
+import {EventSourcePolyfill} from 'event-source-polyfill'
 import {useUserStore} from "@/stores/UserStore.js";
+import {fetchName} from "@/services/UserApi.js";
 
 export const useSSEStore = defineStore('sse', () => {
     const notifications = ref([])
@@ -60,7 +60,7 @@ export const useSSEStore = defineStore('sse', () => {
             // 토큰이 만료되었다면 자동으로 갱신됨
             userStore = useUserStore();
             const employeeSeq = userStore.getEmployeeInfo().employeeSeq;
-            await springAPI.get(`/${employeeSeq}/name`);
+            await fetchName(employeeSeq);
 
             const options = {
                 headers: {

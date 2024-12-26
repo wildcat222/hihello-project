@@ -1,5 +1,5 @@
 <template>
-  <aside class="aside-menu">
+  <aside class="aside-menu" @click.stop>
     <!-- 로고 클릭 시 /main으로 이동 -->
     <div class="logo">
       <router-link to="/main" class="logo-style">HiHello</router-link>
@@ -16,7 +16,7 @@
                 d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
           </svg>
           <span class="login-name" @click.stop="openProfileModal">{{ employeeName }} 님</span>
-          <i class="notify fa-solid fa-bell"/>
+          <i class="notify fa-solid fa-bell" @click.stop="openAlarmModal"/>
         </li>
       </div>
 
@@ -35,7 +35,7 @@
 
       <!-- 메뉴 리스트 -->
       <li v-for="menu in filteredMenus" :key="menu.name" class="menu-item">
-        <div :class="{ active: props.activeMenu === menu.name }" @click="toggleMenu(menu.name)">
+        <div :class="{ active: activeMenu }" @click="toggleMenu(menu.name)">
           <router-link v-if="menu.url" :to="menu.url">{{ menu.name }}</router-link>
           <span v-else>{{ menu.name }}</span>
         </div>
@@ -49,30 +49,77 @@
       </li>
     </ul>
   </aside>
-  <AlarmModal class="alarm-modal" v-if="false"/>
+  <AlarmModal class="alarm-modal" v-if="shouldShowAlarms" @click.stop/>
+  <EmployeeProfile class="profile-modal" v-if="shouldShowProfile" @click.stop/>
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useUserStore} from "@/stores/UserStore.js";
 import router from "@/router/index.js";
 import {fetchName} from "@/services/UserApi.js";
 import {springAPI} from "@/services/axios.js";
 import AlarmModal from "@/components/AlarmModal.vue";
+import EmployeeProfile from "@/components/EmployeeProfile.vue";
 
 const userStore = useUserStore();
+
+// 상태 관리
+const shouldShowAlarms = ref(false);
 const shouldShowProfile = ref(false);
+const activeMenu = ref(null);
 
 const openProfileModal = () => {
   shouldShowProfile.value = !shouldShowProfile.value; // 프로필 모달 열기
-  emit("profile-modal", shouldShowProfile.value);
+  activeMenu.value = null;
+  shouldShowAlarms.value = false;
 };
+
+const openAlarmModal = () => {
+  shouldShowAlarms.value = !shouldShowAlarms.value;
+  activeMenu.value = null;
+  shouldShowProfile.value = false;
+};
+
+// 메뉴 토글 로직
+const toggleMenu = (menuName) => {
+  shouldShowProfile.value = false; // 메뉴 클릭 시 프로필 모달 닫기
+  shouldShowAlarms.value = false;
+  activeMenu.value = activeMenu.value === menuName ? null : menuName;
+};
+
+// 모달 및 메뉴 초기화 함수
+const resetModalsAndMenu = () => {
+  shouldShowAlarms.value = false;
+  shouldShowProfile.value = false;
+  activeMenu.value = null;
+};
+
+const handleOutsideClick = (event) => {
+  // aside-menu, alarm-modal, profile-modal 클래스를 가진 요소들을 찾습니다
+  const asideMenu = document.querySelector('.aside-menu');
+  const alarmModal = document.querySelector('.alarm-modal');
+  const profileModal = document.querySelector('.profile-modal');
+
+  // 클릭된 요소가 aside나 모달 내부가 아닌 경우에만 초기화
+  if (!asideMenu?.contains(event.target) &&
+      !alarmModal?.contains(event.target) &&
+      !profileModal?.contains(event.target)) {
+    resetModalsAndMenu();
+  }
+};
+
+// 라우터 변경 감지
+router.beforeEach((to, from, next) => {
+  resetModalsAndMenu();
+  next();
+});
 
 function logout() {
   userStore.logout();
 }
 
-// 상태 관리
+// 로그인 한 사원 이름 조회
 const employeeSeq = ref(null);
 const employeeName = ref("");
 const loadName = async (employeeSeq) => {
@@ -86,12 +133,6 @@ const loadName = async (employeeSeq) => {
     employeeName.value = "";
   }
 };
-
-// Props & Events
-const props = defineProps({
-  activeMenu: String,
-});
-const emit = defineEmits(["profile-modal", "update-active-menu"]);
 
 const menus = ref([
   // 멘티 ASIDE
@@ -173,16 +214,11 @@ const filteredMenus = computed(() => {
   );
 });
 
-// 메뉴 토글 로직
-const toggleMenu = (menuName) => {
-  shouldShowProfile.value = false; // 메뉴 클릭 시 프로필 모달 닫기
-  const newActiveMenu = props.activeMenu === menuName ? null : menuName;
-  emit("update-active-menu", newActiveMenu);
-};
+
 
 // 마운트 시 초기화
 onMounted(async () => {
-  router.afterEach(() => emit("update-active-menu", null));
+  document.addEventListener('click', handleOutsideClick);
 
   await userStore.$state.initialized;
 
@@ -195,6 +231,11 @@ onMounted(async () => {
   } else {
     console.error('employeeSeq is not available');
   }
+});
+
+// 컴포넌트 언마운트 시 이벤트 리스너 제거
+onUnmounted(() => {
+  document.removeEventListener('click', handleOutsideClick);
 });
 
 </script>
@@ -212,6 +253,7 @@ onMounted(async () => {
 }
 
 .aside-logout-button {
+  cursor: pointer;
   margin-top: 10px;
   margin-bottom: 30px;
   color: var(--gray);
@@ -308,5 +350,12 @@ ul {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 30px;
+}
+
+.profile-modal {
+  position: absolute;
+  z-index: 1000;
+  top: 180px;
+  left: 220px;
 }
 </style>
