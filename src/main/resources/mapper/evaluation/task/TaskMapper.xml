@@ -34,12 +34,11 @@
         f.file_name,
         f.file_url
         FROM task a
-        JOIN department d ON d.department_seq = a.department_seq
-        JOIN employee e
-        ON d.department_seq = e.department_seq
-        JOIN template t ON t.template_seq = a.template_seq
-        JOIN onboarding_status os ON os.template_seq = t.template_seq
-        JOIN file f ON f.task_seq = a.task_seq
+        LEFT JOIN department d ON d.department_seq = a.department_seq
+        LEFT JOIN employee e ON d.department_seq = e.department_seq
+        LEFT JOIN template t ON t.template_seq = a.template_seq
+        LEFT JOIN onboarding_status os ON os.template_seq = t.template_seq
+        LEFT JOIN file f ON f.task_seq = a.task_seq
         WHERE os.employee_seq = #{employee_seq}
         AND a.task_seq = #{task_seq}
 
