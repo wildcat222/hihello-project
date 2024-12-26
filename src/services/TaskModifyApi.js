@@ -1,6 +1,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { springAPI } from "@/services/axios.js";
+import axios from 'axios'; // 추가 필요
 import router from "@/router/index.js";
 
 export function useTask() {
@@ -18,6 +19,8 @@ export function useTask() {
     const template_type = ref('NORMAL');
     const selectedDepartmentSeq = ref(1);
     const templateSeq = ref(1);
+    const departments = ref([]);
+    const taskRounds = ref([]);
 
     // URL에서 taskSeq 가져오기
     const route = useRoute();
@@ -178,9 +181,54 @@ export function useTask() {
         }
     };
 
+    // API 호출 함수
+    const fetchDepartments = async () => {
+        try {
+            const response = await axios.get('http://localhost:8253/api/v1/hr/department', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            if (response.data.success) {
+                departments.value = response.data.data; // 데이터 저장
+            } else {
+                console.error('부서 정보를 가져오는 데 실패했습니다:', response.data.message);
+            }
+        } catch (error) {
+            console.error('API 요청 중 오류가 발생했습니다:', error);
+        }
+    };
+
+    const fetchTaskRounds = async () => {
+        try {
+            const response = await axios.get('http://localhost:8253/api/v1/hr/onboarding/template', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                },
+            });
+            console.log('API 응답:', response.data); // 디버깅용 로그
+
+            if (response.data.success) {
+                if (response.data.data.length === 0) {
+                    console.warn('데이터가 없습니다.');
+                } else {
+                    // 데이터 저장
+                    taskRounds.value = response.data.data;
+                    console.log('taskRounds 값:', taskRounds.value); // 데이터가 잘 저장되었는지 확인
+                }
+            } else {
+                console.error('차수 정보를 가져오는 데 실패했습니다:', response.data.message);
+            }
+        } catch (error) {
+            console.error('API 요청 중 오류가 발생했습니다:', error);
+        }
+    };
+
     // 컴포넌트가 마운트될 때 fetchTaskData 호출
     onMounted(() => {
         fetchTaskData();
+        fetchDepartments();
     });
 
     return {
@@ -195,6 +243,10 @@ export function useTask() {
         taskContent,
         departmentSeq,
         round,
+        departments,
+        taskRounds,
+        fetchTaskRounds,
+        fetchDepartments,
         addRow,
         handleFileChange,
         goToGroupingPage,

@@ -11,16 +11,24 @@ const {
   isLoading,
   taskTitle,
   taskContent,
-  departmentSeq,
   round,
+  departmentSeq,
+  departments,
+  taskRounds,
+  fetchDepartments,
   handleFileChange,
   fetchData,
   addRow,
   submitTask,
-  goToGroupingPage
+  goToGroupingPage,
+  fetchTaskRounds
 } = useTask();
 
-onMounted(fetchData);
+onMounted(() => {
+  fetchDepartments();
+  fetchTaskRounds();  // 새로운 호출
+  fetchData(); // 기존 데이터도 가져옴
+});
 </script>
 
 <template>
@@ -37,21 +45,23 @@ onMounted(fetchData);
         <input v-model="taskTitle" class="task-name-input">
       </div>
       <div class="container-line">
-        <span class="task-depart"> 과제 부서 </span>
-        <select v-model="departmentSeq" class="task-depart-input">
-          <option value="1">교육팀</option>
-          <option value="2">영업팀</option>
-          <option value="3">총무팀</option>
-          <option value="4">SW개발팀</option>
-          <option value="5">인사팀</option>
+        <span class="task-depart">과제 부서</span>
+        <select v-model="departmentSeq" id="departmentSelect" class="task-depart-input">
+          <option v-for="department in departments"
+                  :key="department.departmentSeq"
+                  :value="department.departmentSeq">
+            {{ department.departmentName || '부서 없음' }} <!-- 이름 확인용 -->
+          </option>
         </select>
       </div>
       <div class="container-line">
         <span class="task-round">과제 지정</span>
         <select v-model="templateSeq" class="task-round-input">
-          <option value="1">1주차</option>
-          <option value="2">2주차</option>
-          <option value="3">3주차</option>
+          <option v-for="taskRound in taskRounds"
+                  :key="taskRound.templateSeq"
+                  :value="taskRound.templateSeq">
+            {{ taskRound.templateTaskRound || '차수 없음'}}
+          </option>
         </select>
       </div>
       <div class="container-line">
