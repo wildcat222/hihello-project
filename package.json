@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
+    "@stomp/stompjs": "^7.0.0",
     "@tiptap/core": "^2.10.3",
     "@tiptap/extension-blockquote": "^2.10.3",
     "@tiptap/extension-color": "^2.10.3",
@@ -30,10 +31,12 @@
     "prosemirror-state": "^1.4.3",
     "sass": "^1.82.0",
     "sass-loader": "^16.0.4",
+    "sockjs-client": "^1.6.1",
     "vue": "^3.5.12",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@types/sockjs-client": "^1.5.4",
     "@vitejs/plugin-vue": "^5.1.4",
     "rollup": "^4.28.1",
     "rollup-plugin-sass-migrator": "^1.0.5",

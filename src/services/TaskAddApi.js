@@ -149,7 +149,7 @@ export function useTask() {
     // API 호출 함수
     const fetchDepartments = async () => {
         try {
-            const response = await axios.get('http://localhost:8253/api/v1/hr/department', {
+            const response = await springAPI.get('/hr/department', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
                     'Content-Type': 'multipart/form-data',
@@ -167,7 +167,7 @@ export function useTask() {
 
     const fetchTaskRounds = async () => {
         try {
-            const response = await axios.get('http://localhost:8253/api/v1/hr/onboarding/template', {
+            const response = await springAPI.get('/onboarding/template', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
                 },
