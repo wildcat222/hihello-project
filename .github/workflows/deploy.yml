@@ -1,0 +1,47 @@
+name: Deploy Docker Compose to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Create .env file for Docker Compose
+        run: |
+          echo "MONGO_USER_NAME=${{ secrets.MONGO_USER_NAME }}" > .env
+          echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}" >> .env
+          echo "MONGO_DATABASE=${{ secrets.MONGO_DATABASE }}" >> .env
+          echo "CHAT_PRIVATE_IP=${{ secrets.EC2_HOST }}" >> .env
+
+      - name: Transfer files to EC2
+        run: |
+          scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/docker-compose.yml
+          scp -o StrictHostKeyChecking=no .env ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/.env
+
+      - name: Run Docker Compose on EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} "
+          export $(cat /home/ec2-user/.env | xargs) &&
+          docker-compose -f /home/ec2-user/docker-compose.yml --env-file /home/ec2-user/.env pull &&
+          docker-compose -f /home/ec2-user/docker-compose.yml --env-file /home/ec2-user/.env up -d
+          "
