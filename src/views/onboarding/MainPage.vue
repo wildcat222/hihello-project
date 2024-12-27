@@ -193,12 +193,23 @@ const updateBoxPositions = () => {
     localStorage.setItem('boxPositions', JSON.stringify(boxPositions));
   } else {
     // 로컬 스토리지에 데이터가 없을 때 초기화
+    const boxWidthGap = 500; // 박스의 가로 간격
+    const boxHeightGap = 250; // 박스의 세로 간격
+
+    // 박스 위치 계산 로직
     onboardingList.value.forEach((_, index) => {
-      boxPositions.push({top: 100 + index * 150, left: 100 + index * 200});
+      const row = Math.floor(index / 3); // 3개씩 한 줄로 배치
+      const col = index % 3;
+
+      const left = row % 2 === 0 ? 200 + col * boxWidthGap : 200 + (2 - col) * boxWidthGap; // 왼쪽 또는 오른쪽으로 배치
+      const top = 100 + row * boxHeightGap; // 세로 방향 간격
+
+      boxPositions.push({top, left});
     });
 
     // 초기화된 boxPositions을 로컬 스토리지에 저장
     localStorage.setItem('boxPositions', JSON.stringify(boxPositions));
+
   }
 };
 
@@ -211,13 +222,24 @@ const calculatePath = (startCard, endCard) => {
   const canvasScrollLeft = canvas.value.scrollLeft;
   const canvasScrollTop = canvas.value.scrollTop;
 
+  // 시작 점 (박스의 중앙)
   const startX = startRect.left + startRect.width / 2 - canvasRect.left + canvasScrollLeft;
   const startY = startRect.top + startRect.height / 2 - canvasRect.top + canvasScrollTop;
+
+  // 끝 점 (박스의 중앙)
   const endX = endRect.left + endRect.width / 2 - canvasRect.left + canvasScrollLeft;
   const endY = endRect.top + endRect.height / 2 - canvasRect.top + canvasScrollTop;
 
-  const curveOffset = 400;
-  return `M ${startX} ${startY} C ${startX + curveOffset} ${startY}, ${endX - curveOffset} ${endY}, ${endX} ${endY}`;
+  // S자 형태의 곡선 커브 세로 방향 크기 조정
+  const verticalOffset = 100;  // S자 커브의 세로 방향 크기 조정
+  const middleX = (startX + endX) / 2; // 중간 지점 X
+
+  // 시작과 끝 박스의 Y 위치를 기준으로 제어점 위치 계산
+  const control1Y = startY < endY ? startY : startY;
+  const control2Y = startY < endY ? endY : endY;
+
+  return `M ${startX} ${startY}
+          C ${middleX + verticalOffset} ${control1Y} ${middleX - verticalOffset} ${control2Y} ${endX} ${endY}`;
 };
 
 const updateLines = (movedIndex) => {
@@ -230,7 +252,7 @@ const updateLines = (movedIndex) => {
       const currentCard = document.querySelector(`#item-${movedIndex}`);
       const path = calculatePath(prevCard, currentCard);
       if (path) {
-        linesToUpdate.push({ index: movedIndex, d: path });
+        linesToUpdate.push({index: movedIndex, d: path});
       }
     }
 
@@ -240,7 +262,7 @@ const updateLines = (movedIndex) => {
       const currentCard = document.querySelector(`#item-${movedIndex + 1}`);
       const path = calculatePath(prevCard, currentCard);
       if (path) {
-        linesToUpdate.push({ index: movedIndex + 1, d: path });
+        linesToUpdate.push({index: movedIndex + 1, d: path});
       }
     }
 
@@ -256,7 +278,7 @@ const updateLines = (movedIndex) => {
       const currentCard = document.querySelector(`#item-${index}`);
       const path = calculatePath(prevCard, currentCard);
       if (path) {
-        lines.value.push({ index, d: path });
+        lines.value.push({index, d: path});
       }
     });
   }

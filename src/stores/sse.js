@@ -70,7 +70,8 @@ export const useSSEStore = defineStore('sse', () => {
                 heartbeatTimeout: 3600000
             }
 
-            eventSource = new EventSourcePolyfill('http://localhost:8253/api/v1/notify/connect', options)
+            const baseUrl = import.meta.env.VITE_API_BASE_URL;
+            eventSource = new EventSourcePolyfill(`${baseUrl}/notify/connect`, options)
 
             eventSource.onopen = () => {
                 console.log('SSE 연결 성공')
