@@ -65,11 +65,4 @@ public class NotifyController {
         return ResponseUtil.successResponse("알림을 삭제했습니다.").getBody();
     }
 
-    @Operation(summary = "sse 테스트")
-    @GetMapping("/ssetest")
-    public ApiResponse<?> ssetest() {
-
-        notifyService.ssetest();
-        return ResponseUtil.successResponse("sse 테스트 성공").getBody();
-    }
 }
