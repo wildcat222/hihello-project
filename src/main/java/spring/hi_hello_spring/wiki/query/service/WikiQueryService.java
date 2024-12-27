@@ -1,18 +1,12 @@
 package spring.hi_hello_spring.wiki.query.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.hi_hello_spring.common.util.WikiUtil;
-import spring.hi_hello_spring.wiki.command.domain.aggregate.entity.Wiki;
-import spring.hi_hello_spring.wiki.command.domain.repository.WikiRepository;
 import spring.hi_hello_spring.wiki.query.dto.*;
-import spring.hi_hello_spring.wiki.query.elasticsearch.document.WikiDocument;
-import spring.hi_hello_spring.wiki.query.elasticsearch.repository.WikiDocumentRepository;
 import spring.hi_hello_spring.wiki.query.mapper.WikiMapper;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,13 +17,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-@ConditionalOnProperty(name = "spring.data.elasticsearch.repositories.enabled", havingValue = "true")
 public class WikiQueryService {
 
     private final WikiMapper wikiMapper;
     private final WikiUtil wikiUtil;
-    private final WikiDocumentRepository wikiDocumentRepository;
-    private final WikiRepository wikiRepository;
 
     // 위키 목록 조회하기
     public List<WikiListQueryDTO> getAllWikis() {
@@ -101,29 +92,5 @@ public class WikiQueryService {
         wikiQueryDTO.setModDate(getWikiLatestModDate(wikiSeq));
 
         return wikiQueryDTO;
-    }
-
-    /* 엘라스틱 서치 관련 로직 */
-    // 위키 검색 로직
-    public List<WikiDocument> searchWiki(String keyword) {
-        return wikiDocumentRepository.searchByWikiTitle(keyword);
-    }
-
-    // DB 데이터를 엘라스틱 서치에 동기화
-    @Transactional
-    public void indexAllWiki() {
-        // DB에서 모든 위키 데이터 조회
-        List<Wiki> wikiList = wikiRepository.findAll();
-
-        // WikiDocument 리스트 생성
-        List<WikiDocument> wikiDocumentList = new ArrayList<>();
-        for (Wiki wiki : wikiList) {
-            LocalDateTime latestModDate = wikiMapper.findWikiLatestModDateByWikiSeq(wiki.getWikiSeq());
-            WikiDocument wikiDocument = WikiDocument.from(wiki,latestModDate);
-            wikiDocumentList.add(wikiDocument);
-        }
-
-        // 엘라스틱 서치 저장
-        wikiDocumentRepository.saveAll(wikiDocumentList);
     }
 }

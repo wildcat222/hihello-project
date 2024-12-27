@@ -1,4 +1,4 @@
-package spring.hi_hello_spring.wiki.query.elasticsearch.document;
+package spring.hi_hello_spring.elasticsearch.command.document;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

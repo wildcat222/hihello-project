@@ -10,7 +10,6 @@ import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.wiki.query.dto.WikiHistoryListQueryDTO;
 import spring.hi_hello_spring.wiki.query.dto.WikiListQueryDTO;
 import spring.hi_hello_spring.wiki.query.dto.WikiQueryDTO;
-import spring.hi_hello_spring.wiki.query.elasticsearch.document.WikiDocument;
 import spring.hi_hello_spring.wiki.query.service.WikiQueryService;
 
 import java.util.List;
@@ -19,7 +18,6 @@ import java.util.List;
 @RequestMapping("/api/v1/wiki")
 @RequiredArgsConstructor
 @Tag(name = "Wiki API", description = "위키 API")
-@ConditionalOnProperty(name = "spring.data.elasticsearch.repositories.enabled", havingValue = "true")
 public class WikiQueryController {
 
     private final WikiQueryService wikiQueryService;
@@ -53,19 +51,5 @@ public class WikiQueryController {
     ) {
         WikiQueryDTO wikiQueryDTO = wikiQueryService.getWikiByWikiSeqAndWikiModContentSeq(wikiSeq, wikiModContentSeq);
         return ResponseUtil.successResponse("데이터가 성공적으로 조회되었습니다.", wikiQueryDTO).getBody();
-    }
-
-    @GetMapping("/search")
-    @Operation(summary = "위키 제목 검색", description = "위키 제목을 통해 검색하는 로직입니다.")
-    public ApiResponse<?> searchByWikiTitle(@RequestParam String keyword) {
-        List<WikiDocument> wikiDocumentList = wikiQueryService.searchWiki(keyword);
-        return ResponseUtil.successResponse("위키 검색 결과가 성공적으로 조회되었습니다.", wikiDocumentList).getBody();
-    }
-
-    @PostMapping("/index")
-    @Operation(summary = "위키 엘라스틱 서치 인덱스 생성", description = "위키 DB 데이터를 엘라스틱 서치에 동기화하는 로직입니다.")
-    public ApiResponse<?> indexWiki() {
-        wikiQueryService.indexAllWiki();
-        return ResponseUtil.successResponse("위키 엘라스틱 서치 인덱스가 성공적으로 생성되었습니다.").getBody();
     }
 }
