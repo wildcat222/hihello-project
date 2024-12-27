@@ -87,7 +87,7 @@
     display: inline-block;
     flex-direction: column;
     font-size: 14px;
-    position: relative; /* 아이템 박스에 relative 설정 */
+    position: absolute; /* 아이템 박스에 relative 설정 */
     z-index: 3;  /* 충분히 큰 z-index 값 설정하여 가장 위로 오게 만듦 */
     cursor: grab;
 }
@@ -244,4 +244,5 @@
     width: 100%;
     height: 80vh;
     overflow: scroll;
+    position: relative
 }
