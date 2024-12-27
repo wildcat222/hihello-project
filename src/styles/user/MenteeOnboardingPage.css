@@ -244,8 +244,7 @@
     width: 100%;
     height: 80vh;
     overflow: scroll;
-}
-
+    position: relative
 
 .modal-content {
     width: 14vw;
