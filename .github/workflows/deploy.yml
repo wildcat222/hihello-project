@@ -21,32 +21,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup SSH key
+      - name: Setup SSH key for Bastion Host
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+          ssh-private-key: ${{ secrets.BASTION_SSH_KEY }}
 
-      - name: Create SSH key file
+      - name: Setup SSH key for Private Instance
         run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" > ec2-key.pem
-          chmod 400 ec2-key.pem
+          echo "${{ secrets.EC2_SSH_KEY }}" > private-ec2-key.pem
+          chmod 400 private-ec2-key.pem
 
       - name: Create .env file for Docker Compose
         run: |
           echo "MONGO_USER_NAME=${{ secrets.MONGO_USER_NAME }}" > .env
           echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}" >> .env
           echo "MONGO_DATABASE=${{ secrets.MONGO_DATABASE }}" >> .env
-          echo "CHAT_PRIVATE_IP=${{ secrets.EC2_HOST }}" >> .env
+          echo "CHAT_PRIVATE_IP=${{ secrets.PRIVATE_EC2_IP }}" >> .env
 
-      - name: Transfer files to EC2
+      - name: Transfer files to Private EC2 via Bastion Host
         run: |
-          scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/docker-compose.yml
-          scp -o StrictHostKeyChecking=no .env ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/.env
+          scp -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no ec2-user@${{ secrets.BASTION_HOST }}" \
+          docker-compose.yml ec2-user@${{ secrets.PRIVATE_EC2_IP }}:/home/ec2-user/docker-compose.yml
+          scp -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no ec2-user@${{ secrets.BASTION_HOST }}" \
+          .env ec2-user@${{ secrets.PRIVATE_EC2_IP }}:/home/ec2-user/.env
 
-      - name: Run Docker Compose on EC2
+      - name: Run Docker Compose on Private EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} "
+          ssh -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no ec2-user@${{ secrets.BASTION_HOST }}" \
+          ec2-user@${{ secrets.PRIVATE_EC2_IP }} "
           export $(cat /home/ec2-user/.env | xargs) &&
           docker-compose -f /home/ec2-user/docker-compose.yml --env-file /home/ec2-user/.env pull &&
           docker-compose -f /home/ec2-user/docker-compose.yml --env-file /home/ec2-user/.env up -d
           "
+
