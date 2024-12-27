@@ -1,5 +1,6 @@
 package spring.hi_hello_spring.security.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
+import spring.hi_hello_spring.common.exception.CustomException;
+import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.security.util.JwtUtil;
 
 import java.io.IOException;
@@ -87,18 +90,38 @@ public class JwtFilter extends OncePerRequestFilter {
                     jwtUtil.saveAuthentication(Long.parseLong(jwtUtil.getEmployeeSeq(accessToken.get())));
 //                log.info("accessToken {} ", accessToken.get());
                     filterChain.doFilter(request, response); // 다음 필터로 요청 전달
+                } else {
+                    // 토큰 검증 실패 시 처리 추가
+                    if (!response.isCommitted()) {
+//                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "유효하지 않은 토큰입니다.");
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.setContentType("application/json;charset=UTF-8");
+                        response.getWriter().write(new ObjectMapper().writeValueAsString(
+                                new CustomException(ErrorCodeType.SECURITY_TOKEN_ERROR, "유효하지 않은 토큰입니다.")
+                        ));
+                    }
                 }
             } else {
                 // 토큰이 없는 경우 처리
                 if (!response.isCommitted()) {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰이 존재하지 않습니다.");
+//                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "토큰이 존재하지 않습니다.");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json;charset=UTF-8");
+                    response.getWriter().write(new ObjectMapper().writeValueAsString(
+                            new CustomException(ErrorCodeType.SECURITY_TOKEN_ERROR, "토큰이 존재하지 않습니다.")
+                    ));
                 }
             }
         } catch (ExpiredJwtException e) {
             // 만료된 토큰 처리
             log.error("Expired JWT Token: {}", e.getMessage());
             if (!response.isCommitted()) { // 응답이 커밋되지 않았을 때만 에러 전송
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "엑세스 토큰이 만료되었습니다.");
+//                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "엑세스 토큰이 만료되었습니다.");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write(new ObjectMapper().writeValueAsString(
+                        new CustomException(ErrorCodeType.SECURITY_TOKEN_ERROR, "엑세스 토큰이 만료되었습니다.")
+                ));
             }
         }
 
