@@ -54,12 +54,11 @@ jobs:
           scp -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${{ secrets.BASTION_HOST }}" \
           .env ec2-user@${{ secrets.PRIVATE_EC2_IP }}:/home/ec2-user/.env
 
-      - name: Install Docker Compose on Private EC2
+      - name: Ensure Docker is running on Private EC2
         run: |
           ssh -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no ec2-user@${{ secrets.BASTION_HOST }}" \
           ec2-user@${{ secrets.PRIVATE_EC2_IP }} "
-          sudo curl -L 'https://github.com/docker/compose/releases/download/v2.5.0/docker-compose-$(uname -s)-$(uname -m)' -o /usr/local/bin/docker-compose &&
-          sudo chmod +x /usr/local/bin/docker-compose
+          sudo systemctl start docker
           "
 
       - name: Run Docker Compose on Private EC2
@@ -70,4 +69,5 @@ jobs:
           docker-compose -f /home/ec2-user/docker-compose.yml --env-file /home/ec2-user/.env pull &&
           docker-compose -f /home/ec2-user/docker-compose.yml --env-file /home/ec2-user/.env up -d
           "
+
 
