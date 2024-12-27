@@ -115,7 +115,13 @@ onMounted(async() => {
           <div class="mentor-task-page-title">{{ taskTitle }}</div>
           <div class="flex">
             <div class="task-file-text">과제 파일</div>
-            <div class="task-file-name-container" @click="downloadFile(taskFileUrl, taskFileName)">{{ taskFileName }}</div>
+            <div class="task-file-name-container flex" @click="downloadFile(taskFileUrl, taskFileName)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags-fill" viewBox="0 0 16 16">
+                <path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                <path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043z"/>
+              </svg>
+              <div class="mentor-task-detail-task-file-name">{{ taskFileName }}</div>
+            </div>
           </div>
           <div class="left mentor-task-content">{{ taskContent }}</div>
         </div>
@@ -124,7 +130,9 @@ onMounted(async() => {
           <div class="mentor-task-page-title">과제 제출</div>
           <div v-if="taskSubmitFileUrl !== null" class="flex">
             <div class="task-file-text">제출 파일</div>
-            <div class="task-file-name-container"  @click="downloadFile(taskSubmitFileName, taskSubmitFileUrl)">{{ taskSubmitFileName }}</div>
+            <div class="task-file-name-container"  @click="downloadFile(taskSubmitFileName, taskSubmitFileUrl)">
+              <div class="mentor-task-detail-task-file-name">{{ taskSubmitFileName }}</div>
+            </div>
           </div>
           <div>{{ taskSubmitContent }}</div>
         </div>
@@ -174,7 +182,7 @@ onMounted(async() => {
         </div>
       </div>
       <div>
-        <button class="button purple-button" @click="creatingTaskEvals">평가하기</button>
+        <button class="button mentor-task-detail-read-purple-button" @click="creatingTaskEvals">평가하기</button>
       </div>
     </WhiteBoxComponent>
   </div>

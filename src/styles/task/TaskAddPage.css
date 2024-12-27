@@ -54,7 +54,7 @@
     border-collapse: collapse; /* 테이블 경계선 합치기 */
 }
 
-.task-add-page-container th, td {
+.task-add-page-container th, .task-add-page-container td {
     border: 1px solid #ccc;
     padding: 10px;
     text-align: center;
