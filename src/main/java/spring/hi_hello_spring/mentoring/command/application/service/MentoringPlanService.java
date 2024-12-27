@@ -1,5 +1,6 @@
 package spring.hi_hello_spring.mentoring.command.application.service;
 
+import com.sun.jna.platform.win32.WinDef;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,15 @@ public class MentoringPlanService {
                 .fileUrl(uploadFile)
                 .build();
         fileRepository.save(file);
+
+        Long senderSeq = mentoringPlanRequestDTO.getEmployeeSeq();
+        Employee sender = employeeRepository.findByEmployeeSeq(senderSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
+
+        Employee receiver = employeeRepository.findByDepartmentSeqAndPositionSeq(sender.getDepartmentSeq(), 1L)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
+
+        notifyService.send(sender, receiver, WRITTEN_PLANER_BY_MENTOR, "/mentoring/planning/" + savedPlanning.getPlanningSeq());
     }
 
     @Transactional

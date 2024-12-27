@@ -15,7 +15,10 @@ public enum NotiType {
     ALLOW_PLANER_BY_LEADER("멘토링 계획서가 승인되었습니다."),
     REJECT_PLANER_BY_LEADER("멘토링 계획서가 반려되었습니다."),
 
-    WRITTEN_REPORT_BY_MENTEE("멘티가 보고서를 작성하였습니다.");
+    WRITTEN_REPORT_BY_MENTEE("멘티가 보고서를 작성하였습니다."),
+
+    CREATE_CHATTING_ROOM("멘토링 채팅방이 개설되었습니다."),
+    CREATE_GROUP_CHATTING_ROOM("그룹 과제 채팅방이 개설되었습니다."),
 
     ;
 
