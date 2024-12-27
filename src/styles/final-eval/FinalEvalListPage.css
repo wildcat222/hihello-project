@@ -59,10 +59,13 @@
 }
 
 .final-eval-result-list .read-button {
+    justify-content: center;
+    align-items: center;
     background-color: var(--purple);
-    width: 3.8rem;
-    height: 2rem;
-    border: transparent;
-    border-radius: 15px;
     color: var(--white);
+    width: 6.5rem;
+    height: 2.3rem;
+    cursor: pointer;
+    border-radius: 15px;
+    border: none;
 }
