@@ -100,7 +100,8 @@
     box-sizing: border-box;
 }
 .taskInd-item-taskIndRound-input{
-    border-color: #D9D9D9;
+    border: 1px solid var(--light-gray);
+    box-shadow: none;
 
 }
 .taskIndAddButton {
