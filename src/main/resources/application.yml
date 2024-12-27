@@ -1,6 +1,5 @@
 # 포트 번호 설정
 server:
-  port: ${SERVER_PORT}
   servlet:
     encoding:
       charset: UTF-8
@@ -20,7 +19,7 @@ spring:
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
     mongodb:
-      uri: mongodb://${MONGO_USER_NANE}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=admin
+      uri: mongodb://${MONGO_USER_NAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=admin
     elasticsearch:
       repositories:
         enabled: false
