@@ -7,23 +7,29 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import spring.hi_hello_spring.security.util.JwtUtil;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private static final AntPathRequestMatcher[] SWAGGER_URLS = {
-            new AntPathRequestMatcher("/"),
-            new AntPathRequestMatcher("/api/v1/login"),
-            new AntPathRequestMatcher("/swagger-ui/**"),
-            new AntPathRequestMatcher("/v3/api-docs/**"),
-            new AntPathRequestMatcher("/swagger-resources/**")
+    // SecurityConfig와 동일한 화이트리스트 사용
+    private static final String[] SWAGGER_WHITE_LIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/swagger-resources/**",
+            "/webjars/**",
+            "/swagger-ui/index.html",
+            "/swagger-ui/",
+            "/v3/api-docs.yaml",
+            "/"
     };
 
     private final JwtUtil jwtUtil;
@@ -31,11 +37,16 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        for (AntPathRequestMatcher url : SWAGGER_URLS) {
-            if (url.matches(request)) {
-                filterChain.doFilter(request, response);
-                return;
-            }
+        String path = request.getRequestURI();
+
+        // Swagger UI 경로 체크
+        boolean isSwaggerPath = Arrays.stream(SWAGGER_WHITE_LIST)
+                .anyMatch(pattern ->
+                        new AntPathMatcher().match(pattern, path));
+
+        if (isSwaggerPath || "/api/v1/login".equals(path)) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
         Optional<String> refreshToken = jwtUtil.getToken(request, "refresh");
