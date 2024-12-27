@@ -91,7 +91,7 @@ services:
       - elk
 
   kibana:
-    container_name: kibana_beauty4u
+    container_name: kibana
     image: docker.elastic.co/kibana/kibana:7.14.1
     environment:
       SERVER_NAME: kibana
