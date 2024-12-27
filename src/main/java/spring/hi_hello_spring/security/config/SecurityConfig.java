@@ -34,19 +34,33 @@ public class SecurityConfig {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtUtil jwtUtil;
 
+    private static final String[] SWAGGER_WHITE_LIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/swagger-resources/**",
+            "/webjars/**",
+            "/swagger-ui/index.html",
+            "/swagger-ui/",
+            "/v3/api-docs.yaml",
+            "/"
+    };
+
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
+
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(authz ->
-                        // 추후 api 명세서 작성 후 추가 예정
-//                        authz.requestMatchers(new AntPathRequestMatcher("/users/**", "POST")).permitAll()
-//                        authz.requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
-                                authz.requestMatchers(new AntPathRequestMatcher("/mentee/**")).hasAuthority("MENTEE")
-                                .requestMatchers(new AntPathRequestMatcher("/mentor/**")).hasAuthority("MENTOR")
-                                .requestMatchers(new AntPathRequestMatcher("/hr/**")).hasAuthority("HR")
-                                .anyRequest().authenticated() // 나머지 요청은 필터를 거쳐야한다.
+                .authorizeHttpRequests(authz -> authz
+                          .requestMatchers(SWAGGER_WHITE_LIST).permitAll()  // Swagger UI 접근 허용
+                          .requestMatchers(
+                                  "/api/v1/login"
+                          ).permitAll()
+                          .requestMatchers(new AntPathRequestMatcher("/mentee/**")).hasAuthority("MENTEE")
+                          .requestMatchers(new AntPathRequestMatcher("/mentor/**")).hasAuthority("MENTOR")
+                          .requestMatchers(new AntPathRequestMatcher("/hr/**")).hasAuthority("HR")
+                          .anyRequest().authenticated() // 나머지 요청은 필터를 거쳐야한다.
                 )
 
                 .sessionManagement(
