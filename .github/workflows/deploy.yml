@@ -77,6 +77,12 @@ jobs:
 
       - name: Debug build directory
         run: ls -R build
+        
+      - name: Debug environment variables
+        run: |
+          echo "Environment variables:"
+          echo "RDS_URL=$RDS_URL"
+          echo "RDS_DRIVER_CLASS_NAME=RDS_DRIVER_CLASS_NAME"
 
       - name: Validate JAR file
         run: |
