@@ -34,7 +34,6 @@ public class NotifyServiceImpl implements NotifyService {
 
     private final JpaNotifyRepository notifyRepository;
     private final EmitterRepositoryImpl emitterRepository;
-    private final EmployeeRepository employeeRepository;
 
     public SseEmitter subscribe(String employeeSeq, String lastEventId) {
 
@@ -101,37 +100,38 @@ public class NotifyServiceImpl implements NotifyService {
     // 받는 사람이 한명인 경우
     @Transactional
     @Override
-    public void send(Employee sender, Employee receiver, NotiType notiType, String url) {
+    public void send(Long senderSeq, Long receiverSeq, NotiType notiType, String url) {
 
-        sendToReceivers(sender, List.of(receiver), notiType, url);
+        sendToReceivers(senderSeq, List.of(receiverSeq), notiType, url);
     }
 
     // 받는 사람이 여러명인 경우
     @Transactional
     @Override
-    public void send(Employee sender, List<Employee> receivers, NotiType notiType, String url) {
+    public void send(Long senderSeq, List<Long> receivers, NotiType notiType, String url) {
 
-        sendToReceivers(sender, receivers, notiType, url);
+        sendToReceivers(senderSeq, receivers, notiType, url);
     }
 
-    public void sendToReceivers(Employee sender, List<Employee> receivers, NotiType notiType, String url) {
+    public void sendToReceivers(Long senderSeq, List<Long> receivers, NotiType notiType, String url) {
 
         // 알림 생성 및 저장
         receivers.forEach(receiver -> {
-            String senderSeq = String.valueOf(sender.getEmployeeSeq());
+            // senderSeq 로 수정
+            String senderSeqStr = String.valueOf(senderSeq);
             Notify notification = notifyRepository.save(
-                    createNotification(receiver, notiType, notiType.getMessage(), url, senderSeq)
+                    createNotification(receiver, notiType, notiType.getMessage(), url)
             );
 
             log.debug("Created notification: {}", notification);
 
-            String receiverSeq = String.valueOf(receiver.getEmployeeSeq());
+            String receiverSeq = String.valueOf(receiver);
             String eventId = makeTimeIncludeId(receiverSeq);
             Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByEmployeeSeq(receiverSeq);
 
             emitters.forEach((key, emitter) -> {
                 emitterRepository.saveEventCache(key, notification);
-                Long employeeSeq = Long.parseLong(senderSeq);
+                Long employeeSeq = Long.parseLong(senderSeqStr);
 //                sendNotification(emitter, eventId, key, NotifyDTO.createResponse(notification, employeeSeq));
                 ObjectMapper objectMapper = new ObjectMapper(); // Spring Boot에서는 주입받아 사용하는 것을 권장
                 objectMapper.registerModule(new JavaTimeModule());
@@ -147,10 +147,10 @@ public class NotifyServiceImpl implements NotifyService {
         });
     }
 
-    public Notify createNotification(Employee receiver, NotiType notificationType, String content, String url, String sendEmployeeSeq) {
+    public Notify createNotification(Long receiverSeq, NotiType notificationType, String content, String url) {
 
         return Notify.builder()
-                .employeeSeq(receiver.getEmployeeSeq())
+                .employeeSeq(receiverSeq)
                 .notiType(notificationType)
                 .notiContent(content)
                 .notiUrl(url)
@@ -202,23 +202,4 @@ public class NotifyServiceImpl implements NotifyService {
         notifyRepository.deleteAll(allByEmployeeSeq);
     }
 
-//    // Notify의 수신자 아이디와 로그인 한 요청자의 ID 비교
-//    private Notify checkNotifyAndEmployeeSeq(Long employeeSeq, Long notiSeq){
-//        Notify notify = notifyRepository.findById(notiSeq)
-//                .orElseThrow(() -> new CustomException(ErrorCodeType.NOT_FOUND_NOTIFY));
-//
-//        if (employeeSeq.equals(notify.getEmployeeSeq())){
-//            throw new CustomException(ErrorCodeType.SECURITY_ACCESS_ERROR);
-//        }
-//
-//        return notify;
-//    }
-
-    public void ssetest() {
-
-        Long e2 = CustomUserUtils.getCurrentEmployeeSeq();
-        Employee e1 = employeeRepository.findByEmployeeSeq(e2).orElseThrow();
-
-        send(e1, e1, NotiType.ONBOARDING_END, "/template");
-    }
 }

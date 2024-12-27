@@ -55,7 +55,7 @@ public class MentoringPlanService {
         Employee receiver = employeeRepository.findByDepartmentSeqAndPositionSeq(sender.getDepartmentSeq(), 1L)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
 
-        notifyService.send(sender, receiver, WRITTEN_PLANER_BY_MENTOR, "/mentoring/planning/" + savedPlanning.getPlanningSeq());
+        notifyService.send(senderSeq, receiver.getEmployeeSeq(), WRITTEN_PLANER_BY_MENTOR, "/mentoring/planning/" + savedPlanning.getPlanningSeq());
     }
 
     @Transactional
@@ -78,17 +78,13 @@ public class MentoringPlanService {
         planningRepository.save(modifyPlanning);
 
         Long senderSeq = CustomUserUtils.getCurrentEmployeeSeq();
-        Employee sender = employeeRepository.findByEmployeeSeq(senderSeq)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
-
-        Employee receiver = employeeRepository.findByEmployeeSeq(modifyPlanning.getEmployeeSeq())
-                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
 
         PlanningStatus planningStatus = mentoringPlanUpdateDTO.getPlanningStatus();
+
         if (planningStatus == PlanningStatus.APPROVE) {
-            notifyService.send(sender, receiver, ALLOW_PLANER_BY_LEADER, "/mentoring/planning/" + planningSeq);
-        } else {
-            notifyService.send(sender, receiver, REJECT_PLANER_BY_LEADER, "/mentoring/planning/" + planningSeq);
+            notifyService.send(senderSeq, modifyPlanning.getEmployeeSeq(), ALLOW_PLANER_BY_LEADER, "/mentoring/planning/" + planningSeq);
+        } else if (planningStatus == PlanningStatus.REJECT) {
+            notifyService.send(senderSeq, modifyPlanning.getEmployeeSeq(), REJECT_PLANER_BY_LEADER, "/mentoring/planning/" + planningSeq);
         }
     }
 }

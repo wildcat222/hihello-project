@@ -47,12 +47,7 @@ public class ReportService {
         report.forGroup(mentoring.getMentoringSeq());
         Report currentReport = reportRepository.save(report);
 
-        Employee sender = employeeRepository.findByEmployeeSeq(employeeSeq)
-                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
-        Employee receiver = employeeRepository.findByEmployeeSeq(mentoring.getMentorSeq())
-                .orElseThrow(() -> new CustomException(ErrorCodeType.USER_NOT_FOUND));
-
-        notifyService.send(sender, receiver, WRITTEN_REPORT_BY_MENTEE
+        notifyService.send(employeeSeq, mentoring.getMentorSeq(), WRITTEN_REPORT_BY_MENTEE
                 , "/mentoring/report/" + currentReport.getReportSeq());
     }
 
