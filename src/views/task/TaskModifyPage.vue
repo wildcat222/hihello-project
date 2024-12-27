@@ -14,11 +14,15 @@ const {
   taskContent,
   departmentSeq,
   templateSeq,
+  taskRounds,
+  departments,
+  fetchDepartments,
   handleFileChange,
   fetchData,
   addRow,
   updateTask,
   goToGroupingPage,
+  fetchTaskRounds,
   fetchTaskData // 새로 추가한 fetchTaskData 함수
 } = useTask();
 
@@ -27,11 +31,9 @@ const route = useRoute(); // useRoute 훅을 사용하여 URL 파라미터 접�
 // 컴포넌트가 마운트되면 URL에서 taskSeq 값을 받아와서 해당 데이터를 가져오기
 onMounted(() => {
   const taskSeq = route.params.taskSeq; // URL에서 taskSeq 파라미터를 가져옵니다.
-  if (taskSeq) {
-    fetchTaskData(taskSeq); // taskSeq를 API 요청에 넘겨서 데이터 조회
-  } else {
-    console.error("taskSeq가 URL에 존재하지 않습니다.");
-  }
+  fetchData();
+  fetchDepartments();
+  fetchTaskRounds();  // 새로운 호출
 });
 </script>
 
@@ -50,20 +52,22 @@ onMounted(() => {
         </div>
         <div class="container-line">
           <span class="task-depart"> 과제 부서 </span>
-          <select v-model="departmentSeq" class="task-depart-input">
-            <option value="1">교육팀</option>
-            <option value="2">영업팀</option>
-            <option value="3">총무팀</option>
-            <option value="4">SW개발팀</option>
-            <option value="5">인사팀</option>
+          <select v-model="departmentSeq" id="departmentSelect" class="task-depart-input">
+            <option v-for="department in departments"
+                    :key="department.departmentSeq"
+                    :value="department.departmentSeq">
+              {{ department.departmentName || '부서 없음' }} <!-- 이름 확인용 -->
+            </option>
           </select>
         </div>
         <div class="container-line">
           <span class="task-round">과제 지정</span>
           <select v-model="templateSeq" class="task-round-input">
-            <option value="1주차">1주차</option>
-            <option value="2주차">2주차</option>
-            <option value="3주차">3주차</option>
+            <option v-for="taskRound in taskRounds"
+                    :key="taskRound.templateSeq"
+                    :value="taskRound.templateSeq">
+              {{ taskRound.templateTaskRound || '차수 없음'}}
+            </option>
           </select>
         </div>
         <div class="container-line">
@@ -80,7 +84,7 @@ onMounted(() => {
         </div>
         <div class="container-line">
           <span class="task-content"> 과제 내용 </span>
-          <input v-model="taskContent" class="task-content-input">
+          <textarea v-model="taskContent" class="task-content-input"></textarea>
         </div>
         <div class="container-line">
           <span class="task-attach"> 과제 참고 자료 </span>
@@ -91,7 +95,7 @@ onMounted(() => {
               @change="handleFileChange"
           >
           <label for="fileInput" class="file-upload-label">파일 선택</label>
-          <span v-if="fileName" class="file-name">{{ fileName }}</span> <!-- 파일 이름을 표시하는 부분 -->
+          <span v-if="fileName" class="file-name">{{ fileName }}</span>
         </div>
         <div class="table-container">
           <div class="table-detail">

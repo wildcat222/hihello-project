@@ -105,6 +105,7 @@ export const useUserStore = defineStore('user', {
                             const res = await springAPI.request({
                                 ...error.config,
                                 headers: {
+                                    ...error.config.headers,
                                     RefreshToken: `Bearer ${this.refreshToken}`,
                                 }
                             });
@@ -118,7 +119,7 @@ export const useUserStore = defineStore('user', {
                             springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
 
                             // 수정된 부분: 원래 요청을 새로운 액세스 토큰으로 재시도
-                            return await springAPI({
+                            return await springAPI.request({
                                 method: error.config.method,
                                 url: error.config.url,
                                 data: error.config.data,
@@ -127,6 +128,7 @@ export const useUserStore = defineStore('user', {
                         } catch (err) {
                             console.error('인터셉터 과정 중 에러 발생:', err);
                             alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+                            this.logout();
                             await route.push("/");
                             return Promise.reject(err);
                         }

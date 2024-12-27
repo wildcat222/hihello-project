@@ -1,12 +1,8 @@
 .taskAddBody{
-    font-family: "Noto Sans KR", sans-serif;
     background-color: var(--white);
     border-radius: 10px;
     padding: 0 0 40px 0;
     margin: 0 0 20px 0;
-}
-.taskAddHeader{
-    font-family: "Noto Sans KR", sans-serif;
 }
 
 .submitButton-container{
@@ -80,7 +76,6 @@ th {
     flex-direction: column;
     padding: 62px 0 0 132px;
     gap: 19px;
-
 }
 .container-line {
     display: flex;

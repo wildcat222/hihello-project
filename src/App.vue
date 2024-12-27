@@ -57,8 +57,8 @@ const toggleButtons = () => {
 
 onMounted(() => {
   if (userStore.accessToken) {
-    springAPI.defaults.headers.common['Authorization'] = `Bearer ${userStore.accessToken}`;
-    userStore.isAuthenticated = true;
+      springAPI.defaults.headers.common['Authorization'] = `Bearer ${userStore.accessToken}`;
+      userStore.isAuthenticated = true;
   }
 
   // Axios 인터셉터 초기화
@@ -119,7 +119,8 @@ onUnmounted(() => {
 
 .router-container {
   flex-grow: 1;
-  display: flex;
+  height: 100vh;
+  overflow: auto;
   flex-direction: column;
   align-items: center;
 }

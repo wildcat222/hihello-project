@@ -39,7 +39,7 @@ export const fetchMentoringPlanDetail = async (planningSeq) => {
 
 // 멘토링 계획서 상태 처리 (팀장)
 export const updateMentoringPlanStatus = (planningSeq, planningStatus) => {
-    return springAPI.put(`/mentor/planning/${planningSeq}`, { planningStatus });
+    return springAPI.put(`/leader/planning/${planningSeq}`, { planningStatus });
 };
 
 // 멘토링 그룹 생성
@@ -84,7 +84,7 @@ export const searchReportsByLeader = (searchType, keyword) => {
 
 // (멘토) 멘토링 보고서 목록 조회
 export const fetchReportListByMentor = () => {
-    return springAPI.get(`mentor/report`);
+    return springAPI.get(`/mentor/report`);
 };
 
 // (멘티) 멘토링 보고서 목록 조회

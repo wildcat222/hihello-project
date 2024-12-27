@@ -59,12 +59,15 @@ export default {
 
             if (!template) {
                 template = {
+                    templateTitle : item.templateTitle,
                     templateSub: item.templateSub,
                     templateDetail: item.templateDetail,
                     templateType: item.templateType,
                     checklistContent: [],
                     onboardingCompletedStatus: item.onboardingCompletedStatus,
-                    templateUrlName: item.templateUrlName
+                    templateUrlName: item.templateUrlName,
+                    taskSeq: item.taskSeq,
+                    taskGroupSeq: item.taskGroupSeq,
                 };
                 groupedItems.push(template);
             }

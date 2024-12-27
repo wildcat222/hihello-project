@@ -8,6 +8,14 @@ import ListComponent from "@/components/ListComponent.vue";
 import DeleteModalComponent from "@/components/DeleteModalComponent.vue";
 import "@/styles/task/TaskListPage.css";
 
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const goToModify = () => {
+  router.push('/task/modify');  // '/task/modify'로 이동
+};
+
 const {
   searchQuery,
   taskItems,
@@ -34,7 +42,7 @@ onMounted(() => {
     <div class="title">과제 목록</div>
     <div class="search-bar">
       <SearchBarComponent @search="handleSearch"/>
-      <AddTask buttonText="과제 등록" :targetPage="'/TaskAdd'" class="add-task" />
+      <AddTask buttonText="과제 등록" :targetPage="'/task/add'" class="add-task" />
     </div>
     <div class="user-roll">
       <UserRollRectangle :text="employeeRole === 'MENTOR' ? '멘토' : '담당자'" />
@@ -59,7 +67,7 @@ onMounted(() => {
           <div class="list-item-taskRound">{{ item.templateTaskRound }}</div>
           <div class="list-item-title">{{ item.title }}</div>
           <div class="list-button">
-            <button class="list-button-revise">수정</button>
+            <button class="list-button-revise" @click="goToModify">수정</button>
             <button class="list-button-delete" @click="openDeleteModal(item.seq, item.departmentName, item.templateTaskRound, item.title)">삭제</button>
             <DeleteModalComponent
                 :visible="isDeleteModalVisible"

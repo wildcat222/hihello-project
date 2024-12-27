@@ -4,8 +4,13 @@
     padding: 10px;
     margin: 0 0 0 125px;
 }
+
+.router-container{
+    display:flex;
+}
+
 .taskInd-full-container {
-    width: 100%;
+    width: 140vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -41,7 +46,8 @@
 .taskIndInd-header {
     display: flex;
     justify-content: space-between;
-    padding: 10px;
+    padding: 2px;
+    margin-left: 84px;
 }
 .taskInd-item {
     display: flex;

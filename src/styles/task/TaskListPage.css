@@ -1,6 +1,6 @@
 .task-list-page-container .underline {
     text-decoration: underline;
-    text-decoration-color: #7031FC; /* 밑줄 색상 */
+    text-decoration-color: var(--purple); /* 밑줄 색상 */
     text-decoration-thickness: 2px;
     font-weight: bold; /* 글씨 두껍게 */
 }
@@ -23,6 +23,7 @@
     justify-content: space-between;
     gap: 20px; /* 기본 간격 */
     width: 100%;
+    margin-left:30px;
 }
 .task-list-page-container .task-header, .list-item {
     display: flex;
@@ -35,20 +36,28 @@
     width: 47px;
     height: 25px;
     border-radius: 10px;
-    border: 1px solid white;
-    background: #121212;
+    border: 1px solid var(--white);
+    background: var(--black);
     font-size: 12px;
-    color: #FFF;
+    color: var(--white);
+}
+
+.task-list-page-container .list-button-delete:hover{
+    background: var(--yellow);
 }
 .task-list-page-container .list-button-revise{
     width: 47px;
     height: 25px;
     border-radius: 10px;
-    border: 1px solid white;
-    background: #7031FC;
+    border: 1px solid var(--white);
+    background: var(--purple);
     font-size: 12px;
-    color: #FFF;
+    color: var(--white);
     margin: 0 4px 0 0;
+}
+
+.task-list-page-container .list-button-revise:hover{
+    background: var(--light-purple);
 }
 .task-list-page-container .task-num-title{
     flex: 1;
@@ -83,9 +92,9 @@
     text-align: center;
 }
 .task-list-page-container .task-name-title {
-    flex: 4; /* 과제 제목 */
+    flex: 3.8; /* 과제 제목 */
     text-align: center;
-    padding-left: 10px; /* 내부에서 오른쪽으로 20px 이동 */
+    padding-left: 36px; /* 내부에서 오른쪽으로 20px 이동 */
 }
 .task-list-page-container .task-title-box{
     flex: 0.6;
@@ -97,14 +106,14 @@
 .task-list-page-container .TaskListbody{
     border-radius:10px;
     box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.25);
-    background: #FDFDFD;
+    background: var(--white);
     padding: 47px 46.17px 12px 43px;
 }
 .task-list-page-container .add-task {
     text-align: center;
     margin: 0 0 0 35px;
     border-radius: 10px;
-    color: white;
+    color: var(--white);
 }
 .task-list-page-container .title {
     text-align: center;

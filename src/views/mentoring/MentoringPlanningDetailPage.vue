@@ -12,7 +12,7 @@ const planDetail = ref({}); // API 데이터를 저장 (빈 객체로 초기화)
 
 const userStore = useUserStore();
 const employeeInfo = userStore.getEmployeeInfo();
-const employPosition = employeeInfo.positionSeq;
+const employPosition = employeeInfo.employeePositionName;
 
 const goToBack = () => {
   router.push(`/mentoring/planning`);
@@ -99,7 +99,7 @@ const handleButtonClick = async (event) => {
           <a :href="planDetail.fileUrl" target="_blank" class="content-line">{{ planDetail.fileName }}</a>
         </div>
         <div class="button-container">
-          <div v-if="'employPosition' === '1'" class="inline buttons"> <!-- 팀장만 보이는 버튼 -->
+          <div v-if="employPosition === '팀장'" class="inline buttons"> <!-- 팀장만 보이는 버튼 -->
             <div class="approve" id="APPROVE" @click="handleButtonClick($event)">승인</div>
             <div class="deny" id="REJECT" @click="handleButtonClick($event)">반려</div>
           </div>

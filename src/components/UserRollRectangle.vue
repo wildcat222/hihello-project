@@ -14,16 +14,17 @@ defineProps({
 
 <style scoped>
 .box {
-  background-color: #7031FC;
+  background-color: var(--purple);
   width: 89px;
   height: 25px;
   border-radius: 10px;
   display: flex;
   justify-content: center;  /* 글씨를 중앙에 정렬 */
   align-items: center;  /* 글씨를 중앙에 정렬 */
-  color: white;  /* 글씨 색상 */
+  align-content: center;
+  color: var(--white);  /* 글씨 색상 */
 }
 .box__title{
-  padding: 3px 0 0 0;
+  padding: 0 0 0 0;
 }
 </style>
