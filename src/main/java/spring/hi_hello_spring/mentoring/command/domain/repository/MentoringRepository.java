@@ -11,4 +11,6 @@ public interface MentoringRepository {
     Mentoring findByMenteeSeq(Long menteeSeq);
 
     Mentoring findByChatRoomSeq(String roomId);
+
+    Mentoring findByMentorSeqAndMentoringActiveStatusIsTrue(Long employeeSeq);
 }
