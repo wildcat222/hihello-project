@@ -54,10 +54,13 @@ jobs:
           scp -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${{ secrets.BASTION_HOST }}" \
           .env ec2-user@${{ secrets.PRIVATE_EC2_IP }}:/home/ec2-user/.env
 
-      - name: Ensure Docker is running on Private EC2
+      - name: Install Docker on Private EC2
         run: |
           ssh -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no ec2-user@${{ secrets.BASTION_HOST }}" \
           ec2-user@${{ secrets.PRIVATE_EC2_IP }} "
+          sudo yum update -y &&
+          sudo yum install -y docker &&
+          sudo systemctl enable docker &&
           sudo systemctl start docker
           "
 
@@ -69,5 +72,3 @@ jobs:
           docker-compose -f /home/ec2-user/docker-compose.yml --env-file /home/ec2-user/.env pull &&
           docker-compose -f /home/ec2-user/docker-compose.yml --env-file /home/ec2-user/.env up -d
           "
-
-
