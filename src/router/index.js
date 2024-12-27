@@ -13,6 +13,7 @@ import TaskIndRouter from "@/router/TaskIndRouter.js";
 import OnboardingRouter from "@/router/OnboardingRouter.js";
 import {useUserStore} from "@/stores/UserStore.js";
 import {useSSEStore} from "@/stores/sse.js";
+import ChatRouter from "@/router/ChatRouter.js";
 
 const routes = [
     ...QuizRouter,
@@ -27,6 +28,7 @@ const routes = [
     ...ChatbotRouter,
     ...TaskIndRouter,
     ...OnboardingRouter,
+    ...ChatRouter,
 ]
 
 const router = createRouter({
