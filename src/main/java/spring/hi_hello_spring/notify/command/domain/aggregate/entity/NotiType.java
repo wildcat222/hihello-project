@@ -7,8 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum NotiType {
 
-    ONBOARDING_START("교육이 시작되었습니다."),
-    ONBOARDING_END("교육을 완료하였습니다."),
+    ONBOARDING_START("온보딩 교육 과정이 시작되었습니다."),
+    ONBOARDING_END("온보딩 교육 과정을 완료하였습니다."),
 
     ONBOARDING_COMPLETE_BY_MENTEE("멘티가 온보딩 과정을 수행하였습니다."),
     ONBOARDING_COMPLETE_BY_MENTOR("멘토가 수행한 온보딩 과정에 대해 검토하였습니다."),
