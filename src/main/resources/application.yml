@@ -1,6 +1,5 @@
 # 포트 번호 설정
 server:
-  port: ${SERVER_PORT}
   servlet:
     encoding:
       charset: UTF-8

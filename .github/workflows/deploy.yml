@@ -49,7 +49,6 @@ jobs:
 
       - name: Build and Test with Gradle
         env:
-          SERVER_PORT: ${{ secrets.SERVER_PORT }}
           RDS_DOMAIN: ${{ secrets.RDS_DOMAIN }}
           RDS_URL: ${{ secrets.RDS_URL }}
           RDS_PORT: ${{ secrets.RDS_PORT }}
