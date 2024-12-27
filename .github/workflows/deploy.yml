@@ -26,6 +26,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
+      - name: Create SSH key file
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > ec2-key.pem
+          chmod 400 ec2-key.pem
+
       - name: Create .env file for Docker Compose
         run: |
           echo "MONGO_USER_NAME=${{ secrets.MONGO_USER_NAME }}" > .env
