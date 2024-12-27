@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.hi_hello_spring.chatting.command.application.serivce.ChatRoomService;
+import spring.hi_hello_spring.common.util.CustomUserUtils;
 import spring.hi_hello_spring.group.command.application.dto.MemberDTO;
 import spring.hi_hello_spring.group.command.application.dto.TaskRequestDTO;
 import spring.hi_hello_spring.group.command.domain.aggregate.entity.GroupMember;
@@ -41,7 +42,8 @@ public class GroupMatchService {
                 groupMemberRepository.save(groupMember);
             }
 
-            chatRoomService.createGroupChatRoom(taskSeq.getChatRoomSeq());
+            Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
+            chatRoomService.createGroupChatRoom(employeeSeq, taskSeq.getChatRoomSeq());
         }
     }
 

@@ -10,17 +10,25 @@ import spring.hi_hello_spring.chatting.command.application.dto.ChatRequestMessag
 import spring.hi_hello_spring.chatting.command.application.dto.ChatRoom;
 import spring.hi_hello_spring.chatting.command.domain.repository.mongo.ChatMessageMongoRepository;
 import spring.hi_hello_spring.chatting.command.application.dto.ChatResponseMessage;
+import spring.hi_hello_spring.common.exception.CustomException;
+import spring.hi_hello_spring.common.exception.ErrorCodeType;
+import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
+import spring.hi_hello_spring.employee.command.domain.repository.EmployeeRepository;
 import spring.hi_hello_spring.group.command.domain.aggregate.entity.GroupMember;
 import spring.hi_hello_spring.group.command.domain.aggregate.entity.TaskGroup;
 import spring.hi_hello_spring.group.command.domain.repository.GroupMemberRepository;
 import spring.hi_hello_spring.group.command.domain.repository.TaskGroupRepository;
 import spring.hi_hello_spring.mentoring.command.domain.aggregate.entity.Mentoring;
 import spring.hi_hello_spring.mentoring.command.domain.repository.MentoringRepository;
+import spring.hi_hello_spring.notify.command.application.service.NotifyService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static spring.hi_hello_spring.notify.command.domain.aggregate.entity.NotiType.CREATE_CHATTING_ROOM;
+import static spring.hi_hello_spring.notify.command.domain.aggregate.entity.NotiType.CREATE_GROUP_CHATTING_ROOM;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,6 +40,8 @@ public class ChatRoomService {
     private final ModelMapper modelMapper;
     private final TaskGroupRepository taskGroupRepository;
     private final GroupMemberRepository groupMemberRepository;
+    private final NotifyService notifyService;
+    private final EmployeeRepository employeeRepository;
 
     // Mentoring을 사용해 채팅방 생성
     @Transactional
@@ -46,11 +56,13 @@ public class ChatRoomService {
         chatRoom.setMenteeSeq(menteeSeq);
 
         System.out.println("새로운 맨토링 방 생성 됨: " + chatRoom.getRoomId());
+
+        notifyService.send(mentorSeq, menteeSeq, CREATE_CHATTING_ROOM, "");
     }
 
     // Grouping을 사용해 채팅방 생성
     @Transactional
-    public void createGroupChatRoom(String roomId) {
+    public void createGroupChatRoom(Long senderSeq, String roomId) {
         // Grouping 정보 가져오기
         TaskGroup taskGroup = taskGroupRepository.findByChatRoomSeq(roomId);
 
@@ -73,6 +85,8 @@ public class ChatRoomService {
         }
 
         chatRoom.setMemberSeqs(memberSeqList);
+
+        notifyService.send(senderSeq, memberSeqList, CREATE_GROUP_CHATTING_ROOM, "");
 
         System.out.println("새로운 grouping 방 생성됨: " + chatRoom.getRoomId() + ", 인원: " + memberSeqList);
     }
