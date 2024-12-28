@@ -372,11 +372,14 @@ onMounted(async () => {
             <div class="item-header">
               <div class="templateTitle">{{ item.templateTitle }}</div>
             </div>
-            <div class="item-content" :class="{ completed: item.onboardingCompletedStatus }">
+            <div
+                class="item-content"
+                :class="{ completed: item.onboardingCompletedStatus, 'checklist-item-box-container': item.templateType === 'CHECKLIST'}">
               <div class="templateDetail">{{ item.templateSub }}</div>
               <div v-if="item.templateType === 'CHECKLIST'" class="checklist-bigBox">
-                <div v-if="Array.isArray(item.checklistContent) && item.checklistContent.length > 0"
-                     class="checklist-container">
+                <div
+                    v-if="Array.isArray(item.checklistContent) && item.checklistContent.length > 0"
+                    class="checklist-container">
                   <div class="checklist-content" v-for="(content, index) in item.checklistContent" :key="index">
                     <label class="checklist-label">
                       <input

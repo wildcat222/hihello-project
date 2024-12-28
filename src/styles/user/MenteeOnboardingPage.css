@@ -71,6 +71,12 @@
     border-radius: 10px;
     box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
 }
+
+.checklist-item-box-container {
+    align-items: flex-start !important;
+    padding-left: 2rem;
+}
+
 .item-container-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -87,8 +93,7 @@
     display: inline-block;
     flex-direction: column;
     font-size: 14px;
-    position: absolute; /* 아이템 박스에 relative 설정 */
-    z-index: 3;  /* 충분히 큰 z-index 값 설정하여 가장 위로 오게 만듦 */
+    position: absolute;
     cursor: grab;
 }
 
