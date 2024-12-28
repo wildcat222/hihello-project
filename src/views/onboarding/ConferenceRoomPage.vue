@@ -5,12 +5,37 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import '@/styles/onboarding/OnboardingConferenceRoom.css'
 
+import {springAPI} from "@/services/axios.js";
 const router = useRouter();
 
-const goToMainPage = () => {
-  router.push('/');
-  alert("회의실 예약 실습이 완료되었습니다!")
+const goToMainPage = async () => {
+  const templateSeq = router.currentRoute.value.query.templateSeq; // 쿼리 스트링에서 templateSeq 가져오기
+
+  if (!templateSeq) {
+    alert("유효하지 않은 templateSeq입니다.");
+    return;
+  }
+  try {
+    // PUT 요청
+    await springAPI.put(
+        `mentee/onboarding/template/${templateSeq}/status`,
+        {}, // 요청 본문이 필요 없다면 빈 객체
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // 로컬스토리지에서 토큰 가져오기
+            'Content-Type': 'application/json',
+          },
+        }
+    );
+
+    alert("회의실 예약 실습이 완료되었습니다!");
+    await router.push('/'); // 메인 페이지로 이동
+  } catch (error) {
+    console.error("서버 요청 중 오류 발생:", error.response || error.message);
+    alert("서버 요청 중 문제가 발생했습니다. 다시 시도해 주세요.");
+  }
 };
+
 
 const selectedDate = ref(null);
 

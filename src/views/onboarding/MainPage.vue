@@ -66,7 +66,6 @@ const fetchOnboardingData = async () => {
       });
     }
 
-
     if (response.data.success) {
       onboardingList.value = groupChecklistByTemplate(response.data.data.onboardingList);
 
@@ -91,6 +90,8 @@ const openModal = (item) => {
   selectedItem.value = {
     taskSeq: item.taskSeq,
     taskGroupSeq: item.taskGroupSeq,
+    templateType: item.templateType,
+    templateSeq: item.templateSeq
   }; // taskSeq와 taskGroupSeq 저장
   isModalOpen.value = true; // 모달 열기
 };
@@ -107,6 +108,38 @@ const goToTaskPage = () => {
     console.error('taskSeq 값이 없습니다.');
   }
 };
+
+const goToQuiz = () => {
+  if (selectedItem.value) {
+    router.push(`/quiz`)
+  } else{
+    alert("퀴즈 페이지가 유효하지 않습니다.")
+  }
+}
+
+const goToCF = () => {
+  if (selectedItem.value){
+    const templateSeq = selectedItem.value.templateSeq;
+    router.push({
+      path: `/onboarding/conferenceRoom`,
+      query: { templateSeq }
+    });
+  } else{
+    alert("회의실 예약 페이지가 유효하지 않습니다.")
+  }
+}
+
+const goToBreak = () => {
+  if (selectedItem.value){
+    const templateSeq = selectedItem.value.templateSeq;
+    router.push({
+      path: `/break`,
+      query: { templateSeq }
+    });
+  } else{
+    alert("휴가 신청 페이지가 유효하지 않습니다.")
+  }
+}
 
 const goToGroupEvalPage = () => {
   if (selectedItem.value && selectedItem.value.taskGroupSeq) {
@@ -137,7 +170,9 @@ const groupChecklistByTemplate = (onboardingList) => {
         templateUrlName: item.templateUrlName,
         taskSeq: item.taskSeq,
         taskGroupSeq: item.taskGroupSeq,
-        templateCheckRequiredStatus: item.templateCheckRequiredStatus
+        templateCheckRequiredStatus: item.templateCheckRequiredStatus,
+        quizCategoryName: item.quizCategoryName,
+        quizCategorySeq: item.quizCategorySeq
       };
       groupedItems.push(template);
     }
@@ -441,6 +476,24 @@ onMounted(async () => {
                             @click="goToGroupEvalPage"
                             class="cw-eval-button">
                           동료평가
+                        </button>
+                        <button
+                            v-if="selectedItem.templateType === 'QUIZ'"
+                            @click="goToQuiz"
+                            class="go-to-quiz-button">
+                          퀴즈
+                        </button>
+                        <button
+                            v-if="selectedItem.templateType === 'CF'"
+                            @click="goToCF"
+                            class="go-to-CF-button">
+                          회의실 예약
+                        </button>
+                        <button
+                            v-if="selectedItem.templateType === 'BREAK'"
+                            @click="goToBreak"
+                            class="go-to-Break-button">
+                          휴가 신청
                         </button>
                         <button @click="closeModal" class="close-button">닫기</button>
                       </div>

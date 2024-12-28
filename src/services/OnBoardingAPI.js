@@ -68,6 +68,8 @@ export default {
                     templateUrlName: item.templateUrlName,
                     taskSeq: item.taskSeq,
                     taskGroupSeq: item.taskGroupSeq,
+                    quizCategoryName: item.quizCategoryName,
+                    quizCategorySeq: item.quizCategorySeq,
                 };
                 groupedItems.push(template);
             }

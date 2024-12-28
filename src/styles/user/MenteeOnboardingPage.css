@@ -172,6 +172,18 @@
     margin: 0 0 15px 0;
 }
 
+.go-to-quiz-button, .go-to-Break-button, .go-to-CF-button{
+    width: 60%;
+    height: 40px;
+    border-radius: 15px;
+    border: transparent;
+    margin: 5px 0;
+    font-size: 11px;
+    cursor: pointer;
+    font-weight: 600;
+    background-color: var(--yellow);
+}
+
 .template-confirm-button {
     background: var(--purple);
 }
@@ -261,13 +273,13 @@
     height: 80vh;
     overflow: scroll;
     position: relative
-
+}
 .modal-content {
     width: 14vw;
     overflow: visible;
 }
 
-.check-task-button, .cw-eval-button, .close-button {
+.check-task-button, .cw-eval-button, .close-button{
     width: 60%;
     height: 40px;
     border-radius: 15px;
@@ -285,3 +297,5 @@
 .modal-content > p {
     font-size: 14px;
 }
+
+

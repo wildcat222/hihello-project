@@ -62,6 +62,7 @@ import { ref, onMounted } from 'vue';
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
 import { fetchEmployeeInfo } from "@/services/UserApi.js";
 import { useRouter } from 'vue-router';
+import {springAPI} from "@/services/axios.js";
 
 const router = useRouter();
 
@@ -88,17 +89,36 @@ onMounted(async () => {
   }
 });
 
-function handleSubmit() {
+async function handleSubmit() {
   if (!employeeInfo.value?.employeeName || !reason.value || !leaveType.value || !startDate.value || !startTime.value || !endDate.value || !endTime.value || !reasonText.value) {
     alert('모든 필드를 입력해주세요.');
     return;
   }
-  
-  // 모든 필드 입력 완료 시 알림
-  alert('축하합니다! 미션을 수행하셨습니다!');
-  
-  // /main 페이지로 이동
-  router.push('/main');
+
+  const templateSeq = router.currentRoute.value.query.templateSeq; // 쿼리 스트링에서 templateSeq 가져오기
+  if (!templateSeq) {
+    alert("유효하지 않은 templateSeq입니다.");
+    return;
+  }
+  try {
+    // PUT 요청
+    await springAPI.put(
+        `mentee/onboarding/template/${templateSeq}/status`,
+        {}, // 요청 본문이 필요 없다면 빈 객체
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // 로컬스토리지에서 토큰 가져오기
+            'Content-Type': 'application/json',
+          },
+        }
+    );
+    // 모든 필드 입력 완료 시 알림
+    alert('축하합니다! 미션을 수행하셨습니다!');
+    await router.push('/'); // 메인 페이지로 이동
+  } catch (error) {
+    console.error("서버 요청 중 오류 발생:", error.response || error.message);
+    alert("서버 요청 중 문제가 발생했습니다. 다시 시도해 주세요.");
+  }
 }
 </script>
 
