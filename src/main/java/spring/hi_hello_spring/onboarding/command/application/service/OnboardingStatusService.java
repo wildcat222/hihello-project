@@ -2,6 +2,7 @@ package spring.hi_hello_spring.onboarding.command.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.common.util.CustomUserUtils;
@@ -23,37 +24,44 @@ public class OnboardingStatusService {
     private final MentoringRepository mentoringRepository;
     private final NotifyService notifyService;
 
-    public void updateOnboardingStatus(ReqOnboardingStatusDTO reqOnboardingStatusDTO) {
-
-        OnboardingStatus onboardingStatus = onboardingStatusRepository.findById(reqOnboardingStatusDTO.getOnboardingStatusSeq())
-                .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
-
-        onboardingStatus.updateOnboardingCompletedStatus(true);
-
-        onboardingStatusRepository.save(onboardingStatus);
+    @Transactional
+    public void updateOnboardingStatus(Long templateSeq) {
 
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
-        Mentoring mentoring = mentoringRepository.findByMenteeSeq(employeeSeq);
 
-        notifyService.send(mentoring.getMenteeSeq(), mentoring.getMentorSeq(), NotiType.ONBOARDING_COMPLETE_BY_MENTEE, "");
+        OnboardingStatus onboardingStatus = onboardingStatusRepository.findByEmployeeSeqAndTemplateSeq(employeeSeq, templateSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
+
+        if (onboardingStatus.getOnboardingCompletedStatus() != null && onboardingStatus.getOnboardingCompletedStatus()) {
+            onboardingStatus.updateOnboardingCompletedStatus(false);
+        } else {
+            onboardingStatus.updateOnboardingCompletedStatus(true);
+            Mentoring mentoring = mentoringRepository.findByMenteeSeq(employeeSeq);
+            notifyService.send(mentoring.getMenteeSeq(), mentoring.getMentorSeq(), NotiType.ONBOARDING_COMPLETE_BY_MENTEE, "");
+        }
+        onboardingStatusRepository.save(onboardingStatus);
     }
 
-    public void updateOnboardingStatusByMentor(ReqOnboardingStatusDTO reqOnboardingStatusDTO) {
-
-        OnboardingStatus onboardingStatus = onboardingStatusRepository.findById(reqOnboardingStatusDTO.getOnboardingStatusSeq())
-                .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
+    @Transactional
+    public void updateOnboardingStatusByMentor(Long templateSeq) {
 
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
+
         Mentoring mentoring = mentoringRepository.findByMentorSeqAndMentoringActiveStatusIsTrue(employeeSeq);
 
+        System.out.println("멘티 seq" + mentoring.getMenteeSeq());
 
-        if (Objects.equals(onboardingStatus.getEmployeeSeq(), mentoring.getMenteeSeq())) {
-            onboardingStatus.updateOnboardingCompletedStatus(true);
-            onboardingStatusRepository.save(onboardingStatus);
-            notifyService.send(mentoring.getMentorSeq(), mentoring.getMenteeSeq(), NotiType.ONBOARDING_COMPLETE_BY_MENTOR, "");
+        OnboardingStatus onboardingStatus = onboardingStatusRepository.findByEmployeeSeqAndTemplateSeq(mentoring.getMenteeSeq(), templateSeq)
+                .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
+
+        if (onboardingStatus.getOnboardingCompletedStatus() != null && onboardingStatus.getOnboardingCompletedStatus()) {
+            onboardingStatus.updateOnboardingCompletedStatus(false);
         } else {
-            throw new CustomException(ErrorCodeType.COMMON_ERROR);
+            onboardingStatus.updateOnboardingCompletedStatus(true);
+            notifyService.send(mentoring.getMentorSeq(), mentoring.getMenteeSeq(), NotiType.ONBOARDING_COMPLETE_BY_MENTOR, "");
         }
+        onboardingStatusRepository.save(onboardingStatus);
+
 
     }
 }
