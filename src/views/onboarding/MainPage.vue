@@ -3,8 +3,14 @@ import {onMounted, reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {springAPI} from '@/services/axios.js';
 import '@/styles/user/MenteeOnboardingPage.css';
+import {changeCompleteStatusByTemplateSeq} from "@/services/OnBoardingAPI.js";
+import {useUserStore} from "@/stores/UserStore.js";
 
 const router = useRouter();
+const userStore = useUserStore();
+const employeeInfo = userStore.getEmployeeInfo();
+const employeeRole = employeeInfo.employeeRole[0];
+
 // 상태 변수 정의
 const onboardingList = ref([]); // 온보딩 리스트 데이터
 const loading = ref(true); // 로딩 상태
@@ -49,12 +55,17 @@ const updateChecklistStatus = async (checklistStatusSeq, checklistSeq, listCheck
 // 온보딩 데이터 가져오기
 const fetchOnboardingData = async () => {
   try {
-    const response = await springAPI.get('mentee/onboarding', {
-      params: {taskContent: query.value},
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-    });
+    let response;
+    if (employeeRole === 'MENTEE') {
+      response = await springAPI.get('mentee/onboarding', {
+        params: {taskContent: query.value}
+      });
+    } else if (employeeRole === 'MENTOR') {
+      response = await springAPI.get('mentor/onboarding', {
+        params: {taskContent: query.value}
+      });
+    }
+
 
     if (response.data.success) {
       onboardingList.value = groupChecklistByTemplate(response.data.data.onboardingList);
@@ -116,6 +127,7 @@ const groupChecklistByTemplate = (onboardingList) => {
 
     if (!template) {
       template = {
+        templateSeq: item.templateSeq,
         templateTitle: item.templateTitle,
         templateSub: item.templateSub,
         templateDetail: item.templateDetail,
@@ -125,6 +137,7 @@ const groupChecklistByTemplate = (onboardingList) => {
         templateUrlName: item.templateUrlName,
         taskSeq: item.taskSeq,
         taskGroupSeq: item.taskGroupSeq,
+        templateCheckRequiredStatus: item.templateCheckRequiredStatus
       };
       groupedItems.push(template);
     }
@@ -162,6 +175,11 @@ const toggleChecklistStatus = (item, content) => {
   );
   content.listCheckedStatus = updatedStatus; // 상태 변경
 };
+
+const changeCompleteStatus = async(templateSeq) => {
+  await changeCompleteStatusByTemplateSeq(templateSeq);
+  await fetchOnboardingData();
+}
 
 /* 온보딩 박스 위치 및 선 연결에 관한 메서드들 */
 const updateBoxPositions = () => {
@@ -372,11 +390,14 @@ onMounted(async () => {
             <div class="item-header">
               <div class="templateTitle">{{ item.templateTitle }}</div>
             </div>
-            <div class="item-content" :class="{ completed: item.onboardingCompletedStatus }">
+            <div
+                class="item-content"
+                :class="{ completed: item.onboardingCompletedStatus, 'checklist-item-box-container': item.templateType === 'CHECKLIST'}">
               <div class="templateDetail">{{ item.templateSub }}</div>
               <div v-if="item.templateType === 'CHECKLIST'" class="checklist-bigBox">
-                <div v-if="Array.isArray(item.checklistContent) && item.checklistContent.length > 0"
-                     class="checklist-container">
+                <div
+                    v-if="Array.isArray(item.checklistContent) && item.checklistContent.length > 0"
+                    class="checklist-container">
                   <div class="checklist-content" v-for="(content, index) in item.checklistContent" :key="index">
                     <label class="checklist-label">
                       <input
@@ -395,8 +416,14 @@ onMounted(async () => {
               </div>
               <div v-else>
                 <div>
-                  <button class="tempateButton" @click="openModal(item)">
+                  <button class="template-button template-confirm-button" @click="openModal(item)">
                     확인하기
+                  </button>
+                  <button
+                      v-if="(item.templateCheckRequiredStatus === true && employeeRole === 'MENTOR') || (item.templateCheckRequiredStatus === false && employeeRole === 'MENTEE')"
+                      class="template-button template-complete-button"
+                      @click="changeCompleteStatus(item.templateSeq)">
+                    완료하기
                   </button>
                   <!-- 모달 -->
                   <div v-if="isModalOpen" class="modal">

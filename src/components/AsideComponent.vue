@@ -182,6 +182,7 @@ const menus = ref([
     role: "MENTOR",
     position: "팀장",
     subMenus: [
+      {name: "멘티 소개", url: "/mentee/intro"},
       {name: "멘토링 계획서", url: "/mentoring/planning"},
       {name: "멘토링 보고서", url: "/mentoring/report"},
     ],
