@@ -191,7 +191,10 @@ const menus = ref([
     name: "온보딩 과제 관리",
     role: "MENTOR",
     position: "팀장",
-    url: "/task/add",
+    subMenus: [
+      {name: "온보딩 과제 추가", url: "/task/add"},
+      {name: "온보딩 과제 조회", url: "/task/list"},
+    ],
   },
   {
     name: "온보딩 결과 조회",
@@ -331,6 +334,7 @@ ul {
   border: 1px solid var(--purple);
   border-radius: 15px;
   padding: 1rem 0;
+  z-index: 2;
 }
 
 .login-name {
