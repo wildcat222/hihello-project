@@ -101,3 +101,13 @@ export default {
         content.listCheckedStatus = updatedStatus;  // 상태 변경
     },
 };
+
+// 온보딩 템플릿 완료 상태 변경
+export const changeCompleteStatusByTemplateSeq = async(templateSeq) => {
+    try {
+        alert("온보딩 수행 상태가 변경되었습니다.")
+        return await springAPI.put(`mentee/onboarding/template/${templateSeq}/status`);
+    } catch(error) {
+        alert("온보딩 수행 상태 변경 도중 오류가 발생했습니다.");
+    }
+}

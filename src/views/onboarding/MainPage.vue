@@ -3,6 +3,7 @@ import {onMounted, reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {springAPI} from '@/services/axios.js';
 import '@/styles/user/MenteeOnboardingPage.css';
+import {changeCompleteStatusByTemplateSeq} from "@/services/OnBoardingAPI.js";
 
 const router = useRouter();
 // 상태 변수 정의
@@ -116,6 +117,7 @@ const groupChecklistByTemplate = (onboardingList) => {
 
     if (!template) {
       template = {
+        templateSeq: item.templateSeq,
         templateTitle: item.templateTitle,
         templateSub: item.templateSub,
         templateDetail: item.templateDetail,
@@ -125,6 +127,7 @@ const groupChecklistByTemplate = (onboardingList) => {
         templateUrlName: item.templateUrlName,
         taskSeq: item.taskSeq,
         taskGroupSeq: item.taskGroupSeq,
+        templateCheckRequiredStatus: item.templateCheckRequiredStatus
       };
       groupedItems.push(template);
     }
@@ -162,6 +165,11 @@ const toggleChecklistStatus = (item, content) => {
   );
   content.listCheckedStatus = updatedStatus; // 상태 변경
 };
+
+const changeCompleteStatus = async(templateSeq) => {
+  await changeCompleteStatusByTemplateSeq(templateSeq);
+  await fetchOnboardingData();
+}
 
 /* 온보딩 박스 위치 및 선 연결에 관한 메서드들 */
 const updateBoxPositions = () => {
@@ -398,8 +406,14 @@ onMounted(async () => {
               </div>
               <div v-else>
                 <div>
-                  <button class="tempateButton" @click="openModal(item)">
+                  <button class="template-button template-confirm-button" @click="openModal(item)">
                     확인하기
+                  </button>
+                  <button
+                      v-if="(item.templateCheckRequiredStatus === true && employeeRole === 'MENTOR') || (item.templateCheckRequiredStatus === false && employeeRole === 'MENTEE')"
+                      class="template-button template-complete-button"
+                      @click="changeCompleteStatus(item.templateSeq)">
+                    완료하기
                   </button>
                   <!-- 모달 -->
                   <div v-if="isModalOpen" class="modal">
