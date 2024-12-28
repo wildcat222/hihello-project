@@ -12,8 +12,12 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-const goToModify = () => {
-  router.push('/task/modify');  // '/task/modify'로 이동
+const goToModify = (taskSeq) => {
+  if (!taskSeq) {
+    alert("잘못된 과제 번호입니다.");
+    return;
+  }
+  router.push(`/task/modify/${taskSeq}`); // taskSeq를 URL에 포함
 };
 
 const {
@@ -67,7 +71,7 @@ onMounted(() => {
           <div class="list-item-taskRound">{{ item.templateTaskRound }}</div>
           <div class="list-item-title">{{ item.title }}</div>
           <div class="list-button">
-            <button class="list-button-revise" @click="goToModify">수정</button>
+            <button class="list-button-revise" @click="goToModify(item.seq)">수정</button>
             <button class="list-button-delete" @click="openDeleteModal(item.seq, item.departmentName, item.templateTaskRound, item.title)">삭제</button>
             <DeleteModalComponent
                 :visible="isDeleteModalVisible"
