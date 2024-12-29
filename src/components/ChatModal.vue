@@ -6,8 +6,8 @@
         @mousedown="handleMouseDown"
     >
       <div class="modal-header">
-        <h3>Chat with us</h3>
-        <button @click="closeModal">X</button>
+        <div>멘토링</div>
+        <button @click="closeModal" class="chatBot-modal-delete-button">X</button>
       </div>
       <div class="modal-body">
         <Chatting/>
@@ -34,7 +34,7 @@ let dragStartY = ref(0); // 드래그 시작 Y 좌표
 
 // 모달 닫기
 const closeModal = () => {
-  emit('update:isVisible', false); // 부모 컴포넌트에서 isVisible을 false로 변경하여 모달을 숨김
+  emit('update:isVisible', false);
 };
 
 // 드래그 시작
@@ -99,11 +99,13 @@ onUnmounted(() => {
 .modal-header {
   display: flex;
   justify-content: space-between;
-  padding: 10px;
+  padding: 10px 20px;
+  font-weight: 600;
   border-bottom: 1px solid var(--gray);
 }
 
-.modal-body {
-  padding: 20px;
+.chatBot-modal-delete-button{
+  border: none;
+  background-color: var(--white);
 }
 </style>
