@@ -53,6 +53,10 @@
     margin: 0 1rem;
 }
 
+.task-eval-result-detail-result-modal-submitter-container {
+    position: relative;
+}
+
 .task-eval-result-list-container .gray-hr {
     border: 1px solid var(--gray);
 }

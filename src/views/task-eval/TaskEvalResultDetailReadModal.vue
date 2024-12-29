@@ -1,9 +1,11 @@
 <script setup>
 import "@/styles/task-eval/TaskEvalResultDetailReadModal.css"
 import { fetchTaskEvalDetailResult } from "@/services/TaskEvalResultApi.js";
-import { computed, reactive, watch } from "vue";
+import {computed, reactive, ref, watch} from "vue";
+import TaskEvalResultGroupMembersReadModal from "@/views/task-eval/TaskEvalResultGroupMembersReadModal.vue";
 
 const taskEvalResultDetailList = reactive([]);
+const isModalOpen = ref(false);
 
 const fetchingTaskEvalDetailResult = async (taskSubmitSeq) => {
   try {
@@ -46,10 +48,13 @@ const groupingTaskEvalDetailResult = computed(() => {
   return groups;
 });
 
+const changeGroupMemberReadModalStatus = () => {
+  isModalOpen.value = !isModalOpen.value;
+}
+
 // Props 정의
 const props = defineProps({
   isOpen: Boolean,
-  taskSubmitSeq: Number,
   taskData: Object,
 });
 
@@ -59,6 +64,7 @@ const emit = defineEmits(["close"]);
 // 모달 닫기
 const closeModal = () => {
   emit("close");
+  isModalOpen.value = false;
 };
 
 const closeModalOutside = (event) => {
@@ -87,9 +93,18 @@ watch(
           <tr class="task-eval-result-detail-read-modal-table-row">
             <td class="table-left">제출자</td>
             <td>
-              <div class="flex task-eval-result-detail-result-modal-td">
+              <div class="flex task-eval-result-detail-result-modal-td task-eval-result-detail-result-modal-submitter-container">
                 <div>{{ props.taskData.submitterName }}</div>
-                <button class="button purple-button">그룹조회</button>
+                <button class="button purple-button" @click="changeGroupMemberReadModalStatus">
+                  그룹조회
+                </button>
+                <TaskEvalResultGroupMembersReadModal
+                    v-if="isModalOpen"
+                    :isModalOpen="isModalOpen"
+                    :taskSubmitSeq="props.taskData.taskSubmitSeq"
+                    @click="changeGroupMemberReadModalStatus"
+                    class="task-eval-result-group-members-read-modal"
+                />
               </div>
             </td>
           </tr>
@@ -153,5 +168,4 @@ watch(
       </div>
     </div>
   </div>
-
 </template>
