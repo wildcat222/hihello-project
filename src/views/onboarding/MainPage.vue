@@ -3,10 +3,14 @@ import {computed, onMounted, reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {springAPI} from '@/services/axios.js';
 import '@/styles/user/MenteeOnboardingPage.css';
+
 import {
   changeCompleteStatusByTemplateSeqMentee,
   changeCompleteStatusByTemplateSeqMentor
 } from "@/services/OnBoardingAPI.js";
+
+import {changeCompleteStatusByMentee, changeCompleteStatusByMentor} from "@/services/OnBoardingAPI.js";
+
 import {useUserStore} from "@/stores/UserStore.js";
 import {downloadFile} from "@/services/FileApi.js";
 
@@ -243,6 +247,7 @@ const toggleChecklistStatus = (item, content) => {
   content.listCheckedStatus = updatedStatus; // 상태 변경
 };
 
+
 const changeCompleteStatusMentee = async(templateSeq) => {
   await changeCompleteStatusByTemplateSeqMentee(templateSeq);
   await fetchOnboardingData();
@@ -250,6 +255,16 @@ const changeCompleteStatusMentee = async(templateSeq) => {
 
 const changeCompleteStatusMentor = async(templateSeq) => {
   await changeCompleteStatusByTemplateSeqMentor(templateSeq);
+  await fetchOnboardingData();
+}
+
+const changeCompleteStatus = async(templateSeq) => {
+  if (employeeRole === 'MENTEE') {
+    await changeCompleteStatusByMentee(templateSeq);
+  } else if (employeeRole === 'MENTOR') {
+    await changeCompleteStatusByMentor(templateSeq);
+  }
+
   await fetchOnboardingData();
 }
 
