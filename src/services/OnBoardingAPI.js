@@ -107,9 +107,18 @@ export default {
 // 온보딩 템플릿 완료 상태 변경
 export const changeCompleteStatusByTemplateSeq = async(templateSeq) => {
     try {
+        await springAPI.put(`mentee/onboarding/template/${templateSeq}/status`);
         alert("온보딩 수행 상태가 변경되었습니다.")
-        return await springAPI.put(`mentee/onboarding/template/${templateSeq}/status`);
     } catch(error) {
         alert("온보딩 수행 상태 변경 도중 오류가 발생했습니다.");
+    }
+}
+
+// 체크리스트 수행 완료 상태 조회
+export const fetchChecklistStatus = async(templateSeq) => {
+    try {
+        return await springAPI.get(`/template/${templateSeq}/checklist/status`);
+    } catch(error) {
+        alert("체크리스트 수행 완료 상태 조회 중 오류가 발생했습니다.");
     }
 }
