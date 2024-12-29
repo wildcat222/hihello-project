@@ -9,8 +9,6 @@ import {
   changeCompleteStatusByTemplateSeqMentor
 } from "@/services/OnBoardingAPI.js";
 
-import {changeCompleteStatusByMentee, changeCompleteStatusByMentor} from "@/services/OnBoardingAPI.js";
-
 import {useUserStore} from "@/stores/UserStore.js";
 import {downloadFile} from "@/services/FileApi.js";
 
