@@ -21,6 +21,12 @@ import java.util.Map;
 @Configuration
 public class KafkaProducerConfig {
 
+    private final KafkaConstants kafkaConstants;
+
+    public KafkaProducerConfig(KafkaConstants kafkaConstants) {
+        this.kafkaConstants = kafkaConstants;
+    }
+
     @Bean
     public KafkaTemplate<String, ChatResponseMessage> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
@@ -29,11 +35,17 @@ public class KafkaProducerConfig {
     @Bean
     public ProducerFactory<String, ChatResponseMessage> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstants.KAFKA_BROKER);
-        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);    // key(토픽 이름)
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);    // value(전하고자 하는 메시지 내용(DTO))
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConstants.KAFKA_BROKER); // Kafka 브로커 주소
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);    // key 직렬화 설정
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);    // value 직렬화 설정
 
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule()); // LocalDateTime 등의 타입 지원
+        return objectMapper;
+    }
 }

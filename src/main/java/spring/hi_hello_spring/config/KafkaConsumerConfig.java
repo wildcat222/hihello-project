@@ -19,11 +19,17 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
+    private final KafkaConstants kafkaConstants;
+
+    public KafkaConsumerConfig(KafkaConstants kafkaConstants) {
+        this.kafkaConstants = kafkaConstants;
+    }
+
     @Bean
     public ConsumerFactory<String, Object> consumerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstants.KAFKA_BROKER);
-        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConstants.GROUP_ID);
+        configProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConstants.KAFKA_BROKER);
+        configProps.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaConstants.GROUP_ID);
         configProps.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         configProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         configProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
@@ -42,5 +48,4 @@ public class KafkaConsumerConfig {
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
-
 }

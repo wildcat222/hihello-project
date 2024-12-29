@@ -1,10 +1,18 @@
 package spring.hi_hello_spring.chatting;
 
-import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class KafkaConstants {
-    //서버 실행 시 환경 변수로 서버마다 다른 그룹 아이디를 가지도록 설정
-    public static final String GROUP_ID = "chat-group";
-    public static final String KAFKA_TOPIC = "chat-messages";
-    public static final String KAFKA_BROKER = "localhost:10000";
+
+    // @Value를 사용하여 application.yml에서 값을 읽어옵니다.
+    @Value("${spring.kafka.consumer.group-id}")
+    public String GROUP_ID;
+
+    @Value("${spring.kafka.consumer.bootstrap-servers}")
+    public String KAFKA_BROKER;
+
+    @Value("${spring.kafka.producer.topic:chat-messages}") // 기본값으로 "chat-messages" 사용
+    public String KAFKA_TOPIC;
 }
