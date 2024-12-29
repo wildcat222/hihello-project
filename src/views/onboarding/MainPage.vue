@@ -3,7 +3,7 @@ import {onMounted, reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {springAPI} from '@/services/axios.js';
 import '@/styles/user/MenteeOnboardingPage.css';
-import {changeCompleteStatusByTemplateSeq} from "@/services/OnBoardingAPI.js";
+import {changeCompleteStatusByMentee, changeCompleteStatusByMentor} from "@/services/OnBoardingAPI.js";
 import {useUserStore} from "@/stores/UserStore.js";
 
 const router = useRouter();
@@ -212,7 +212,11 @@ const toggleChecklistStatus = (item, content) => {
 };
 
 const changeCompleteStatus = async(templateSeq) => {
-  await changeCompleteStatusByTemplateSeq(templateSeq);
+  if (employeeRole === 'MENTEE') {
+    await changeCompleteStatusByMentee(templateSeq);
+  } else if (employeeRole === 'MENTOR') {
+    await changeCompleteStatusByMentor(templateSeq);
+  }
   await fetchOnboardingData();
 }
 
