@@ -34,7 +34,7 @@ let dragStartY = ref(0); // 드래그 시작 Y 좌표
 
 // 모달 닫기
 const closeModal = () => {
-  emit('update:isVisible', false); // 부모 컴포넌트에서 isVisible을 false로 변경하여 모달을 숨김
+  emit('update:isVisible', false);
 };
 
 // 드래그 시작

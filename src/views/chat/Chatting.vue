@@ -186,7 +186,7 @@ watch(messages, scrollToBottom);
 // 페이지 마운트 시 WebSocket 연결 및 메시지 목록 로드
 onMounted(() => {
   connect();  // WebSocket 연결 시도
-  getChatMessageList();  // 메시지 목록 불러오기
+  getChatMessageList();
 });
 
 // 페이지 언마운트 시 WebSocket 연결 종료
