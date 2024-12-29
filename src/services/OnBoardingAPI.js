@@ -104,8 +104,10 @@ export default {
     },
 };
 
-// 온보딩 템플릿 완료 상태 변경 (멘티)
-export const changeCompleteStatusByMentee = async(templateSeq) => {
+
+// 온보딩 템플릿 완료 상태 변경
+export const changeCompleteStatusByTemplateSeqMentee = async(templateSeq) => {
+
     try {
         alert("온보딩 수행 상태가 변경되었습니다.")
         return await springAPI.put(`mentee/onboarding/template/${templateSeq}/status`);
@@ -114,8 +116,8 @@ export const changeCompleteStatusByMentee = async(templateSeq) => {
     }
 }
 
-// 온보딩 템플릿 완료 상태 변경 (멘토)
-export const changeCompleteStatusByMentor = async(templateSeq) => {
+
+export const changeCompleteStatusByTemplateSeqMentor = async(templateSeq) => {
     try {
         alert("온보딩 수행 상태가 변경되었습니다.")
         return await springAPI.put(`mentor/onboarding/template/${templateSeq}/status`);

@@ -1,10 +1,16 @@
 <script setup>
-import {onMounted, reactive, ref} from 'vue';
+import {computed, onMounted, reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {springAPI} from '@/services/axios.js';
 import '@/styles/user/MenteeOnboardingPage.css';
-import {changeCompleteStatusByMentee, changeCompleteStatusByMentor} from "@/services/OnBoardingAPI.js";
+
+import {
+  changeCompleteStatusByTemplateSeqMentee,
+  changeCompleteStatusByTemplateSeqMentor
+} from "@/services/OnBoardingAPI.js";
+
 import {useUserStore} from "@/stores/UserStore.js";
+import {downloadFile} from "@/services/FileApi.js";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -19,6 +25,7 @@ const completedCount = ref(0); // 완료된 항목의 개수
 const totalCount = ref(0); // 전체 항목의 개수
 const isModalOpen = ref(false); // 모달 열림 여부
 const selectedItem = ref(null); // 선택된 항목 저장
+const templateType = ref('VIDEO');
 // 온보딩 박스 및 선 연결 관련 상태 변수 정의
 const boxPositions = reactive([]);  // 카드의 위치 정보를 담는 객체
 const lines = ref([]);
@@ -91,7 +98,9 @@ const openModal = (item) => {
     taskSeq: item.taskSeq,
     taskGroupSeq: item.taskGroupSeq,
     templateType: item.templateType,
-    templateSeq: item.templateSeq
+    templateSeq: item.templateSeq,
+    templateDetail: item.templateDetail,
+    templateUrlName: item.templateUrlName
   }; // taskSeq와 taskGroupSeq 저장
   isModalOpen.value = true; // 모달 열기
 };
@@ -108,6 +117,14 @@ const goToTaskPage = () => {
     console.error('taskSeq 값이 없습니다.');
   }
 };
+
+const goToTaskReviewPage = () => {
+  if (selectedItem.value) {
+    router.push(`/task-submit/${selectedItem.value.taskSeq}`);
+  } else {
+    console.error('taskSeq 값이 없습니다.');
+  }
+}
 
 const goToQuiz = () => {
   if (selectedItem.value) {
@@ -171,8 +188,9 @@ const groupChecklistByTemplate = (onboardingList) => {
         taskSeq: item.taskSeq,
         taskGroupSeq: item.taskGroupSeq,
         templateCheckRequiredStatus: item.templateCheckRequiredStatus,
-        quizCategoryName: item.quizCategoryName,
-        quizCategorySeq: item.quizCategorySeq
+        fileSeq: item.fileSeq,
+        fileName: item.fileName,
+        fileUrl: item.fileUrl
       };
       groupedItems.push(template);
     }
@@ -189,6 +207,22 @@ const groupChecklistByTemplate = (onboardingList) => {
 
   return groupedItems;
 };
+
+const modalContentStyle = computed(() => {
+  console.log('selectedItem:', selectedItem);
+  console.log('selectedItem.templateType:', selectedItem.value.templateType);
+
+  if (selectedItem && selectedItem.value.templateType === 'VIDEO') {
+    return {
+      width: '40vw',
+      height: 'auto',
+    };
+  }
+  return {
+    width: '14vw',
+    height: 'auto',
+  };
+});
 
 // URL 열기
 const goToUrl = (url) => {
@@ -211,12 +245,24 @@ const toggleChecklistStatus = (item, content) => {
   content.listCheckedStatus = updatedStatus; // 상태 변경
 };
 
+
+const changeCompleteStatusMentee = async(templateSeq) => {
+  await changeCompleteStatusByTemplateSeqMentee(templateSeq);
+  await fetchOnboardingData();
+}
+
+const changeCompleteStatusMentor = async(templateSeq) => {
+  await changeCompleteStatusByTemplateSeqMentor(templateSeq);
+  await fetchOnboardingData();
+}
+
 const changeCompleteStatus = async(templateSeq) => {
   if (employeeRole === 'MENTEE') {
     await changeCompleteStatusByMentee(templateSeq);
   } else if (employeeRole === 'MENTOR') {
     await changeCompleteStatusByMentor(templateSeq);
   }
+
   await fetchOnboardingData();
 }
 
@@ -250,7 +296,7 @@ const updateBoxPositions = () => {
     localStorage.setItem('boxPositions', JSON.stringify(boxPositions));
   } else {
     // 로컬 스토리지에 데이터가 없을 때 초기화
-    const boxWidthGap = 500; // 박스의 가로 간격
+    const boxWidthGap = 400; // 박스의 가로 간격
     const boxHeightGap = 250; // 박스의 세로 간격
 
     // 박스 위치 계산 로직
@@ -258,8 +304,8 @@ const updateBoxPositions = () => {
       const row = Math.floor(index / 3); // 3개씩 한 줄로 배치
       const col = index % 3;
 
-      const left = row % 2 === 0 ? 200 + col * boxWidthGap : 200 + (2 - col) * boxWidthGap; // 왼쪽 또는 오른쪽으로 배치
-      const top = 100 + row * boxHeightGap; // 세로 방향 간격
+      const left = row % 2 === 0 ? 210 + col * boxWidthGap : 210 + (2 - col) * boxWidthGap; // 왼쪽 또는 오른쪽으로 배치
+      const top = 30 + row * boxHeightGap; // 세로 방향 간격
 
       boxPositions.push({top, left});
     });
@@ -341,6 +387,9 @@ const updateLines = (movedIndex) => {
   }
 };
 
+
+
+
 const startDrag = (index, event) => {
   draggingCard = index;
   offsetX = event.clientX - boxPositions[index].left;
@@ -376,18 +425,9 @@ onMounted(async () => {
   <div class="onboarding-page">
     <div class="header">
       <div v-if="loading" class="loading">로딩 중...</div>
-      <div v-else>
+      <div v-else class="header-box">
         <!-- 완료된 항목을 게이지로 표시 -->
         <div class="status-gauge">
-          <div class="alarm-container">
-            <button class="alarm-button">
-              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="#FFC107" class="alarm-button-img"
-                   viewBox="0 0 16 16">
-                <path
-                    d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
-              </svg>
-            </button>
-          </div>
           <div class="vr"></div>
           <div class="status-gauge-container">
             <progress :value="completedCount" :max="totalCount" class="progress-bar"></progress>
@@ -455,51 +495,78 @@ onMounted(async () => {
               </div>
               <div v-else>
                 <div>
+                  <button
+                      v-if="item.fileName"
+                      class="template-download-button"
+                      @click="downloadFile(item.fileUrl, item.fileName)">
+                    🔗{{ item.fileName }}
+                  </button>
                   <button class="template-button template-confirm-button" @click="openModal(item)">
                     확인하기
                   </button>
                   <button
                       v-if="(item.templateCheckRequiredStatus === true && employeeRole === 'MENTOR') || (item.templateCheckRequiredStatus === false && employeeRole === 'MENTEE')"
                       class="template-button template-complete-button"
-                      @click="changeCompleteStatus(item.templateSeq)">
+                      @click="employeeRole === 'MENTOR' ? changeCompleteStatusMentor(item.templateSeq) : changeCompleteStatusMentee(item.templateSeq)">
                     완료하기
                   </button>
-                  <!-- 모달 -->
+
                   <div v-if="isModalOpen" class="modal">
-                    <div class="modal-content">
-                      <p>{{ item.templateDetail }}</p>
-                      <div class="onboarding-button-container">
-                        <button
-                            v-if="selectedItem && selectedItem.taskSeq !== null"
-                            @click="goToTaskPage(selectedItem)"
-                            class="check-task-button">
-                          과제확인
-                        </button>
-                        <button
-                            v-if="selectedItem.taskGroupSeq !== null"
-                            @click="goToGroupEvalPage"
-                            class="cw-eval-button">
-                          동료평가
-                        </button>
-                        <button
-                            v-if="selectedItem.templateType === 'QUIZ'"
-                            @click="goToQuiz"
-                            class="go-to-quiz-button">
-                          퀴즈
-                        </button>
-                        <button
-                            v-if="selectedItem.templateType === 'CF'"
-                            @click="goToCF"
-                            class="go-to-CF-button">
-                          회의실 예약
-                        </button>
-                        <button
-                            v-if="selectedItem.templateType === 'BREAK'"
-                            @click="goToBreak"
-                            class="go-to-Break-button">
-                          휴가 신청
-                        </button>
+                    <div class="modal-content" :style="modalContentStyle">
+                      <div v-if="selectedItem?.templateType === 'VIDEO'" class="video-modal">
+                        <h2>{{ selectedItem?.templateTitle }}</h2>
+                        <iframe
+                            class="iframe-main-page"
+                            width="560"
+                            height="315"
+                            :src="`https://www.youtube.com/embed/${selectedItem.templateUrlName}`"
+                            title="YouTube video player"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                        ></iframe>
                         <button @click="closeModal" class="close-button">닫기</button>
+                      </div>
+                      <div v-else>
+                        <p>{{ selectedItem.templateDetail }}</p>
+                        <div class="onboarding-button-container">
+                          <button
+                              v-if="selectedItem && selectedItem.taskSeq !== null"
+                              @click="employeeRole === 'MENTOR' ? goToTaskReviewPage(selectedItem) : goToTaskPage(selectedItem)"
+                              class="check-task-button"
+                          >
+                            과제확인
+                          </button>
+                          <button
+                              v-if="selectedItem.taskGroupSeq !== null"
+                              @click="goToGroupEvalPage"
+                              class="cw-eval-button"
+                          >
+                            동료평가
+                          </button>
+                          <button
+                              v-if="selectedItem.templateType === 'QUIZ'"
+                              @click="goToQuiz"
+                              class="go-to-quiz-button"
+                          >
+                            퀴즈
+                          </button>
+                          <button
+                              v-if="selectedItem.templateType === 'CF'"
+                              @click="goToCF"
+                              class="go-to-CF-button"
+                          >
+                            회의실 예약
+                          </button>
+                          <button
+                              v-if="selectedItem.templateType === 'BREAK'"
+                              @click="goToBreak"
+                              class="go-to-Break-button"
+                          >
+                            휴가 신청
+                          </button>
+                          <button @click="closeModal" class="close-button">닫기</button>
+                        </div>
                       </div>
                     </div>
                   </div>
