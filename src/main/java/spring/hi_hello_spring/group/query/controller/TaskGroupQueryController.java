@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.group.query.dto.TaskGroupListQueryDTO;
+import spring.hi_hello_spring.group.query.dto.TaskGroupMembersQueryDTO;
 import spring.hi_hello_spring.group.query.service.TaskGroupQueryService;
 
 import java.util.List;
@@ -29,5 +30,13 @@ public class TaskGroupQueryController {
 
         List<TaskGroupListQueryDTO> queryDTO = taskGroupQueryService.getTaskGroupList(taskSeq);
         return ResponseUtil.successResponse("그룹 과제 별 그룹 리스트가 성공적으로 조회되었습니다.", queryDTO).getBody();
+    }
+
+    /* 제출된 그룹 과제의 그룹 멤버 조회 */
+    @GetMapping("/task-submit/{taskSubmitSeq}/members")
+    @Operation(summary = "제출된 그룹 과제의 그룹 멤버 조회", description = "제출된 그룹 과제의 그룹 멤버 조회 로직입니다.")
+    public ApiResponse<?> getTaskGroupMembers(@PathVariable Long taskSubmitSeq) {
+        List<TaskGroupMembersQueryDTO> taskGroupMembersQueryDTOS = taskGroupQueryService.getTaskGroupMembers(taskSubmitSeq);
+        return ResponseUtil.successResponse("제출된 그룹 과제의 그룹 멤버가 성공적으로 조회되었습니다.", taskGroupMembersQueryDTOS).getBody();
     }
 }

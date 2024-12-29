@@ -3,6 +3,7 @@ package spring.hi_hello_spring.group.query.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.hi_hello_spring.group.query.dto.TaskGroupListQueryDTO;
+import spring.hi_hello_spring.group.query.dto.TaskGroupMembersQueryDTO;
 import spring.hi_hello_spring.group.query.mapper.TaskGroupMapper;
 
 import java.util.List;
@@ -24,5 +25,9 @@ public class TaskGroupQueryService {
         }
 
         return taskGroupList;
+    }
+
+    public List<TaskGroupMembersQueryDTO> getTaskGroupMembers(Long taskSubmitSeq) {
+        return taskGroupMapper.getTaskGroupMembers(taskSubmitSeq);
     }
 }
