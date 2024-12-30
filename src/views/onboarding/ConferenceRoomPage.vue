@@ -207,10 +207,10 @@ const updateReservation = (roomIndex, startIndex, endIndex) => {
       <div class="conferenceRoomPageBody-select-container">
         <!-- 예약 테이블 -->
         <table class="conferenceRoomPageBody-table">
-          <thead>
+          <thead class="cf_thead">
           <tr class="conferenceRoomPageBody-table-header">
-            <th rowspan="2" class="floor-cell"></th> <!-- 새로 추가된 열 -->
-            <th colspan="2" style="border: none;"></th>
+            <th rowspan="2" class="floor-cell-first"></th>
+            <th colspan="2" class="floor-cell-zero"></th>
             <td
                 v-for="(timeSlot, index) in timeSlots"
                 :key="index"

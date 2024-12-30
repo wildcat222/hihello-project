@@ -107,10 +107,12 @@
     margin-top: 10px;
 }
 
-.conferenceRoomPageBody-table-header th {
-    border: none; /* 테두리 제거 */
+.conferenceRoomPageBody-table-header    {
+    border: none;
+}
 
-    background-color: var(--white); /* 배경색 설정 */
+.floor-cell-zero{
+    border:none;
 }
 
 
@@ -123,8 +125,12 @@
 .conferenceRoomPageBody-room-row {
     height: 15px;
 }
-
+.floor-cell{
+    border: 1px solid var(--light-gray);
+    padding: 0 10px;
+}
 .conferenceRoomPageBody-room-cell {
+    border: 1px solid var(--light-gray);
     text-align: left;
     width: 150px;
     height: 10px; /* 기존 15px에서 10px로 줄임 */
@@ -134,11 +140,16 @@
 .conferenceRoomPageBody-time-header {
     text-align: center;
     border: 1px solid var(--white);
+    /*border-bottom-color: var(--light-gray);*/
     position: relative;
     right : 59px;
     color: var(--gray);
     width: 13px;
     padding:13px 0;
+}
+
+.cf_thead{
+    border-bottom-color: white;
 }
 
 .conferenceRoomPageBody-time-header::after {
@@ -155,6 +166,7 @@
 /* 테이블 셀 스타일 */
 .conferenceRoomPageBody-button-cell {
     border: 1px solid #ccc;
+    border-top:1px;
     text-align: center;
     padding: 0; /* 내부 패딩 제거 */
     margin: 0; /* 여백 제거 */
