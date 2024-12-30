@@ -46,7 +46,7 @@ export function useTask() {
     };
 
     const fetchData = async () => {
-        if (isLoading.value) return;
+        if (isLoading.value) return; // 중복 호출 방지
         isLoading.value = true;
 
         try {
@@ -59,11 +59,16 @@ export function useTask() {
             if (response.data?.data) {
                 tableData.value = response.data.data.map(item => ({
                     ...item,
-                    newContent: '',
+                    newContent: '', // 추가 속성 초기화
                 }));
+            } else {
+                console.error('응답 데이터가 없습니다:', response);
+                tableData.value = []; // 안전한 초기화
             }
         } catch (error) {
             console.error('API 요청 실패:', error);
+            alert('데이터를 불러오는데 실패했습니다. 다시 시도해주세요.');
+            tableData.value = []; // 안전한 초기화
         } finally {
             isLoading.value = false;
         }
