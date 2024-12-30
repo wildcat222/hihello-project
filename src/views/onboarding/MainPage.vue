@@ -260,9 +260,10 @@ const fetchingChecklistStatus = async(templateSeq) => {
       // 모든 체크리스트가 완료되었을 경우
       await changeCompleteStatus(templateSeq);
     }
-  } catch(error) {
+  } catch (error) {
     alert("체크리스트 수행 완료 상태를 조회하던 도중 오류가 발생했습니다.");
   }
+}
 
 const changeCompleteStatusMentee = async(templateSeq) => {
   await changeCompleteStatusByTemplateSeqMentee(templateSeq);
@@ -405,9 +406,6 @@ const updateLines = (movedIndex) => {
   }
 };
 
-
-
-
 const startDrag = (index, event) => {
   draggingCard = index;
   offsetX = event.clientX - boxPositions[index].left;
@@ -433,7 +431,7 @@ const stopDrag = () => {
 
 onMounted(async () => {
   await fetchOnboardingData();
-  await updateBoxPositions()
+  await updateBoxPositions();
   await updateLines();
   window.addEventListener('scroll', updateLines);
 });
