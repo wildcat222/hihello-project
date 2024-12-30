@@ -3,7 +3,8 @@ server:
   servlet:
     encoding:
       charset: UTF-8
-
+  port: 5000
+  
 # mariaDb, jpa
 spring:
   config:
