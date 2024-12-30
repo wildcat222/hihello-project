@@ -33,7 +33,7 @@
     padding: 0.5rem;
     cursor: pointer;
     border-radius: 4px;
-    transition: background-color 0.2s ease;  // 자연스럽게 배경색 변경
+    transition: background-color 0.2s ease; 
 }
 
 .editor-component-container .button-group button:disabled {
