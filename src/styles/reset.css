@@ -20,3 +20,34 @@
 :lang(en) {
     font-family: 'Inter';
 }
+
+blockquote {
+    border-left: 4px solid var(--yellow);
+    padding-left: 1rem;
+    margin: 1rem 0;
+}
+
+pre {
+    background-color: var(--black);
+    color: var(--white);
+    border-radius: 4px;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+pre > code {
+    background-color: transparent;
+    color: var(--white);
+}
+
+code {
+    background-color: var(--light-purple);
+    color: var(--purple);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+sup {
+    color: var(--purple);
+    font-weight: bold;
+}
