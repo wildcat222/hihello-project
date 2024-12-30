@@ -98,3 +98,19 @@ springdoc:
     tags-sorter: alpha
     operations-sorter: method
     doc-expansion: none
+
+#management:
+#  endpoint:
+#    metrics:
+#      enabled: true
+#    prometheus:
+#      enabled: true
+#
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health, info, metrics, prometheus
+#
+#  metrics:
+#    tags:
+#      application: ${SPRING_APPLICATION_NAME}

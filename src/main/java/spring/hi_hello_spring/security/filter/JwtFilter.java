@@ -34,7 +34,8 @@ public class JwtFilter extends OncePerRequestFilter {
             "/v3/api-docs.yaml",
             "/",
             "/ws/**",
-            "/**"
+//            "/**",
+            "/actuator/prometheus"
     };
 
     private final JwtUtil jwtUtil;
