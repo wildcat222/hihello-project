@@ -1,0 +1,131 @@
+.taskIndInd-header{
+    display:flex;
+    width: 67%;
+    padding: 10px;
+    margin: 0 0 0 125px;
+}
+
+.router-container{
+    display:flex;
+}
+
+.taskInd-full-container {
+    width: 140vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.taskInd-header {
+    display: flex;
+    margin: 105px 0px 49px 0px;
+    justify-content: space-between;
+    text-align: center;
+    font-weight: bold;
+    font-size: 35px;
+}
+.taskInd-container {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    padding: 20px 20px;
+    background-color: var(--white);
+    border-radius: 10px;
+}
+.taskInd-item-delete{
+    width: 60px;
+    height: 23px;
+    border-radius: 10px;
+    background: var(--yellow);
+    border: 0px;
+    box-shadow: 2px 2px 2px 0px rgba(0, 0, 0, 0.25);
+    color: white;
+}
+.taskInd-item-delete:hover{
+    cursor: pointer;
+}
+.taskIndInd-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px;
+    margin-left: 84px;
+}
+.taskInd-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 요소를 수직으로 가운데 정렬 */
+    padding: 5px 10px; /* 여백 축소 */
+    gap: 10px; /* 요소 간 간격 설정 */
+}
+.taskInd-item-num,
+.taskInd-item-departmentName,
+.taskInd-item-taskIndRound {
+    flex: 1;
+    text-align: center;
+}
+
+.new-item button {
+    flex: 0;
+    padding: 5px 10px;
+}
+.taskInd-item.new-item{
+    width: 100%;
+    padding: 0 20px 0 20px;
+    gap: 20px;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+.new-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 세로 가운데 정렬 */
+    gap: 10px; /* 간격 축소 */
+}
+.taskInd-item-departmentName,
+.taskInd-input-name,
+.taskInd-input-score{
+    border-radius: 10px;
+    border-color: #D9D9D9;
+    width: 30px;
+}
+
+.taskInd-item-departmentName-input input{
+    width: 300px; /* 기존보다 줄인 값 */
+    padding: 5px;
+    box-sizing: border-box;
+}
+.taskInd-item-taskIndRound-input input{
+    width: 40px; /* 기존보다 줄인 값 */
+    padding: 5px;
+    box-sizing: border-box;
+}
+.taskInd-item-taskIndRound-input{
+    border: 1px solid var(--light-gray);
+    box-shadow: none;
+
+}
+.taskIndAddButton {
+    cursor: pointer; /* 추가하기 버튼에 마우스 올리면 포인터 모양 */
+    padding: 5px 10px;
+    width: 100px;
+    height: auto;
+    flex-shrink: 0;
+    border:0px;
+    border-radius: 10px;
+    background-color: var(--purple);
+    box-shadow: none;
+    color: white;
+}
+.taskIndAddButtonContainer{
+    width:auto;
+}
+.taskIndAddButton:hover{
+    cursor:pointer;
+}
+.taskInd-item-container{
+    display:flex;
+    width: 80%;
+    align-items: center;
+    justify-content: center;
+    gap:20px;
+}

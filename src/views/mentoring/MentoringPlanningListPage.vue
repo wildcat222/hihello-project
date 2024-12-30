@@ -1,0 +1,208 @@
+<script setup>
+import ListComponent from "@/components/ListComponent.vue";
+import { onMounted, reactive, ref } from "vue";
+import { fetchMentoringPlanningList, searchMentoringPlans } from "@/services/MentoringApi.js";
+import WhiteBoxListComponent from "@/components/WhiteBoxListComponent.vue";
+import SearchBarComponent from "@/components/SearchBarComponent.vue";
+import { useUserStore } from "@/stores/UserStore.js";
+import { useRouter } from "vue-router"; // useRouter 추가
+
+const router = useRouter(); // useRouter 사용
+const mentoringPlanningList = reactive([]);
+
+const searchCategory = ref("title"); // 기본 검색 카테고리
+
+const userStore = useUserStore();
+const employeeInfo = userStore.getEmployeeInfo();
+const employeeRole = employeeInfo.employeeRole;
+alert(employeeRole)
+// 멘토링 계획서 리스트 가져오기
+const fetchingMentoringPlanningList = async () => {
+  try {
+    const response = await fetchMentoringPlanningList();
+    response.data.forEach(plan => {
+      mentoringPlanningList.push({
+        planningSeq: plan.planningSeq,
+        employeeName: plan.employeeName,
+        planningName: plan.planningName,
+        planningStatus: plan.planningStatus,
+        regDate: plan.regDate,
+        fileUrl: plan.fileUrl
+      });
+    });
+  } catch (error) {
+    alert("멘토링 계획서 리스트를 조회하던 중 오류가 발생했습니다.");
+  }
+};
+// 상태별 클래스와 텍스트 반환
+const getStatusClass = (status) => {
+  switch (status) {
+    case 'APPROVE':
+      return { class: 'approved', text: '승인' };
+    case 'PENDING':
+      return { class: 'pending', text: '대기' };
+    case 'REJECT':
+      return { class: 'rejected', text: '반려' };
+    default:
+      return { class: '', text: status };
+  }
+};
+
+
+// 검색 로직
+const searchPlans = async (query) => {
+  if (!query.trim()) { // 검색어가 비어있다면
+    await fetchingMentoringPlanningList(); // 전체 데이터를 다시 가져옴
+    return;
+  }
+  try {
+    console.log("검색 호출 시작:", searchCategory.value, query);
+    const encodedQuery = encodeURIComponent(query);
+    const response = await searchMentoringPlans(searchCategory.value, encodedQuery);
+    mentoringPlanningList.splice(0); // 기존 리스트 초기화
+    response.data.data.forEach(plan => {
+      mentoringPlanningList.push({
+        planningSeq: plan.planningSeq,
+        employeeName: plan.employeeName,
+        planningName: plan.planningName,
+        planningStatus: plan.planningStatus,
+        regDate: plan.regDate,
+        fileUrl: plan.fileUrl
+      });
+    });
+  } catch (error) {
+    alert("해당하는 데이터가 없습니다.");
+  }
+};
+
+const goToRegisterPage = () => {
+  router.push(`/mentoring/planning/create`);
+};
+
+const goToDetailPage = (planningSeq) => {
+  router.push(`/mentoring/planning/${planningSeq}`);
+};
+
+onMounted(async () => {
+  await fetchingMentoringPlanningList();
+});
+</script>
+
+
+<template>
+  <div class="content_box">
+    <div class="title">멘토링 계획서</div>
+    <div class="search_bar_container">
+      <div class="search-box">
+        <SearchBarComponent @search="searchPlans" />
+        <select v-model="searchCategory" class="box">
+          <option value="title">제목</option>
+          <option value="name">기안자</option>
+        </select>
+        <div class="yellow-box" v-if="employeeRole[0] === 'MENTOR'" @click="goToRegisterPage">
+        <img src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/8d64cbf7-77f8-4670-8ddf-40e43d7bc481_plus.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241216T063855Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241216%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=7b785c3af1fdf24cef7127814d2d0327e29824719c832902b14f72af28fb0af6">
+          <div>계획서 등록</div>
+        </div>
+      </div>
+
+    </div>
+    <WhiteBoxListComponent>
+      <ListComponent :items="mentoringPlanningList">
+        <template #header>
+          <div>순서</div>
+          <div>제목</div>
+          <div class="flex">
+            <div class="left-title">기안자</div>
+            <div class="left-title">상태</div>
+            <div class="left-title">날짜</div>
+          </div>
+        </template>
+
+        <template #item="{ item, index }">
+          <div class="flex-line" @click="goToDetailPage(item.planningSeq)">
+            <div>{{ index + 1 }}</div>
+            <div>{{ item.planningName }}</div>
+
+            <div class="flex">
+              <div class="left-title">{{ item.employeeName }}</div>
+              <div :class="getStatusClass(item.planningStatus).class" class="left-title">{{ getStatusClass(item.planningStatus).text }}</div>
+              <div class="left-title">{{ item.regDate }}</div>
+            </div>
+          </div>
+        </template>
+      </ListComponent>
+    </WhiteBoxListComponent>
+  </div>
+</template>
+
+<style scoped>
+/* 상태에 따른 스타일 */
+.approved {
+  color: var(--purple);
+}
+.pending {
+  color: var(--black);
+}
+.rejected {
+  color: var(--red);
+}
+.yellow-box{
+  box-shadow: 2px 2px 4px 0 var(--gray);
+  background-color: var(--yellow);
+  border-radius: 15px;
+  height: 50px;
+  display: flex;
+  width: 200px;
+  align-items: center;
+  justify-content: space-evenly;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+}
+.yellow-box img{
+  width: 25px;
+  height: 25px;
+}
+.left-title{
+  width: 70px;
+  display: flex;
+  justify-content: center;
+}
+.content_box {
+  width: 70%;
+  margin: 0 auto;
+}
+.flex{
+  display: flex;
+}
+.flex-line{
+  display: flex;
+  margin: 0px 20px;
+  padding-left: 14px;
+  font-size: 13px;
+  justify-content: space-between;
+}
+.title {
+  font-size: 35px;
+  font-weight: bold;
+  text-align: center;
+  margin: 62px 0 49px;
+}
+.search_bar_container {
+  width: 90%;
+  margin: 29px auto;
+  align-items: center;
+}
+.search-box{
+  display: flex;
+  gap: 20px;
+}
+.box{
+  border: none;
+  background-color: var(--white);
+  box-shadow: 2px 2px 4px 0 var(--gray);
+  border-radius: 15px;
+  width: 100px;
+  height: 50px;
+}
+</style>

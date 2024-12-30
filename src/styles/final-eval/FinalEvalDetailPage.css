@@ -1,0 +1,129 @@
+.final-eval-detail-read{
+    justify-content: center;
+    display: flex;
+    width: 100%;
+}
+.final-eval-detail-read .user-info-data{
+    color: var(--gray);
+    font-size: 15px;
+}
+.final-eval-detail-read .page-container {
+    width: 70%;
+}
+
+.final-eval-detail-read .page-title {
+    font-size: 35px;
+    display: flex;
+    font-weight: bold;
+    justify-content: center;
+    margin: 105px 0px 49px 0px;
+}
+
+.final-eval-detail-read .white-box-component {
+    min-width: 560px;
+}
+
+.final-eval-detail-read .content {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+}
+
+.final-eval-detail-read .left-container {
+    margin-right: 1rem;
+}
+
+.final-eval-detail-read .profile-img {
+    width: 10.5rem;
+    height: 10.5rem;
+    border-radius: 50%;
+}
+
+.final-eval-detail-read .employee-info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 20px;
+}
+
+.final-eval-detail-read .employee-info-container > div:first-child {
+    margin-bottom: 0.75rem;
+}
+
+.final-eval-detail-read .employee-info-container > div:last-child {
+    margin-top: 0.1rem;
+}
+
+.final-eval-detail-read .font-25-bold {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.final-eval-detail-read .employee-sub-info {
+    font-size: 20px;
+    font-weight: 500;
+}
+.employee-sub-info .flex{
+    font-size: 15px;
+    font-weight: 700;
+}
+.final-eval-detail-read .employee-sub-info > div {
+    margin: 1.1rem 0;
+}
+
+.final-eval-detail-read .employee-sub-info-title {
+    width: 150px
+}
+
+.final-eval-detail-read .purple-border-container {
+    width: 20rem;
+    border: 2px solid var(--purple);
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-top: 1rem;
+    box-sizing: border-box;
+}
+
+.final-eval-detail-read .final-eval-result {
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.final-eval-detail-read .final-eval-result > div {
+    margin: 0.3rem 0;
+}
+
+.final-eval-detail-read .final-total-score-container {
+    justify-content: space-between;
+    padding: 1rem 1rem;
+    box-sizing: border-box;
+}
+
+.final-eval-detail-read .final-total-score-container > div:first-child {
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.final-eval-detail-read .final-total-score {
+    color: var(--purple);
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.final-eval-detail-read .close-button-container {
+    justify-content: center;
+    align-items: center;
+}
+
+.final-eval-detail-read .close-button {
+    justify-content: center;
+    align-items: center;
+    background-color: var(--purple);
+    color: var(--white);
+    width: 6.5rem;
+    height: 2.3rem;
+    cursor: pointer;
+    border-radius: 15px;
+    border: none;
+}
