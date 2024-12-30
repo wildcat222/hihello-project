@@ -1,10 +1,10 @@
-package spring.hi_hello_spring.wiki.query.elasticsearch.repository;
+package spring.hi_hello_spring.elasticsearch.command.repository;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.elasticsearch.annotations.Query;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
-import spring.hi_hello_spring.wiki.query.elasticsearch.document.WikiDocument;
+import spring.hi_hello_spring.elasticsearch.command.document.WikiDocument;
 
 import java.util.List;
 

@@ -14,4 +14,20 @@
         ORDER BY
             tg.task_group_seq
     </select>
+
+    <select id="getTaskGroupMembers" resultType="TaskGroupMembersQueryDTO">
+        SELECT
+            e.employee_num,
+            e.employee_name
+        FROM
+            task_submit ts
+        JOIN
+            task_group tg ON ts.task_seq = tg.task_seq
+        JOIN
+            group_member gm ON tg.task_group_Seq = gm.task_group_seq
+        JOIN
+            employee e ON gm.employee_seq = e.employee_seq
+        WHERE
+            ts.task_submit_seq = #{task_submit_seq}
+    </select>
 </mapper>

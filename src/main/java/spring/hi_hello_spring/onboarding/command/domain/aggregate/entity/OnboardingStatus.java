@@ -20,4 +20,8 @@ public class OnboardingStatus extends BaseTimeEntity {
     private Long employeeSeq;
 
     private Boolean onboardingCompletedStatus = false;
+
+    public void updateOnboardingCompletedStatus(boolean onboardingCompletedStatus) {
+        this.onboardingCompletedStatus = onboardingCompletedStatus;
+    }
 }

@@ -14,4 +14,6 @@ public interface EmployeeRepository{
     Employee save(Employee newEmployee);
 
     void deleteById(Long employeeSeq);
+
+    Optional<Employee> findByDepartmentSeqAndPositionSeq(Long departmentSeq, Long positionSeq);
 }
