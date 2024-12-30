@@ -15,6 +15,8 @@ const router = useRouter();
 const userStore = useUserStore();
 const employeeInfo = userStore.getEmployeeInfo();
 const employeeRole = employeeInfo.employeeRole[0];
+const modalLoading = ref(false); // 모달 로딩 상태
+
 
 // 상태 변수 정의
 const onboardingList = ref([]); // 온보딩 리스트 데이터
@@ -99,13 +101,16 @@ const openModal = (item) => {
     templateType: item.templateType,
     templateSeq: item.templateSeq,
     templateDetail: item.templateDetail,
-    templateUrlName: item.templateUrlName
+    templateUrlName: item.templateUrlName,
+    quizCategorySeq: item.quizCategorySeq
   }; // taskSeq와 taskGroupSeq 저장
+  modalLoading.value = true; // 로딩 상태 활성화
   isModalOpen.value = true; // 모달 열기
 };
 
 const closeModal = () => {
   isModalOpen.value = false; // 모달 닫기
+  modalLoading.value = false; // 로딩 상태 비활성화
 };
 
 // 페이지 이동
@@ -127,7 +132,7 @@ const goToTaskReviewPage = () => {
 
 const goToQuiz = () => {
   if (selectedItem.value) {
-    router.push(`/quiz`)
+    router.push(`/quiz/${selectedItem.value.quizCategorySeq}`)
   } else{
     alert("퀴즈 페이지가 유효하지 않습니다.")
   }
@@ -189,7 +194,8 @@ const groupChecklistByTemplate = (onboardingList) => {
         templateCheckRequiredStatus: item.templateCheckRequiredStatus,
         fileSeq: item.fileSeq,
         fileName: item.fileName,
-        fileUrl: item.fileUrl
+        fileUrl: item.fileUrl,
+        quizCategorySeq: item.quizCategorySeq
       };
       groupedItems.push(template);
     }
@@ -529,8 +535,17 @@ onMounted(async () => {
                     <div class="modal-content" :style="modalContentStyle">
                       <div v-if="selectedItem?.templateType === 'VIDEO'" class="video-modal">
                         <h2>{{ selectedItem?.templateTitle }}</h2>
+
+                        <!-- Spinner -->
+                        <div v-if="modalLoading" class="loading-spinner">
+                          <div class="spinner"></div>
+                          <p>로딩중...</p>
+                        </div>
+
                         <iframe
+                            v-show="!modalLoading"
                             class="iframe-main-page"
+                            @load="modalLoading = false"
                             width="560"
                             height="315"
                             :src="`https://www.youtube.com/embed/${selectedItem.templateUrlName}`"
@@ -560,7 +575,7 @@ onMounted(async () => {
                           </button>
                           <button
                               v-if="selectedItem.templateType === 'QUIZ'"
-                              @click="goToQuiz"
+                              @click="goToQuiz(selectedItem.quizCategorySeq)"
                               class="go-to-quiz-button"
                           >
                             퀴즈

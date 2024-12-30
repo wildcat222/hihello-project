@@ -5,7 +5,7 @@ import QuizResultPage from "@/views/quiz/QuizResultPage.vue";
 
 export default [
     {
-        path: '/quiz',
+        path: '/quiz/:quizCategorySeq',
         component: QuizPage,
     },
     {
