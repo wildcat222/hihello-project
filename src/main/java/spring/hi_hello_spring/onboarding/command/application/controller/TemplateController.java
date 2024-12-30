@@ -29,8 +29,8 @@ public class TemplateController {
 
     private final TemplateService templateService;
     private final FileUploadUtil fileUploadUtil;
-    /* 온보딩 스토리보드 등록 */
 
+    /* 온보딩 스토리보드 등록 */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "온보딩 스토리 보드 생성", description = "온보딩 스토리 보드 생성 로직입니다.")
     public ApiResponse<?> createTemplate(@RequestPart("createDTO") @Validated TemplateCreateDTO createDTO,
