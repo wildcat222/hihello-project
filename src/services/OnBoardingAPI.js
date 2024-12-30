@@ -10,7 +10,7 @@ export default {
                 listCheckedStatus,
             };
 
-            const response = await springAPI.put('hr/onboarding/checklist', payload, {
+            const response = await springAPI.put('/onboarding/checklist', payload, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
                 },
