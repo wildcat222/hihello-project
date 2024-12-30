@@ -50,7 +50,7 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync ./dist s3://my-vue-app-bucket --delete
+          aws s3 sync ./dist s3://hihello-vue --delete
 
 
       # 5. CloudFront 캐시 무효화
