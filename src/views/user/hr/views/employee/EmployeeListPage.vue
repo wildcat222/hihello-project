@@ -199,15 +199,21 @@ onMounted(async () => {
     </WhiteBoxListComponent>
   </div>
 
-  <UpdateEmployeeModal v-if="shouldShowUpdateModal" class="modal"
-                       :employee="employee"
-                       @close-modal="visibleDelModal"
-                       @update-employee="modifyEmployee"/>
+  <div v-if="shouldShowUpdateModal" class="modal-overlay">
+    <UpdateEmployeeModal  class="modal"
+                         :employee="employee"
+                         @close-modal="visibleDelModal"
+                         @update-employee="modifyEmployee"/>
+  </div>
 
-  <DeleteEmployeeModal v-if="shouldShowDelModal" class="modal"
-                       :employee="employee"
-                       @close-modal="visibleDelModal"
-                       @delete-employee="deleteEmployeeBySeq"/>
+
+  <div v-if="shouldShowDelModal" class="modal-overlay">
+    <DeleteEmployeeModal  class="modal"
+                         :employee="employee"
+                         @close-modal="visibleDelModal"
+                         @delete-employee="deleteEmployeeBySeq"/>
+  </div>
+
 </template>
 
 <style scoped>
@@ -312,8 +318,24 @@ onMounted(async () => {
   margin-right: 5px;
 }
 
-.modal {
+.modal-overlay {
   position: fixed;
-  margin-top: 3vw;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 배경 불투명도 설정 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 다른 요소들보다 위에 표시 */
+}
+
+.modal {
+  position: relative; /* absolute에서 relative로 변경 */
+  background: white;
+  z-index: 1001; /* 오버레이보다 위에 표시 */
+  max-width: 300px;
+  max-height: 290px;
 }
 </style>
