@@ -32,35 +32,44 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch, nextTick } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch, nextTick, defineProps } from 'vue';
 import { Client } from "@stomp/stompjs";
 import { useUserStore } from "@/stores/UserStore.js";
 import { getChatMessages } from "@/services/ChatApi.js";
+
+const props = defineProps({
+  chatRoomSeq: String,  // prop에서 roomSeq 값을 받습니다.
+});
 
 // 상태 관리
 const stompClient = ref(null);
 const messages = ref([]);
 const messageContent = ref("");
-const roomId = "d76099ef-e34d-44e9-806a-19e631700c4c";
-const socketUrl = "ws://localhost:8080/ws";
+const roomId = ref(props.chatRoomSeq);
+const socketUrl = "ws://localhost:8080/ws"; // WebSocket URL
 const connected = ref(false);
 const currentUserCode = useUserStore().getEmployeeInfo().employeeSeq;
 
-// WebSocket 연결
+// WebSocket 연결 함수
 const connect = () => {
   const authStore = useUserStore();
   const token = authStore.accessToken;
+
+  if (!roomId.value) {
+    console.error("roomId가 누락되었습니다.");
+    return;
+  }
 
   if (!token) {
     console.error("토큰이 누락되었습니다!");
     return;
   }
 
-  // STOMP 클라이언트 생성 및 설정
+  // STOMP 클라이언트 설정
   stompClient.value = new Client({
     brokerURL: socketUrl,
     connectHeaders: {
-      Authorization: `Bearer ${token}`,  // 인증 토큰
+      Authorization: `Bearer ${token}`,
     },
     reconnectDelay: 5000,
     heartbeatIncoming: 4000,
@@ -69,7 +78,7 @@ const connect = () => {
 
   stompClient.value.onConnect = () => {
     connected.value = true;
-    subscribeToChat();
+    subscribeToChat(); // 채팅 방 구독 시작
   };
 
   stompClient.value.onStompError = (frame) => {
@@ -81,18 +90,17 @@ const connect = () => {
     connected.value = false;
   };
 
-  // WebSocket 연결 활성화
   stompClient.value.activate();
 };
 
-// 채팅방 메시지 구독
+// 채팅방 구독을 시작하는 함수
 const subscribeToChat = () => {
-  if (!stompClient.value || !roomId) {
+  if (!stompClient.value || !roomId.value) {
     console.error("STOMP Client 또는 Room ID가 없습니다.");
     return;
   }
 
-  stompClient.value.subscribe(`/sub/${roomId}`, (message) => {
+  stompClient.value.subscribe(`/sub/${roomId.value}`, (message) => {
     try {
       const parsedMessage = JSON.parse(message.body);
       handleIncomingMessage(parsedMessage);
@@ -102,9 +110,8 @@ const subscribeToChat = () => {
   });
 };
 
-// 수신된 메시지 처리
+// 메시지 수신 처리
 const handleIncomingMessage = (message) => {
-
   messages.value.push({
     message: message.message,
     userCode: message.userCode,
@@ -125,16 +132,15 @@ const sendMessage = () => {
   const employeeSeq = currentUserCode;
 
   const message = {
-    roomId,
+    roomId: roomId.value,  // roomId를 .value로 사용
     userCode: employeeSeq,
     message: messageContent.value,
     createdAt: new Date().toISOString(),
   };
 
-  // STOMP 클라이언트를 통해 서버로 메시지 전송
   if (stompClient.value && token) {
     stompClient.value.publish({
-      destination: `/pub/${roomId}`,
+      destination: `/pub/${roomId.value}`,
       body: JSON.stringify(message),
       headers: {
         Authorization: `Bearer ${token}`,
@@ -150,12 +156,20 @@ const disconnect = () => {
   if (stompClient.value) {
     stompClient.value.deactivate();
     connected.value = false;
+    console.log("연결 해제");
   }
 };
 
+// 채팅 메시지 목록 가져오기
 const getChatMessageList = async () => {
   try {
-    const response = await getChatMessages(roomId);
+    console.log("현재 roomId 값은:", roomId.value);
+
+    // 이전 메시지 초기화
+    messages.value = [];
+
+    const response = await getChatMessages(roomId.value);  // roomId.value로 API 호출
+
     if (response && response.data) {
       messages.value = response.data.map(msg => ({
         ...msg,
@@ -165,35 +179,40 @@ const getChatMessageList = async () => {
       messages.value = [];
     }
   } catch (error) {
-    console.error("멘토링 채팅 조회 오류:", error);
+    console.error("채팅 조회 오류:", error);
     messages.value = [];
   }
 };
 
-// 메시지 목록 끝으로 스크롤
-const scrollToBottom = () => {
-  nextTick(() => {
-    const container = document.querySelector(".messages");
-    if (container) {
-      container.scrollTop = container.scrollHeight;
-    }
-  });
-};
+// 채팅방 변경 시 roomId 업데이트
+watch(() => roomId.value, async (newRoomId, oldRoomId) => {
+  if (newRoomId !== oldRoomId) {
+    console.log("roomId 값이 변경되었습니다:", newRoomId);
 
-// messages 배열의 변화를 감지
-watch(messages, scrollToBottom);
+    // 기존 WebSocket 연결 해제 및 데이터 초기화
+    disconnect();  // 기존 연결 종료
 
-// 페이지 마운트 시 WebSocket 연결 및 메시지 목록 로드
+    // 메시지 리스트를 비우고 채팅 데이터를 가져옵니다.
+    messages.value = [];
+    await getChatMessageList();  // 새로운 roomId로 데이터 불러오기
+
+    connect();  // 새로운 roomId에 대해 WebSocket 연결 시작
+  }
+}, { immediate: true });
+
+
+// 페이지 마운트 시 WebSocket 연결 및 데이터 로딩
 onMounted(() => {
-  connect();  // WebSocket 연결 시도
-  getChatMessageList();
+  connect();  // WebSocket 연결
+  getChatMessageList();  // 처음 로드 시 채팅 메시지 목록 가져오기
 });
 
-// 페이지 언마운트 시 WebSocket 연결 종료
+// 페이지 언마운트 시 WebSocket 연결 해제
 onBeforeUnmount(() => {
-  disconnect();  // WebSocket 연결 종료
+  disconnect();
 });
 </script>
+
 
 <style scoped>
 .chat-container {

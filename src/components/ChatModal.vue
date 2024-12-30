@@ -6,28 +6,32 @@
         @mousedown="handleMouseDown"
     >
       <div class="modal-header">
-        <div>멘토링</div>
+        <div>{{ chatType === 'mentor' ? '멘토링' : '그룹 채팅' }}</div>
+        {{chatRoomSeq}}
         <button @click="closeModal" class="chatBot-modal-delete-button">X</button>
       </div>
       <div class="modal-body">
-        <Chatting/>
+        <!-- Pass the chatType and chatRoomSeq props to Chatting component -->
+        <Chatting :chatRoomSeq="chatRoomSeq"/>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps, onMounted, onUnmounted } from 'vue';
-import Chatting from "@/views/chat/Chatting.vue";
+import {ref, defineProps, defineEmits, onMounted, onUnmounted} from 'vue';
+import Chatting from '@/views/chat/Chatting.vue';
 
 const props = defineProps({
-  isVisible: Boolean // 모달의 표시 여부를 부모로부터 전달받음
+  isVisible: Boolean,        // To control modal visibility
+  chatType: String,          // chatType (mentor or group)
+  chatRoomSeq: String,       // chatRoomSeq (chat room ID)
 });
 
 const emit = defineEmits(['update:isVisible']); // 부모로부터 isVisible 업데이트 받을 수 있게 설정
 
 // 위치 변수
-const position = ref({ x: 200, y: 200 });  // 초기 위치 설정
+const position = ref({x: 200, y: 200});  // 초기 위치 설정
 let isDragging = ref(false); // 드래그 여부
 let dragStartX = ref(0); // 드래그 시작 X 좌표
 let dragStartY = ref(0); // 드래그 시작 Y 좌표
@@ -104,7 +108,7 @@ onUnmounted(() => {
   border-bottom: 1px solid var(--gray);
 }
 
-.chatBot-modal-delete-button{
+.chatBot-modal-delete-button {
   border: none;
   background-color: var(--white);
 }
