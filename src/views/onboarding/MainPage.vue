@@ -3,12 +3,11 @@ import {computed, onMounted, reactive, ref} from 'vue';
 import {useRouter} from 'vue-router';
 import {springAPI} from '@/services/axios.js';
 import '@/styles/user/MenteeOnboardingPage.css';
-
 import {
-  changeCompleteStatusByTemplateSeqMentee,
-  changeCompleteStatusByTemplateSeqMentor
+  changeCompleteStatusByMentee,
+  changeCompleteStatusByMentor,
+  fetchChecklistStatus
 } from "@/services/OnBoardingAPI.js";
-
 import {useUserStore} from "@/stores/UserStore.js";
 import {downloadFile} from "@/services/FileApi.js";
 
@@ -235,16 +234,35 @@ const goToUrl = (url) => {
 };
 
 // 체크리스트 항목 상태 변경
-const toggleChecklistStatus = (item, content) => {
+const toggleChecklistStatus = async(item, content) => {
   const updatedStatus = !content.listCheckedStatus; // 상태 반전
-  updateChecklistStatus(
+  await updateChecklistStatus(
       content.checklistStatusSeq,
       content.checklistSeq,
       updatedStatus
   );
   content.listCheckedStatus = updatedStatus; // 상태 변경
+
+  // 체크리스트가 취소된 경우, 온보딩 수행 상태는 false로 변경, 수행됐을 경우 온보딩 수행 상태 변경을 체크
+  if (!updatedStatus) {
+    item.onboardingCompletedStatus = false;
+  } else {
+    await fetchingChecklistStatus(item.templateSeq);
+  }
 };
 
+// 체크리스트 수행 완료 상태 조회 및 처리
+const fetchingChecklistStatus = async(templateSeq) => {
+  try {
+    const response = await fetchChecklistStatus(templateSeq);
+    if (response.data.data === true) {
+      // 모든 체크리스트가 완료되었을 경우
+      await changeCompleteStatus(templateSeq);
+    }
+  } catch (error) {
+    alert("체크리스트 수행 완료 상태를 조회하던 도중 오류가 발생했습니다.");
+  }
+}
 
 const changeCompleteStatusMentee = async(templateSeq) => {
   await changeCompleteStatusByTemplateSeqMentee(templateSeq);
@@ -312,7 +330,6 @@ const updateBoxPositions = () => {
 
     // 초기화된 boxPositions을 로컬 스토리지에 저장
     localStorage.setItem('boxPositions', JSON.stringify(boxPositions));
-
   }
 };
 
@@ -387,9 +404,6 @@ const updateLines = (movedIndex) => {
   }
 };
 
-
-
-
 const startDrag = (index, event) => {
   draggingCard = index;
   offsetX = event.clientX - boxPositions[index].left;
@@ -415,7 +429,7 @@ const stopDrag = () => {
 
 onMounted(async () => {
   await fetchOnboardingData();
-  await updateBoxPositions()
+  await updateBoxPositions();
   await updateLines();
   window.addEventListener('scroll', updateLines);
 });
@@ -483,7 +497,7 @@ onMounted(async () => {
                           type="checkbox"
                           class="checklist-checkbox"
                           :checked="content.listCheckedStatus"
-                          @change="toggleChecklistStatus(item, content)"
+                          @change="toggleChecklistStatus(item, content) "
                       />
                     </label>
                     <div class="checklist-inner">{{ content.checklistContent }}</div>
