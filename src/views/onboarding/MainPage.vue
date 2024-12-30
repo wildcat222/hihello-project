@@ -17,7 +17,6 @@ const employeeInfo = userStore.getEmployeeInfo();
 const employeeRole = employeeInfo.employeeRole[0];
 const modalLoading = ref(false); // 모달 로딩 상태
 
-
 // 상태 변수 정의
 const onboardingList = ref([]); // 온보딩 리스트 데이터
 const loading = ref(true); // 로딩 상태
@@ -44,7 +43,7 @@ const updateChecklistStatus = async (checklistStatusSeq, checklistSeq, listCheck
       listCheckedStatus,
     };
 
-    const response = await springAPI.put('hr/onboarding/checklist', payload, {
+    const response = await springAPI.put('/onboarding/checklist', payload, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
       },
@@ -242,6 +241,9 @@ const goToUrl = (url) => {
 // 체크리스트 항목 상태 변경
 const toggleChecklistStatus = async(item, content) => {
   const updatedStatus = !content.listCheckedStatus; // 상태 반전
+
+  const beforeUpdateChecklistStatus = await fetchChecklistStatus(item.templateSeq);
+
   await updateChecklistStatus(
       content.checklistStatusSeq,
       content.checklistSeq,
@@ -249,10 +251,9 @@ const toggleChecklistStatus = async(item, content) => {
   );
   content.listCheckedStatus = updatedStatus; // 상태 변경
 
-  // 체크리스트가 취소된 경우, 온보딩 수행 상태는 false로 변경, 수행됐을 경우 온보딩 수행 상태 변경을 체크
-  if (!updatedStatus) {
-    item.onboardingCompletedStatus = false;
-  } else {
+  const afterUpdateChecklistStatus = await fetchChecklistStatus(item.templateSeq);
+
+  if (beforeUpdateChecklistStatus.data.data !== afterUpdateChecklistStatus.data.data) {
     await fetchingChecklistStatus(item.templateSeq);
   }
 };
@@ -260,11 +261,7 @@ const toggleChecklistStatus = async(item, content) => {
 // 체크리스트 수행 완료 상태 조회 및 처리
 const fetchingChecklistStatus = async(templateSeq) => {
   try {
-    const response = await fetchChecklistStatus(templateSeq);
-    if (response.data.data === true) {
-      // 모든 체크리스트가 완료되었을 경우
-      await changeCompleteStatus(templateSeq);
-    }
+    await changeCompleteStatus(templateSeq);
   } catch (error) {
     alert("체크리스트 수행 완료 상태를 조회하던 도중 오류가 발생했습니다.");
   }
