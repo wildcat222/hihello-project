@@ -101,11 +101,12 @@ onMounted(() => {
 
 <style scoped>
 .alarm-list {
-  max-width: 600px;
-  margin: 0 auto;
   background-color: var(--white);
   border-radius: 8px;
-  padding: 16px;
+  width: 510px;  /* 모달 너비 고정 */
+  height: 400px;  /* 모달 높이 고정 */
+  display: flex;
+  flex-direction: column;
 }
 
 .alarm-list-header {
@@ -114,6 +115,25 @@ onMounted(() => {
   margin-bottom: 16px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--white);
+  flex-shrink: 0; /* 헤더는 크기 고정 */
+}
+
+.alarm-list-section {
+  flex: 1; /* 남은 공간을 모두 차지 */
+  overflow-y: auto; /* 스크롤 활성화 */
+}
+
+.alarm-list-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.alarm-list-section::-webkit-scrollbar-thumb {
+  background-color: var(--gray);
+  border-radius: 3px;
+}
+
+.alarm-list-section::-webkit-scrollbar-track {
+  background-color: var(--light-gray);
 }
 
 .no-alarms {
@@ -128,6 +148,8 @@ onMounted(() => {
   align-items: center;
   padding: 12px;
   border-bottom: 1px solid var(--gray);
+  min-height: 30px; /* 각 알람 아이템의 최소 높이 설정 */
+
 }
 
 .alarm-list-row.unread {
