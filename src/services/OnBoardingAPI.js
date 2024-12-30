@@ -104,8 +104,10 @@ export default {
     },
 };
 
+
 // 온보딩 템플릿 완료 상태 변경
-export const changeCompleteStatusByTemplateSeq = async(templateSeq) => {
+export const changeCompleteStatusByTemplateSeqMentee = async(templateSeq) => {
+
     try {
         await springAPI.put(`mentee/onboarding/template/${templateSeq}/status`);
         alert("온보딩 수행 상태가 변경되었습니다.")
