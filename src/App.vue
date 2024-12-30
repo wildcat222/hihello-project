@@ -116,7 +116,7 @@ onUnmounted(() => {
     <ChatBotModal
         :isVisible="isChatBotModalVisible"
         @update:isVisible="isChatBotModalVisible = $event"
-        iframeSrc="https://www.erdcloud.com/d/yCNxCAcuq7CCDuz8a"
+        iframeSrc="http://192.168.1.236:8501/"
     />
   </div>
 </template>

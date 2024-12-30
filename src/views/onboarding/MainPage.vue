@@ -265,12 +265,12 @@ const fetchingChecklistStatus = async(templateSeq) => {
 }
 
 const changeCompleteStatusMentee = async(templateSeq) => {
-  await changeCompleteStatusByTemplateSeqMentee(templateSeq);
+  await changeCompleteStatusByMentee(templateSeq);
   await fetchOnboardingData();
 }
 
 const changeCompleteStatusMentor = async(templateSeq) => {
-  await changeCompleteStatusByTemplateSeqMentor(templateSeq);
+  await changeCompleteStatusByMentor(templateSeq);
   await fetchOnboardingData();
 }
 

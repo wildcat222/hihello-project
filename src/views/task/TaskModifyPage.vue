@@ -99,7 +99,7 @@ onMounted(() => {
         </div>
         <div class="table-container">
           <div class="table-detail">
-            <table>
+            <table v-if="tableData.length > 0">
               <thead>
               <tr>
                 <td :rowspan="tableData.length + 1" class="evalList">평가 항목</td>
@@ -118,6 +118,7 @@ onMounted(() => {
               </tr>
               </thead>
             </table>
+            <p v-else>데이터를 로드 중입니다...</p>
           </div>
         </div>
       </div>

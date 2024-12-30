@@ -52,6 +52,7 @@ defineProps({
   position: absolute;
   top: 0;
   right: 4px;
+  width: 40px;
   background: none;
   border: none;
   font-size: 30px;
