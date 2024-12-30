@@ -30,7 +30,10 @@
         c.checklist_content AS checklistContent,
         cs.list_checked_status AS listCheckedStatus,
         cs.checklist_status_seq AS checklistStatusSeq,
-        gm.task_group_seq AS taskGroupSeq
+        gm.task_group_seq AS taskGroupSeq,
+        f.file_seq,
+        f.file_name,
+        f.file_url
         FROM
         employee AS e
         JOIN
@@ -51,6 +54,8 @@
         task_group AS tg ON t2.task_seq = tg.task_seq
         LEFT JOIN
         group_member AS gm ON tg.task_group_seq = gm.task_group_seq
+        LEFT JOIN
+        file AS f ON t1.template_seq = f.template_seq
         WHERE
         e.employee_seq = #{employeeSeq}
         ORDER BY
@@ -58,7 +63,7 @@
     </select>
 
     <select id="getOnboardingListByMentor" parameterType="java.lang.Long" resultType="OnboardingDTO">
-        SELECT
+        SELECT DISTINCT
         e.employee_seq AS employeeSeq,
         e.employee_name AS employeeName,
         o.onboarding_status_seq AS onboardingStatusSeq,
@@ -76,12 +81,16 @@
         t1.template_task_round AS templateTaskRound,
         t2.task_seq AS taskSeq,
         t2.task_title AS taskTitle,
+        t2.task_type AS taskType,
         t1.template_procedure AS templateProcedure,
         t1.template_end_at AS templateEndAt,
         cs.checklist_seq AS checklistSeq,
         c.checklist_content AS checklistContent,
         cs.list_checked_status AS listCheckedStatus,
-        gm.task_group_seq AS taskGroupSeq
+        gm.task_group_seq AS taskGroupSeq,
+        f.file_seq,
+        f.file_name,
+        f.file_url
         FROM
         mentoring AS m
         JOIN
@@ -104,6 +113,8 @@
         task_group AS tg ON t2.task_seq = tg.task_seq
         LEFT JOIN
         group_member AS gm ON tg.task_group_seq = gm.task_group_seq
+        LEFT JOIN
+        file AS f ON t1.template_seq = f.template_seq
         WHERE
         m.mentor_seq = #{employeeSeq}
         AND
