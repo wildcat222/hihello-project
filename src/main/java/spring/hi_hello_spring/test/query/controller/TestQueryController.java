@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.mariadb.jdbc.message.client.ResetPacket;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,5 +41,11 @@ public class TestQueryController {
 
         TestQueryDTO testQueryDTO = testQueryService.getTestById(testSeq);
         return ResponseUtil.successResponse("데이터가 성공적으로 조회되었습니다.", testQueryDTO).getBody();
+    }
+
+    /* 배포 환경 헬스 체크*/
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("Healthy");
     }
 }
