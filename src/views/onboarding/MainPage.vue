@@ -4,11 +4,10 @@ import {useRouter} from 'vue-router';
 import {springAPI} from '@/services/axios.js';
 import '@/styles/user/MenteeOnboardingPage.css';
 import {
-  changeCompleteStatusByTemplateSeq,   
-  changeCompleteStatusByTemplateSeqMentee,
-  changeCompleteStatusByTemplateSeqMentor, 
+  changeCompleteStatusByMentee,
+  changeCompleteStatusByMentor,
   fetchChecklistStatus
-  } from "@/services/OnBoardingAPI.js";
+} from "@/services/OnBoardingAPI.js";
 import {useUserStore} from "@/stores/UserStore.js";
 import {downloadFile} from "@/services/FileApi.js";
 
@@ -331,7 +330,6 @@ const updateBoxPositions = () => {
 
     // 초기화된 boxPositions을 로컬 스토리지에 저장
     localStorage.setItem('boxPositions', JSON.stringify(boxPositions));
-
   }
 };
 
