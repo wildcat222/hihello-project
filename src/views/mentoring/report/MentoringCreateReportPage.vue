@@ -2,6 +2,7 @@
 import {onMounted, ref} from 'vue'
 import {CreateReport, getMentoringWeek} from "@/services/MentoringApi.js";
 import {useUserStore} from "@/stores/UserStore.js";
+import WhiteBoxComponent from "@/components/WhiteBoxComponent.vue";
 
 const reportContent = ref('');
 const reportFeeling = ref('');
@@ -45,33 +46,37 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="report-container">
-    <div>{{ reportWeek }}주차</div>
-    <h1 class="text-2xl font-bold mb-6">보고서</h1>
+  <div class="report-create-container">
 
-    <div class="form-section mb-8">
-      <h2 class="text-lg font-semibold mb-3">활동 내용</h2>
-      <textarea
-          v-model="reportContent"
-          class="w-full h-40 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-          placeholder="주요 실시한 업무, 교육, 연구, 세미나 등의 사내활동 작성"
-      ></textarea>
+    <div class="report-title-section">
+      <div class="report-week">{{ reportWeek }}주차</div>
+      <h1 class="text-2xl font-bold mb-6 report-title">보고서</h1>
     </div>
 
-    <div class="form-section mb-8">
-      <h2 class="text-lg font-semibold mb-3">배운점 및 소감</h2>
-      <textarea
-          v-model="reportFeeling"
-          class="w-full h-40 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-          placeholder="주요 활동을 통해 새롭게 습득한 지식, 생각, 느낀점, 향후 활용 사항"
-      ></textarea>
-    </div>
+    <WhiteBoxComponent class="input-section">
+      <div class="form-section mb-8">
+        <h2 class="text-lg font-semibold mb-3">활동 내용</h2>
+        <textarea
+            v-model="reportContent"
+            class="w-full h-40 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            placeholder="주요 실시한 업무, 교육, 연구, 세미나 등의 사내활동 작성"
+        ></textarea>
+      </div>
 
-    <div class="flex justify-center">
+      <div class="form-section mb-8">
+        <h2 class="text-lg font-semibold mb-3">배운점 및 소감</h2>
+        <textarea
+            v-model="reportFeeling"
+            class="w-full h-40 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            placeholder="주요 활동을 통해 새롭게 습득한 지식, 생각, 느낀점, 향후 활용 사항"
+        ></textarea>
+      </div>
+    </WhiteBoxComponent>
+
+    <div class="button-group">
       <button
           @click="submitReport"
-          class="px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
-      >
+          class="create-btn">
         제출하기
       </button>
     </div>
@@ -79,14 +84,66 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.report-container {
+.report-create-container {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
 }
 
+.report-title-section {
+  display: flex;
+  justify-items: center;
+  align-items: baseline;
+  width: 55vw;
+}
+
+.report-week {
+  display: flex;
+  background-color: var(--white);
+  border-radius: 8px;
+  height: 2vw;
+  width: 5vw;
+  align-items: center;
+  justify-content: center;
+  text-align: left;
+  box-shadow: 2px 2px 4px 0 var(--gray);
+}
+
+.report-title {
+  text-align: center;
+  flex-grow: 1;
+}
+
+.input-section {
+  box-shadow: 2px 2px 4px 0 var(--gray);
+  width: 59vw;
+}
+
+.form-section h2 {
+  justify-self: left;
+}
+
 .form-section textarea {
+  border-color: var(--light-gray);
   resize: none;
   font-size: 0.95rem;
+  width: 55vw;
+  height: 20vw;
+}
+
+.button-group {
+  width: 59vw;
+  display: flex;
+  justify-content: center;
+}
+
+.create-btn {
+  background-color: var(--purple);
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 18px;
 }
 </style>
