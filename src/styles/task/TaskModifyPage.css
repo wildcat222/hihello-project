@@ -6,9 +6,7 @@
 }
 
 .submitButton-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
 }
 .task-submit-button {
     background-color: #7031FC;
@@ -18,7 +16,7 @@
     border: none;
     font-size: 16px;
     cursor: pointer;
-
+    margin-right:20px;
 }
 .evalContent{
     width: 250px;
@@ -192,13 +190,17 @@ th {
 }
 
 .task-group-button:hover{
-    background-color: #5a1dc2;
-}
-
-.task-group-button:hover{
-    background-color: #5a1dc2;
+    background-color: var(--yellow);
 }
 
 .evalButton:hover{
     background-color: #5a1dc2;
+}
+
+.task-submit-cancel{
+    margin-left: 2vw;
+}
+
+.evalButton-delete:hover{
+    background-color: var(--dark-yellow)
 }

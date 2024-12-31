@@ -12,20 +12,49 @@
     font-family: "Noto Sans KR", sans-serif;
 }
 
+.evalButton-delete{
+    border:none;
+    background-color: var(--yellow);
+    border-radius: 10px;
+    height: 30px;
+    width: 50px;
+    border: 0;
+    margin-left: 5px;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+
+.evalButton-delete:hover{
+    background-color:var(--dark-yellow)
+}
+
+.TaskAddButtonBox{
+    display:flex;
+    height: 5.6vh;
+    border: none;
+    justify-content: center;
+    align-items: center;
+    padding:0;
+    width: 7vw;
+}
+
 .task-add-page-container .submitButton-container{
     display: flex;
     justify-content: center;
     align-items: center;
 }
 .task-add-page-container .task-submit-button {
-    background-color: #7031FC;
+    background-color: var(--purple);
     color: white;
     padding: 10px 20px;
     border-radius: 10px;
     border: none;
     font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
 
+.task-submit-button:hover{
+    background-color:var(--dark-purple) ;
 }
 .task-add-page-container .evalContent{
     width: 250px;
@@ -35,13 +64,19 @@
     text-align: center;
 }
 .task-add-page-container .evalButton{
-    width: 80px;
+    width: 50px;
     height: 30px;
     border-radius: 10px;
     border: 1px #ccc solid;
     background: #7031FC;
     color: white;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
 }
+
+.evalButton:hover{
+    background-color:var(--dark-purple) ;
+}
+
 .task-add-page-container .evalscore{
     width: 50px;
     height: 25px;
@@ -56,7 +91,7 @@
 
 .task-add-page-container th, .task-add-page-container td {
     border: 1px solid #ccc;
-    padding: 10px;
+    padding: 10px 2px;
     text-align: center;
 }
 
@@ -125,7 +160,7 @@
 .task-add-page-container .file-upload-label {
     display: inline-block;
     padding: 7px 10px;
-    background-color: #7031FC; /* 버튼 배경색 */
+    background-color: var(--purple); /* 버튼 배경색 */
     color: white; /* 글자 색 */
     border-radius: 10px;
     font-size: 16px;
@@ -135,7 +170,7 @@
     transition: background-color 0.3s ease; /* 배경색 변화 효과 */
 }
 .task-add-page-container .file-upload-label:hover {
-    background-color: #5a1dc2; /* 마우스 호버 시 배경색 변경 */
+    background-color: var(--dark-purple); /* 마우스 호버 시 배경색 변경 */
 }
 .task-add-page-container .file-name {
     margin-left: 10px;
@@ -193,10 +228,35 @@
 .task-add-page-container .task-group-button {
     margin-left: 10px;
     padding: 5px 10px;
-    background-color: #7031FC;
+    background-color: var(--purple);
     color: white;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     font-size: 15px;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+
+.task-group-button:hover{
+    background-color: var(--dark-purple)
+}
+
+.submitButton-container{
+    display:flex;
+    gap:2vw;
+}
+
+.task-submit-cancel{
+    background-color: var(--gray);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+
+.task-submit-cancel:hover{
+    background-color: var(--black);
 }

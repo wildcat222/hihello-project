@@ -71,6 +71,16 @@ export function useTask() {
         tableData.value[index + 1].newContent = '';
     };
 
+    const deleteRow = (index) => {
+        if(index > 0){
+            tableData.value.splice(index, 1);
+        }
+    }
+
+    const back = () => {
+        window.history.back();
+    }
+
     const submitTask = async () => {
         const formData = new FormData();
 
@@ -113,6 +123,7 @@ export function useTask() {
             });
 
             alert('과제가 등록되었습니다.');
+            window.location.href = '/task/list';
         } catch (error) {
             alert('과제 등록에 실패했습니다.');
             console.error(error);
@@ -167,20 +178,17 @@ export function useTask() {
 
     const fetchTaskRounds = async () => {
         try {
-            const response = await springAPI.get('/onboarding/template', {
+            const response = await springAPI.get('hr/onboarding/template', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
                 },
             });
-            console.log('API 응답:', response.data); // 디버깅용 로그
 
             if (response.data.success) {
                 if (response.data.data.length === 0) {
-                    console.warn('데이터가 없습니다.');
                 } else {
                     // 데이터 저장
                     taskRounds.value = response.data.data;
-                    console.log('taskRounds 값:', taskRounds.value); // 데이터가 잘 저장되었는지 확인
                 }
             } else {
                 console.error('차수 정보를 가져오는 데 실패했습니다:', response.data.message);
@@ -202,10 +210,12 @@ export function useTask() {
         round,
         departments,
         taskRounds,
+        back,
         fetchTaskRounds,
         fetchDepartments,
         handleFileChange,
         fetchData,
+        deleteRow,
         addRow,
         submitTask,
         goToGroupingPage
