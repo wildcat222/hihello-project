@@ -75,7 +75,7 @@ const handleButtonClick = async (event) => {
 <template>
   <div class="content-box">
     <!-- 상세 데이터 화면 -->
-    <h1>멘토링 계획서</h1>
+    <div class="mentor-plan-detail-page-title">멘토링 계획서</div>
     <WhiteBoxListComponent>
       <div class="detail-container">
         <div class="small">
@@ -144,12 +144,14 @@ const handleButtonClick = async (event) => {
   background: var(--black);
   box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.25);
   color: var(--white);
-  height: 50px;
-  font-size: 20px;
-  font-weight: 700;
+  height: 30px;
+  font-size: 15px;
+  font-weight: 600;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0 auto;
+  max-width: 300px;
 }
 .inline{
   display: flex;
@@ -163,8 +165,8 @@ const handleButtonClick = async (event) => {
 .statue{
   color: var(--red);
 }
-h1{
-  font-size: 35px;
+.mentor-plan-detail-page-title{
+  font-size: 30px;
   font-weight: 700;
   text-align: center;
   margin: 150px 0px 49px 0px;

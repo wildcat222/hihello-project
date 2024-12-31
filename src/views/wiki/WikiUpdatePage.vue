@@ -17,6 +17,7 @@ import Editor from '@/components/EditorComponent.vue';
 import {onMounted, ref} from "vue";
 import {fetchWiki, updateWiki} from "@/services/WikiApi.js";
 import {useRoute} from "vue-router";
+import router from "@/router/index.js";
 
 const route = useRoute();
 const wikiSeq = ref(null);
@@ -51,6 +52,7 @@ const updatingWiki = async (seq) => {
     }
     await updateWiki(seq, wikiData);
     alert("위키가 성공적으로 수정되었습니다.");
+    await router.push(`/wiki`);
   } catch (error) {
     alert("위키 수정 도중 오류가 발생했습니다.");
     throw error;

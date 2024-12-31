@@ -15,7 +15,6 @@ const searchCategory = ref("title"); // 기본 검색 카테고리
 const userStore = useUserStore();
 const employeeInfo = userStore.getEmployeeInfo();
 const employeeRole = employeeInfo.employeeRole;
-alert(employeeRole)
 // 멘토링 계획서 리스트 가져오기
 const fetchingMentoringPlanningList = async () => {
   try {
@@ -100,7 +99,10 @@ onMounted(async () => {
           <option value="name">기안자</option>
         </select>
         <div class="yellow-box" v-if="employeeRole[0] === 'MENTOR'" @click="goToRegisterPage">
-        <img src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/8d64cbf7-77f8-4670-8ddf-40e43d7bc481_plus.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241216T063855Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241216%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=7b785c3af1fdf24cef7127814d2d0327e29824719c832902b14f72af28fb0af6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+          </svg>
           <div>계획서 등록</div>
         </div>
       </div>
@@ -183,10 +185,10 @@ onMounted(async () => {
   justify-content: space-between;
 }
 .title {
-  font-size: 35px;
-  font-weight: bold;
+  font-size: 30px;
+  font-weight: 700;
   text-align: center;
-  margin: 62px 0 49px;
+  margin: 150px 0px 49px 0px;
 }
 .search_bar_container {
   width: 90%;

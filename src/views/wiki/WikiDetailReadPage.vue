@@ -138,7 +138,7 @@ onMounted(async () => {
 <template>
   <div class="wiki-container">
     <div class="wiki-page-title">인턴위키</div>
-    <WhiteBoxListComponent>
+    <WhiteBoxListComponent class="wiki-detail-white-box-list-component">
       <div class="wiki-header-container">
         <div class="wiki-title"> {{ wikiTitle }}</div>
         <div class="flex">
@@ -180,6 +180,10 @@ onMounted(async () => {
   font-weight: bold;
   text-align: center;
   margin: 6.565rem 0 2.88rem 0;
+}
+
+.wiki-detail-white-box-list-component {
+  position: relative;
 }
 
 .wiki-title {

@@ -9,7 +9,7 @@
     <ul class="aside-menu-list">
       <!-- 이름 조회 -->
       <div>
-        <li class="aside-login-name" >
+        <li class="aside-login-name">
           <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" fill="currentColor" class="bi bi-person"
                viewBox="0 0 16 16">
             <path
@@ -20,11 +20,10 @@
         </li>
       </div>
 
-
       <!-- 로그아웃 메뉴 -->
       <li class="aside-logout-button" @click="logout">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-right"
-             viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+             class="bi bi-box-arrow-right" viewBox="0 0 16 16">
           <path fill-rule="evenodd"
                 d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
           <path fill-rule="evenodd"
@@ -35,15 +34,31 @@
 
       <!-- 메뉴 리스트 -->
       <li v-for="menu in filteredMenus" :key="menu.name" class="menu-item">
-        <div :class="{ active: activeMenu }" @click="toggleMenu(menu.name)">
-          <router-link v-if="menu.url" :to="menu.url">{{ menu.name }}</router-link>
-          <span v-else>{{ menu.name }}</span>
+        <!-- 상위 메뉴 -->
+        <div
+            :class="{ active: activeMenu === menu.name || (menu.subMenus && menu.subMenus.some(sub => activeSubMenu === sub.name)) }"
+            @click="toggleMenu(menu.name)"
+        >
+          <router-link v-if="menu.url" :to="menu.url">
+            {{ menu.name }}
+          </router-link>
+          <span v-else>
+            {{ menu.name }}
+          </span>
         </div>
 
         <!-- 서브 메뉴 -->
         <ul v-if="menu.subMenus && activeMenu === menu.name" class="sub-menu">
-          <li v-for="subMenu in menu.subMenus" :key="subMenu.name" class="sub-menu-item">
-            <router-link :to="subMenu.url">{{ subMenu.name }}</router-link>
+          <li
+              v-for="subMenu in menu.subMenus"
+              :key="subMenu.name"
+              class="sub-menu-item"
+              :class="{ active: activeSubMenu === subMenu.name }"
+              @click.stop="activateSubMenu(subMenu.name)"
+          >
+            <router-link :to="subMenu.url">
+              {{ subMenu.name }}
+            </router-link>
           </li>
         </ul>
       </li>
@@ -54,54 +69,56 @@
 </template>
 
 <script setup>
-import {computed, onMounted, onUnmounted, ref} from "vue";
-import {useUserStore} from "@/stores/UserStore.js";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useUserStore } from "@/stores/UserStore.js";
 import router from "@/router/index.js";
-import {fetchName} from "@/services/UserApi.js";
-import {springAPI} from "@/services/axios.js";
+import { fetchName } from "@/services/UserApi.js";
+import { springAPI } from "@/services/axios.js";
 import AlarmModal from "@/components/AlarmModal.vue";
 import EmployeeProfile from "@/components/EmployeeProfile.vue";
 
 const userStore = useUserStore();
-
-// 상태 관리
 const shouldShowAlarms = ref(false);
 const shouldShowProfile = ref(false);
 const activeMenu = ref(null);
+const activeSubMenu = ref(null);
 
 const openProfileModal = () => {
-  shouldShowProfile.value = !shouldShowProfile.value; // 프로필 모달 열기
-  activeMenu.value = null;
+  shouldShowProfile.value = !shouldShowProfile.value;
   shouldShowAlarms.value = false;
 };
 
 const openAlarmModal = () => {
   shouldShowAlarms.value = !shouldShowAlarms.value;
-  activeMenu.value = null;
   shouldShowProfile.value = false;
 };
 
-// 메뉴 토글 로직
 const toggleMenu = (menuName) => {
-  shouldShowProfile.value = false; // 메뉴 클릭 시 프로필 모달 닫기
-  shouldShowAlarms.value = false;
-  activeMenu.value = activeMenu.value === menuName ? null : menuName;
+  // 메뉴 상태를 토글하는 방식으로 유지
+  if (activeMenu.value === menuName) {
+    // 이미 활성화된 메뉴를 클릭하면 닫지 않음
+    return;
+  }
+  activeMenu.value = menuName;      // 메뉴 클릭 시 활성화된 상위 메뉴를 설정
+  activeSubMenu.value = null;
 };
 
-// 모달 및 메뉴 초기화 함수
+const activateSubMenu = (subMenuName) => {
+  activeSubMenu.value = subMenuName;
+};
+
 const resetModalsAndMenu = () => {
   shouldShowAlarms.value = false;
   shouldShowProfile.value = false;
-  activeMenu.value = null;
+  // activeMenu.value = null;
+  // activeSubMenu.value = null;
 };
 
 const handleOutsideClick = (event) => {
-  // aside-menu, alarm-modal, profile-modal 클래스를 가진 요소들을 찾습니다
   const asideMenu = document.querySelector('.aside-menu');
   const alarmModal = document.querySelector('.alarm-modal');
   const profileModal = document.querySelector('.profile-modal');
 
-  // 클릭된 요소가 aside나 모달 내부가 아닌 경우에만 초기화
   if (!asideMenu?.contains(event.target) &&
       !alarmModal?.contains(event.target) &&
       !profileModal?.contains(event.target)) {
@@ -109,17 +126,15 @@ const handleOutsideClick = (event) => {
   }
 };
 
-// 라우터 변경 감지
 router.beforeEach((to, from, next) => {
   resetModalsAndMenu();
   next();
 });
 
-function logout() {
+const logout = () => {
   userStore.logout();
-}
+};
 
-// 로그인 한 사원 이름 조회
 const employeeSeq = ref(null);
 const employeeName = ref("");
 const loadName = async (employeeSeq) => {
@@ -129,11 +144,10 @@ const loadName = async (employeeSeq) => {
     const name = await fetchName(employeeSeq);
     if (name) employeeName.value = name;
   } catch (error) {
-    console.error('Error loading name:', error);
+    console.error("Error loading name:", error);
     employeeName.value = "";
   }
 };
-
 const menus = ref([
   // 멘티 ASIDE
   {name: "인턴 위키", url: "/wiki", role: "MENTEE"},
@@ -218,35 +232,19 @@ const filteredMenus = computed(() => {
   );
 });
 
-
-
-// 마운트 시 초기화
 onMounted(async () => {
-  document.addEventListener('click', handleOutsideClick);
+  document.addEventListener("click", handleOutsideClick);
 
-  await userStore.$state.initialized;
-
-  springAPI.defaults.headers.common['Authorization'] = `Bearer ${userStore.accessToken}`;
-  employeeSeq.value = userStore.getEmployeeInfo().employeeSeq;
-
-  // 이름 로딩 전에 employeeSeq 유효성 확인
-  if (employeeSeq.value) {
+  if (employeeInfo.value) {
+    employeeSeq.value = employeeInfo.value.employeeSeq;
     await loadName(employeeSeq.value);
-  } else {
-    console.error('employeeSeq is not available');
   }
 });
 
-// 컴포넌트 언마운트 시 이벤트 리스너 제거
-onUnmounted(() => {
-  document.removeEventListener('click', handleOutsideClick);
-});
 
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-
 .aside-login-name {
   position: relative;
   font-weight: 600;
@@ -303,13 +301,14 @@ ul {
 }
 
 .menu-item {
-  margin-bottom: 20px;
-  font-size: 17px;
-  font-weight: 600;
-  text-align: center;
-  white-space: nowrap;
   position: relative;
-  cursor: pointer;
+  margin: 3px 0px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.menu-item:hover .sub-menu {
+  display: block; /* 마우스를 올리면 보여줌 */
 }
 
 .menu-item a {
@@ -318,23 +317,24 @@ ul {
   font-family: 'Inter', sans-serif;
 }
 
-.menu-item a:hover,
+.menu-item .active + .sub-menu {
+  display: block;
+}
 .menu-item > div.active {
   color: var(--purple);
+  font-weight: bold;
+}
+
+.sub-menu-item.active {
+  font-weight: bold;
 }
 
 .sub-menu {
-  font-size: 19px;
+  display: none; /* 기본적으로 숨김 */
+  position: relative;
   font-weight: normal;
-  position: absolute;
-  top: 0;
-  left: 180px;
-  width: 180px;
-  background-color: var(--white);
-  border: 1px solid var(--purple);
-  border-radius: 15px;
   padding: 1rem 0;
-  z-index: 2;
+  text-align: left;
 }
 
 .login-name {
@@ -358,6 +358,11 @@ ul {
   width: 380px;
   max-height: 500px;
   overflow: hidden;
+}
+
+.active {
+  color: var(--purple);
+  background-color: #f0f4ff;
 }
 
 .profile-modal {
