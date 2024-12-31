@@ -66,6 +66,12 @@ const handleReportEdit = async () => {
   isReportEditing.value = !isReportEditing.value;
 }
 
+const handleReportCancel = () => {
+  editedReportContent.value = reportContent.value;
+  editedReportFeeling.value = reportFeeling.value;
+  isReportEditing.value = false;
+}
+
 // 멘토 피드백 수정 핸들러
 const handleMentorFeedbackEdit = async () => {
   if (isMentorFeedbackEditing.value) {
@@ -81,6 +87,11 @@ const handleMentorFeedbackEdit = async () => {
     editedMentorFeedback.value = reportFeedbackContent.value
   }
   isMentorFeedbackEditing.value = !isMentorFeedbackEditing.value
+}
+
+const handleMentorFeedbackCancel = () => {
+  editedMentorFeedback.value = reportFeedbackContent.value;
+  isMentorFeedbackEditing.value = false;
 }
 
 // API 호출 함수
@@ -149,6 +160,13 @@ onMounted(() => {
         <button class="edit-button" @click="handleReportEdit">
           {{ isReportEditing ? '저장하기' : '수정하기' }}
         </button>
+        <button
+            v-if="isReportEditing"
+            class="cancel-button"
+            @click="handleReportCancel"
+        >
+          취소하기
+        </button>
       </div>
     </div>
 
@@ -161,7 +179,8 @@ onMounted(() => {
     <div class="report-write-section">
       <section class="report-section">
         <div class="content-box" v-if="!isMentorFeedbackEditing">
-          <p>{{ reportFeedbackContent }}</p>
+          <p v-if="reportFeedbackContent">{{ reportFeedbackContent }}</p>
+          <p v-else class="no-feedback">피드백이 아직 작성되지 않았습니다.</p>
         </div>
         <div class="content-box" v-else>
         <textarea
@@ -174,6 +193,13 @@ onMounted(() => {
       <div class="button-container" v-if="employeeRole === 'MENTOR'">
         <button class="edit-button" @click="handleMentorFeedbackEdit">
           {{ isMentorFeedbackEditing ? '저장하기' : '수정하기' }}
+        </button>
+        <button
+            v-if="isMentorFeedbackEditing"
+            class="cancel-button"
+            @click="handleMentorFeedbackCancel"
+        >
+          취소하기
         </button>
       </div>
     </div>
@@ -260,10 +286,26 @@ onMounted(() => {
 .button-container {
   display: flex;
   justify-content: center;
+  gap: 10px;
 }
 
 .section-line {
   width: 59vw;
+}
+
+.cancel-button {
+  background-color: var(--gray);
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+  background-color: var(--black);
 }
 
 .edit-button {
@@ -274,10 +316,11 @@ onMounted(() => {
   padding: 8px 16px;
   cursor: pointer;
   font-size: 14px;
+  transition: background-color 0.3s ease;
 }
 
 .edit-button:hover {
-  background-color: var(--purple);
+  background-color: var(--dark-purple);
 }
 
 .feedback-textarea {
@@ -292,5 +335,11 @@ onMounted(() => {
 h2 {
   font-size: 18px;
   margin-bottom: 15px;
+}
+
+.no-feedback {
+  color: var(--gray);
+  text-align: center;
+  font-style: italic;
 }
 </style>

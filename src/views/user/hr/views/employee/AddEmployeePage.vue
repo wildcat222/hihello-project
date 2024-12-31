@@ -261,9 +261,11 @@ const goBack = () => {
 
 <style scoped>
 .title {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 1.5rem;
+  margin-top: 80px;
+  margin-bottom: 5vw;
+  justify-self: center;
 }
 
 .form-container {
@@ -316,7 +318,7 @@ const goBack = () => {
   left: 0;
   width: 100%;
   background: white;
-  border: 1px solid #ddd;
+  border: 1px solid var(--light-gray);
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   z-index: 1000;
@@ -328,7 +330,7 @@ const goBack = () => {
 }
 
 .dropdown-item:hover {
-  background: #f5f5f5;
+  background: var(--light-gray);
 }
 
 .phone-input {
@@ -365,15 +367,15 @@ const goBack = () => {
 }
 
 .btn-primary:hover {
-  background-color: var(--light-purple);
+  background-color: var(--dark-purple);
 }
 
 .btn-secondary {
-  background-color: var(--light-gray);
+  background-color: var(--gray);
   color: white;
 }
 
 .btn-secondary:hover {
-  background-color: #757575;
+  background-color: var(--black);
 }
 </style>

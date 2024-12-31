@@ -7,6 +7,7 @@ import {onMounted, reactive, ref} from "vue";
 import {deleteEmployee, fetchEmployeeList, searchEmployees, updateEmployee} from "@/services/UserApi.js";
 import DeleteEmployeeModal from "@/views/user/hr/modal/employee/DeleteEmployeeModal.vue";
 import UpdateEmployeeModal from "@/views/user/hr/modal/employee/UpdateEmployeeModal.vue";
+import WhiteBoxComponent from "@/components/WhiteBoxComponent.vue";
 
 const route = router;
 const employeeList = reactive([]);
@@ -152,12 +153,12 @@ onMounted(async () => {
     <div class="page-title">사원 관리</div>
     <div class="search-bar-container">
       <div class="search-box">
-        <SearchBarComponent @search="searchEmployeeList"/>
+        <SearchBarComponent class="search-section" @search="searchEmployeeList"/>
         <select v-model="searchCategory" class="box">
           <option value="name">이름</option>
           <option value="num">사번</option>
         </select>
-        <div class="yellow-box" @click="goToRegisterPage">
+        <div class="create-box" @click="goToRegisterPage">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bibi-plus-circle" viewBox="0 0 16 16">
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
@@ -167,8 +168,8 @@ onMounted(async () => {
       </div>
     </div>
 
-    <WhiteBoxListComponent>
-      <ListComponent :items="employeeList">
+    <WhiteBoxComponent class="list-section">
+      <ListComponent class="row-section" :items="employeeList">
         <!-- 헤더 슬롯 -->
         <template #header>
           <div class="employee-list-row-container">
@@ -198,7 +199,7 @@ onMounted(async () => {
           </div>
         </template>
       </ListComponent>
-    </WhiteBoxListComponent>
+    </WhiteBoxComponent>
   </div>
 
   <div v-if="shouldShowUpdateModal" class="modal-overlay">
@@ -220,7 +221,7 @@ onMounted(async () => {
 
 <style scoped>
 .employee-list-container {
-  width: 70%;
+  width: 60vw;
   margin: 0 auto;
   position: relative;
 }
@@ -230,6 +231,18 @@ onMounted(async () => {
   font-weight: bold;
   text-align: center;
   margin: 6.562rem 0 2.88rem 0;
+}
+
+.search-section {
+  width: 60vw;
+}
+
+.list-section {
+  width: 60vw;
+}
+
+.row-section {
+  width: 55vw;
 }
 
 .employee-list-row-container {
@@ -251,9 +264,9 @@ onMounted(async () => {
   grid-template-columns: 2fr 1fr 1fr 2fr 2fr 1fr 2fr;
 }
 
-.yellow-box {
+.create-box {
   box-shadow: 2px 2px 4px 0 var(--gray);
-  background-color: var(--yellow);
+  background-color: var(--purple);
   border-radius: 15px;
   height: 50px;
   display: flex;
@@ -264,6 +277,11 @@ onMounted(async () => {
   font-weight: 600;
   color: var(--white);
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.create-box:hover {
+  background-color: var(--dark-purple);
 }
 
 .left-title {
@@ -299,18 +317,23 @@ onMounted(async () => {
 }
 
 .update-btn {
-  width: 40%;
-  background-color: var(--purple);
+  width: 1.5vw;
+  background-color: var(--yellow);
   color: var(--white);
   border: none;
   border-radius: 5px;
   padding: 10px 15px;
   cursor: pointer;
   margin-right: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.update-btn:hover {
+  background-color: var(--dark-yellow);
 }
 
 .delete-btn {
-  width: 40%;
+  width: 1.5vw;
   background-color: var(--gray);
   color: var(--white);
   border: none;
@@ -318,6 +341,11 @@ onMounted(async () => {
   padding: 10px 15px;
   cursor: pointer;
   margin-right: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+  background-color: var(--black);
 }
 
 .modal-overlay {
