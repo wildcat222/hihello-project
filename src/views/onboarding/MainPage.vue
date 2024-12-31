@@ -287,6 +287,19 @@ const changeCompleteStatus = async(templateSeq) => {
   await fetchOnboardingData();
 }
 
+const resetBoxPositions = (index) => {
+  const boxWidthGap = 400; // 박스의 가로 간격
+  const boxHeightGap = 250; // 박스의 세로 간격
+
+  const row = Math.floor(index / 3); // 3개씩 한 줄로 배치
+  const col = index % 3;
+
+  const left = row % 2 === 0 ? 210 + col * boxWidthGap : 210 + (2 - col) * boxWidthGap; // 왼쪽 또는 오른쪽으로 배치
+  const top = 200 + row * boxHeightGap; // 세로 방향 간격
+
+  boxPositions.push({top, left});
+}
+
 /* 온보딩 박스 위치 및 선 연결에 관한 메서드들 */
 const updateBoxPositions = () => {
   const savedPositions = localStorage.getItem('boxPositions');
@@ -303,8 +316,7 @@ const updateBoxPositions = () => {
         // 기존 항목 유지
         boxPositions.push(positions[index]);
       } else {
-        // 추가된 항목에 대한 위치 계산
-        boxPositions.push({top: 50 + index * 150, left: 100 + index * 200});
+        resetBoxPositions(index);
       }
     });
 
@@ -317,18 +329,8 @@ const updateBoxPositions = () => {
     localStorage.setItem('boxPositions', JSON.stringify(boxPositions));
   } else {
     // 로컬 스토리지에 데이터가 없을 때 초기화
-    const boxWidthGap = 400; // 박스의 가로 간격
-    const boxHeightGap = 250; // 박스의 세로 간격
-
-    // 박스 위치 계산 로직
     onboardingList.value.forEach((_, index) => {
-      const row = Math.floor(index / 3); // 3개씩 한 줄로 배치
-      const col = index % 3;
-
-      const left = row % 2 === 0 ? 210 + col * boxWidthGap : 210 + (2 - col) * boxWidthGap; // 왼쪽 또는 오른쪽으로 배치
-      const top = 30 + row * boxHeightGap; // 세로 방향 간격
-
-      boxPositions.push({top, left});
+      resetBoxPositions(index);
     });
 
     // 초기화된 boxPositions을 로컬 스토리지에 저장
