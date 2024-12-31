@@ -64,6 +64,11 @@
     color: var(--white);
     width:30%;
     margin-top: 30px;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+
+.onboarding-data-submit:hover{
+    background-color: var(--dark-purple);
 }
 .onboarding-data-form input, select{
     border-radius: 10px;
@@ -103,7 +108,7 @@
 }
 
 .onboarding-check-list-add-button{
-    background: var(--yellow);
+    background: var(--purple);
     border: none;
     border-radius: 10px;
     color: var(--white);
@@ -115,6 +120,11 @@
     gap: 10px;
     margin-left: 155px;
     margin-top: 10px;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+
+.onboarding-check-list-add-button:hover{
+    background-color:var(--dark-purple)
 }
 
 .onboarding-data-submit-container{
