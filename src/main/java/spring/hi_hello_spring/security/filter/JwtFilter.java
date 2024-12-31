@@ -33,8 +33,9 @@ public class JwtFilter extends OncePerRequestFilter {
             "/swagger-ui/",
             "/v3/api-docs.yaml",
             "/",
-//            "/ws/**",
-//            "/**"
+            "/ws/**",
+//            "/**",
+            "/actuator/prometheus"
     };
 
     private final JwtUtil jwtUtil;
