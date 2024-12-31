@@ -355,9 +355,9 @@ ul {
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 30px;
-  width: 510px;  /* 모달의 너비 설정 */
-  max-height: 500px;  /* 모달의 최대 높이 설정 */
-  overflow: hidden;  /* 내부 컨텐츠가 넘치지 않도록 설정 */
+  width: 380px;
+  max-height: 500px;
+  overflow: hidden;
 }
 
 .profile-modal {
