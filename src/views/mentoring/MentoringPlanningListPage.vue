@@ -150,7 +150,7 @@ onMounted(async () => {
 }
 .yellow-box{
   box-shadow: 2px 2px 4px 0 var(--gray);
-  background-color: var(--yellow);
+  background-color: var(--purple);
   border-radius: 15px;
   height: 50px;
   display: flex;
@@ -160,7 +160,13 @@ onMounted(async () => {
   font-size: 15px;
   font-weight: 600;
   color: var(--white);
+  transition: background-color 0.3s ease; /* 배경색 변화 효과 */
 }
+
+.yellow-box:hover{
+  background-color: var(--dark-purple);
+}
+
 .yellow-box img{
   width: 25px;
   height: 25px;
