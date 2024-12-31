@@ -12,6 +12,7 @@ import {
 } from "@/services/MentoringApi.js";
 import {useUserStore} from "@/stores/UserStore.js";
 import WhiteBoxComponent from "@/components/WhiteBoxComponent.vue";
+import WhiteBoxListComponent from "@/components/WhiteBoxListComponent.vue";
 
 // 상태 관리
 const reports = ref([]);

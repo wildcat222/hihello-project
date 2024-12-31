@@ -29,6 +29,8 @@ defineProps(['items']);
   font-weight: bold;
   margin: 0 20px 14px 20px;
   justify-content: space-between;
+  flex-direction: row;
+  height: 40px;
 }
 
 .gray_hr {
