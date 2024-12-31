@@ -75,6 +75,7 @@ onMounted(async() => {
   opacity: 90%;
   border-radius: 15px;
   border: 1px solid var(--light-gray);
+  margin-top: 0.5rem;
   overflow: auto;
   position: absolute;
   left: 60%;
