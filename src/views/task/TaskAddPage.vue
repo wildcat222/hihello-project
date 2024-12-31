@@ -15,9 +15,11 @@ const {
   departmentSeq,
   departments,
   taskRounds,
+  back,
   fetchDepartments,
   handleFileChange,
   fetchData,
+  deleteRow,
   addRow,
   submitTask,
   goToGroupingPage,
@@ -76,7 +78,7 @@ onMounted(() => {
       </div>
       <div class="container-line">
         <span class="task-content"> 과제 내용 </span>
-        <input v-model="taskContent" class="task-content-input">
+        <textarea v-model="taskContent" class="task-content-input"/>
       </div>
       <div class="container-line">
         <span class="task-attach"> 과제 참고 자료 </span>
@@ -104,8 +106,9 @@ onMounted(() => {
               <td>
                 <input v-model="item.evalListScore" type="number" placeholder="점수" min="0" class="evalscore"/>
               </td>
-              <td>
-                <button @click="addRow(index)" class="evalButton">추가하기</button>
+              <td class="TaskAddButtonBox">
+                <button @click="addRow(index)" class="evalButton">추가</button>
+                <button @click="deleteRow(index)" class="evalButton-delete">삭제</button>
               </td>
             </tr>
             </thead>
@@ -114,6 +117,7 @@ onMounted(() => {
       </div>
     </div>
       <div class="submitButton-container">
+        <button @click="back" class="task-submit-cancel">뒤로 가기</button>
         <button @click="submitTask" class="task-submit-button">과제 등록</button>
       </div>
   </div>
