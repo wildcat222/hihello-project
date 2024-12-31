@@ -3,6 +3,7 @@ import {onMounted, ref} from 'vue'
 import {CreateReport, getMentoringWeek} from "@/services/MentoringApi.js";
 import {useUserStore} from "@/stores/UserStore.js";
 import WhiteBoxComponent from "@/components/WhiteBoxComponent.vue";
+import router from "@/router/index.js";
 
 const reportContent = ref('');
 const reportFeeling = ref('');
@@ -34,10 +35,16 @@ const submitReport = async () => {
     // 폼 초기화
     reportContent.value = ''
     reportFeeling.value = ''
+
+    router.back();
   } catch (error) {
     console.error('Error submitting report:', error)
     alert('보고서 제출 중 오류가 발생했습니다.')
   }
+}
+
+const goBack = async () => {
+  router.back();
 }
 
 onMounted(() => {
@@ -78,6 +85,11 @@ onMounted(() => {
           @click="submitReport"
           class="create-btn">
         제출하기
+      </button>
+      <button
+          @click="goBack"
+          class="cancel-btn">
+        뒤로가기
       </button>
     </div>
   </div>
@@ -145,5 +157,26 @@ onMounted(() => {
   padding: 8px 16px;
   cursor: pointer;
   font-size: 18px;
+  transition: background-color 0.3s ease;
+}
+
+.create-btn:hover {
+  background-color: var(--dark-purple);
+}
+
+.cancel-btn {
+  background-color: var(--gray);
+  color: var(--white);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 18px;
+  margin-left: 1.5vw;
+  transition: background-color 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background-color: var(--black);
 }
 </style>

@@ -94,9 +94,11 @@ onMounted(async () => {
         <option value="num">사번</option>
       </select>
     </div>
-    <div class="yellow-box" @click="goToRegisterPage" v-if="employeeRole[0] === 'MENTEE'">
-      <img
-          src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/8d64cbf7-77f8-4670-8ddf-40e43d7bc481_plus.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241216T063855Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241216%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=7b785c3af1fdf24cef7127814d2d0327e29824719c832902b14f72af28fb0af6"/>
+    <div class="create-box" @click="goToRegisterPage" v-if="employeeRole[0] === 'MENTEE'">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bibi-plus-circle" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+      </svg>
       <div>보고서 등록</div>
     </div>
     <WhiteBoxComponent class="white-box-background">
@@ -156,13 +158,13 @@ onMounted(async () => {
   height: 50px;
 }
 
-.yellow-box {
+.create-box {
   box-shadow: 2px 2px 4px 0 var(--gray);
-  background-color: var(--yellow);
+  background-color: var(--purple);
   border-radius: 15px;
   height: 50px;
   display: flex;
-  width: 200px;
+  width: 150px;
   align-items: center;
   justify-content: space-evenly;
   justify-self: right;
@@ -170,6 +172,11 @@ onMounted(async () => {
   font-weight: 600;
   color: var(--white);
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.create-box:hover {
+  background-color: var(--dark-purple);
 }
 
 .list-row {
