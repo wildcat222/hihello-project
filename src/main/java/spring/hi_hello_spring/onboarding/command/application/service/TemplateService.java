@@ -2,6 +2,7 @@ package spring.hi_hello_spring.onboarding.command.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.hi_hello_spring.common.aggregate.entity.EmployeeRole;
@@ -9,6 +10,10 @@ import spring.hi_hello_spring.common.aggregate.entity.File;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.common.repository.FileRepository;
+import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.Task;
+import spring.hi_hello_spring.evaluation.command.domain.repository.TaskRepository;
+import spring.hi_hello_spring.group.command.domain.aggregate.entity.TaskGroup;
+import spring.hi_hello_spring.group.command.domain.repository.TaskGroupRepository;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
 import spring.hi_hello_spring.employee.command.domain.repository.EmployeeRepository;
 import spring.hi_hello_spring.onboarding.command.application.dto.CheckListCreateDTO;
@@ -20,6 +25,7 @@ import spring.hi_hello_spring.onboarding.command.domain.repository.OnboardingSta
 import spring.hi_hello_spring.onboarding.command.domain.repository.TemplateRepository;
 import spring.hi_hello_spring.onboarding.command.infrastructure.repository.JpaChecklistRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,11 +40,14 @@ public class TemplateService {
     private final JpaChecklistRepository checklistRepository;
     private final OnboardingStatusRepository onboardingStatusRepository;
     private final CheckListStatusRepository checkListStatusRepository;
+    private final TaskGroupRepository taskGroupRepository;
+    private final TaskRepository taskRepository;
+
 
     /* 온보딩 스토리 보드 등록 */
     @Transactional
     public TemplateCreateDTO createTemplate(TemplateCreateDTO createDTO, String uploadFile){
-        System.out.println("헤헷");
+
         Template template = modelMapper.map(createDTO, Template.class);
         Template savedTemplate = templateRepository.save(template);
 
@@ -87,6 +96,7 @@ public class TemplateService {
             }
         }
     }
+
     @Transactional
     public void createCheckListTemplate(TemplateCreateDTO createDTO) {
 
@@ -128,6 +138,32 @@ public class TemplateService {
                             .listCheckedStatus(false)
                             .build();
                     checkListStatusRepository.save(checklistStatus);
+                }
+            }
+        }
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 * * * ?") // 매 시간 0분 0초에 실행
+    public void updateTaskGroupStatus() {
+        // 모든 템플릿에 대해 마감기한을 확인하고, 상태 업데이트
+        List<Template> templates = templateRepository.findAll();
+        for (Template template : templates) {
+            if (template.getTemplateEndAt() != null && template.getTemplateEndAt().isBefore(LocalDateTime.now())) {
+            // 템플릿에 해당하는 모든 task를 찾음
+                List<Task> tasks = taskRepository.findByTemplateSeq(template.getTemplateSeq());
+
+                for (Task task : tasks) {
+                    // 각 task에 해당하는 task_group을 찾아서 상태 업데이트
+                    List<TaskGroup> taskGroups = taskGroupRepository.findByTaskSeq(task.getTaskSeq());
+
+                    for (TaskGroup taskGroup : taskGroups) {
+                        // 상태를 0으로 업데이트
+                        if (taskGroup.getTaskGroupActiveStatus()) {
+                            taskGroup.setTaskGroupActiveStatus(false);
+                            taskGroupRepository.save(taskGroup);  // 저장
+                        }
+                    }
                 }
             }
         }
