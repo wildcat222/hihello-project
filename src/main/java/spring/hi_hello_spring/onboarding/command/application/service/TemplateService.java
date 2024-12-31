@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.hi_hello_spring.common.aggregate.entity.EmployeeRole;
 import spring.hi_hello_spring.common.aggregate.entity.File;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
@@ -13,13 +14,14 @@ import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.Task;
 import spring.hi_hello_spring.evaluation.command.domain.repository.TaskRepository;
 import spring.hi_hello_spring.group.command.domain.aggregate.entity.TaskGroup;
 import spring.hi_hello_spring.group.command.domain.repository.TaskGroupRepository;
+import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
+import spring.hi_hello_spring.employee.command.domain.repository.EmployeeRepository;
 import spring.hi_hello_spring.onboarding.command.application.dto.CheckListCreateDTO;
 import spring.hi_hello_spring.onboarding.command.application.dto.TeamplateOrderUpdateDTO;
 import spring.hi_hello_spring.onboarding.command.application.dto.TemplateCreateDTO;
-import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.Checklist;
-import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.Template;
+import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.*;
 import spring.hi_hello_spring.onboarding.command.domain.repository.CheckListStatusRepository;
-import spring.hi_hello_spring.onboarding.command.domain.repository.ChecklistRepository;
+import spring.hi_hello_spring.onboarding.command.domain.repository.OnboardingStatusRepository;
 import spring.hi_hello_spring.onboarding.command.domain.repository.TemplateRepository;
 import spring.hi_hello_spring.onboarding.command.infrastructure.repository.JpaChecklistRepository;
 
@@ -33,8 +35,11 @@ public class TemplateService {
 
     private final TemplateRepository templateRepository;
     private final FileRepository fileRepository;
+    private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
     private final JpaChecklistRepository checklistRepository;
+    private final OnboardingStatusRepository onboardingStatusRepository;
+    private final CheckListStatusRepository checkListStatusRepository;
     private final TaskGroupRepository taskGroupRepository;
     private final TaskRepository taskRepository;
 
@@ -52,6 +57,9 @@ public class TemplateService {
                 .fileUrl(uploadFile)
                 .build();
         fileRepository.save(file);
+
+        // 온보딩 스토리 보드 등록 시 온보딩 수행 상태 테이블에 데이터 삽입
+        createOnboardingStatus(savedTemplate);
         return createDTO;
     }
 
@@ -88,12 +96,12 @@ public class TemplateService {
             }
         }
     }
+
     @Transactional
     public void createCheckListTemplate(TemplateCreateDTO createDTO) {
 
         Template template = modelMapper.map(createDTO, Template.class);
         Template savedTemplate = templateRepository.save(template);
-        System.out.println("hihihihi"+createDTO.getChecklistContent());
         if (createDTO.getChecklistContent() != null && !createDTO.getChecklistContent().isEmpty()) {
             for (CheckListCreateDTO checkList : createDTO.getChecklistContent()) {
                 // 체크리스트 엔티티 생성 (Builder 사용)
@@ -106,8 +114,34 @@ public class TemplateService {
                 checklistRepository.save(checkListEntity);  // 체크리스트 저장
             }
         }
+        // 온보딩 스토리 보드 등록 시 온보딩 수행 상태 테이블에 데이터 삽입
+        createOnboardingStatus(savedTemplate);
     }
 
+    private void createOnboardingStatus(Template savedTemplate) {
+        List<Employee> mentees = employeeRepository.findByEmployeeRole(EmployeeRole.MENTEE);
+
+        for (Employee mentee : mentees) {
+            OnboardingStatus onboardingStatus = OnboardingStatus
+                    .builder()
+                    .templateSeq(savedTemplate.getTemplateSeq())
+                    .employeeSeq(mentee.getEmployeeSeq())
+                    .build();
+            onboardingStatusRepository.save(onboardingStatus);
+
+            if(savedTemplate.getTemplateType() == TemplateType.CHECKLIST) {
+                List<Checklist> checklists = checklistRepository.findByTemplateSeq(savedTemplate.getTemplateSeq());
+                for (Checklist checklist : checklists) {
+                    CheckListStatus checklistStatus = CheckListStatus.builder()
+                            .employeeSeq(mentee.getEmployeeSeq())
+                            .checklistSeq(checklist.getChecklistSeq())
+                            .listCheckedStatus(false)
+                            .build();
+                    checkListStatusRepository.save(checklistStatus);
+                }
+            }
+        }
+    }
 
     @Transactional
     @Scheduled(cron = "0 0 * * * ?") // 매 시간 0분 0초에 실행
