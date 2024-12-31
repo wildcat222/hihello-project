@@ -21,6 +21,7 @@
 import Editor from '@/components/EditorComponent.vue';
 import {createWiki} from "@/services/WikiApi.js";
 import {ref} from "vue";
+import router from "@/router/index.js";
 
 const wikiTitle = ref('');
 const wikiContent = ref('');
@@ -42,6 +43,8 @@ const creatingWiki = async () => {
         console.error("위키 생성 도중 오류가 발생했습니다.", error);
         alert("위키 생성 도중 오류가 발생했습니다.");
       })
+
+  await router.push(`/wiki`);
 }
 </script>
 
