@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import {ref, onMounted, computed} from 'vue';
 import {deleteNoti, getAlarmList, readNoti} from "@/services/AlramApi.js";
 import {springAPI} from "@/services/axios.js";
 import {useUserStore} from "@/stores/UserStore.js";
@@ -88,11 +88,11 @@ onMounted(() => {
           <span class="alarm-time">{{ item.regDate }}</span>
         </div>
         <div class="alarm-actions">
-          <button class="btn-read"
-                  v-if="!item.alarmReadStatus"
-                  @click="isReadStatus(item.notiSeq)">읽음</button>
-          <button class="btn-delete"
-                  @click="deleteAlarm(item.notiSeq)">삭제</button>
+          <i class="fa-solid fa-check btn-read"
+             v-if="!item.alarmReadStatus"
+             @click="isReadStatus(item.notiSeq)"/>
+          <i class="fa-solid fa-xmark btn-delete"
+             @click="deleteAlarm(item.notiSeq)"/>
         </div>
       </div>
     </div>
@@ -103,8 +103,8 @@ onMounted(() => {
 .alarm-list {
   background-color: var(--white);
   border-radius: 8px;
-  width: 510px;  /* 모달 너비 고정 */
-  height: 400px;  /* 모달 높이 고정 */
+  width: 380px;
+  height: 400px;
   display: flex;
   flex-direction: column;
 }
@@ -184,7 +184,7 @@ onMounted(() => {
 }
 
 .btn-read, .btn-delete {
-  padding: 6px 12px;
+  padding: 6px 8px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
