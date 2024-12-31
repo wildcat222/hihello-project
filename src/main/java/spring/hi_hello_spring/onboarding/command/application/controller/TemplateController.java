@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/hr/onboarding")
 @RequiredArgsConstructor
+@EnableScheduling
 @Tag(name = "Template API", description = "온보딩 스토리 보드 관련 API")
 public class TemplateController {
 
