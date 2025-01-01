@@ -54,10 +54,11 @@ jobs:
 
       # 5. CloudFront 캐시 무효화
       - name: Invalidate CloudFront Cache
-        uses: aws-actions/aws-cli-action@v2
+        uses: pauloviveiros/aws-cloudfront-invalidate@v1.0.2
         with:
+          distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          invalidation-paths: "/*"
+          aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          command: |
-            cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+
