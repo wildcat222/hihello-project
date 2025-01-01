@@ -55,9 +55,10 @@ const handleClick = () => {
   font-weight: bold;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease; /* 배경색 변화 효과 */
 }
 .add-button:hover{
-  background: var(--purple)
+  background: var(--dark-yellow)
 }
 
 .bibi-plus-circle{

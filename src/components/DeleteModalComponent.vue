@@ -87,7 +87,7 @@ const onConfirm = () => {
 }
 
 .modal-confirm-button:hover {
-  background: var(--light-purple);
+  background: var(--dark-purple);
   color: white;
 }
 .modal-cancel-button {
@@ -96,7 +96,7 @@ const onConfirm = () => {
 }
 
 .modal-cancel-button:hover {
-  background: var(--light-gray);
+  background: var(--yellow);
   color:white;
 }
 

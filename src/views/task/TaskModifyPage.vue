@@ -16,6 +16,8 @@ const {
   templateSeq,
   taskRounds,
   departments,
+  deleteRow,
+  back,
   fetchDepartments,
   handleFileChange,
   fetchData,
@@ -113,7 +115,8 @@ onMounted(() => {
                   <input v-model="item.evalListScore" type="number" placeholder="점수" min="0" class="evalscore"/>
                 </td>
                 <td>
-                  <button @click="addRow(index)" class="evalButton">추가하기</button>
+                  <button @click="addRow(index)" class="evalButton">추가</button>
+                  <button @click="deleteRow(index)" class="evalButton-delete">삭제</button>
                 </td>
               </tr>
               </thead>
@@ -123,15 +126,9 @@ onMounted(() => {
         </div>
       </div>
       <div class="submitButton-container">
+        <button @click="back" class="task-submit-cancel">뒤로 가기</button>
         <button @click="updateTask" class="task-submit-button">수정 등록</button>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-button:hover{
-  background-color: #5a1dc2; /* 마우스 호버 시 배경색 변경 */
-  cursor:pointer;
-}
-</style>

@@ -65,11 +65,14 @@ const submitMentoringPlan = async () => {
     alert(errorMessage);
   }
 };
+const goToBack = () => {
+  router.push(`/mentoring/planning`);
+};
 </script>
 
 <template>
   <div class="planning-container">
-    <h1>멘토링 계획서 등록</h1>
+    <div class="mentoring-plan-page-title">멘토링 계획서 등록</div>
 
     <WhiteBoxListComponent>
       <form @submit.prevent="submitMentoringPlan">
@@ -93,10 +96,9 @@ const submitMentoringPlan = async () => {
         <div class="form-group">
           <div class="file_name">파일</div>
           <label for="file" class="file_button">
-            <img
-                src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/a66dd4ac-e739-4954-b754-f981f66a0b32_attach_file.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241220T015006Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241220%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=3c518a60aa9f192a49d922c21d25773d32783486add47de80dede36d97b158df"
-                id="file-button"
-            />
+            <svg id="file-button" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
+              <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z"/>
+            </svg>
             <p v-if="mentoringPlanForm.fileName" id="file-name">{{ mentoringPlanForm.fileName }}</p>
           </label>
           <input
@@ -108,7 +110,11 @@ const submitMentoringPlan = async () => {
           />
         </div>
         <br><br>
-        <button type="submit" class="submit-button">등록</button>
+        <div class="button-group">
+          <input type="button" class="gotoback" @click="goToBack" value="취소">
+          <input type="submit" class="submit-button" value="등록">
+        </div>
+
       </form>
     </WhiteBoxListComponent>
   </div>
@@ -144,19 +150,37 @@ const submitMentoringPlan = async () => {
   height: 150px;
   padding-top: 10px;
 }
-h1{
+.mentoring-plan-page-title{
   text-align: center;
   margin: 150px 0px 49px 0px;
-  font-size: 35px;
+  font-size: 30px;
   font-weight: 700;
 }
+.button-group{
+  display: flex;
+  margin: 0 auto;
+  gap: 10px;
+}
 .submit-button {
-  width: 297px;
-  height: 50px;
-  background-color: var(--black);
-  font-weight: 700;
-  font-size: 20px;
+  width: 140px;
+  height: 30px;
+  background-color: var(--purple);
+  font-weight: 600;
+  font-size: 15px;
   color: var(--white);
+  margin: 0 auto;
+  border: none;
+  border-radius: 10px;
+}
+.gotoback{
+  width: 140px;
+  height: 30px;
+  background-color: var(--black);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--white);
+  margin: 0 auto;
+  border: none;
   border-radius: 10px;
 }
 .form-group label{
@@ -165,7 +189,6 @@ h1{
 form {
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .file_button {

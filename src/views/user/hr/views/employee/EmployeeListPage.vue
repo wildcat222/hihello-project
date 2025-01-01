@@ -7,6 +7,7 @@ import {onMounted, reactive, ref} from "vue";
 import {deleteEmployee, fetchEmployeeList, searchEmployees, updateEmployee} from "@/services/UserApi.js";
 import DeleteEmployeeModal from "@/views/user/hr/modal/employee/DeleteEmployeeModal.vue";
 import UpdateEmployeeModal from "@/views/user/hr/modal/employee/UpdateEmployeeModal.vue";
+import WhiteBoxComponent from "@/components/WhiteBoxComponent.vue";
 
 const route = router;
 const employeeList = reactive([]);
@@ -152,21 +153,23 @@ onMounted(async () => {
     <div class="page-title">사원 관리</div>
     <div class="search-bar-container">
       <div class="search-box">
-        <SearchBarComponent @search="searchEmployeeList"/>
+        <SearchBarComponent class="search-section" @search="searchEmployeeList"/>
         <select v-model="searchCategory" class="box">
           <option value="name">이름</option>
           <option value="num">사번</option>
         </select>
-        <div class="yellow-box" @click="goToRegisterPage">
-          <img
-              src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/8d64cbf7-77f8-4670-8ddf-40e43d7bc481_plus.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241216T063855Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241216%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=7b785c3af1fdf24cef7127814d2d0327e29824719c832902b14f72af28fb0af6"/>
+        <div class="create-box" @click="goToRegisterPage">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bibi-plus-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+          </svg>
           <div>사원 등록</div>
         </div>
       </div>
     </div>
 
-    <WhiteBoxListComponent>
-      <ListComponent :items="employeeList">
+    <WhiteBoxComponent class="list-section">
+      <ListComponent class="row-section" :items="employeeList">
         <!-- 헤더 슬롯 -->
         <template #header>
           <div class="employee-list-row-container">
@@ -196,23 +199,29 @@ onMounted(async () => {
           </div>
         </template>
       </ListComponent>
-    </WhiteBoxListComponent>
+    </WhiteBoxComponent>
   </div>
 
-  <UpdateEmployeeModal v-if="shouldShowUpdateModal" class="modal"
-                       :employee="employee"
-                       @close-modal="visibleDelModal"
-                       @update-employee="modifyEmployee"/>
+  <div v-if="shouldShowUpdateModal" class="modal-overlay">
+    <UpdateEmployeeModal  class="modal"
+                         :employee="employee"
+                         @close-modal="visibleDelModal"
+                         @update-employee="modifyEmployee"/>
+  </div>
 
-  <DeleteEmployeeModal v-if="shouldShowDelModal" class="modal"
-                       :employee="employee"
-                       @close-modal="visibleDelModal"
-                       @delete-employee="deleteEmployeeBySeq"/>
+
+  <div v-if="shouldShowDelModal" class="modal-overlay">
+    <DeleteEmployeeModal  class="modal"
+                         :employee="employee"
+                         @close-modal="visibleDelModal"
+                         @delete-employee="deleteEmployeeBySeq"/>
+  </div>
+
 </template>
 
 <style scoped>
 .employee-list-container {
-  width: 70%;
+  width: 60vw;
   margin: 0 auto;
   position: relative;
 }
@@ -222,6 +231,18 @@ onMounted(async () => {
   font-weight: bold;
   text-align: center;
   margin: 6.562rem 0 2.88rem 0;
+}
+
+.search-section {
+  width: 60vw;
+}
+
+.list-section {
+  width: 60vw;
+}
+
+.row-section {
+  width: 55vw;
 }
 
 .employee-list-row-container {
@@ -243,19 +264,24 @@ onMounted(async () => {
   grid-template-columns: 2fr 1fr 1fr 2fr 2fr 1fr 2fr;
 }
 
-.yellow-box {
+.create-box {
   box-shadow: 2px 2px 4px 0 var(--gray);
-  background-color: var(--yellow);
+  background-color: var(--purple);
   border-radius: 15px;
   height: 50px;
   display: flex;
-  width: 200px;
+  width: 150px;
   align-items: center;
   justify-content: space-evenly;
   font-size: 15px;
   font-weight: 600;
   color: var(--white);
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.create-box:hover {
+  background-color: var(--dark-purple);
 }
 
 .left-title {
@@ -291,18 +317,23 @@ onMounted(async () => {
 }
 
 .update-btn {
-  width: 40%;
-  background-color: var(--purple);
+  width: 1.5vw;
+  background-color: var(--yellow);
   color: var(--white);
   border: none;
   border-radius: 5px;
   padding: 10px 15px;
   cursor: pointer;
   margin-right: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.update-btn:hover {
+  background-color: var(--dark-yellow);
 }
 
 .delete-btn {
-  width: 40%;
+  width: 1.5vw;
   background-color: var(--gray);
   color: var(--white);
   border: none;
@@ -310,10 +341,31 @@ onMounted(async () => {
   padding: 10px 15px;
   cursor: pointer;
   margin-right: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.delete-btn:hover {
+  background-color: var(--black);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 배경 불투명도 설정 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 다른 요소들보다 위에 표시 */
 }
 
 .modal {
-  position: fixed;
-  margin-top: 3vw;
+  position: relative; /* absolute에서 relative로 변경 */
+  background: white;
+  z-index: 1001; /* 오버레이보다 위에 표시 */
+  max-width: 300px;
+  max-height: 290px;
 }
 </style>

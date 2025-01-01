@@ -40,7 +40,10 @@ loadTemplates(); // 화면 로드시 템플릿 리스트 불러오기
         >
           <div class="onboarding-order">{{ template.templateProcedure }}</div>
           <div class="onboarding-title">{{ template.templateTitle }}</div>
-          <button @click="deleteTemplate(template.templateSeq)" class="onboarding-list-delete">X</button>
+          <button @click="deleteTemplate(template.templateSeq)" class="onboarding-list-delete"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+          </svg></button>
         </li>
       </ul>
     </div>
@@ -110,10 +113,9 @@ loadTemplates(); // 화면 로드시 템플릿 리스트 불러오기
               <label>파일입력</label>
             </div>
             <label for="file" class="file_button">
-              <img
-                  src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/a66dd4ac-e739-4954-b754-f981f66a0b32_attach_file.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241220T015006Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241220%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=3c518a60aa9f192a49d922c21d25773d32783486add47de80dede36d97b158df"
-                  id="file-button"
-              />
+              <svg xmlns="http://www.w3.org/2000/svg" id="file-button" width="20" height="20" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
+                <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z"/>
+              </svg>
               <p v-if="templateForm.templateUrlName" id="file-name">{{ templateForm.templateUrlName }}</p>
             </label>
             <input id="file" type="file" accept=".jpg, .png, .pdf" @change="handleFileChange" style="display: none;">
@@ -159,15 +161,19 @@ loadTemplates(); // 화면 로드시 템플릿 리스트 불러오기
           </div>
           <div>
             <button type="button" @click="addChecklistItem" class="onboarding-check-list-add-button">
-              <img src="https://hi-hello-bucket.s3.ap-northeast-2.amazonaws.com/190b59ac-dec7-4879-b6b2-f36d2682df5d_plus.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241220T022346Z&X-Amz-SignedHeaders=host&X-Amz-Expires=3600&X-Amz-Credential=AKIAQXPZDBYQREV7D6US%2F20241220%2Fap-northeast-2%2Fs3%2Faws4_request&X-Amz-Signature=8d94d6d1ea506d0d50bdeef4e53583f346c26fafb8a81e028909e53cbccfea39">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+              </svg>
               항목 추가</button>
           </div>
           <!-- 동적으로 추가된 입력 필드 리스트 -->
           <div class="onboarding-data-line">
             <ul>
-              <li v-for="(item, index) in templateForm.checklistContent" :key="index">
+              <li v-for="(item, index) in templateForm.checklistContent" :key="index" class="plus-check-list">
+                <div class="yellow-circle"></div>
                 {{ item.checklistContent }}
-                <button @click="removeChecklistItem(index)">삭제</button>
+                <button @click="removeChecklistItem(index)" class="plus-check-list-delete">삭제</button>
               </li>
             </ul>
           </div>

@@ -35,39 +35,40 @@
 <script setup>
 import "@/styles/quiz/QuizResult.css";
 import WhiteBox from "@/components/WhiteBoxComponent.vue";
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useQuizStore } from "@/stores/QuizStore";
 import { useUserStore } from "@/stores/UserStore";
 import { fetchQuizResults } from "@/services/QuizApi";
 
 const route = useRoute();
-
+const router = useRouter();
 const userStore = useUserStore();
-const quizStore = useQuizStore();
 
 const quizResults = ref([]);
-const quizCategorySeq = quizStore.quizCategorySeq;
-
 
 const fetchResults = async () => {
+  const quizCategorySeq = route.params.quizCategorySeq; // 라우터에서 quizCategorySeq 가져오기
   const employeeInfo = userStore.getEmployeeInfo();
 
+  if (!quizCategorySeq || !employeeInfo) {
+    console.error("quizCategorySeq or employeeInfo is missing");
+    return;
+  }
+
   try {
-    if (!quizCategorySeq) {
-      console.error("Quiz Category Seq is missing.");
-      return;
-    }
     quizResults.value = await fetchQuizResults(quizCategorySeq, employeeInfo.employeeSeq);
   } catch (error) {
     console.error("Failed to fetch quiz results:", error);
   }
 };
 
+const handleFinish = () => {
+  router.push("/"); // 완료 버튼 클릭 시 메인 페이지로 이동
+};
+
 onMounted(() => {
   fetchResults();
 });
-
 </script>
 
 <style scoped>

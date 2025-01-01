@@ -45,6 +45,12 @@ export function useTask() {
         tableData.value[index + 1].newContent = '';
     };
 
+    const deleteRow = (index) => {
+        if(index > 0){
+            tableData.value.splice(index, 1);
+        }
+    }
+
     const fetchData = async () => {
         if (isLoading.value) return; // 중복 호출 방지
         isLoading.value = true;
@@ -86,6 +92,10 @@ export function useTask() {
 
         router.push({ path: '/grouping', query: queryParams });
     };
+
+    const back = () => {
+        window.history.back();
+    }
 
     const fetchTaskData = async () => {
         if (!taskSeq.value) {
@@ -178,6 +188,7 @@ export function useTask() {
                 },
             });
             alert('과제 수정이 성공하였습니다.');
+            window.location.href = '/task/list';
         } catch (error) {
             alert('과제 수정에 실패했습니다.');
             console.error('API Error:', error.response?.data || error);
@@ -246,9 +257,11 @@ export function useTask() {
         round,
         departments,
         taskRounds,
+        back,
         fetchTaskRounds,
         fetchDepartments,
         addRow,
+        deleteRow,
         handleFileChange,
         goToGroupingPage,
         fetchData,
