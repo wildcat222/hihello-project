@@ -21,6 +21,8 @@
 .onboarding-title{
     font-size: 15px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .onboarding-ul{
     padding: 0;
@@ -29,6 +31,7 @@
 .onboarding-li{
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 .onboarding-data-sidebar {
     width: 25%;
