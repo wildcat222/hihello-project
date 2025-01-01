@@ -51,10 +51,30 @@
     color: white;
     margin: 6px;
 }
+.yellow-circle{
+    background-color: var(--yellow);
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+}
 .onboarding-data-form label{
     font-size: 15px;
     font-weight: 700;
     width: 80px;
+}
+.plus-check-list{
+    list-style: none;
+    margin: 10px 10px 10px 115px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.plus-check-list-delete{
+    border: none;
+    background-color: var(--gray);
+    border-radius: 10px;
+    height: 30px;
+    padding: 0px 10px;
 }
 .onboarding-data-submit{
     border-radius: 10px;
