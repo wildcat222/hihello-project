@@ -36,7 +36,14 @@
         WHERE
             e.department_seq = #{departmentSeq}
         AND
-            e.employee_role = "MENTEE"
+            e.employee_role = 'MENTEE'
+        AND
+        NOT EXISTS (
+            SELECT 1
+            FROM mentoring AS m
+            WHERE m.mentee_seq = e.employee_seq
+            AND m.mentoring_active_status = 1
+        );
     </select>
 
     <!-- 모든 멘토 데이터를 가져오는 SQL -->
@@ -218,8 +225,13 @@
         e.department_seq = d.department_seq
         WHERE
         e.department_seq = #{departmentSeq}
-        AND
-        e.employee_role = "MENTOR"
+        AND e.employee_role = 'MENTOR'
+        AND NOT EXISTS (
+        SELECT 1
+        FROM mentoring AS m
+        WHERE m.mentor_seq = e.employee_seq
+        AND m.mentoring_active_status = 1
+        );
     </select>
 
     <select id="findEmployeeRole" parameterType="long" resultType="EmployeeRoleDTO">
