@@ -1,19 +1,21 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import dotenv from 'dotenv';
 import path from 'path';
 
-// .env 파일 로드
-dotenv.config();
+export default defineConfig(({ mode }) => {
+  // 환경 변수 로드
+  const env = loadEnv(mode, process.cwd());
 
-export default defineConfig({
-  plugins: [vue()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
+  return {
+    plugins: [vue()],
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+      },
     },
-  },
-  define: {
-    'global':{},
-  }
+    define: {
+      'process.env': env, // 환경 변수 정의
+      'global': {}, // 필요한 경우 global 객체 정의
+    },
+  };
 });
