@@ -237,6 +237,7 @@ onMounted(async () => {
 
   if (employeeInfo.value) {
     employeeSeq.value = employeeInfo.value.employeeSeq;
+    springAPI.defaults.headers.common['Authorization'] = `Bearer ${userStore.accessToken}`
     await loadName(employeeSeq.value);
   }
 });
