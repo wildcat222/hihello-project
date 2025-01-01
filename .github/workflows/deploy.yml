@@ -16,6 +16,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: produce
 
     steps:
       # 1. 리포지토리 체크아웃
@@ -27,15 +28,23 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+      
+      - name: Generate Environment Variables File for Production
+        run: |
+          echo "VITE_APP_TITLE=$VITE_APP_TITLE" >> .env.staging
+          echo "VITE_API_BASE_URL=$VITE_API_BASE_URL" >> .env.staging
+          echo "VITE_LAMBDA_API_BASE_URL=$VITE_LAMBDA_API_BASE_URL" >> .env.staging
+          echo "VITE_FAST_API_BASE_URL=$VITE_FAST_API_BASE_URL" >> .env.staging
 
-      # 3. 빌드 단계
-      - name: Build Vue application
         env:
           VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
           VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
           VITE_LAMBDA_API_BASE_URL: ${{ secrets.VITE_LAMBDA_API_BASE_URL }}
           VITE_FAST_API_BASE_URL: ${{ secrets.VITE_FAST_API_BASE_URL }}
-          VUE_APP_BASE_URL: ${{ secrets.VUE_APP_BASE_URL }}
+
+
+      # 3. 빌드 단계
+      - name: Build Vue application
         run: |
           npm install
           npm run build
@@ -58,8 +67,4 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
             --paths "/*"
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
 
