@@ -44,6 +44,7 @@ public class SecurityConfig {
             "/swagger-ui/",
             "/v3/api-docs.yaml",
             "/",
+            "/ws/**",
             "/api/v1/test/health",
             "/actuator/prometheus"
     };
