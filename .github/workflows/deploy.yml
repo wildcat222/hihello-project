@@ -53,11 +53,11 @@ jobs:
           aws s3 sync ./dist s3://hihello-vue --delete
 
       # 5. CloudFront 캐시 무효화
-      - name: Invalidate CloudFront
-        uses: chetan/invalidate-cloudfront-action@master
+      - name: Invalidate CloudFront Cache
+        uses: aws-actions/aws-cli-action@v2
         with:
-          paths: '/*'
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-          distribution-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          command: |
+            cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
