@@ -9,7 +9,7 @@ export default [
         component: QuizPage,
     },
     {
-        path: '/quiz/result',
+        path: '/quiz/:quizCategorySeq/result',
         component: QuizResultPage,
     },
     {
