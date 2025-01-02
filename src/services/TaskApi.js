@@ -9,3 +9,7 @@ export const fetchSubmittedTask = async(taskSubmitSeq) => {
         console.error("과제 제출 내용을 가져오는 중 오류가 발생했습니다.", error);
     }
 }
+
+export const back = () => {
+    window.history.back();
+}

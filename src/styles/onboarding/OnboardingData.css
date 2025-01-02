@@ -21,6 +21,8 @@
 .onboarding-title{
     font-size: 15px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .onboarding-ul{
     padding: 0;
@@ -29,6 +31,7 @@
 .onboarding-li{
     display: flex;
     align-items: center;
+    cursor: pointer;
 }
 .onboarding-data-sidebar {
     width: 25%;
@@ -51,10 +54,30 @@
     color: white;
     margin: 6px;
 }
+.yellow-circle{
+    background-color: var(--yellow);
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+}
 .onboarding-data-form label{
     font-size: 15px;
     font-weight: 700;
     width: 80px;
+}
+.plus-check-list{
+    list-style: none;
+    margin: 10px 10px 10px 115px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.plus-check-list-delete{
+    border: none;
+    background-color: var(--gray);
+    border-radius: 10px;
+    height: 30px;
+    padding: 0px 10px;
 }
 .onboarding-data-submit{
     border-radius: 10px;
@@ -64,6 +87,11 @@
     color: var(--white);
     width:30%;
     margin-top: 30px;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+
+.onboarding-data-submit:hover{
+    background-color: var(--dark-purple);
 }
 .onboarding-data-form input, select{
     border-radius: 10px;
@@ -102,7 +130,7 @@
 }
 
 .onboarding-check-list-add-button{
-    background: var(--yellow);
+    background: var(--purple);
     border: none;
     border-radius: 10px;
     color: var(--white);
@@ -114,6 +142,11 @@
     gap: 10px;
     margin-left: 155px;
     margin-top: 10px;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+
+.onboarding-check-list-add-button:hover{
+    background-color:var(--dark-purple)
 }
 
 .onboarding-data-submit-container{
