@@ -56,6 +56,7 @@ const changeGroupMemberReadModalStatus = () => {
 const props = defineProps({
   isOpen: Boolean,
   taskData: Object,
+  taskType: String
 });
 
 // Emit 정의
@@ -95,7 +96,10 @@ watch(
             <td>
               <div class="flex task-eval-result-detail-result-modal-td task-eval-result-detail-result-modal-submitter-container">
                 <div>{{ props.taskData.submitterName }}</div>
-                <button class="button purple-button" @click="changeGroupMemberReadModalStatus">
+                <button
+                    v-if="props.taskData.taskType === 'GROUP'"
+                    class="button purple-button"
+                    @click="changeGroupMemberReadModalStatus">
                   그룹조회
                 </button>
                 <TaskEvalResultGroupMembersReadModal

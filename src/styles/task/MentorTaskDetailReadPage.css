@@ -101,13 +101,13 @@
     text-align: center;
 }
 
-.mentor-task-detail-button-box{
+.mentor-task-detail-button-box {
     display:flex;
     justify-content: center;
     gap:2vw;
 }
 
-.mentor-task-detail-cencel-button{
+.mentor-task-detail-cencel-button {
     width: 5rem;
     height: 2.4rem;
     font-size: 15px;
@@ -118,7 +118,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease; /* 배경색 변화 효과 */
 }
-.mentor-task-detail-cencel-button:hover{
+.mentor-task-detail-cencel-button:hover {
     background-color: var(--black);
 }
 
@@ -129,7 +129,7 @@
     color: var(--white);
     background-color: var(--purple);
     border: transparent;
-    border-radius: 10px;
+    border-radius: 15px;
     cursor: pointer;
     transition: background-color 0.3s ease; /* 배경색 변화 효과 */
 }

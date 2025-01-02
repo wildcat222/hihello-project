@@ -92,7 +92,7 @@ onMounted(() => {
             <div>{{ item.departmentName }}</div>
             <div>{{ item.totalFinalEvalScore }}</div>
             <div>
-              <button class="read-button" @click="navigateToFinalEvalDetail(item.employeeSeq)">조회</button>
+              <button class="final-eval-result-read-button" @click="navigateToFinalEvalDetail(item.employeeSeq)">조회</button>
             </div>
           </div>
         </template>

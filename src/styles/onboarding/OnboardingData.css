@@ -110,7 +110,6 @@
 }
 .onboarding-data-form input[type="datetime-local"] {
     padding-right: 10px;
-    width: 150px;
 }
 .onboarding-data-form input[type="text"] {
     width: 50%;

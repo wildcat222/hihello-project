@@ -146,9 +146,9 @@ onMounted(async () => {
       <div class="wiki-header-container">
         <div class="wiki-title"> {{ wikiTitle }}</div>
         <div class="flex">
-          <button class="button purple-border" @click="toggleModal">히스토리</button>
-          <button class="button purple-background" @click="navigateToWikiUpdatePage">편집</button>
-          <button v-if="employeeRole === 'HR'" class="button purple-background" @click="deletingWiki">삭제</button>
+          <button class="yellow-border-button" @click="toggleModal">히스토리</button>
+          <button class="yellow-background-button" @click="navigateToWikiUpdatePage">편집</button>
+          <button v-if="employeeRole === 'HR'" class="gray-background-button" @click="deletingWiki">삭제</button>
         </div>
       </div>
       <WikiHistoryModal
@@ -210,7 +210,7 @@ onMounted(async () => {
   margin: 0.8rem 0;
 }
 
-.button {
+.yellow-border-button, .yellow-background-button, .gray-background-button {
   border: transparent;
   border-radius: 10px;
   width: 5rem;
@@ -220,15 +220,32 @@ onMounted(async () => {
   cursor: pointer;
 }
 
-.purple-border {
+.yellow-border-button {
   background-color: var(--white);
   color: var(--black);
-  border: 1px solid var(--purple);
+  border: 1px solid var(--yellow);
 }
 
-.purple-background {
-  background-color: var(--purple);
+.yellow-border-button:hover {
+  background-color: var(--yellow);
+}
+
+.yellow-background-button {
+  background-color: var(--yellow);
   color: var(--white);
+}
+
+.yellow-background-button:hover {
+  background-color: var(--dark-yellow);
+}
+
+.gray-background-button {
+  background-color: var(--gray);
+  color: var(--white);
+}
+
+.gray-background-button:hover {
+  background-color: var(--black);
 }
 
 .toc-container {

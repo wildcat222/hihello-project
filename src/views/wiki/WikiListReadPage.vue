@@ -107,11 +107,11 @@ onMounted(async () => {
               class="wiki-title-container"
               @click="navigateToWiki(item.wikiSeq)"
           >
-            <div>{{ item.wikiTitle}}</div>
+            <div>{{ item.wikiTitle }}</div>
           </div>
         </div>
       </div>
-      <button class="purple_button" @click="navigateToWikiNewPost">문서작성</button>
+      <button class="purple-button" @click="navigateToWikiNewPost">문서작성</button>
     </div>
     <WhiteBoxComponent>
       <ListComponent :items="isSearching ? searchedWikiList : wikiList">
@@ -189,7 +189,7 @@ onMounted(async () => {
   cursor: pointer;
 }
 
-.purple_button {
+.purple-button {
   background-color: var(--purple);
   width: 111px;
   height: 43px;
@@ -198,6 +198,10 @@ onMounted(async () => {
   border: none;
   margin-right: 10%;
   cursor: pointer;
+}
+
+.purple-button:hover {
+  background-color: var(--dark-purple);
 }
 
 .wiki_list_row_container {

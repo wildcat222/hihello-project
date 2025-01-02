@@ -90,7 +90,7 @@ onMounted(async () => {
         </div>
       </div>
       <div class="flex close-button-container">
-        <button class="close-button flex">닫기</button>
+        <button class="final-eval-detail-go-back-button flex">뒤로가기</button>
       </div>
     </WhiteBoxComponent>
   </div>
