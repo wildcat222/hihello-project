@@ -116,14 +116,18 @@
     align-items: center;
 }
 
-.final-eval-detail-read .close-button {
+.final-eval-detail-go-back-button {
     justify-content: center;
     align-items: center;
-    background-color: var(--purple);
+    background-color: var(--gray);
     color: var(--white);
     width: 6.5rem;
     height: 2.3rem;
     cursor: pointer;
     border-radius: 15px;
     border: none;
+}
+
+.final-eval-detail-go-back-button:hover {
+    background-color: var(--black);
 }

@@ -111,3 +111,7 @@
     border-radius: 15px;
     cursor: pointer;
 }
+
+.mentor-task-detail-read-purple-button:hover {
+    background-color: var(--dark-purple);
+}

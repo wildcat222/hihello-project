@@ -58,12 +58,12 @@
     margin-left: 10px;
 }
 
-.final-eval-result-list .read-button {
+.final-eval-result-read-button {
     justify-content: center;
     align-items: center;
     background-color: var(--purple);
     color: var(--white);
-    width: 6.5rem;
+    width: 5.5rem;
     height: 2.3rem;
     cursor: pointer;
     border-radius: 15px;

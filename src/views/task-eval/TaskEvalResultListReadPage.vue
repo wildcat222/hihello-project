@@ -29,11 +29,13 @@ const fetchingTaskEvalResultList = async () => {
         departmentName: taskEvalResult.departmentName,
         templateTaskRound: taskEvalResult.templateTaskRound,
         taskSubmitSeq: taskEvalResult.taskSubmitSeq,
+        taskType: taskEvalResult.taskType,
         submitterName: taskEvalResult.submitterName,
         taskContent: taskEvalResult.taskContent,
         taskTotalScore: taskEvalResult.taskTotalScore
       })
     })
+    console.log(response)
   } catch (error) {
     alert("과제 평가 결과 리스트를 조회하던 도중 오류가 발생했습니다.");
   }
@@ -79,8 +81,8 @@ onMounted(async () => {
             <div class="submitter-name">{{ item.submitterName }}</div>
             <div class="task-content-container">{{ item.taskContent }}</div>
             <div class="task-total-score">
-              <div v-if="item.taskTotalScore !== null">
-              {{ item.taskTotalScore }}
+              <div v-if="item.taskTotalScore !== null" class="task-eval-score">
+              {{ item.taskTotalScore }}점
               </div>
               <div v-else-if="employeeRole === 'HR' || employeePosition === '팀장'">
               평가전
@@ -92,22 +94,22 @@ onMounted(async () => {
               >
                 평가하기
               </button>
+              <TaskEvalResultDetailReadModal
+                  :isOpen="isModalOpen"
+                  :taskData="taskInfo"
+                  @close="closeTaskResultDetailModal"/>
             </div>
           </div>
         </template>
       </ListComponent>
     </WhiteBoxListComponent>
-    <TaskEvalResultDetailReadModal
-        :isOpen="isModalOpen"
-        :taskData="taskInfo"
-        @close="closeTaskResultDetailModal"/>
+
   </div>
 </template>
 
 <style scoped>
 .task-eval-result-list-container {
   width: 70%;
-  justify-content: space-around;
 }
 
 .page-title {
@@ -180,8 +182,13 @@ onMounted(async () => {
   justify-content: center;
 }
 
+.task-eval-score {
+  width: 1000px;
+  text-align: center;
+}
+
 .eval-button {
-  width: 5rem;
+  width: 100rem;
   height: 2.4rem;
   font-size: 15px;
   color: var(--white);
@@ -189,5 +196,9 @@ onMounted(async () => {
   border: transparent;
   border-radius: 15px;
   cursor: pointer;
+}
+
+.eval-button:hover {
+  background-color: var(--dark-purple);
 }
 </style>
