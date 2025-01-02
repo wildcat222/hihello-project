@@ -435,8 +435,21 @@ const startDrag = (index, event) => {
 
 const onDrag = (event) => {
   if (draggingCard === null) return;
-  boxPositions[draggingCard].left = event.clientX - offsetX;
-  boxPositions[draggingCard].top = event.clientY - offsetY;
+  const canvasRect = canvas.value.getBoundingClientRect();
+  const boxWidth = document.querySelector(`#item-${draggingCard}`).offsetWidth;
+  const boxHeight = document.querySelector(`#item-${draggingCard}`).offsetHeight;
+
+  // 계산된 위치
+  let newLeft = event.clientX - offsetX;
+  let newTop = event.clientY - offsetY;
+
+  // canvas 경계 제한
+  newLeft = Math.max(canvasRect.left, Math.min(canvasRect.right - boxWidth, newLeft));
+  newTop = Math.max(canvasRect.top, Math.min(canvasRect.bottom - boxHeight, newTop));
+
+  // 업데이트된 위치 저장
+  boxPositions[draggingCard].left = newLeft - canvasRect.left + canvas.value.scrollLeft;
+  boxPositions[draggingCard].top = newTop - canvasRect.top + canvas.value.scrollTop;
   updateLines();
 };
 
