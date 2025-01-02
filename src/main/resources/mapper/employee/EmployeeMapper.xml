@@ -133,6 +133,7 @@
     <!-- 멘티의 프로필 정보를 조회하는 SQL -->
     <select id="findMenteeInfo" parameterType="java.lang.Long" resultType="ResEmplInfoQueryDTO">
         SELECT
+            mentee.employee_seq AS employeeSeq,
             mentee.employee_name AS employeeName,
             mentee.employee_role AS employeeRole,
             mentee.employee_num AS employeeNum,
