@@ -92,29 +92,29 @@ VALUES
 INSERT INTO template (template_seq, template_type, template_check_required_status, template_training_type, template_title, template_sub, template_detail, template_url_name, template_task_round, template_procedure, reg_date)
 VALUES
     -- 직무교육 템플릿
-    (3, 'TASK', TRUE, '직무교육', '개발자 기초 교육', '프로그래밍 기초 학습', '개발 기초 교육 과정입니다', 'https://example.com/dev/basic','4주차', 3, NOW()),
-    (4, 'TASK', TRUE, '직무교육', 'SQL 심화 과정', 'DB 실무 역량 강화', 'SQL 심화 학습 과정입니다', 'https://example.com/dev/sql','3주차', 4, NOW()),
-    (5, 'TASK', TRUE, '직무교육', '영업 실무 교육', '영업 프로세스 이해', '영업팀 실무 교육입니다', 'https://example.com/sales/basic','4주차', 5, NOW()),
+    (3, 'TASK', TRUE, 'JOB', '개발자 기초 교육', '프로그래밍 기초 학습', '개발 기초 교육 과정입니다', 'https://example.com/dev/basic','4주차', 3, NOW()),
+    (4, 'TASK', TRUE, 'JOB', 'SQL 심화 과정', 'DB 실무 역량 강화', 'SQL 심화 학습 과정입니다', 'https://example.com/dev/sql','3주차', 4, NOW()),
+    (5, 'TASK', TRUE, 'JOB', '영업 실무 교육', '영업 프로세스 이해', '영업팀 실무 교육입니다', 'https://example.com/sales/basic','4주차', 5, NOW()),
 
     -- 일반 공통교육 템플릿
-    (6, 'NORMAL', TRUE, '공통교육', '신입 비즈니스 매너', '비즈니스 매너 학습', '기업 예절 교육입니다', 'https://example.com/common/manner','2주차', 6, NOW()),
-    (7, 'NORMAL', FALSE, '공통교육', '정보보안 기초', '보안 의식 강화 교육', '전사 보안 교육입니다', 'https://example.com/common/security','1주차', 7, NOW()),
+    (6, 'NORMAL', TRUE, 'COMMON', '신입 비즈니스 매너', '비즈니스 매너 학습', '기업 예절 교육입니다', 'https://example.com/common/manner','2주차', 6, NOW()),
+    (7, 'NORMAL', FALSE, 'COMMON', '정보보안 기초', '보안 의식 강화 교육', '전사 보안 교육입니다', 'https://example.com/common/security','1주차', 7, NOW()),
 
     -- 휴식/팀빌딩 템플릿
-    (8, 'BREAK', FALSE, '공통교육', '팀 커뮤니케이션 데이', '팀 단합을 위한 활동', '팀워크 강화 프로그램입니다', 'https://example.com/break/teamday','1주차', 8, NOW()),
-    (9, 'BREAK', FALSE, '공통교육', '부서 문화의 날', '부서별 문화 활동', '부서 단합 프로그램입니다', 'https://example.com/break/culture','1주차', 9, NOW()),
+    (8, 'BREAK', FALSE, 'COMMON', '팀 커뮤니케이션 데이', '팀 단합을 위한 활동', '팀워크 강화 프로그램입니다', 'https://example.com/break/teamday','1주차', 8, NOW()),
+    (9, 'BREAK', FALSE, 'COMMON', '부서 문화의 날', '부서별 문화 활동', '부서 단합 프로그램입니다', 'https://example.com/break/culture','1주차', 9, NOW()),
 
     -- 체크리스트 템플릿
-    (10, 'CHECKLIST', TRUE, '공통교육', '신입사원 온보딩 체크리스트', '입사 후 필수 확인사항', '온보딩 필수 체크리스트입니다', 'https://example.com/checklist/onboarding','1주차', 10, NOW()),
-    (11, 'CHECKLIST', TRUE, '직무교육', '개발환경 셋업 체크리스트', '개발환경 구성 가이드', '개발환경 설정 체크리스트입니다', 'https://example.com/checklist/devsetup','1주차', 11, NOW()),
+    (10, 'CHECKLIST', TRUE, 'COMMON', '신입사원 온보딩 체크리스트', '입사 후 필수 확인사항', '온보딩 필수 체크리스트입니다', 'https://example.com/checklist/onboarding','1주차', 10, NOW()),
+    (11, 'CHECKLIST', TRUE, 'JOB', '개발환경 셋업 체크리스트', '개발환경 구성 가이드', '개발환경 설정 체크리스트입니다', 'https://example.com/checklist/devsetup','1주차', 11, NOW()),
 
     -- 동영상 교육 템플릿
-    (12, 'VIDEO', TRUE, '공통교육', '회사 소개 동영상', '회사 역사와 문화', '회사 소개 영상 교육입니다', 'https://example.com/video/company','1주차', 12, NOW()),
-    (13, 'VIDEO', TRUE, '직무교육', '신기술 동향 강의', 'IT 트렌드 교육', '최신 기술 동향 교육입니다', 'https://example.com/video/tech','2주차', 13, NOW()),
+    (12, 'VIDEO', TRUE, 'COMMON', '회사 소개 동영상', '회사 역사와 문화', '회사 소개 영상 교육입니다', 'https://example.com/video/company','1주차', 12, NOW()),
+    (13, 'VIDEO', TRUE, 'JOB', '신기술 동향 강의', 'IT 트렌드 교육', '최신 기술 동향 교육입니다', 'https://example.com/video/tech','2주차', 13, NOW()),
 
     -- 퀴즈 템플릿
-    (14, 'QUIZ', TRUE, '공통교육', '정보보안 퀴즈', '보안 정책 이해도 테스트', '보안 교육 평가입니다', 'https://example.com/quiz/security','1주차', 14, NOW()),
-    (15, 'QUIZ', TRUE, '직무교육', '프로그래밍 기초 퀴즈', '개발 지식 테스트', '개발 기초 평가입니다', 'https://example.com/quiz/programming','2주차', 15, NOW());
+    (14, 'QUIZ', TRUE, 'COMMON', '정보보안 퀴즈', '보안 정책 이해도 테스트', '보안 교육 평가입니다', 'https://example.com/quiz/security','1주차', 14, NOW()),
+    (15, 'QUIZ', TRUE, 'JOB', '프로그래밍 기초 퀴즈', '개발 지식 테스트', '개발 기초 평가입니다', 'https://example.com/quiz/programming','2주차', 15, NOW());
 
 -- Checklist 데이터 수정 (CHECKLIST 타입 템플릿에만 연결)
 INSERT INTO checklist (checklist_seq, checklist_content, template_seq)
