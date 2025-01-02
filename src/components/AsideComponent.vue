@@ -69,7 +69,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useUserStore } from "@/stores/UserStore.js";
 import router from "@/router/index.js";
 import { fetchName } from "@/services/UserApi.js";
@@ -110,8 +110,6 @@ const activateSubMenu = (subMenuName) => {
 const resetModalsAndMenu = () => {
   shouldShowAlarms.value = false;
   shouldShowProfile.value = false;
-  // activeMenu.value = null;
-  // activeSubMenu.value = null;
 };
 
 const handleOutsideClick = (event) => {
@@ -194,9 +192,16 @@ const menus = ref([
   {
     name: "멘토링",
     role: "MENTOR",
-    position: "팀장",
     subMenus: [
       {name: "멘티 소개", url: "/mentee/intro"},
+      {name: "멘토링 계획서", url: "/mentoring/planning"},
+      {name: "멘토링 보고서", url: "/mentoring/report"},
+    ],
+  },
+  {
+    name: "멘토링",
+    position: "팀장",
+    subMenus: [
       {name: "멘토링 계획서", url: "/mentoring/planning"},
       {name: "멘토링 보고서", url: "/mentoring/report"},
     ],
@@ -306,6 +311,7 @@ ul {
   margin: 3px 0px;
   font-weight: 600;
   text-align: left;
+  cursor: pointer;
 }
 
 .menu-item:hover .sub-menu {
