@@ -94,7 +94,7 @@ const openAlarmModal = () => {
 };
 
 const toggleMenu = (menuName) => {
-  // 메뉴 상태를 토글하는 방식으로 유지
+  // 메뉴 상태를 토글하는 방식으로 유지.
   if (activeMenu.value === menuName) {
     // 이미 활성화된 메뉴를 클릭하면 닫지 않음
     return;
