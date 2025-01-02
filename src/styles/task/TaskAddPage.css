@@ -14,7 +14,7 @@
 
 .evalButton-delete{
     border:none;
-    background-color: var(--yellow);
+    background-color: var(--light-gray);
     border-radius: 10px;
     height: 30px;
     width: 50px;
@@ -24,7 +24,7 @@
 }
 
 .evalButton-delete:hover{
-    background-color:var(--dark-yellow)
+    background-color:var(--black)
 }
 
 .TaskAddButtonBox{
