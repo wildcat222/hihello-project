@@ -279,6 +279,7 @@ onMounted(async () => {
   padding: 20px;
   box-sizing: border-box;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .logo {
