@@ -46,7 +46,7 @@ const stompClient = ref(null);
 const messages = ref([]);
 const messageContent = ref("");
 const roomId = ref(props.chatRoomSeq);
-const socketUrl = "ws://localhost:8080/ws"; // WebSocket URL
+const socketUrl = "ws://localhost:5000/ws"; // WebSocket URL
 const connected = ref(false);
 const currentUserCode = useUserStore().getEmployeeInfo().employeeSeq;
 

@@ -203,7 +203,7 @@
 .go-to-quiz-button, .go-to-Break-button, .go-to-CF-button{
     width: 60%;
     height: 40px;
-    border-radius: 15px;
+    border-radius: 10px;
     border: transparent;
     margin: 5px 0;
     font-size: 11px;
@@ -361,7 +361,7 @@
 .check-task-button, .cw-eval-button, .close-button{
     width: 60%;
     height: 40px;
-    border-radius: 15px;
+    border-radius: 10px;
     border: transparent;
     margin: 5px 0;
     font-size: 11px;

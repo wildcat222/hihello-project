@@ -1,7 +1,7 @@
 <template>
     <div class="mentor-container">
         <header class="mentor-header">
-            <h1>멘토 조회</h1>
+            <div class="mentee_profile_page">멘토 조회</div>
         </header>
 
         <div class="mentor-card" v-if="mentor">

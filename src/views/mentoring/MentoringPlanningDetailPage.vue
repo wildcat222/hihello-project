@@ -169,7 +169,7 @@ const handleButtonClick = async (event) => {
   font-size: 30px;
   font-weight: 700;
   text-align: center;
-  margin: 150px 0px 49px 0px;
+  margin: 105px 0px 49px 0px;
 }
 .content-box {
   width: 550px;

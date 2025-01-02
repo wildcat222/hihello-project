@@ -152,7 +152,7 @@ const goToBack = () => {
 }
 .mentoring-plan-page-title{
   text-align: center;
-  margin: 150px 0px 49px 0px;
+  margin: 105px 0px 49px 0px;
   font-size: 30px;
   font-weight: 700;
 }
