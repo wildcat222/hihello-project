@@ -6,7 +6,7 @@
 .hr-quiz-result-container h1 {
     text-align: center;
     margin: 50px 0;
-    font-size: 35px;
+    font-size: 30px;
     color: #333;
     font-weight: bold;
 }
@@ -67,7 +67,7 @@
     flex: 1;
 }
 .hr-quiz-result-page-title{
-    font-size: 35px;
+    font-size: 30px;
     font-weight: 600;
     margin-top: 105px;
     margin-bottom: 49px;

@@ -3,7 +3,7 @@
 }
 
 .wiki-update-page-title {
-    font-size: 35px;
+    font-size: 30px;
     font-weight: bold;
     text-align: center;
     margin: 6.562rem 0 2.88rem 0;
@@ -31,7 +31,7 @@
     width: 6.5rem;
     height: 2.3rem;
     cursor: pointer;
-    border-radius: 15px;
+    border-radius: 10px;
     border: none;
     background-color: var(--purple);
     color: var(--white);

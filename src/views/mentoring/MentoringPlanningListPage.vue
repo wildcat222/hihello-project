@@ -141,17 +141,20 @@ onMounted(async () => {
 /* 상태에 따른 스타일 */
 .approved {
   color: var(--purple);
+  font-weight: 700;
 }
 .pending {
   color: var(--black);
+  font-weight: 700;
 }
 .rejected {
   color: var(--red);
+  font-weight: 700;
 }
 .yellow-box{
   box-shadow: 2px 2px 4px 0 var(--gray);
   background-color: var(--purple);
-  border-radius: 15px;
+  border-radius: 10px;
   height: 50px;
   display: flex;
   width: 200px;
@@ -185,7 +188,7 @@ onMounted(async () => {
 }
 .flex-line{
   display: flex;
-  margin: 0px 20px;
+  margin: 10px 20px;
   padding-left: 14px;
   font-size: 13px;
   justify-content: space-between;
@@ -194,7 +197,7 @@ onMounted(async () => {
   font-size: 30px;
   font-weight: 700;
   text-align: center;
-  margin: 150px 0px 49px 0px;
+  margin: 105px 0px 49px 0px;
 }
 .search_bar_container {
   width: 90%;
@@ -209,7 +212,7 @@ onMounted(async () => {
   border: none;
   background-color: var(--white);
   box-shadow: 2px 2px 4px 0 var(--gray);
-  border-radius: 15px;
+  border-radius: 10px;
   width: 100px;
   height: 50px;
 }

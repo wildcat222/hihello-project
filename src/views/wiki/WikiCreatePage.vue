@@ -10,7 +10,8 @@
       >
     </div>
     <Editor v-model="wikiContent"/>
-    <div class="wiki-create-button-container">
+    <div class="wiki-buttons-container">
+      <button @click="goBackToWikiList" class="go-back-to-wiki-list-button">뒤로가기</button>
       <button @click="creatingWiki" class="wiki-create-button">등록하기</button>
     </div>
   </div>
@@ -46,6 +47,10 @@ const creatingWiki = async () => {
 
   await router.push(`/wiki`);
 }
+
+const goBackToWikiList = () => {
+  router.push(`/wiki`);
+}
 </script>
 
 <style scoped>
@@ -54,7 +59,7 @@ const creatingWiki = async () => {
 }
 
 .wiki-create-page-title {
-  font-size: 35px;
+  font-size: 30px;
   font-weight: bold;
   text-align: center;
   margin: 6.562rem 0 2.88rem 0;
@@ -62,7 +67,7 @@ const creatingWiki = async () => {
 
 .wiki-title-input {
   width: 100%;
-  padding: 1.5rem 1rem;
+  padding: 1.2rem 1rem;
   font-size: 28px;
   font-weight: bold;
   border: none;
@@ -72,20 +77,29 @@ const creatingWiki = async () => {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);;
 }
 
-.wiki-create-button-container {
+.wiki-buttons-container {
   display: flex;
   justify-content: center;
   margin: 2rem 0;
+  gap: 2vw;
+}
+
+.wiki-create-button, .go-back-to-wiki-list-button {
+  width: 6.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+}
+
+.go-back-to-wiki-list-button {
+  background-color: var(--gray);
+  color: var(--white);
 }
 
 .wiki-create-button {
-  width: 6.5rem;
-  height: 2.3rem;
-  cursor: pointer;
-  border-radius: 15px;
-  border: none;
   background-color: var(--purple);
   color: var(--white);
-  font-size: 16px;
 }
 </style>

@@ -3,15 +3,14 @@ import { ref, onMounted } from 'vue';
 import { fetchDepartmentList, fetchMenteeByDepartment, fetchMentorsByDepartment, createMentoringGroup } from '@/services/MentoringApi.js';
 import WhiteBoxComponent from "@/components/WhiteBoxComponent.vue";
 
-// 부서와 멘토 데이터를 저장할 변수
 const departments = ref([]);
 const mentors = ref([]);
 const mentees = ref([]);
 const selectedDepartment = ref(null);
-const mentoringGroups = ref([]);  // 멘토-멘티 매칭 데이터
+const mentoringGroups = ref([]);
+const selectedMentees = ref(new Set()); // 선택된 멘티 관리
 const error = ref(null);
 
-// 부서 목록
 const fetchDepartments = async () => {
   try {
     const response = await fetchDepartmentList();
@@ -21,7 +20,6 @@ const fetchDepartments = async () => {
   }
 };
 
-// 부서별 멘토 목록을 가져오는 함수
 const fetchMentors = async (departmentSeq) => {
   try {
     const response = await fetchMentorsByDepartment(departmentSeq);
@@ -32,7 +30,6 @@ const fetchMentors = async (departmentSeq) => {
   }
 };
 
-// 부서별 멘티 목록을 가져오는 함수
 const fetchMentees = async (departmentSeq) => {
   try {
     const response = await fetchMenteeByDepartment(departmentSeq);
@@ -44,48 +41,45 @@ const fetchMentees = async (departmentSeq) => {
   }
 };
 
-// 부서 목록과 멘토 목록을 초기화
 onMounted(async () => {
-  await fetchDepartments(); // 부서 목록을 가져옵니다.
-
+  await fetchDepartments();
   if (departments.value.length > 0) {
-    // 첫 번째 부서를 선택
     const firstDepartment = departments.value[0];
     selectedDepartment.value = firstDepartment.departmentSeq;
-
-    // 선택된 첫 번째 부서의 멘토 및 멘티 가져오기
     fetchMentors(firstDepartment.departmentSeq);
     fetchMentees(firstDepartment.departmentSeq);
   }
 });
 
-// 부서를 클릭했을 때 호출되는 함수
 const handleDepartmentClick = (departmentSeq) => {
   selectedDepartment.value = departmentSeq;
   fetchMentors(departmentSeq);
   fetchMentees(departmentSeq);
 };
 
-// 멘티를 멘토에 할당한 데이터 생성
 const assignMenteeToMentor = (mentorSeq, menteeSeq) => {
-  console.log("mentorSeq:", mentorSeq);
-  console.log("menteeSeq:", menteeSeq);
+  if (!menteeSeq) return;
+  mentoringGroups.value.forEach(group => {
+    if (group.menteeSeq === menteeSeq) {
+      selectedMentees.value.delete(group.menteeSeq);
+      group.menteeSeq = null;
+    }
+  });
 
-  if (!mentoringGroups.value.some(group => group.mentorSeq === mentorSeq)) {
-    mentoringGroups.value.push({ mentorSeq, menteeSeq });
-  } else {
-    // 기존 멘토에 멘티를 할당
-    const group = mentoringGroups.value.find(group => group.mentorSeq === mentorSeq);
+  const group = mentoringGroups.value.find(group => group.mentorSeq === mentorSeq);
+  if (group) {
+    if (group.menteeSeq) selectedMentees.value.delete(group.menteeSeq);
     group.menteeSeq = menteeSeq;
+  } else {
+    mentoringGroups.value.push({ mentorSeq, menteeSeq });
   }
+
+  selectedMentees.value.add(menteeSeq);
 };
 
-
-// 멘토-멘티 매칭 저장 (서버로 전송)
 const saveMentoringGroups = async () => {
   try {
     const response = await createMentoringGroup(mentoringGroups.value);
-    console.log("hihi"+response);
     alert('멘토-멘티 매칭이 성공적으로 등록되었습니다.');
   } catch (e) {
     console.error('매칭 저장 실패:', e);
@@ -97,7 +91,7 @@ const saveMentoringGroups = async () => {
 
 <template>
   <div class="content-box">
-    <h1>멘토-멘티 매칭</h1>
+    <div class="mentor-mentee-matching-page">멘토-멘티 매칭</div>
     <div>
       <ul class="department-list">
         <li
@@ -131,8 +125,8 @@ const saveMentoringGroups = async () => {
                 <select :id="'mentees-select-' + mentor.employeeSeq" class="click"
                         @change="assignMenteeToMentor(mentor.employeeSeq, $event.target.value)">
                   <option value="">멘티를 지정하세요</option>
-                  <option v-for="mentee in mentees" :key="mentee.employeeSeq" :value="mentee.employeeSeq">
-                    {{ mentee.employeeName }}/{{mentee.employeeSeq}}/({{ mentee.employeeNum }})
+                  <option v-for="mentee in mentees" :key="mentee.employeeSeq" :value="mentee.employeeSeq" :disabled="selectedMentees.has(mentee.employeeSeq)">
+                    {{ mentee.employeeName }}/({{ mentee.employeeNum }})
                   </option>
                 </select>
               </div>
@@ -149,10 +143,10 @@ const saveMentoringGroups = async () => {
 </template>
 
 <style scoped>
-h1{
+.mentor-mentee-matching-page{
   margin-bottom: 49px;
-  margin-top: 150px;
-  font-size: 35px;
+  margin-top: 105px;
+  font-size: 30px;
 }
 .submit{
   margin-top: 20px;
@@ -218,7 +212,7 @@ h1{
   justify-content: space-around;
 }
 .no-data {
-  color: #777;
+  color: var(--gray);
   font-size: 16px;
 }
 </style>

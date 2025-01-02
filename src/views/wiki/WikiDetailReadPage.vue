@@ -94,6 +94,10 @@ const deletingWiki = async () => {
   }
 }
 
+const goBackToWikiList = () => {
+  router.push(`/wiki`);
+}
+
 watch(() => route.params.wikiSeq, async () => {
   const wikiSeq = route.params.wikiSeq;
   const wikiModContentSeq = route.params.wikiModContentSeq;
@@ -165,6 +169,9 @@ onMounted(async () => {
       </div>
       <div v-html="wikiContent" class="wiki-content"></div>
     </WhiteBoxListComponent>
+    <div class="wiki-button-container">
+      <button @click="goBackToWikiList" class="go-back-to-wiki-list-button">뒤로가기</button>
+    </div>
   </div>
 </template>
 
@@ -266,4 +273,22 @@ onMounted(async () => {
   text-decoration: none;
   color: var(--black);
 }
+
+.go-back-to-wiki-list-button {
+  width: 6.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  background-color: var(--gray);
+  color: var(--white);
+}
+
+.wiki-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 2rem;
+}
+
 </style>

@@ -73,7 +73,7 @@ onMounted(async() => {
   height: 32rem;
   background-color: var(--white);
   opacity: 90%;
-  border-radius: 15px;
+  border-radius: 10px;
   border: 1px solid var(--light-gray);
   margin-top: 0.5rem;
   overflow: auto;
@@ -97,7 +97,7 @@ onMounted(async() => {
   height: 1.8rem;
   background-color: var(--purple);
   border: transparent;
-  border-radius: 15px;
+  border-radius: 10px;
   margin-left: 1rem;
   color: var(--white);
   cursor: pointer;

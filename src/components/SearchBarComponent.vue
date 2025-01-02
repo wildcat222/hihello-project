@@ -54,7 +54,7 @@ watch(searchQuery, () => {
   height: 50px;
   background-color: var(--white);
   box-shadow: 2px 2px 4px 0 var(--gray);
-  border-radius: 15px;
+  border-radius: 10px;
   display: flex;
   margin: 0 auto;
 }
