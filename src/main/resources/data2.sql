@@ -92,9 +92,9 @@ VALUES
 INSERT INTO template (template_seq, template_type, template_check_required_status, template_training_type, template_title, template_sub, template_detail, template_url_name, template_task_round, template_procedure, reg_date)
 VALUES
     -- 직무교육 템플릿
-    (3, 'JOB', TRUE, '직무교육', '개발자 기초 교육', '프로그래밍 기초 학습', '개발 기초 교육 과정입니다', 'https://example.com/dev/basic','4주차', 3, NOW()),
-    (4, 'JOB', TRUE, '직무교육', 'SQL 심화 과정', 'DB 실무 역량 강화', 'SQL 심화 학습 과정입니다', 'https://example.com/dev/sql','3주차', 4, NOW()),
-    (5, 'JOB', TRUE, '직무교육', '영업 실무 교육', '영업 프로세스 이해', '영업팀 실무 교육입니다', 'https://example.com/sales/basic','4주차', 5, NOW()),
+    (3, 'TASK', TRUE, '직무교육', '개발자 기초 교육', '프로그래밍 기초 학습', '개발 기초 교육 과정입니다', 'https://example.com/dev/basic','4주차', 3, NOW()),
+    (4, 'TASK', TRUE, '직무교육', 'SQL 심화 과정', 'DB 실무 역량 강화', 'SQL 심화 학습 과정입니다', 'https://example.com/dev/sql','3주차', 4, NOW()),
+    (5, 'TASK', TRUE, '직무교육', '영업 실무 교육', '영업 프로세스 이해', '영업팀 실무 교육입니다', 'https://example.com/sales/basic','4주차', 5, NOW()),
 
     -- 일반 공통교육 템플릿
     (6, 'NORMAL', TRUE, '공통교육', '신입 비즈니스 매너', '비즈니스 매너 학습', '기업 예절 교육입니다', 'https://example.com/common/manner','2주차', 6, NOW()),
