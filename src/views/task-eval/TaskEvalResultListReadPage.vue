@@ -111,7 +111,7 @@ onMounted(async () => {
 }
 
 .page-title {
-  font-size: 35px;
+  font-size: 30px;
   font-weight: bold;
   text-align: center;
   margin: 105px 0px 49px 0px;
@@ -182,12 +182,12 @@ onMounted(async () => {
 
 .eval-button {
   width: 5rem;
-  height: 2.4rem;
+  height: 30px;
   font-size: 15px;
   color: var(--white);
   background-color: var(--purple);
   border: transparent;
-  border-radius: 15px;
+  border-radius: 10px;
   cursor: pointer;
 }
 </style>

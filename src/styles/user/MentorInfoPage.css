@@ -6,11 +6,11 @@
     height: 100vh;
 }
 
-.mentor-header h1 {
-    font-size: 1.8rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
-    color: var(--black);
+.mentee_profile_page{
+    margin-top: 105px;
+    margin-bottom: 49px;
+    font-weight: 600;
+    font-size: 30px;
 }
 
 .mentor-card {

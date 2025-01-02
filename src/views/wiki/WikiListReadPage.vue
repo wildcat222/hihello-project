@@ -139,10 +139,10 @@ onMounted(async () => {
 }
 
 .title {
-  font-size: 35px;
+  font-size: 30px;
   font-weight: bold;
   text-align: center;
-  margin: 62px 0 49px;
+  margin: 105px 0 49px;
 }
 
 .search-bar-header-container {
@@ -194,7 +194,7 @@ onMounted(async () => {
   width: 111px;
   height: 43px;
   color: var(--white);
-  border-radius: 15px;
+  border-radius: 10px;
   border: none;
   margin-right: 10%;
   cursor: pointer;
@@ -203,7 +203,7 @@ onMounted(async () => {
 .wiki_list_row_container {
   display: flex;
   font-size: 15px;
-  margin: 22px 20px;
+  margin: 10px 20px;
   justify-content: space-between;
   cursor: pointer;
 }

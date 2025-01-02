@@ -283,7 +283,7 @@ onMounted(async () => {
 
 .logo {
   margin-top: 50px;
-  font-size: 35px;
+  font-size: 30px;
   font-weight: 700;
   font-family: 'Inter', sans-serif;
   margin-bottom: 60px;
