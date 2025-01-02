@@ -242,7 +242,7 @@ const goToUrl = (url) => {
 const toggleChecklistStatus = async (item, content) => {
   const updatedStatus = !content.listCheckedStatus; // 상태 반전
 
-  const beforeUpdateChecklistStatus = await fetchChecklistStatus(item.templateSeq);
+  const beforeUpdateChecklistStatus = await fetchChecklistStatus(item.templateSeq, employeeRole);
 
   await updateChecklistStatus(
       content.checklistStatusSeq,
@@ -251,8 +251,7 @@ const toggleChecklistStatus = async (item, content) => {
   );
   content.listCheckedStatus = updatedStatus; // 상태 변경
 
-  const afterUpdateChecklistStatus = await fetchChecklistStatus(item.templateSeq);
-
+  const afterUpdateChecklistStatus = await fetchChecklistStatus(item.templateSeq, employeeRole);
   if (beforeUpdateChecklistStatus.data.data !== afterUpdateChecklistStatus.data.data) {
     await fetchingChecklistStatus(item.templateSeq);
   }
