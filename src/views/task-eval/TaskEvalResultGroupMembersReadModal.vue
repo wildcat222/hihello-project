@@ -44,7 +44,7 @@ onMounted(async()=> {
   width: 10rem;
   padding: 1rem;
   background-color: var(--light-purple);
-  border-radius: 15px;
+  border-radius: 10px;
   position: absolute;
   top: 0.1rem;
   left: 12rem;

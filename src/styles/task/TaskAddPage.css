@@ -14,7 +14,8 @@
 
 .evalButton-delete{
     border:none;
-    background-color: var(--yellow);
+    color: var(--white);
+    background-color: var(--gray);
     border-radius: 10px;
     height: 30px;
     width: 50px;
@@ -24,7 +25,7 @@
 }
 
 .evalButton-delete:hover{
-    background-color:var(--dark-yellow)
+    background-color:var(--black)
 }
 
 .TaskAddButtonBox{
@@ -109,7 +110,7 @@
 .task-add-page-container .header-title {
     text-align: center;
     font-weight: bold;
-    font-size: 35px;
+    font-size: 30px;
     margin: 105px 0 46px 0;
 }
 .task-add-page-container .taskAddContainer {

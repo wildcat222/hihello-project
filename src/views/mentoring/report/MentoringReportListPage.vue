@@ -85,7 +85,7 @@ onMounted(async () => {
 <template>
   <div class="report-container">
     <div class="title-section">
-      <h1 class="title">멘토링 보고서</h1>
+      <div class="title">멘토링 보고서</div>
     </div>
 
     <div class="search-section" v-if="employeeRole[0] !== 'MENTEE' && employeeRole[0] !== 'MENTOR'">
@@ -96,7 +96,7 @@ onMounted(async () => {
       </select>
     </div>
     <div class="create-box" @click="goToRegisterPage" v-if="employeeRole[0] === 'MENTEE'">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bibi-plus-circle" viewBox="0 0 16 16">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bibi-plus-circle" viewBox="0 0 16 16">
         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
         <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
       </svg>
@@ -129,14 +129,16 @@ onMounted(async () => {
 
 <style scoped>
 .report-container {
-  padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .title {
+  font-weight: 600;
+  font-size: 30px;
   text-align: center;
-  margin-bottom: 30px;
+  margin-top: 105px;
+  margin-bottom: 49px;
 }
 
 .search-section {
@@ -154,7 +156,7 @@ onMounted(async () => {
   border: none;
   background-color: var(--white);
   box-shadow: 2px 2px 4px 0 var(--gray);
-  border-radius: 15px;
+  border-radius: 10px;
   width: 100px;
   height: 50px;
 }
@@ -162,7 +164,7 @@ onMounted(async () => {
 .create-box {
   box-shadow: 2px 2px 4px 0 var(--gray);
   background-color: var(--purple);
-  border-radius: 15px;
+  border-radius: 10px;
   height: 50px;
   display: flex;
   width: 150px;

@@ -89,7 +89,7 @@ import {onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import StarterKit from '@tiptap/starter-kit';
 import {Editor, EditorContent} from '@tiptap/vue-3';
 import Image from '@tiptap/extension-image';
-import axios from "axios";
+import {springAPI} from "@/services/axios.js";
 
 const editor = ref(null);
 
@@ -141,7 +141,7 @@ const uploadImage = async (file) => {
   const formData = new FormData();
   formData.append('file', file);
   try {
-    const response = await axios.post(`http://localhost:8253/api/v1/wiki/image/upload`, formData, {
+    const response = await springAPI.post(`/wiki/image/upload`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

@@ -227,7 +227,7 @@ onMounted(async () => {
 }
 
 .page-title {
-  font-size: 35px;
+  font-size: 30px;
   font-weight: bold;
   text-align: center;
   margin: 6.562rem 0 2.88rem 0;
@@ -267,7 +267,7 @@ onMounted(async () => {
 .create-box {
   box-shadow: 2px 2px 4px 0 var(--gray);
   background-color: var(--purple);
-  border-radius: 15px;
+  border-radius: 10px;
   height: 50px;
   display: flex;
   width: 150px;
@@ -303,7 +303,7 @@ onMounted(async () => {
   border: none;
   background-color: var(--white);
   box-shadow: 2px 2px 4px 0 var(--gray);
-  border-radius: 15px;
+  border-radius: 10px;
   width: 100px;
   height: 50px;
 }

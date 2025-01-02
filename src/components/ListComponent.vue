@@ -35,9 +35,11 @@ defineProps(['items']);
 
 .gray_hr {
   border: 1px var(--gray) solid;
+  margin: 0px;
 }
 
 .light_gray_hr {
   border: 1px var(--light-gray) solid;
+  margin: 0px;
 }
 </style>

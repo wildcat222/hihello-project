@@ -62,7 +62,7 @@ onMounted(async() => {
       <div>{{ formattingDateTime(wikiHistory.latestModDate) }}</div>
       <div>{{ wikiHistory.editorNum }}</div>
       <div>{{ wikiHistory.editorName }}</div>
-      <button class="yellow-button" @click="navigateToRestoredWiki(wikiHistory.wikiModContentSeq)">보기</button>
+      <button class="purple-button" @click="navigateToRestoredWiki(wikiHistory.wikiModContentSeq)">보기</button>
     </div>
   </div>
 </template>
@@ -73,7 +73,7 @@ onMounted(async() => {
   height: 32rem;
   background-color: var(--white);
   opacity: 90%;
-  border-radius: 15px;
+  border-radius: 10px;
   border: 1px solid var(--light-gray);
   margin-top: 0.5rem;
   overflow: auto;
@@ -92,12 +92,18 @@ onMounted(async() => {
   margin-right: 1.2rem;
 }
 
-.yellow-button {
+.purple-button {
   width: 3.5rem;
   height: 1.8rem;
-  background-color: var(--yellow);
+  background-color: var(--purple);
   border: transparent;
-  border-radius: 15px;
+  border-radius: 10px;
   margin-left: 1rem;
+  color: var(--white);
+  cursor: pointer;
+}
+
+.purple-button:hover {
+  background-color: var(--dark-purple);
 }
 </style>
