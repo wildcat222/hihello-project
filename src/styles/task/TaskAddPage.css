@@ -14,7 +14,8 @@
 
 .evalButton-delete{
     border:none;
-    background-color: var(--light-gray);
+    color: var(--white);
+    background-color: var(--gray);
     border-radius: 10px;
     height: 30px;
     width: 50px;
