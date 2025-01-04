@@ -12,5 +12,5 @@ public interface OnboardingMapper {
 
     CompletedStatusDTO getCountStatus(Long employeeSeq);
 
-    List<OnboardingDTO> getOnboardingListByMentor(Long employeeSeq);
+    List<OnboardingDTO> getOnboardingListByMentor(Long employeeSeq, Long menteeSeq);
 }

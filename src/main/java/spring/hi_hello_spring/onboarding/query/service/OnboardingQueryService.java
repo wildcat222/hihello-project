@@ -3,6 +3,8 @@ package spring.hi_hello_spring.onboarding.query.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.hi_hello_spring.common.util.CustomUserUtils;
+import spring.hi_hello_spring.evaluation.query.mapper.TaskSubmitQueryMapper;
+import spring.hi_hello_spring.mentoring.query.dto.MenteeQueryDTO;
 import spring.hi_hello_spring.onboarding.query.dto.CompletedStatusDTO;
 import spring.hi_hello_spring.onboarding.query.dto.OnboardingDTO;
 import spring.hi_hello_spring.onboarding.query.dto.OnboardingResDTO;
@@ -15,6 +17,7 @@ import java.util.List;
 public class OnboardingQueryService {
 
     private final OnboardingMapper onboardingMapper;
+    private final TaskSubmitQueryMapper taskSubmitQueryMapper;
 
     public OnboardingResDTO getOnboardingListByMentee() {
 
@@ -39,8 +42,10 @@ public class OnboardingQueryService {
     public OnboardingResDTO getOnboardingListByMentor() {
 
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
+        MenteeQueryDTO mentee = taskSubmitQueryMapper.findMenteeEmployeeSeq(employeeSeq);
+        Long menteeSeq = mentee.getMenteeSeq();
 
-        List<OnboardingDTO> onboardingList = onboardingMapper.getOnboardingListByMentor(employeeSeq);
+        List<OnboardingDTO> onboardingList = onboardingMapper.getOnboardingListByMentor(employeeSeq, menteeSeq);
         CompletedStatusDTO completedStatusDTO = onboardingMapper.getCountStatus(employeeSeq);
 
         int completedCount = completedStatusDTO.getCompletedCount();
