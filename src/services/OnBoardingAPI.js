@@ -96,7 +96,7 @@ export default {
         }
     },
 
-    // 체크리스트 항목의 상태 변경 (체크박스 개별적으로 처리)
+    // 체크리스트 항목의 상태 변경 (체크박스 개별적으로 처리).
     toggleChecklistStatus(item, content) {
         const updatedStatus = !content.listCheckedStatus;  // 상태 반전
         this.updateChecklistStatus(content.checklistStatusSeq, content.checklistSeq, updatedStatus);
