@@ -115,13 +115,29 @@ const closeModal = () => {
 // 페이지 이동
 const goToTaskPage = () => {
   if (selectedItem.value) {
-    router.push(`/task/${selectedItem.value.taskSeq}`);
+    const taskSeq = selectedItem.value.taskSeq;
+    const templateSeq = selectedItem.value.templateSeq; // templateSeq 값 추가
+
+    if (!taskSeq) {
+      console.error('taskSeq 값이 없습니다.');
+      return;
+    }
+    if (!templateSeq) {
+      console.error('templateSeq 값이 없습니다.');
+      return;
+    }
+
+    // URL로 경로와 쿼리 문자열을 전달
+    router.push({
+      path: `/task/${taskSeq}`,
+      query: { templateSeq }, // templateSeq를 쿼리 파라미터로 추가
+    });
   } else {
-    console.error('taskSeq 값이 없습니다.');
+    console.error('selectedItem 값이 없습니다.');
   }
 };
-
 const goToTaskReviewPage = () => {
+
   if (selectedItem.value) {
     router.push(`/task-submit/${selectedItem.value.taskSeq}`);
   } else {
@@ -228,7 +244,6 @@ const modalContentStyle = computed(() => {
   };
 });
 
-// URL 열기
 const goToUrl = (url) => {
   console.log('Received URL:', url);
   if (url) {
@@ -481,8 +496,12 @@ onMounted(async () => {
         <div class="status-gauge">
           <div class="vr"></div>
           <div class="status-gauge-container">
-            <progress :value="completedCount" :max="totalCount" class="progress-bar"></progress>
-            <p class="progress-text">{{ completedCount }} / {{ totalCount }}</p>
+            <div>온보딩 수행률</div>
+            <div class="wave-container">
+              <progress :value="completedCount" :max="totalCount" class="progress-bar"></progress>
+              <div class="wave"></div>
+            </div>
+            <p class="progress-text">{{ completedCount }} of {{ totalCount }}</p>
           </div>
         </div>
       </div>
@@ -556,7 +575,7 @@ onMounted(async () => {
                   확인하기
                 </button>
                 <button
-                    v-if="(item.templateCheckRequiredStatus === true && employeeRole === 'MENTOR') || (item.templateCheckRequiredStatus === false && employeeRole === 'MENTEE')"
+                    v-if="(item.templateCheckRequiredStatus === true && employeeRole === 'MENTOR' || item.templateCheckRequiredStatus === false && employeeRole === 'MENTEE') && !(item.templateType === 'TASK' || item.templateType === 'BREAK' || item.templateType === 'CF')"
                     class="template-button template-complete-button"
                     @click="employeeRole === 'MENTOR' ? changeCompleteStatusMentor(item.templateSeq) : changeCompleteStatusMentee(item.templateSeq)">
                   완료하기
