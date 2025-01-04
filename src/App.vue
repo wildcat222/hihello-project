@@ -81,13 +81,6 @@ const toggleButtons = () => {
   showAdditionalButtons.value = !showAdditionalButtons.value;
 };
 
-// 웹 브라우저 종료 시 로컬 스토리지 토큰 제거
-const handleBeforeUnload = () => {
-  localStorage.removeItem('accessToken')
-  localStorage.removeItem('refreshToken')
-}
-
-
 // 컴포넌트가 마운트될 때 이벤트 초기화
 onMounted(() => {
   if (userStore.accessToken) {
@@ -97,15 +90,9 @@ onMounted(() => {
 
   userStore.initializeInterceptors(); // Axios 인터셉터 초기화
 
-  window.addEventListener('beforeunload', handleBeforeUnload);
-
   // 외부 클릭 이벤트 등록
   document.addEventListener('mousedown', hideComponentsOnOutsideClick);
 });
-
-onBeforeUnmount(() => {
-  window.addEventListener('beforeunload', handleBeforeUnload);
-})
 
 // 컴포넌트가 언마운트될 때 이벤트 제거
 onUnmounted(() => {
@@ -171,7 +158,7 @@ onUnmounted(() => {
     <ChatBotModal
         :isVisible="isChatBotModalVisible"
         @update:isVisible="isChatBotModalVisible = $event"
-        iframeSrc="http://172.30.1.40:8501/"
+        iframeSrc="http://192.168.1.6:8501/"
     />
   </div>
 </template>

@@ -103,6 +103,18 @@
     height: 33px;
 }
 
+.peer-review-list__confirm-btn:hover, .peer-review-list__add-btn:hover {
+    background-color: var(--dark-purple);
+}
+
+.peer-review-list__delete-btn:hover {
+    background-color: var(--dark-yellow);
+}
+
+.peer-review-list__cancel-btn:hover {
+    background-color: var(--black);
+}
+
 .peer-review-list__add-button-container {
     display: flex;
     justify-content: center;
