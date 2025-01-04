@@ -100,7 +100,7 @@ onMounted(() => {
               <td :rowspan="tableData.length + 1" class="evalList">평가 항목</td>
             </tr>
             <tr v-for="(item, index) in tableData" :key="index">
-              <td>{{ item.evalIndContent }}</td>
+              <td class="taskAddEvalsub">{{ item.evalIndContent }}</td>
               <td>
                 <input v-model="item.evalListContent" placeholder="내용을 입력하세요" class="evalContent"/>
               </td>

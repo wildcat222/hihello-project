@@ -37,13 +37,13 @@ const fetchingSubmittedTask = async(taskSubmitSeq) => {
     taskSubmitFileUrl.value = response.data.taskSubmitFileUrl;
     taskSubmitDate.value = response.data.taskSubmitDate;
   } catch (error) {
-    alert("제출된 과제 내용을 불러오던 도중 오류가 발생했습니다.");
+    alert("과제가 제출되지 않았습니다.");
+    window.location.href = '/main';
   }
 }
 
 // 과제 평가 항목 조회하기
 const fetchingTaskEvalDetailResult = async (taskSeq) => {
-  try {
     const response = await fetchEvalLists(taskSeq);
 
     taskEvalResultDetailList.splice(0, taskEvalResultDetailList.length); // 초기화
@@ -58,9 +58,6 @@ const fetchingTaskEvalDetailResult = async (taskSeq) => {
       });
     });
 
-  } catch (error) {
-    alert("과제 평가 조회 상세 결과를 조회하던 도중 오류가 발생했습니다.");
-  }
 };
 
 // 평가 지표 항목별로 그룹핑된 데이터 생성
@@ -132,8 +129,8 @@ onMounted(async() => {
           <div class="mentor-task-page-title">과제 제출</div>
           <div v-if="taskSubmitFileUrl !== null" class="flex">
             <div class="task-file-text">제출 파일</div>
-            <div class="task-file-name-container"  @click="downloadFile(taskSubmitFileName, taskSubmitFileUrl)">
-              <div class="mentor-task-detail-task-file-name">{{ taskSubmitFileName }}</div>
+            <div class="task-file-name-container"  @click="downloadFile(taskSubmitFileUrl, taskSubmitFileName)">
+              <div class="mentor-task-detail-task-file-name">🔗 {{ taskSubmitFileName }}</div>
             </div>
           </div>
           <div class="mentor-task-detail-read-task-submit-content">{{ taskSubmitContent }}</div>
