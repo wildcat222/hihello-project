@@ -1,0 +1,139 @@
+name: fastapi-master-deploy
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+    branches:
+      - "master"
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+  push:
+    branches:
+      - "master"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: produce
+
+    steps:
+      # 코드 체크아웃
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Python 3.12 설정
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      # Poetry 설치
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"
+          poetry --version
+
+      # 환경변수 설정
+      - name: Set Environment Variables
+        run: |
+          echo "ENV=production" >> $GITHUB_ENV
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+          echo "PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }}" >> $GITHUB_ENV
+          echo "PINECONE_ENV=${{ secrets.PINECONE_ENV }}" >> $GITHUB_ENV
+          echo "PINECONE_HOST=${{ secrets.PINECONE_HOST }}" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "UPSTAGE_API_KEY=${{ secrets.UPSTAGE_API_KEY }}" >> $GITHUB_ENV
+
+      # Python 가상 환경 및 의존성 설치
+      - name: Set up Virtual Environment and Install Dependencies
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          poetry install --no-root
+
+      # 현재 시간 가져오기
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss
+          utcOffset: "+09:00"
+
+      # 애플리케이션 패키징
+      - name: Package Application
+        run: |
+          mkdir -p deploy
+          cp -r app deploy/
+          cp pyproject.toml deploy/
+          cp poetry.lock deploy/
+          cp Procfile deploy/Procfile
+          cp -r .ebextensions deploy/.ebextensions || echo "No .ebextensions directory found"
+          cp -r .platform deploy/.platform || echo "No .platform directory found"
+          cd deploy && zip -r deploy.zip .
+
+      # Elastic Beanstalk에 배포
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: hihello-fastapi
+          environment_name: Hihello-fastapi-env
+          version_label: github-action-${{ steps.current-time.outputs.formattedTime }}
+          region: ap-northeast-2
+          deployment_package: deploy/deploy.zip
+          use_existing_version_if_available: false
+          wait_for_deployment: true
+          wait_for_environment_recovery: 300
+
+      # Discord 알림 전송
+      - name: Notify Discord
+        if: always()
+        run: |
+          BUILD_STATUS="${{ job.status }}"
+          ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          send_discord_notification() {
+            local status="$1"
+            local title=""
+            local color=""
+            local description=""
+
+            if [ "$status" = "success" ]; then
+              title="✅ 배포 성공"
+              color=3066993
+              description="FastAPI 애플리케이션이 성공적으로 배포되었어요! 🎉\\n\\n"
+            else
+              title="❌ 배포 실패"
+              color=15158332
+              description="FastAPI 애플리케이션 배포에 실패했어요. 😢\\n\\n"
+            fi
+
+            curl -H "Content-Type: application/json" \
+              -d "{
+                    \"embeds\": [
+                      {
+                        \"title\": \"$title\",
+                        \"description\": \"$description\",
+                        \"color\": $color,
+                        \"fields\": [
+                          {
+                            \"name\": \"🔗 로그\",
+                            \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\",
+                            \"inline\": false
+                          }
+                        ]
+                      }
+                    ]
+                  }" \
+              ${{ secrets.DISCORD_WEBHOOK_URL }}
+          }
+
+          send_discord_notification "$BUILD_STATUS"
