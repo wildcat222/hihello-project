@@ -22,7 +22,7 @@ const fetchingFinalEvalResultList = async() => {
         employeeNum: finalEval.employeeNum,
         employeeName: finalEval.employeeName,
         departmentName: finalEval.departmentName,
-        totalFinalEvalScore: finalEval.totalFinalEvalScore
+        totalFinalEvalScore: parseFloat(finalEval.totalFinalEvalScore.toFixed(2))
       })
     })
   } catch(error) {
@@ -46,7 +46,7 @@ const searchingFinalEvalResultList = async(keyword) => {
         employeeNum: finalEval.employeeNum,
         employeeName: finalEval.employeeName,
         departmentName: finalEval.departmentName,
-        totalFinalEvalScore: finalEval.totalFinalEvalScore
+        totalFinalEvalScore: parseFloat(finalEval.totalFinalEvalScore.toFixed(2))
       })
     })
 

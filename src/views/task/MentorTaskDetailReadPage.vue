@@ -3,12 +3,13 @@ import "@/styles/task/MentorTaskDetailReadPage.css"
 import WhiteBoxComponent from "@/components/WhiteBoxComponent.vue";
 import {computed, onMounted, reactive, ref} from "vue";
 import {fetchSubmittedTask, back} from "@/services/TaskApi.js";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {fetchEvalLists} from "@/services/EvalListApi.js";
 import {createTaskEval} from "@/services/TaskEvalApi.js";
 import {downloadFile} from "@/services/FileApi.js";
 
 const route = useRoute();
+const router = useRouter();
 
 const taskSeq = ref('');
 const taskTitle = ref('');
@@ -94,7 +95,7 @@ const creatingTaskEvals = async() => {
 
     await createTaskEval(taskSubmitSeq, taskEvalsData);
     alert("과제 평가가 성공적으로 등록되었습니다.");
-    window.location.href = '/main';
+    await router.push('/task-eval');
   } catch(error) {
     alert("과제 평가 등록 중 오류가 발생했습니다.");
   }
@@ -135,7 +136,7 @@ onMounted(async() => {
               <div class="mentor-task-detail-task-file-name">{{ taskSubmitFileName }}</div>
             </div>
           </div>
-          <div>{{ taskSubmitContent }}</div>
+          <div class="mentor-task-detail-read-task-submit-content">{{ taskSubmitContent }}</div>
         </div>
         <hr class="light-gray-hr">
         <div class="mentor-eval-container">
@@ -183,8 +184,8 @@ onMounted(async() => {
         </div>
       </div>
       <div class="mentor-task-detail-button-box">
-        <button class="mentor-task-detail-cencel-button" @click="back">뒤로가기</button>
-        <button class="button mentor-task-detail-read-purple-button" @click="creatingTaskEvals">평가하기</button>
+        <button class="mentor-task-detail-cancel-button" @click="back">뒤로가기</button>
+        <button class="mentor-task-detail-read-purple-button" @click="creatingTaskEvals">평가하기</button>
       </div>
     </WhiteBoxComponent>
   </div>
