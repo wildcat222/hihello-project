@@ -1,31 +1,28 @@
-name: fastapi-poetry-service
+name: fastapi-master-deploy
 
 permissions:
   contents: read
-  pull-requests: write
 
 on:
-  pull_request:
+  push:
     branches:
-      - "develop"
-    types:
-      - opened
-      - reopened
+      - "master"
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    environment: produce
 
     steps:
       # 코드 체크아웃
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Python 3.11 설정
-      - name: Set up Python 3.11
+      # Python 3.12 설정
+      - name: Set up Python 3.12
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       # Poetry 설치
       - name: Install Poetry
@@ -37,80 +34,80 @@ jobs:
       # 환경변수 설정
       - name: Set Environment Variables
         run: |
+          echo "ENV=production" >> $GITHUB_ENV
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
           echo "PINECONE_API_KEY=${{ secrets.PINECONE_API_KEY }}" >> $GITHUB_ENV
           echo "PINECONE_ENV=${{ secrets.PINECONE_ENV }}" >> $GITHUB_ENV
           echo "PINECONE_HOST=${{ secrets.PINECONE_HOST }}" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
           echo "UPSTAGE_API_KEY=${{ secrets.UPSTAGE_API_KEY }}" >> $GITHUB_ENV
 
-      # 스크립트 실행 권한 부여
-      - name: Grant execute permission for scripts
-        run: chmod +x ./scripts/* || echo "No scripts to make executable"
-
-      # 시작 시간 기록
-      - name: Record Start Time
-        id: record_start
-        run: echo "start_time=$(date +%s)" >> $GITHUB_ENV
-
-      # Poetry로 의존성 설치
-      - name: Install Dependencies with Poetry
-        run: poetry install --no-root
-
-      # 실행 시간 계산
-      - name: Calculate Duration
-        id: calculate_duration
+      # Python 가상 환경 및 의존성 설치
+      - name: Set up Virtual Environment and Install Dependencies
         run: |
-          START_TIME=$(cat $GITHUB_ENV | grep start_time | cut -d'=' -f2)
-          END_TIME=$(date +%s)
-          echo "duration=$((END_TIME - START_TIME))" >> $GITHUB_ENV
+          python3 -m venv /var/app/venv
+          source /var/app/venv/bin/activate
+          poetry install --no-root
+
+      # 현재 시간 가져오기
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss
+          utcOffset: "+09:00"
+
+      # 애플리케이션 패키징
+      - name: Package Application
+        run: |
+          mkdir -p deploy
+          cp -r app deploy/
+          cp pyproject.toml deploy/
+          cp poetry.lock deploy/
+          cp Procfile deploy/Procfile
+          cp -r .ebextensions deploy/.ebextensions || echo "No .ebextensions directory found"
+          cp -r .platform deploy/.platform || echo "No .platform directory found"
+          cd deploy && zip -r deploy.zip .
+
+      # Elastic Beanstalk에 배포
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: hihello-fastapi
+          environment_name: Hihello-fastapi-env
+          version_label: github-action-${{ steps.current-time.outputs.formattedTime }}
+          region: ap-northeast-2
+          deployment_package: deploy/deploy.zip
+          use_existing_version_if_available: false
+          wait_for_deployment: true
+          wait_for_environment_recovery: 300
 
       # Discord 알림 전송
       - name: Notify Discord
-        if: always() # 항상 실행
+        if: always()
         run: |
-          # 빌드 상태 가져오기
-          if [ "${{ job.status }}" = "success" ]; then
-            BUILD_STATUS="success"
-          else
-            BUILD_STATUS="failure"
-          fi
-            
-          # PR 제목 또는 커밋 메시지 가져오기
-          if [ -n "${{ github.event.pull_request.title }}" ]; then
-            PR_TITLE="${{ github.event.pull_request.title }}"
-          else
-            PR_TITLE="${{ github.event.head_commit.message }}"
-          fi
-            
-          # JSON-safe 포맷으로 변환
-          SAFE_PR_TITLE=$(echo "$PR_TITLE" | jq -R .)
-            
-          # 기본값 설정
-          DURATION="${{ env.duration }}"
-          if [ -z "$DURATION" ]; then
-            DURATION="알 수 없음"
-          fi
-            
+          BUILD_STATUS="${{ job.status }}"
           ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-            
-          # Discord Webhook 호출 함수
+
           send_discord_notification() {
-            local status="$1" # success or failure
+            local status="$1"
             local title=""
             local color=""
             local description=""
-            
+
             if [ "$status" = "success" ]; then
-              title="✅ 빌드 성공 알림"
+              title="✅ 배포 성공"
               color=3066993
-              description="빌드에 성공했어핑! 🎉\\n\\n"
+              description="FastAPI 애플리케이션이 성공적으로 배포되었어요! 🎉\\n\\n"
             else
-              title="❌ 빌드 실패 알림"
+              title="❌ 배포 실패"
               color=15158332
-              description="빌드에 실패했어핑. 😢\\n\\n"
+              description="FastAPI 애플리케이션 배포에 실패했어요. 😢\\n\\n"
             fi
-            
-            # Discord Webhook 호출
+
             curl -H "Content-Type: application/json" \
               -d "{
                     \"embeds\": [
@@ -120,18 +117,8 @@ jobs:
                         \"color\": $color,
                         \"fields\": [
                           {
-                            \"name\": \"📝 작업 제목\",
-                            \"value\": $SAFE_PR_TITLE,
-                            \"inline\": false
-                          },
-                          {
-                            \"name\": \"⏱️ 실행 시간\",
-                            \"value\": \"${DURATION}초\\n\\n\",
-                            \"inline\": false
-                          },
-                          {
-                            \"name\": \"🔗 디버그 URL\",
-                            \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\\n\\n\",
+                            \"name\": \"🔗 로그\",
+                            \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\",
                             \"inline\": false
                           }
                         ]
@@ -140,6 +127,5 @@ jobs:
                   }" \
               ${{ secrets.DISCORD_WEBHOOK_URL }}
           }
-            
-          # 빌드 성공 및 실패에 따라 Discord 알림 전송
+
           send_discord_notification "$BUILD_STATUS"

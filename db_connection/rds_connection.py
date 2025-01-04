@@ -4,10 +4,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# .env 파일 로드
-load_dotenv()
+# .env 파일 로드 (개발 환경에서만)
+if os.getenv("ENV", "development") == "development":
+    load_dotenv()
 
-# 환경변수에서 데이터베이스 URL 가져오기
+# 환경변수에서 DATABASE_URL 가져오기
 DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise ValueError("DATABASE_URL 환경변수가 설정되지 않았습니다.")
