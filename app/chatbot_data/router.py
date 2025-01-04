@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from db_connection.rds_connection import get_db
-from chatbot_data.model import Chatbot
-from chatbot_category.model import ChatbotCategory
-from chatbot_data.schema import ChatbotAddRequest
-from chatbot_data.schema import ChatbotUpdateRequest
+from app.db_connection.rds_connection import get_db
+from app.chatbot_data.model import Chatbot
+from app.chatbot_category.model import ChatbotCategory
+from app.chatbot_data.schema import ChatbotAddRequest
+from app.chatbot_data.schema import ChatbotUpdateRequest
 
 router = APIRouter(
     prefix="/api/v1/hr/chatbot",

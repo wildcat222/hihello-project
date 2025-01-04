@@ -1,6 +1,6 @@
 from sqlalchemy import Column, BigInteger, String, ForeignKey
 from sqlalchemy.orm import relationship
-from db_connection.rds_connection import Base
+from app.db_connection.rds_connection import Base
 
 class Chatbot(Base):
     __tablename__ = "chatbot"

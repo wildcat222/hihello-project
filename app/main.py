@@ -1,9 +1,9 @@
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from chatbot_category.router import router as category_router
-from chatbot_data.router import router as data_router
-from exception import (
+from app.chatbot_category.router import router as category_router
+from app.chatbot_data.router import router as data_router
+from app.exception import (
     http_exception_handler,
     validation_exception_handler,
     custom_validation_exception_handler,

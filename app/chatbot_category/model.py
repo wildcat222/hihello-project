@@ -1,5 +1,5 @@
 from sqlalchemy import Column, BigInteger, String
-from db_connection.rds_connection import Base
+from app.db_connection.rds_connection import Base
 from sqlalchemy.orm import relationship
 
 class ChatbotCategory(Base):
