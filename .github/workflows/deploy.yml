@@ -54,8 +54,8 @@ jobs:
       # Python 가상 환경 및 의존성 설치
       - name: Set up Virtual Environment and Install Dependencies
         run: |
-          python3 -m venv venv
-          source venv/bin/activate
+          python3 -m venv /var/app/venv
+          source /var/app/venv/bin/activate
           poetry install --no-root
 
       # 현재 시간 가져오기
