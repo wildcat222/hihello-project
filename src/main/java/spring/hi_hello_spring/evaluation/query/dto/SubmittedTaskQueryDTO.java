@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class SubmittedTaskQueryDTO {
 
     private Long taskSeq;
+    private Long menteeSeq;
     private String taskTitle;
     private String taskFileName;
     private String taskFileUrl;
