@@ -33,6 +33,7 @@ const fetchingFinalEvalResultDetail = async (employeeSeq) => {
         finalEvalScore: finalEvalResult.finalEvalScore
       })
       finalEvalTotalScore.value += finalEvalResult.finalEvalScore;
+      finalEvalTotalScore.value = parseFloat(finalEvalTotalScore.value.toFixed(2));   // 소수 둘째 자리로 반올림
     })
   } catch (error) {
     alert("최종 평과 결과 상세 내용을 조회하던 도중 오류가 발생했습니다.");

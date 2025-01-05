@@ -16,7 +16,10 @@
                 d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
           </svg>
           <span class="login-name" @click.stop="openProfileModal">{{ employeeName }} 님</span>
-          <i class="notify fa-solid fa-bell" @click.stop="openAlarmModal"/>
+          <div class="notify-box" @click.stop="openAlarmModal">
+            <i class="notify fa-solid fa-bell"/>
+            <div class="notify-count" v-if="notificationStore.notiCount !== 0">{{ notificationStore.notiCount }}</div>
+          </div>
         </li>
       </div>
 
@@ -64,10 +67,6 @@
       </li>
     </ul>
   </aside>
-  <div v-if="isLoading" class="loading-spinner">
-    <div class="spinner"></div>
-    <p>로딩중...</p>
-  </div>
   <AlarmModal class="alarm-modal" v-if="shouldShowAlarms" @click.stop/>
   <EmployeeProfile class="profile-modal" v-if="shouldShowProfile" @click.stop/>
 </template>
@@ -81,6 +80,7 @@ import { springAPI } from "@/services/axios.js";
 import AlarmModal from "@/components/AlarmModal.vue";
 import EmployeeProfile from "@/components/EmployeeProfile.vue";
 import {createFinalEval} from "@/services/FinalEvalApi.js";
+import {useNotificationStore} from "@/stores/NotificationStore.js";
 
 const userStore = useUserStore();
 const shouldShowAlarms = ref(false);
@@ -108,7 +108,6 @@ const toggleMenu = (menuName) => {
     activeSubMenu.value = null; // 서브 메뉴 상태 초기화
   }
 };
-
 
 const activateSubMenu = (subMenuName) => {
   activeSubMenu.value = subMenuName;
@@ -167,6 +166,7 @@ const loadName = async (employeeSeq) => {
   }
 };
 
+const notificationStore = useNotificationStore();
 const menus = ref([
   // 멘티 ASIDE
   {name: "인턴 위키", url: "/wiki", role: "MENTEE"},
@@ -272,6 +272,7 @@ onMounted(async () => {
     employeeSeq.value = employeeInfo.value.employeeSeq;
     springAPI.defaults.headers.common['Authorization'] = `Bearer ${userStore.accessToken}`
     await loadName(employeeSeq.value);
+    await notificationStore.updateNotiCount();
   }
 });
 </script>
@@ -378,7 +379,21 @@ ul {
 .notify {
   display: flex;
   margin-top: 3px;
+}
+
+.notify-box {
   cursor: pointer;
+}
+
+.notify-count {
+  position: absolute;
+  font-size: 15px;
+  width: 18px;
+  background-color: var(--red);
+  color: var(--white);
+  border-radius: 13px;
+  top: -8px;
+  right: -8px;
 }
 
 .alarm-modal {
