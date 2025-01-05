@@ -23,7 +23,6 @@
         </li>
       </div>
 
-
       <!-- 로그아웃 메뉴 -->
       <li class="aside-logout-button" @click="logout">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
@@ -73,13 +72,14 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from "vue";
-import {useUserStore} from "@/stores/UserStore.js";
+import {computed, nextTick, onMounted, ref} from "vue";
+import { useUserStore } from "@/stores/UserStore.js";
 import router from "@/router/index.js";
-import {fetchName} from "@/services/UserApi.js";
-import {springAPI} from "@/services/axios.js";
+import { fetchName } from "@/services/UserApi.js";
+import { springAPI } from "@/services/axios.js";
 import AlarmModal from "@/components/AlarmModal.vue";
 import EmployeeProfile from "@/components/EmployeeProfile.vue";
+import {createFinalEval} from "@/services/FinalEvalApi.js";
 import {useNotificationStore} from "@/stores/NotificationStore.js";
 
 const userStore = useUserStore();
@@ -87,6 +87,7 @@ const shouldShowAlarms = ref(false);
 const shouldShowProfile = ref(false);
 const activeMenu = ref(null);
 const activeSubMenu = ref(null);
+const isLoading = ref(false);
 
 const openProfileModal = () => {
   shouldShowProfile.value = !shouldShowProfile.value;
@@ -99,13 +100,13 @@ const openAlarmModal = () => {
 };
 
 const toggleMenu = (menuName) => {
-  // 메뉴 상태를 토글하는 방식으로 유지.
   if (activeMenu.value === menuName) {
     // 이미 활성화된 메뉴를 클릭하면 닫지 않음
-    return;
+    activeMenu.value = null; // 메뉴 상태 초기화
+  } else {
+    activeMenu.value = menuName;
+    activeSubMenu.value = null; // 서브 메뉴 상태 초기화
   }
-  activeMenu.value = menuName;      // 메뉴 클릭 시 활성화된 상위 메뉴를 설정
-  activeSubMenu.value = null;
 };
 
 const activateSubMenu = (subMenuName) => {
@@ -129,9 +130,22 @@ const handleOutsideClick = (event) => {
   }
 };
 
-router.beforeEach((to, from, next) => {
-  resetModalsAndMenu();
-  next();
+router.beforeEach(async (to, from, next) => {
+  if (to.path === '/final-eval') {
+    isLoading.value = true; // 로딩 상태 설정
+    await nextTick(); // DOM 업데이트를 강제로 반영
+
+    try {
+      await creatingFinalEval(); // 비동기 작업 실행
+    } catch (error) {
+      alert('최종 평가 생성 중 오류가 발생했습니다.');
+    } finally {
+      isLoading.value = false; // 항상 로딩 상태 해제
+      next(); // 라우팅 처리
+    }
+  } else {
+    next(); // 다른 라우팅은 그대로 진행
+  }
 });
 
 const logout = () => {
@@ -153,7 +167,6 @@ const loadName = async (employeeSeq) => {
 };
 
 const notificationStore = useNotificationStore();
-
 const menus = ref([
   // 멘티 ASIDE
   {name: "인턴 위키", url: "/wiki", role: "MENTEE"},
@@ -244,6 +257,14 @@ const filteredMenus = computed(() => {
   );
 });
 
+const creatingFinalEval = async() => {
+  try {
+    const response = await createFinalEval();
+  } catch(error) {
+    console.error("최종 평가 등록 실패", error);
+  }
+}
+
 onMounted(async () => {
   document.addEventListener("click", handleOutsideClick);
 
@@ -254,8 +275,6 @@ onMounted(async () => {
     await notificationStore.updateNotiCount();
   }
 });
-
-
 </script>
 
 <style scoped>
@@ -400,5 +419,32 @@ ul {
   z-index: 1000;
   top: 180px;
   left: 220px;
+}
+
+.loading-spinner {
+  left: 200px;
+  width: 90%;
+  height:100%;
+  position: absolute;
+  background-color: var(--ivory);
+  z-index: 5;
+}
+
+.spinner {
+  border: 4px solid var(--yellow);
+  border-top: 4px solid var(--purple);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>

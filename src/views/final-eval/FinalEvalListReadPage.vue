@@ -38,6 +38,8 @@ const searchingFinalEvalResultList = async(keyword) => {
       return;
     }
 
+    searchedFinalEvalResultList.length = 0;
+
     const response = await searchFinalEvalResultList(keyword);
 
     response.data.data.forEach(finalEval => {
@@ -59,10 +61,6 @@ const searchingFinalEvalResultList = async(keyword) => {
 const navigateToFinalEvalDetail = (employeeSeq) => {
   router.push(`/final-eval/${employeeSeq}`);
 }
-
-watch(searchedFinalEvalResultList, (newList) => {
-  isSearching.value = newList.length > 0;
-});
 
 onMounted(() => {
   fetchingFinalEvalResultList();
