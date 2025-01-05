@@ -17,10 +17,14 @@ import uvicorn
 app = FastAPI()
 
 # 환경 구분
-ENV = os.getenv("ENV", "development")  # 기본값은 'development'
+ENV = os.getenv("production", "development")  # 기본값은 'development'
 
 # CORS 설정
-origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+if ENV == "development":
+    origins = ["http://localhost:5173", "http://127.0.0.1:5173"]  # 개발 환경 도메인
+else:
+    origins = os.getenv("ALLOWED_ORIGINS", "https://hi-hello.site").split(",")  # 배포 환경 도메인
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -43,7 +47,7 @@ app.include_router(data_router)
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))  # Elastic Beanstalk에서 제공하는 PORT 사용
     host = "localhost" if ENV == "development" else "0.0.0.0"  # 호스트 설정
-    reload = True if ENV == "development" else False  # 개발 환경에서만 reload 활성화
+    reload = True if ENV == "production" else False  # 개발 환경에서만 reload 활성화
 
     uvicorn.run(
         "app.main:app",
