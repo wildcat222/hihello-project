@@ -126,8 +126,8 @@ public class JwtUtil {
 //        log.info("employee 정보 : " + employeePositionName + " + " + employeeDepartmentName);
 
 //        long expirationTime = (long) 1000 * 60 * 30; // 30분
-        long expirationTime = (long) 5000; // 토큰 테스트 용
-//        long expirationTime = (long) 1000 * 60 * 120; // 프론트 개발 용 2시간
+//        long expirationTime = (long) 5000; // 토큰 테스트 용
+        long expirationTime = (long) 1000 * 60 * 180; // 프론트 개발 용 3시간
 
         /* 권한을 꺼내 List<String> 으로 변환 */
         List<String> authorities = authentication.getAuthorities().stream()
