@@ -15,17 +15,17 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyList;
 
-@ExtendWith(MockitoExtension.class)  // Ensure this is used and remove openMocks
+@ExtendWith(MockitoExtension.class)
 class TaskEvalServiceTest {
 
     @Mock
-    private TaskGroupEvalRepository taskGroupEvalRepository; // Mocking repository
+    private TaskGroupEvalRepository taskGroupEvalRepository;
 
     @Mock
-    private CustomUserUtils customUserUtils; // Mocking utility for current user
+    private CustomUserUtils customUserUtils;
 
     @InjectMocks
-    private TaskEvalService taskEvalService; // Service being tested
+    private TaskEvalService taskEvalService;
 
     @Test
     void createTaskGroupEval_whenValidDTOProvided_shouldSavePeerReviews() {
@@ -42,13 +42,12 @@ class TaskEvalServiceTest {
 
         List<EvalGroupCreateDTO> evalGroupCreateDTOList = Arrays.asList(dto1, dto2);
 
-        Long reviewerSeq = 100L; // Mocked reviewer sequence
+        Long reviewerSeq = 100L;
 
         // When
         taskEvalService.createTaskGroupEval(evalGroupCreateDTOList);
 
         // Then
-        // Verify that saveAll was called once with a list of PeerReview entities
         Mockito.verify(taskGroupEvalRepository, Mockito.times(1)).saveAll(anyList());
     }
 }

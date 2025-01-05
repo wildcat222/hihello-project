@@ -1,14 +1,11 @@
 package spring.hi_hello_spring.evaluation.command.application.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import spring.hi_hello_spring.common.exception.CustomException;
-import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.common.repository.FileRepository;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskCreateDTO;
 import spring.hi_hello_spring.evaluation.command.application.dto.TaskSubmitDTO;
@@ -19,12 +16,12 @@ import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.TaskTyp
 import spring.hi_hello_spring.evaluation.command.domain.repository.TaskRepository;
 import spring.hi_hello_spring.common.aggregate.entity.File;
 import spring.hi_hello_spring.evaluation.command.domain.service.EvalListDomainService;
+import spring.hi_hello_spring.group.command.application.dto.TaskRequestWrapper;
 import spring.hi_hello_spring.group.command.application.service.GroupMatchService;
 import spring.hi_hello_spring.onboarding.command.domain.repository.TemplateRepository;
 import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.Template;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TaskServiceTest {
@@ -70,8 +67,8 @@ class TaskServiceTest {
         taskService.submitTask(taskSubmitDTO, taskSeq, uploadFile);
 
         // Then
-        Mockito.verify(taskRepository, Mockito.times(1)).save(Mockito.any(TaskSubmit.class));
-        Mockito.verify(fileRepository, Mockito.times(1)).save(Mockito.any(File.class));
+        verify(taskRepository, times(1)).save(Mockito.any(TaskSubmit.class));
+        verify(fileRepository, times(1)).save(Mockito.any(File.class));
     }
 
     @Test
@@ -87,7 +84,7 @@ class TaskServiceTest {
         taskUpdateDTO.setTaskTitle("Updated Task Title");
         taskUpdateDTO.setTaskContent("Updated Task Content");
 
-        Template template = new Template(); // 필요한 필드만 채워도 됨
+        Template template = new Template();
         Task updatedTask = Task.builder()
                 .taskSeq(taskSeq)
                 .taskType(taskUpdateDTO.getTaskType())
@@ -106,9 +103,9 @@ class TaskServiceTest {
         taskService.updateTask(taskUpdateDTO, taskSeq, uploadFile);
 
         // Then
-        Mockito.verify(templateRepository, Mockito.times(1)).findByTemplateSeq(taskUpdateDTO.getTemplateSeq());
-        Mockito.verify(taskRepository, Mockito.times(1)).save(Mockito.any(Task.class));
-        Mockito.verify(fileRepository, Mockito.times(1)).save(Mockito.any(File.class));
+        verify(templateRepository, times(1)).findByTemplateSeq(taskUpdateDTO.getTemplateSeq());
+        verify(taskRepository, times(1)).save(Mockito.any(Task.class));
+        verify(fileRepository, times(1)).save(Mockito.any(File.class));
     }
 
     @Test
@@ -122,10 +119,6 @@ class TaskServiceTest {
         taskService.deleteTask(taskSeq);
 
         // Then
-        Mockito.verify(taskRepository, Mockito.times(1)).deleteById(taskSeq);
+        verify(taskRepository, times(1)).deleteById(taskSeq);
     }
-
-
-
-
 }
