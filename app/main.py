@@ -27,10 +27,10 @@ else:
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["http://localhost:5173", "https://hi-hello.site"],  # 허용할 출처
+    allow_credentials=True,  # 인증 정보 허용 (쿠키 등)
+    allow_methods=["*"],  # 모든 HTTP 메서드 허용
+    allow_headers=["*"],  # 모든 헤더 허용
 )
 
 # 글로벌 예외 핸들러 등록
