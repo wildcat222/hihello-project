@@ -1,13 +1,12 @@
 <script setup>
-import {computed, onBeforeUnmount, onMounted, onUnmounted, ref} from 'vue';
-import { useRoute } from 'vue-router';
+import {computed, onMounted, onUnmounted, ref} from 'vue';
+import {useRoute} from 'vue-router';
 import AsideComponent from '@/components/AsideComponent.vue';
-import { useUserStore } from '@/stores/UserStore';
-import { springAPI } from '@/services/axios.js';
-import EmployeeProfile from "@/components/EmployeeProfile.vue";
+import {useUserStore} from '@/stores/UserStore';
+import {springAPI} from '@/services/axios.js';
 import ChatModal from '@/components/ChatModal.vue';
 import ChatBotModal from "@/components/ChatBotModal.vue";
-import { getGroupChatRoomSeq, getMentoringChatRoomSeq } from "@/services/ChatApi.js"; // API 추가
+import {getGroupChatRoomSeq, getMentoringChatRoomSeq} from "@/services/ChatApi.js"; // API 추가
 
 // Vue Router 및 전역 스토어 설정
 const route = useRoute();
@@ -111,16 +110,9 @@ onUnmounted(() => {
         @update-active-menu="toggleMenu"
     />
 
-    <!-- Employee Profile -->
-    <EmployeeProfile
-        class="profile"
-        v-if="shouldShowProfile"
-        @should-show-profile="toggleProfile"
-    />
-
     <!-- Router View -->
     <div class="router-container">
-      <router-view />
+      <router-view/>
     </div>
 
     <!-- 메인 채팅 버튼 -->

@@ -270,9 +270,27 @@ onMounted(async () => {
 
   if (employeeInfo.value) {
     employeeSeq.value = employeeInfo.value.employeeSeq;
-    springAPI.defaults.headers.common['Authorization'] = `Bearer ${userStore.accessToken}`
-    await loadName(employeeSeq.value);
-    await notificationStore.updateNotiCount();
+
+    // 인터셉터 초기화 확인
+    if (!userStore.interceptorsInitialized) {
+      userStore.initializeInterceptors();
+    }
+
+    // 토큰 설정이 확실히 되었는지 확인
+    if (!springAPI.defaults.headers.common['Authorization'] && userStore.accessToken) {
+      springAPI.defaults.headers.common['Authorization'] = `Bearer ${userStore.accessToken}`;
+    }
+
+    // 약간의 지연 후 데이터 요청
+    if (springAPI.defaults.headers.common['Authorization']) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // 데이터 요청
+      await Promise.all([
+        await loadName(employeeSeq.value),
+        await notificationStore.updateNotiCount()
+      ]);
+    }
   }
 });
 </script>
@@ -355,6 +373,7 @@ ul {
 .menu-item .active + .sub-menu {
   display: block;
 }
+
 .menu-item > div.active {
   color: var(--purple);
   font-weight: bold;
