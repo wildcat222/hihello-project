@@ -20,21 +20,13 @@ app = FastAPI()
 ENV = os.getenv("ENV", "development")  # 기본값은 'development'
 
 # CORS 설정
-if ENV == "development":
-    origins = [
-        "http://localhost:5173"  # 개발 환경에서의 허용 Origin
-    ]
-else:
-    origins = [
-        "https://fastapi.hi-hello.site"  # 배포 환경에서의 허용 Origin
-    ]
-
+origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # 허용할 Origin
-    allow_credentials=True,  # 쿠키 허용 여부
-    allow_methods=["*"],  # 허용할 HTTP 메서드
-    allow_headers=["*"],  # 허용할 HTTP 헤더
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # 글로벌 예외 핸들러 등록
@@ -49,17 +41,13 @@ app.include_router(data_router)
 
 # 개발과 배포에 따른 서버 설정
 if __name__ == "__main__":
-    if ENV == "development":
-        uvicorn.run(
-            "app.main:app",
-            host="localhost",  # 개발 환경에서는 localhost 사용
-            port=8255,
-            reload=True  # 코드 변경 시 자동으로 서버 재시작
-        )
-    else:
-        uvicorn.run(
-            "app.main:app",
-            host="0.0.0.0",  # 배포 환경에서는 0.0.0.0 사용
-            port=8000,
-            reload=False  # 배포 환경에서는 reload 비활성화
-        )
+    port = int(os.getenv("PORT", 8000))  # Elastic Beanstalk에서 제공하는 PORT 사용
+    host = "localhost" if ENV == "development" else "0.0.0.0"  # 호스트 설정
+    reload = True if ENV == "development" else False  # 개발 환경에서만 reload 활성화
+
+    uvicorn.run(
+        "app.main:app",
+        host=host,
+        port=port,
+        reload=reload
+    )
