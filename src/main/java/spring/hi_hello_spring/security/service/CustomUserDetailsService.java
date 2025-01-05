@@ -27,7 +27,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
     private final PositionRepository positionRepository;
-    private final EmployeeService employeeService;
 
     @Override
     public CustomUserDetails loadUserByUsername(String employeeNum) throws UsernameNotFoundException {
@@ -61,8 +60,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         grantedAuthorities.add(new SimpleGrantedAuthority(String.valueOf(employee.getEmployeeRole()))); // 역할 -> mentee
 
-        return new CustomUserDetails(employee.getEmployeeSeq(), employee.getEmployeeNum()
-                ,employeeDepartment.getDepartmentName(), employeePosition.getPositionName()
+        return new CustomUserDetails(employee.getEmployeeSeq(), employeeDepartment.getDepartmentName()
+                , employeePosition.getPositionName(), employee.getEmployeeNum()
                 , employee.getEmployeePassword(), grantedAuthorities);
     }
 }

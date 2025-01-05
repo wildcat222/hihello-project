@@ -50,7 +50,6 @@ public class JwtUtil {
     public boolean validateAccessToken(String accessToken) {
 
         log.info("엑세스 토큰 검증 도중 확인 : " + accessToken);
-
         String savedToken = "";
 
         try {
@@ -60,11 +59,9 @@ public class JwtUtil {
             String EmployeeSeqInAccessToken = getEmployeeSeq(accessToken);
 
             // 레디스에 저장된 해당 사원이 이전에 발급 받았던 엑세스 토큰 조회
-
-
             savedToken = redisService.getToken(EmployeeSeqInAccessToken + 'a');
             log.info("레디스에서 조회한 엑세스 토큰 : {}", savedToken);
-            if (Objects.equals(savedToken, accessToken)) {
+            if (savedToken != null && savedToken.equals(accessToken)) {
                 return false;
             }
             return true;
@@ -130,7 +127,7 @@ public class JwtUtil {
 
 //        long expirationTime = (long) 1000 * 60 * 30; // 30분
 //        long expirationTime = (long) 5000; // 토큰 테스트 용
-        long expirationTime = (long) 1000 * 60 * 120; // 프론트 개발 용 2시간
+        long expirationTime = (long) 1000 * 60 * 180; // 프론트 개발 용 3시간
 
         /* 권한을 꺼내 List<String> 으로 변환 */
         List<String> authorities = authentication.getAuthorities().stream()
