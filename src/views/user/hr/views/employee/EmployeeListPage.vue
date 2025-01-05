@@ -254,7 +254,7 @@ onMounted(async () => {
 }
 
 .employee-list-row {
-  margin: 0 20px 14px 20px;
+  margin: 14px 20px 14px 20px;
   font-size: 13px;
   justify-content: space-between;
   align-items: center;
