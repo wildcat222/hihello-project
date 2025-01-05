@@ -11,6 +11,7 @@ import spring.hi_hello_spring.common.response.ApiResponse;
 import spring.hi_hello_spring.common.response.ResponseUtil;
 import spring.hi_hello_spring.common.util.CustomUserUtils;
 import spring.hi_hello_spring.notify.command.application.dto.NotifyDTO;
+import spring.hi_hello_spring.notify.query.dto.AlarmCountDTO;
 import spring.hi_hello_spring.notify.query.dto.ReadNotifyDTO;
 import spring.hi_hello_spring.notify.query.service.NotifyQueryService;
 
@@ -32,5 +33,14 @@ public class NotifyQueryController {
         Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
         List<ReadNotifyDTO> alarms = notifyQueryService.notiAll(employeeSeq);
         return ResponseUtil.successResponse("알림을 성공적으로 조회하였습니다.", alarms).getBody();
+    }
+
+    @Operation(summary = "읽지 않은 알림 개수 조회", description = "내게 온 알림 중 읽지 않은 알림 개수를 조회한다.")
+    @GetMapping("/list/count")
+    public ApiResponse<?> notiCount() {
+
+        Long employeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
+        AlarmCountDTO alarmCount = notifyQueryService.notiCount(employeeSeq);
+        return ResponseUtil.successResponse("알림 갯수를 성공적으로 조회하였습니다.", alarmCount).getBody();
     }
 }
