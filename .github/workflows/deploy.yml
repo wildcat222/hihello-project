@@ -21,6 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: produce
 
+    concurrency:
+      group: elastic-beanstalk-deploy
+      cancel-in-progress: true
+
     steps:
       # 코드 체크아웃
       - name: Checkout Repository
