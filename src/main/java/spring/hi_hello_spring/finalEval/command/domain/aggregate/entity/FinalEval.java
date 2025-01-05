@@ -1,6 +1,7 @@
 package spring.hi_hello_spring.finalEval.command.domain.aggregate.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.hi_hello_spring.common.aggregate.entity.BaseTimeEntity;
@@ -29,5 +30,13 @@ public class FinalEval extends BaseTimeEntity {
 
     public void updateEmployeeSeq(Long employeeSeq) {
         this.employeeSeq = employeeSeq;
+    }
+
+    @Builder
+    public FinalEval(Long employeeSeq, Long evalIndSeq, Long finalEvalIndSeq, double employeeScore) {
+        this.employeeSeq = employeeSeq;
+        this.evalIndSeq = evalIndSeq;
+        this.finalEvalIndSeq = finalEvalIndSeq;
+        this.employeeScore = employeeScore;
     }
 }

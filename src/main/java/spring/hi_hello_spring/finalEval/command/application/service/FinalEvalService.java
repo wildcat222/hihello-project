@@ -1,23 +1,26 @@
 package spring.hi_hello_spring.finalEval.command.application.service;
 
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.hi_hello_spring.common.aggregate.entity.EmployeeRole;
 import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
+import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
+import spring.hi_hello_spring.employee.command.domain.repository.EmployeeRepository;
 import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.*;
 import spring.hi_hello_spring.evaluation.command.domain.repository.*;
-import spring.hi_hello_spring.finalEval.command.application.dto.FinalEvalCreateDTO;
 import spring.hi_hello_spring.finalEval.command.domain.aggregate.entity.FinalEval;
 import spring.hi_hello_spring.finalEval.command.domain.aggregate.entity.FinalEvalInd;
 import spring.hi_hello_spring.finalEval.command.domain.repository.FinalEvalIndRepository;
 import spring.hi_hello_spring.finalEval.command.domain.repository.FinalEvalRepository;
 import spring.hi_hello_spring.group.command.domain.repository.PeerReviewRepository;
 import spring.hi_hello_spring.mentoring.command.domain.repository.ReportRepository;
+import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.TemplateType;
 import spring.hi_hello_spring.onboarding.command.domain.repository.TemplateRepository;
 import spring.hi_hello_spring.quiz.command.domain.repository.QuizResultRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,22 +34,62 @@ public class FinalEvalService {
     private final QuizResultRepository quizResultRepository;
     private final ReportRepository reportRepository;
     private final PeerReviewRepository peerReviewRepository;
-    private final ModelMapper modelMapper;
     private final TaskEvalRepository taskEvalRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Transactional
-    public void createFinalEval(Long employeeSeq, List<FinalEvalCreateDTO> finalEvalCreateDTOs) {
-        for (FinalEvalCreateDTO finalEvalCreateDTO : finalEvalCreateDTOs) {
-            FinalEval finalEval = modelMapper.map(finalEvalCreateDTO, FinalEval.class);
-            finalEval.updateEmployeeSeq(employeeSeq);
+    public void createFinalEval() {
+        List<EvalInd> evalInds = evalIndRepository.findAll();
+        List<FinalEvalInd> finalEvalInds = finalEvalIndRepository.findAll();
+        List<Employee> mentees = employeeRepository.findByEmployeeRole(EmployeeRole.MENTEE);
+        LocalDateTime lastDeadline = templateRepository.findFirstByOrderByTemplateEndAtDesc().getTemplateEndAt();
 
-            Long evalIndSeq = finalEval.getEvalIndSeq();
-            Long finalEvalIndSeq = finalEval.getFinalEvalIndSeq();
+        if (lastDeadline.isBefore(LocalDateTime.now())) {
+            for (Employee mentee : mentees) {
+                for (EvalInd evalInd : evalInds) {
+                    // 해당 mentee와 evalInd로 데이터가 이미 존재하면 패스
+                    boolean exists = finalEvalRepository.existsByEmployeeSeqAndEvalIndSeq(
+                            mentee.getEmployeeSeq(), evalInd.getEvalIndSeq()
+                    );
 
-            double finalScore = calculateFinalScore(employeeSeq, evalIndSeq, finalEvalIndSeq);
+                    if (exists) {
+                        continue; // 이미 존재하면 생성하지 않고 패스
+                    }
 
-            finalEval.updateEmployeeScore(Math.round(finalScore * 10) / 10.0);  // 최종점수는 소수 첫째자리까지 반올림
-            finalEvalRepository.save(finalEval);
+                    double finalScore = calculateFinalScore(mentee.getEmployeeSeq(), evalInd.getEvalIndSeq(), null);
+
+                    FinalEval finalEval = FinalEval.builder()
+                            .employeeSeq(mentee.getEmployeeSeq())
+                            .evalIndSeq(evalInd.getEvalIndSeq())
+                            .employeeScore(finalScore)
+                            .build();
+
+                    finalEval.updateEmployeeScore(Math.round(finalScore * 10) / 10.0); // 최종점수는 소수 첫째 자리 반올림
+                    finalEvalRepository.save(finalEval);
+                }
+
+                for (FinalEvalInd finalEvalInd : finalEvalInds) {
+                    // 해당 mentee와 finalEvalInd로 데이터가 이미 존재하면 패스
+                    boolean exists = finalEvalRepository.existsByEmployeeSeqAndFinalEvalIndSeq(
+                            mentee.getEmployeeSeq(), finalEvalInd.getFinalEvalIndSeq()
+                    );
+
+                    if (exists) {
+                        continue; // 이미 존재하면 생성하지 않고 패스
+                    }
+
+                    double finalScore = calculateFinalScore(mentee.getEmployeeSeq(), null, finalEvalInd.getFinalEvalIndSeq());
+
+                    FinalEval finalEval = FinalEval.builder()
+                            .employeeSeq(mentee.getEmployeeSeq())
+                            .finalEvalIndSeq(finalEvalInd.getFinalEvalIndSeq())
+                            .employeeScore(finalScore)
+                            .build();
+
+                    finalEval.updateEmployeeScore(Math.round(finalScore * 10) / 10.0); // 최종점수는 소수 첫째 자리 반올림
+                    finalEvalRepository.save(finalEval);
+                }
+            }
         }
     }
 
@@ -54,9 +97,9 @@ public class FinalEvalService {
     private double calculateFinalScore(Long employeeSeq, Long evalIndSeq, Long finalEvalIndSeq) {
         double finalScore = 0;
 
-        if (evalIndSeq == null) {
+        if (evalIndSeq == null && finalEvalIndSeq != null) {
             finalScore = calculateScoreForFinalEvalInd(employeeSeq, finalEvalIndSeq);
-        } else if (finalEvalIndSeq == null) {
+        } else if (evalIndSeq != null && finalEvalIndSeq == null) {
             finalScore = calculateScoreForEvalInd(employeeSeq, evalIndSeq);
         }
 
@@ -98,7 +141,7 @@ public class FinalEvalService {
         EvalInd evalInd = evalIndRepository.findById(evalIndSeq)
                 .orElseThrow(() -> new CustomException(ErrorCodeType.DATA_NOT_FOUND));
 
-        int totalTaskQty = templateRepository.countByTemplateTaskRoundIsNotNull().intValue();
+        int totalTaskQty = templateRepository.findByTemplateType(TemplateType.TASK).size();
         int perfectScoreOfEvalInd = evalInd.getEvalIndScore();
         double totalPerfectScoreOfEvalInd = perfectScoreOfEvalInd * totalTaskQty;
 
