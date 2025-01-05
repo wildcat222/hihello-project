@@ -39,6 +39,7 @@ public class TaskService {
     private final GroupMatchService groupMatchService;
 
     // 과제 등록
+    @Transactional
     public void createTask(TaskCreateDTO taskCreateDTO, String uploadFile) {
 
         Task task = Task.builder()
