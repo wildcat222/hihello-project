@@ -35,7 +35,7 @@ const fetchingTaskEvalResultList = async () => {
         taskTotalScore: taskEvalResult.taskTotalScore
       })
     })
-    console.log(response)
+    // console.log(response)
   } catch (error) {
     alert("과제 평가 결과 리스트를 조회하던 도중 오류가 발생했습니다.");
   }
@@ -109,7 +109,7 @@ onMounted(async () => {
 
 <style scoped>
 .task-eval-result-list-container {
-  width: 70%;
+  width: 70vw;
 }
 
 .page-title {
