@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onBeforeUnmount, onMounted, onUnmounted, ref} from 'vue';
+import {computed, onMounted, onUnmounted, ref} from 'vue';
 import { useRoute } from 'vue-router';
 import AsideComponent from '@/components/AsideComponent.vue';
 import { useUserStore } from '@/stores/UserStore';
