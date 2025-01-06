@@ -45,14 +45,17 @@ jobs:
           scp -v -i private-ec2-key.pem -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${{ secrets.BASTION_HOST }}" \
           docker-compose.yml ec2-user@${{ secrets.PRIVATE_EC2_IP }}:/home/ec2-user/docker-compose.yml
 
-      - name: Install Docker on Private EC2
+      - name: Install Docker and Docker Compose on Private EC2
         run: |
           ssh -i private-ec2-key.pem -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no ec2-user@${{ secrets.BASTION_HOST }}" \
           ec2-user@${{ secrets.PRIVATE_EC2_IP }} "
           sudo yum update -y &&
           sudo yum install -y docker &&
           sudo systemctl enable docker &&
-          sudo systemctl start docker
+          sudo systemctl start docker &&
+          sudo curl -L \"https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)\" -o /usr/local/bin/docker-compose &&
+          sudo chmod +x /usr/local/bin/docker-compose &&
+          sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
           "
 
       - name: Grant Docker permissions to ec2-user
