@@ -45,9 +45,9 @@ const submitMentoringPlan = async () => {
     formData.append("productImgUrl", mentoringPlanForm.value.file);
 
     // 디버그 출력: FormData의 내용을 확인
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ": " + pair[1]);
-    }
+    // for (let pair of formData.entries()) {
+    //   console.log(pair[0] + ": " + pair[1]);
+    // }
 
     // API 호출
     const response = await submitMentoringPlanService(formData);
