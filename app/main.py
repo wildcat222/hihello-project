@@ -20,15 +20,22 @@ app = FastAPI()
 ENV = os.getenv("production", "development")  # 기본값은 'development'
 
 # CORS 설정
-# CORS 설정
-if ENV == "development":
-    origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
-else:
-    origins = os.getenv("ALLOWED_ORIGINS", "https://hi-hello.site").split(",")
+# if ENV == "development":
+#     origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
+# else:
+#     origins = os.getenv("ALLOWED_ORIGINS", "https://hi-hello.site").split(",")
+#
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,  # 환경 변수에서 가져온 origins 사용
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # 환경 변수에서 가져온 origins 사용
+    allow_origins=["https://hi-hello.site"],  # 허용할 클라이언트 도메인
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
