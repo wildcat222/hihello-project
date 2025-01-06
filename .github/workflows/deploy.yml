@@ -73,7 +73,7 @@ jobs:
           cp Procfile deploy/
           cp -r .ebextensions deploy/.ebextensions || echo "No .ebextensions directory found"
           cp -r .platform deploy/.platform || echo "No .platform directory found"
-          cp -r venv deploy/venv  # 가상환경 포함
+#          cp -r venv deploy/venv  # 가상환경 포함
           cd deploy && zip -r deploy.zip .
 
       # Elastic Beanstalk에 배포
