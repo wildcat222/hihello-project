@@ -76,7 +76,7 @@ router.beforeEach(async (to, from, next) => {
         } else if (employeeRole === 'MENTOR' || employeeRole === 'MENTEE') {
             next();
         } else {
-            next('/');
+            next({path: '/'});
         }
         return;
     }
