@@ -61,7 +61,8 @@ jobs:
         run: |
           mkdir -p deploy
           cp -r app deploy/
-          cp requirements.txt deploy/
+          cp pyproject.toml deploy/
+          cp poetry.lock deploy/
           cp Procfile deploy/
           cp -r .ebextensions deploy/.ebextensions || echo "No .ebextensions directory found"
           cp -r .platform deploy/.platform || echo "No .platform directory found"
