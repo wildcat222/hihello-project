@@ -11,4 +11,8 @@ public interface FinalEvalRepository {
     Optional<FinalEval> findById(Long finalEvalIndSeq);
 
     FinalEval save(FinalEval finalEval);
+
+    boolean existsByEmployeeSeqAndEvalIndSeq(Long employeeSeq, Long evalIndSeq);
+
+    boolean existsByEmployeeSeqAndFinalEvalIndSeq(Long employeeSeq, Long finalEvalIndSeq);
 }

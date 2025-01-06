@@ -33,42 +33,27 @@ public class SecurityConfig {
     private final BCryptPasswordEncoder passwordEncoder;
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtUtil jwtUtil;
-
-    private static final String[] SWAGGER_WHITE_LIST = {
-            "/v3/api-docs/**",
-            "/swagger-ui/**",
-            "/swagger-ui.html",
-            "/swagger-resources/**",
-            "/webjars/**",
-            "/swagger-ui/index.html",
-            "/swagger-ui/",
-            "/v3/api-docs.yaml",
-            "/"
-    };
+    private final SecurityProperties securityProperties;
 
     @Bean
-    protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    protected SecurityFilterChain configure(HttpSecurity http, SecurityProperties securityProperties) throws Exception {
 
 
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(authz -> authz
-                          .requestMatchers(SWAGGER_WHITE_LIST).permitAll()  // Swagger UI 접근 허용
-                          .requestMatchers(
-                                  "/api/v1/login"
-                          ).permitAll()
-                          .requestMatchers("/api/v1/test/health").permitAll()
-                          .requestMatchers(new AntPathRequestMatcher("/mentee/**")).hasAuthority("MENTEE")
-                          .requestMatchers(new AntPathRequestMatcher("/mentor/**")).hasAuthority("MENTOR")
-                          .requestMatchers(new AntPathRequestMatcher("/hr/**")).hasAuthority("HR")
-                          .anyRequest().authenticated() // 나머지 요청은 필터를 거쳐야한다.
+                        .requestMatchers(securityProperties.getWhitelist().toArray(new String[0])).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/mentee/**")).hasAuthority("MENTEE")
+                        .requestMatchers(new AntPathRequestMatcher("/mentor/**")).hasAuthority("MENTOR")
+                        .requestMatchers(new AntPathRequestMatcher("/hr/**")).hasAuthority("HR")
+                        .anyRequest().authenticated() // 나머지 요청은 필터를 거쳐야한다.
                 )
 
                 .sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
-        http.addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtFilter(jwtUtil, securityProperties), UsernamePasswordAuthenticationFilter.class);
 
         http.addFilterBefore(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

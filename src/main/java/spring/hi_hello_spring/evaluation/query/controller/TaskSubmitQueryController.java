@@ -20,10 +20,10 @@ public class TaskSubmitQueryController {
 
     private final TaskSubmitQueryService taskSubmitQueryService;
 
-    @GetMapping("/{taskSubmitSeq}")
+    @GetMapping("/{taskSeq}")
     @Operation(summary="(멘토) 제출된 과제 조회", description="멘토가 멘티가 제출한 과제를 상세 조회하는 기능입니다.")
-    public ApiResponse<?> getSubmittedTasks(@PathVariable("taskSubmitSeq") Long taskSubmitSeq) {
-        SubmittedTaskQueryDTO submittedTaskQueryDTO = taskSubmitQueryService.getSubmittedTask(taskSubmitSeq);
+    public ApiResponse<?> getSubmittedTasks(@PathVariable("taskSeq") Long taskSeq) {
+        SubmittedTaskQueryDTO submittedTaskQueryDTO = taskSubmitQueryService.getSubmittedTask(taskSeq);
         return ResponseUtil.successResponse("데이터가 성공적으로 조회되었습니다.", submittedTaskQueryDTO).getBody();
     }
 }

@@ -68,7 +68,7 @@ public class FileUploadUtil {
     // Presigned URL 생성 메서드
     private String generatePresignedUrl(String fileName) {
         GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
-                .signatureDuration(Duration.ofMinutes(60))
+                .signatureDuration(Duration.ofDays(7))
                 .getObjectRequest(b -> b.bucket(bucket).key(fileName))
                 .build();
 
