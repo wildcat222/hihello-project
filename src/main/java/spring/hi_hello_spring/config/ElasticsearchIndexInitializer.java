@@ -45,9 +45,10 @@ public class ElasticsearchIndexInitializer {
 
             // 해당 인덱스 존재하지 않을 경우 생성
             if (!indexOperations.exists()) {
-                // log.info("인덱스를 생성합니다.");
+                log.info("인덱스를 생성합니다.");
                 indexOperations.create(Settings.parse(settings));
                 indexOperations.putMapping(Document.parse(mappings));
+                log.info("인덱스 생성 완료");
             } else {
                 log.info("인덱스가 이미 존재합니다.");
             }
