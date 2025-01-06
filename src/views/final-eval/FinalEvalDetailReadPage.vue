@@ -6,7 +6,6 @@ import {onMounted, reactive, ref} from "vue";
 import {useRoute} from "vue-router";
 import router from "@/router/index.js";
 
-
 const route = useRoute();
 
 const profileImgUrl = ref('');
@@ -21,7 +20,6 @@ const finalEvalTotalScore = ref(0);
 const fetchingFinalEvalResultDetail = async (employeeSeq) => {
   try {
     const response = await fetchFinalEvalResultDetail(employeeSeq);
-    // console.log(response);
     profileImgUrl.value = response.data.data.profileImgUrl;
     employeeName.value = response.data.data.employeeName;
     employeePhone.value = response.data.data.employeePhone
@@ -42,8 +40,8 @@ const fetchingFinalEvalResultDetail = async (employeeSeq) => {
   }
 }
 
-const goBack = () => {
-  router.back();
+const goBackToFinalEvalList = () => {
+  router.push(`/final-eval`);
 }
 
 onMounted(async () => {
@@ -97,7 +95,7 @@ onMounted(async () => {
         </div>
       </div>
       <div class="flex close-button-container">
-        <button class="final-eval-detail-go-back-button flex" @click="goBack">뒤로가기</button>
+        <button class="final-eval-detail-go-back-button flex" @click="goBackToFinalEvalList">뒤로가기</button>
       </div>
     </WhiteBoxComponent>
   </div>

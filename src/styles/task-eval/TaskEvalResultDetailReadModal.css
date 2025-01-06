@@ -55,6 +55,11 @@
     margin: 0 1rem;
 }
 
+.task-eval-result-detail-result-modal-td {
+    width: 40rem;
+    white-space: normal;
+}
+
 .task-eval-result-detail-result-modal-submitter-container {
     position: relative;
 }
