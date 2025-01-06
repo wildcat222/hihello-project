@@ -147,6 +147,7 @@ const saveMentoringGroups = async () => {
   margin-bottom: 49px;
   margin-top: 105px;
   font-size: 30px;
+  font-weight: 700
 }
 .submit{
   margin-top: 20px;
