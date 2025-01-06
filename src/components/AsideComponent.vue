@@ -194,6 +194,7 @@ const menus = ref([
     subMenus: [
       {name: "퀴즈 관리", url: "/hr/quiz"},
       {name: "과제 등록", url: "/task/add"},
+      {name: "과제 리스트 조회", url: "/task/list"},
       {name: "동료 평가 지표 관리", url: "/hr/peer/review/list"},
       {name: "공통 평가 지표 관리", url: "/taskInd/manage"},
     ],
