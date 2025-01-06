@@ -36,4 +36,8 @@ public interface EmployeeMapper {
     List<MentorDepQueryDTO> findMentorByDep(Long departmentSeq);
 
     EmployeeRoleDTO findEmployeeRole(Long currentEmployeeSeq);
+
+    DepartmentListDTO findEmployeeDepartment(Long currentEmployeeSeq);
+
+    List<DepartmentListDTO> findTaskDepartment(String empRole, Long empDepartmentSeq);
 }

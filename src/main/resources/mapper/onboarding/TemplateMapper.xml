@@ -24,8 +24,15 @@
         WHERE
         tm.template_task_round IS NOT NULL
         AND (
-        (#{employeeRole} = 'mentor' AND tm.template_training_type = 'JOB')
-        OR (#{employeeRole} = 'hr' AND tm.template_training_type = 'COMMON')
+        (#{currentEmployeeRole} = 'mentor' AND tm.template_training_type = 'JOB' AND tm.template_type = 'TASK')
+        OR (#{currentEmployeeRole} = 'hr' AND tm.template_training_type = 'COMMON' AND tm.template_type = 'TASK')
+        )
+        AND NOT EXISTS (
+        SELECT 1
+        FROM task t
+        WHERE t.department_seq = #{empDepartmentSeq}
+        AND t.template_seq = tm.template_seq
         );
     </select>
+
 </mapper>

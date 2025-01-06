@@ -10,6 +10,5 @@ import java.util.List;
 public interface TemplateMapper {
     List<TemplateAllQueryDTO> findAllTemplate();
 
-
-    List<TemplateTaskRoundDTO> findTemplateTaskRound(String currentEmployeeRole);
+    List<TemplateTaskRoundDTO> findTemplateTaskRound(String currentEmployeeRole, Long empDepartmentSeq);
 }

@@ -20,6 +20,35 @@
             e.employee_role = "MENTEE"
     </select>
 
+    <select id="findEmployeeDepartment" resultType="DepartmentListDTO">
+        SELECT
+        d.department_seq
+        FROM
+        department d
+        INNER JOIN employee e ON d.department_seq = e.department_seq
+        WHERE
+        e.employee_seq = #{currentEmployeeSeq};
+    </select>
+
+    <select id="findTaskDepartment" resultType="DepartmentListDTO">
+        SELECT DISTINCT
+        d.department_seq,
+        d.department_name
+        FROM
+        department d
+        LEFT JOIN employee e ON e.department_seq = d.department_seq
+        WHERE
+        (
+        #{empRole} = 'hr'
+        OR
+        (
+        #{empRole} = 'mentor'
+        AND e.department_seq = #{empDepartmentSeq}
+        )
+        )
+    </select>
+
+
     <!-- 해당 부서의 매칭 전인 멘티를 조회하는 SQL   -->
     <select id="findMenteeByDep" parameterType="long" resultType="MenteeDepQueryDTO">
         SELECT
