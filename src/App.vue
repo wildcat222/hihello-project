@@ -15,10 +15,8 @@ const userStore = useUserStore();
 // 상태 정의
 const shouldShowAside = computed(() => !route.meta.hideAside);
 
-const shouldShowProfile = ref(false);
 const isChatModalVisible = ref(false);
 const isChatBotModalVisible = ref(false);
-const activeMenu = ref(null);
 const showAdditionalButtons = ref(false); // 추가 버튼 표시 여부
 
 const chatType = ref(null); // 'mentor' or 'group'
@@ -48,33 +46,6 @@ const toggleChatBotModal = () => {
   isChatBotModalVisible.value = !isChatBotModalVisible.value;
 };
 
-// 프로필 활성화 토글
-const toggleProfile = (data) => {
-  shouldShowProfile.value = data;
-
-  // 프로필 활성화 시 메뉴 비활성화
-  if (shouldShowProfile.value) {
-    activeMenu.value = null;
-  }
-};
-
-// 메뉴 토글
-const toggleMenu = (data) => {
-  shouldShowProfile.value = false;
-  activeMenu.value = data;
-};
-
-// 외부 클릭 감지하여 Profile 및 SubMenu 비활성화
-const hideComponentsOnOutsideClick = (event) => {
-  const profileElement = document.querySelector('.profile');
-  const asideMenuElement = document.querySelector('.aside');
-
-  if (!event.target.closest('.profile') && !event.target.closest('.menu-item')) {
-    shouldShowProfile.value = false;
-    activeMenu.value = null;
-  }
-};
-
 // 추가 버튼 가시성 토글
 const toggleButtons = () => {
   showAdditionalButtons.value = !showAdditionalButtons.value;
@@ -89,13 +60,6 @@ onMounted(() => {
 
   userStore.initializeInterceptors(); // Axios 인터셉터 초기화
 
-  // 외부 클릭 이벤트 등록
-  document.addEventListener('mousedown', hideComponentsOnOutsideClick);
-});
-
-// 컴포넌트가 언마운트될 때 이벤트 제거
-onUnmounted(() => {
-  document.removeEventListener('mousedown', hideComponentsOnOutsideClick);
 });
 </script>
 
@@ -105,9 +69,6 @@ onUnmounted(() => {
     <AsideComponent
         class="aside"
         v-if="shouldShowAside"
-        @profile-modal="toggleProfile"
-        :active-menu="activeMenu"
-        @update-active-menu="toggleMenu"
     />
 
     <!-- Router View -->

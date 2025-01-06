@@ -12,7 +12,6 @@ const notificationStore = useNotificationStore();
 const fetchAlarmList = async () => {
   try {
     const response = await getAlarmList();
-    console.log(response.data.data);
     if (response.data.data.length === 0) {
       alarms.value = null;
     } else {

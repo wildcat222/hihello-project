@@ -4,30 +4,32 @@ const COMMON = 'COMMON';
 const JOB = 'JOB';
 
 import {
-  templateForm,
-  templateList,
-  newChecklistItem,
-  removeChecklistItem,
   addChecklistItem,
-  submitTemplate,
-  loadTemplates,
-  handleFileChange,
   deleteTemplate,
-  drop,
   dragOver,
   dragStart,
-  resetTemplateData, isFormValid, errorMessage,
-  fetchQuizCategory,
+  drop,
+  errorMessage,
+  handleFileChange,
+  isFormValid,
+  loadTemplates,
+  newChecklistItem,
+  removeChecklistItem,
+  resetTemplateData,
+  submitTemplate,
+  templateForm,
+  templateList,
 } from '@/services/OnboardingDataApi.js';
-
-import { ref, onMounted } from 'vue';
+import {fetchQuizCategory} from "@/services/QuizCategoryApi.js";
+import {onMounted, ref} from "vue";
 
 const quizCategories = ref([]);
 const selectedCategory = ref(null);
 
-loadTemplates();
-
 onMounted(async () => {
+
+  await loadTemplates();
+
   try {
     const response = await fetchQuizCategory();
     quizCategories.value = response.data || [];
@@ -75,11 +77,11 @@ onMounted(async () => {
             <label>템플릿 유형</label>
           </div>
           <select v-model="templateForm.templateType" @change="resetTemplateData">
-            <option value="NORMAL">글,파일 탬플릿</option>
-            <option value="BREAK">휴가 신청 탬플릿</option>
-            <option value="CF">회의실 예약 탬플릿</option>
-            <option value="CHECKLIST">CheckList 탬플릿</option>
-            <option value="VIDEO">영상 탬플릿</option>
+            <option value="NORMAL">글,파일 템플릿</option>
+            <option value="BREAK">휴가 신청 템플릿</option>
+            <option value="CF">회의실 예약 템플릿</option>
+            <option value="CHECKLIST">CheckList 템플릿</option>
+            <option value="VIDEO">영상 템플릿</option>
             <option value="TASK">과제</option>
             <option value="QUIZ">퀴즈</option>
           </select>
@@ -296,12 +298,10 @@ onMounted(async () => {
             <div class="onboarding-data-label">
               <label>퀴즈 카테고리</label>
             </div>
-            <select v-if="quizCategories.length > 0" v-model="selectedCategory">
-              <option
-                  v-for="category in quizCategories"
-                  :key="category.quizCategorySeq"
-                  :value="category.quizCategorySeq"
-              >
+            <select v-model="templateForm.quizCategorySeq">
+              <option v-for="category in quizCategories"
+                      :key="category.quizCategorySeq"
+                      :value="category.quizCategoryName">
                 {{ category.quizCategoryName }}
               </option>
             </select>
