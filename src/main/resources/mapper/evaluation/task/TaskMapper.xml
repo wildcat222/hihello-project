@@ -5,7 +5,6 @@
 <mapper namespace="spring.hi_hello_spring.evaluation.query.mapper.TaskQueryMapper">
 
     <select id="findHrAllTask" resultType="TaskAllListQueryDTO">
-
         SELECT DISTINCT
         a.task_seq,
         a.department_seq,
@@ -17,11 +16,9 @@
         JOIN department d ON a.department_seq = d.department_seq
         JOIN template t ON a.template_seq = t.template_seq
         JOIN employee e ON d.department_seq = e.department_seq
-
     </select>
 
     <select id="findMenteeTaskDetail" parameterType="java.util.Map" resultType="TaskMenteeDetailQueryDTO">
-
         SELECT DISTINCT
         a.task_seq,
         a.task_title,
@@ -41,7 +38,6 @@
         LEFT JOIN file f ON f.task_seq = a.task_seq
         WHERE os.employee_seq = #{employee_seq}
         AND a.task_seq = #{task_seq}
-
     </select>
 
     <select id="findGroupTaskTitle" resultType="GroupTaskAllQueryDTO">
@@ -204,7 +200,7 @@
         f.file_name,
         f.file_url
         FROM task t
-        LEFT JOIN template tm ON tm.template_seq = t.task_seq
+        LEFT JOIN template tm ON tm.template_seq = t.template_seq
         LEFT JOIN department dm ON dm.department_seq = t.department_seq
         LEFT JOIN eval_list el ON el.task_seq = t.task_seq
         LEFT JOIN eval_ind ei ON ei.eval_ind_seq = el.eval_ind_seq

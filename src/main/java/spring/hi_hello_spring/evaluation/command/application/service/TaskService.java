@@ -50,7 +50,6 @@ public class TaskService {
                 .taskContent(taskCreateDTO.getTaskContent())
                 .build();
 
-
         Task savedTask = taskRepository.save(task);
 
         if (savedTask.getTaskSeq() == null) {
@@ -68,9 +67,10 @@ public class TaskService {
 
         evalListDomainService.createTask(taskCreateDTO, savedTask);
 
-        groupMatchService.createMenteeGroup(savedTask.getTaskSeq(), taskCreateDTO.getTasks().getTasks()); // passing taskSeq
+        if (taskCreateDTO.getTasks() != null && taskCreateDTO.getTasks().getTasks() != null) {
+            groupMatchService.createMenteeGroup(savedTask.getTaskSeq(), taskCreateDTO.getTasks().getTasks());
+        }
     }
-
 
     // 과제 수정
     @Transactional
