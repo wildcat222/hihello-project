@@ -19,21 +19,18 @@ export const setMaxTemplateProcedure = () => {
 
 // 템플릿 리스트 불러오기 함수
 export const loadTemplates = async () => {
-    try {
+
         const response = await springAPI.get('/hr/onboarding'); // 템플릿 리스트 가져오는 API
         templateList.value = response.data.data; // 템플릿 리스트 갱신
 
         // 템플릿 리스트가 갱신된 후, 가장 큰 templateProcedure 값을 갱신
         setMaxTemplateProcedure();
         console.log("가장 큰 templateProcedure 값:", maxTemplateProcedure.value);
-
-    } catch (error) {
-        console.error('템플릿 목록 로드 중 오류:', error);
-    }
 };
 
 // 템플릿 데이터를 리셋하는 함수
 export const resetTemplateData = () => {
+
     setMaxTemplateProcedure(); // 항상 최신화된 값 보장
     console.log("Reset template with maxTemplateProcedure:", maxTemplateProcedure.value); // 디버깅 로그
 
@@ -54,6 +51,7 @@ export const resetTemplateData = () => {
 
 // 템플릿 순서를 업데이트하는 함수
 export const updateTemplateProcedure = async (updatedTemplates) => {
+
     try {
         const updateDTO = updatedTemplates.map((template, index) => ({
             templateSeq: template.templateSeq,
@@ -73,6 +71,7 @@ export const updateTemplateProcedure = async (updatedTemplates) => {
 
 // 템플릿 삭제 함수
 export const deleteTemplate = async (templateSeq, templateProcedure) => {
+
     try {
         await springAPI.delete(`/hr/onboarding/${templateSeq}`);
 
@@ -102,6 +101,7 @@ export const errorMessage = ref('');
 
 // 템플릿 데이터를 전송하는 함수
 export const submitTemplate = async () => {
+
     await setMaxTemplateProcedure(); // 비동기로 최대값 갱신
     if (!templateForm.value.templateTitle) {
         isFormValid.value = false;
