@@ -4,7 +4,6 @@ from app.db_connection.rds_connection import get_db
 from app.chatbot_data.schema import ChatbotAddRequest, ChatbotUpdateRequest
 from app.chatbot_data.model import Chatbot
 from app.chatbot_category.model import ChatbotCategory
-from app.db_connection.pinecone_connection import upload_to_pinecone, delete_from_pinecone, generate_embedding
 
 router = APIRouter(
     prefix="/api/v1/hr/chatbot",
@@ -46,16 +45,6 @@ def add_chatbot_data(
         db.add(new_data)
         db.flush()
 
-        # 임베딩 생성
-        embedding_vector = generate_embedding(request_body.chatbotData)
-
-        # Pinecone 업로드
-        upload_to_pinecone(
-            contents=[request_body.chatbotData],
-            metadatas=[{"id": str(new_data.chatbot_seq)}],
-            embeddings=[embedding_vector]  # 생성된 임베딩 전달
-        )
-
         db.commit()
         return {"message": "Chatbot data added successfully."}
 
@@ -89,16 +78,6 @@ def update_chatbot_data(
             )
         chatbot_data.chatbot_data = request_body.chatbotData
 
-        # 임베딩 생성
-        embedding_vector = generate_embedding(request_body.chatbotData)
-
-        # Pinecone 업데이트
-        upload_to_pinecone(
-            contents=[request_body.chatbotData],
-            metadatas=[{"id": str(chatbotSeq)}],
-            embeddings=[embedding_vector]  # 생성된 임베딩 전달
-        )
-
         db.commit()
         return {"message": "Chatbot data updated successfully."}
 
@@ -126,9 +105,6 @@ def delete_chatbot_data(categorySeq: int, chatbotSeq: int, db: Session = Depends
                 detail=f"Chatbot data with ID {chatbotSeq} not found in category {categorySeq}."
             )
         db.delete(chatbot_data)
-
-        # Pinecone 삭제
-        delete_from_pinecone(ids=[str(chatbotSeq)])
 
         db.commit()
         return {"message": "Chatbot data deleted successfully."}
