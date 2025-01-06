@@ -119,4 +119,12 @@ public class EmployeeQueryController {
         List<DepartmentListDTO> departmentListDTOs = employeeQueryService.getAllDepartment();
         return ResponseUtil.successResponse("부서를 성공적으로 조회하였습니다.", departmentListDTOs).getBody();
     }
+
+    @Operation(summary = "과제 등록 부서 조회", description = "부서를을 조회한다.")
+    @GetMapping("/hr/task/department")
+    public ApiResponse<?> getTaskAddEmployeeDepartment() {
+
+        List<DepartmentListDTO> departmentListDTOs = employeeQueryService.getTaskAddDepartment();
+        return ResponseUtil.successResponse("부서를 성공적으로 조회하였습니다.", departmentListDTOs).getBody();
+    }
 }

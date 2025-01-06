@@ -93,4 +93,14 @@ public class EmployeeQueryService {
         }
         return menteeDepQueryDTO;
     }
+
+    public List<DepartmentListDTO> getTaskAddDepartment() {
+        Long currentEmployeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
+        EmployeeRoleDTO employeeRoleDTO = employeeMapper.findEmployeeRole(currentEmployeeSeq);
+        String empRole = String.valueOf(employeeRoleDTO.getEmployeeRole());
+
+        DepartmentListDTO departmentListDTO = employeeMapper.findEmployeeDepartment(currentEmployeeSeq);
+        Long empDepartmentSeq = departmentListDTO.getDepartmentSeq();
+        return employeeMapper.findTaskDepartment(empRole, empDepartmentSeq);
+    }
 }
