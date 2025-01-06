@@ -2,6 +2,7 @@
 import '@/styles/onboarding/OnboardingData.css'
 const COMMON = 'COMMON';
 const JOB = 'JOB';
+
 import {
   templateForm,
   templateList,
@@ -18,8 +19,25 @@ import {
   resetTemplateData, isFormValid, errorMessage,
   fetchQuizCategory,
 } from '@/services/OnboardingDataApi.js';
-loadTemplates(); // 화면 로드시 템플릿 리스트 불러오기
 
+import { ref, onMounted } from 'vue';
+
+const quizCategories = ref([]);
+const selectedCategory = ref(null);
+
+loadTemplates();
+
+onMounted(async () => {
+  try {
+    const response = await fetchQuizCategory();
+    quizCategories.value = response.data || [];
+    if (quizCategories.value.length > 0) {
+      selectedCategory.value = quizCategories.value[0].quizCategorySeq;
+    }
+  } catch (err) {
+    console.error('퀴즈 카테고리 데이터 로드 실패:', error.value);
+  }
+});
 </script>
 
 <template>
@@ -278,11 +296,13 @@ loadTemplates(); // 화면 로드시 템플릿 리스트 불러오기
             <div class="onboarding-data-label">
               <label>퀴즈 카테고리</label>
             </div>
-            <select v-model="templateForm.quizCategorySeq">
-              <option v-for="category in quizCategories"
-                      :key="category.quizCategorySeq"
-                      :value="category.quizCategorySeq">
-                {{ category.quizCategoryName }} <!-- 각 카테고리 이름 표시 -->
+            <select v-if="quizCategories.length > 0" v-model="selectedCategory">
+              <option
+                  v-for="category in quizCategories"
+                  :key="category.quizCategorySeq"
+                  :value="category.quizCategorySeq"
+              >
+                {{ category.quizCategoryName }}
               </option>
             </select>
           </div>
