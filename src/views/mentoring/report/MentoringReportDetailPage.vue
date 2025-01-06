@@ -258,6 +258,7 @@ onMounted(() => {
   align-content: center;
   justify-content: space-between;
   margin-bottom: 15px;
+  width: 59vw;
 }
 
 .employee-name {

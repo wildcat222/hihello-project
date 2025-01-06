@@ -69,7 +69,7 @@
       </ul>
     </aside>
     <AlarmModal class="alarm-modal" v-if="shouldShowAlarms" @click.stop/>
-    <EmployeeProfile class="profile-modal" v-if="shouldShowProfile" @click.stop/>
+    <EmployeeProfile class="profile-modal" v-if="shouldShowProfile" @click.stop @change-view="handleViewChange"/>
   </div>
 </template>
 
@@ -132,7 +132,15 @@ const handleOutsideClick = (event) => {
   }
 };
 
+const handleViewChange = () => {
+  resetModalsAndMenu();
+  activeMenu.value = null;
+  activeSubMenu.value = null;
+};
+
 router.beforeEach(async (to, from, next) => {
+  resetModalsAndMenu();
+
   if (to.path === '/final-eval') {
     isLoading.value = true; // 로딩 상태 설정
     await nextTick(); // DOM 업데이트를 강제로 반영
@@ -171,8 +179,8 @@ const loadName = async (employeeSeq) => {
 const notificationStore = useNotificationStore();
 const menus = ref([
   // 멘티 ASIDE
-  {name: "인턴 위키", url: "/wiki", role: "MENTEE"},
   {name: "멘토 소개", url: "/mentor/intro", role: "MENTEE"},
+  {name: "인턴 위키", url: "/wiki", role: "MENTEE"},
   // { name: "멘토 채팅", url: "/mentor-chat", role: "MENTEE" },
   {name: "보고서 조회", url: "/mentoring/report", role: "MENTEE"},
 
@@ -230,14 +238,6 @@ const menus = ref([
       return baseMenus;
     }
   },
-  // {
-  //   name: "멘토링",
-  //   position: "팀장",
-  //   subMenus: [
-  //     {name: "멘토링 계획서", url: "/mentoring/planning"},
-  //     {name: "멘토링 보고서", url: "/mentoring/report"},
-  //   ],
-  // },
   {
     name: "온보딩 과제 관리",
     role: "MENTOR",
