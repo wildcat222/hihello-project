@@ -282,7 +282,7 @@ loadTemplates(); // 화면 로드시 템플릿 리스트 불러오기
               <option v-for="category in quizCategories"
                       :key="category.quizCategorySeq"
                       :value="category.quizCategorySeq">
-                {{ category.name }} <!-- 각 카테고리 이름 표시 -->
+                {{ category.quizCategoryName }} <!-- 각 카테고리 이름 표시 -->
               </option>
             </select>
           </div>
