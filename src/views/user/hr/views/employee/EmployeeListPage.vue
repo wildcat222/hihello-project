@@ -42,7 +42,7 @@ const searchEmployeeList = async (query) => {
     return;
   }
   try {
-    console.log('검색 호출 시작 : ', searchCategory.value, query);
+    // console.log('검색 호출 시작 : ', searchCategory.value, query);
     const encodedQuery = encodeURIComponent(query);
     const response = await searchEmployees(searchCategory.value, encodedQuery);
     employeeList.splice(0);  // 기존 리스트 초기화
@@ -89,7 +89,6 @@ const activeDelModal = (item) => {
     departmentName: item.departmentName,
     positionName: item.positionName
   }
-  console.log(employee);
 }
 
 const shouldShowUpdateModal = ref(false);
@@ -125,10 +124,9 @@ const modifyEmployee = async (employeeRole) => {
     shouldShowUpdateModal.value = false;
     alert('사원 정보를 수정하였습니다.');
   } catch (error) {
-    console.error(error);
     alert('사원 정보를 수정하는데 실패하였습니다.');
   }
-  // location.reload();
+  location.reload();
 }
 
 // 삭제 모달 삭제 버튼 클릭 시

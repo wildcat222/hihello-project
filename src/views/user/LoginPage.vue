@@ -1,7 +1,7 @@
 <template>
     <div class="login-page">
         <WhiteBox>
-            <h2 class="login-title">로그인</h2>
+          <h1 class="logo-img"> HiHello</h1>
             <form class="login-form" @submit.prevent="onLogin">
                 <div class="login-form-group">
                     <label for="username">사번</label>
