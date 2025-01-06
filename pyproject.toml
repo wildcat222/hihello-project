@@ -182,7 +182,7 @@ pyparsing = "^3.2.1"
 python-dateutil = "^2.9.0.post0"
 python-json-logger = "^3.2.1"
 pytz = "^2024.2"
-pywin32 = "^308"
+pywin32 = { version = "^308", platform = "win32" }
 pywinpty = "^2.0.14"
 pyxnat = "^1.6.2"
 pyzmq = "^26.2.0"
@@ -231,6 +231,7 @@ webencodings = "^0.5.1"
 websocket-client = "^1.8.0"
 wget = "^3.2"
 yarl = "^1.18.3"
+maturin = "^1.8.1"
 
 
 
