@@ -2,8 +2,10 @@ package spring.hi_hello_spring.onboarding.command.domain.repository;
 
 import org.springframework.data.jpa.repository.Query;
 import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.Template;
+import spring.hi_hello_spring.onboarding.command.domain.aggregate.entity.TemplateType;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +26,9 @@ public interface TemplateRepository {
 
     Template findByTemplateSeq(Long templateSeq);
 
-    @Query("SELECT t FROM Template t WHERE t.templateEndAt <= :currentDateTime")
-    List<Template> findExpiredTemplates(LocalDateTime currentDateTime);
-
     List<Template> findAll();
+
+    Collection<Object> findByTemplateType(TemplateType templateType);
+
+    Template findFirstByOrderByTemplateEndAtDesc();
 }

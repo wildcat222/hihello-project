@@ -20,6 +20,16 @@
             reg_date DESC;
     </select>
 
+    <select id="findNotiCount" parameterType="java.lang.Long" resultType="AlarmCountDTO">
+        SELECT
+            COUNT(*) as alarmCount
+        FROM
+            noti
+        WHERE
+            employee_seq = #{employeeSeq}
+        AND
+            alarm_read_status = false;
+    </select>
 
 
 

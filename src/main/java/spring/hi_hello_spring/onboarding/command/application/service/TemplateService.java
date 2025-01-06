@@ -11,11 +11,16 @@ import spring.hi_hello_spring.common.exception.CustomException;
 import spring.hi_hello_spring.common.exception.ErrorCodeType;
 import spring.hi_hello_spring.common.repository.FileRepository;
 import spring.hi_hello_spring.evaluation.command.domain.aggregate.entity.Task;
+import spring.hi_hello_spring.evaluation.command.domain.repository.EvalIndRepository;
+import spring.hi_hello_spring.evaluation.command.domain.repository.EvalListRepository;
 import spring.hi_hello_spring.evaluation.command.domain.repository.TaskRepository;
+import spring.hi_hello_spring.finalEval.command.application.service.FinalEvalService;
 import spring.hi_hello_spring.group.command.domain.aggregate.entity.TaskGroup;
 import spring.hi_hello_spring.group.command.domain.repository.TaskGroupRepository;
 import spring.hi_hello_spring.employee.command.domain.aggregate.entity.Employee;
 import spring.hi_hello_spring.employee.command.domain.repository.EmployeeRepository;
+import spring.hi_hello_spring.mentoring.command.domain.repository.MentoringRepository;
+import spring.hi_hello_spring.mentoring.command.domain.repository.ReportRepository;
 import spring.hi_hello_spring.onboarding.command.application.dto.CheckListCreateDTO;
 import spring.hi_hello_spring.onboarding.command.application.dto.TeamplateOrderUpdateDTO;
 import spring.hi_hello_spring.onboarding.command.application.dto.TemplateCreateDTO;
@@ -42,7 +47,6 @@ public class TemplateService {
     private final CheckListStatusRepository checkListStatusRepository;
     private final TaskGroupRepository taskGroupRepository;
     private final TaskRepository taskRepository;
-
 
     /* 온보딩 스토리 보드 등록 */
     @Transactional

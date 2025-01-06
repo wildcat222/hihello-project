@@ -106,8 +106,9 @@
         quiz_category AS qc ON q.quiz_category_seq = qc.quiz_category_seq
         LEFT JOIN
         checklist AS c ON t1.template_seq = c.template_seq
-        LEFT JOIN
-        checklist_status AS cs ON c.checklist_seq = cs.checklist_seq
+        LEFT JOIN checklist_status AS cs
+        ON c.checklist_seq = cs.checklist_seq
+        AND cs.employee_seq = #{menteeSeq}
         LEFT JOIN
         task AS t2 ON t1.template_seq = t2.template_seq
         LEFT JOIN
