@@ -14,4 +14,5 @@ public class MenteeAllQueryDTO {
     private String employeeNum;
     private String employeeName;
     private String departmentName;
+    private Long employeeSeq;
 }

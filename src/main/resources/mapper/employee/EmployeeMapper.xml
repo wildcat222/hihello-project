@@ -9,7 +9,8 @@
         SELECT
             e.employee_name,
             e.employee_num,
-            d.department_name
+            d.department_name,
+            e.employee_seq
         FROM
             employee AS e
         JOIN
