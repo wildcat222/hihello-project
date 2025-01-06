@@ -83,8 +83,8 @@ onMounted(async () => {
               <div v-if="item.taskTotalScore !== null" class="task-eval-score">
               {{ item.taskTotalScore }}점
               </div>
-              <div v-else-if="employeeRole === 'HR' || employeePosition === '팀장'">
-              평가전
+              <div v-else-if="employeeRole === 'HR' || employeePosition === '팀장'" class="task-eval-score">
+              평가 전
               </div>
               <button
                   v-else-if="employeeRole === 'MENTOR'"
