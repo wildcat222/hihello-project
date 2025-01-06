@@ -9,14 +9,4 @@ import spring.hi_hello_spring.elasticsearch.command.repository.WikiDocumentRepos
 @SpringBootTest
 class HiHelloSpringApplicationTests {
 
-	@MockBean
-	private ElasticsearchIndexInitializer elasticsearchIndexInitializer;
-
-	@MockBean
-	private WikiDocumentRepository wikiDocumentRepository;
-
-	@Test
-	void contextLoads() {
-	}
-
 }

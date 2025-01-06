@@ -3,6 +3,7 @@ package spring.hi_hello_spring.onboarding.query.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.hi_hello_spring.common.util.CustomUserUtils;
+import spring.hi_hello_spring.employee.query.dto.DepartmentListDTO;
 import spring.hi_hello_spring.employee.query.dto.EmployeeRoleDTO;
 import spring.hi_hello_spring.employee.query.mapper.EmployeeMapper;
 import spring.hi_hello_spring.onboarding.query.dto.TemplateAllQueryDTO;
@@ -17,6 +18,7 @@ public class TemplateQueryService {
 
     private final TemplateMapper templateMapper;
     private final EmployeeMapper employeeMapper;
+    private final EmployeeMapper employeeRoleMapper;
 
     /* 온보딩 스토리보드 순서 전체 조회 */
     public List<TemplateAllQueryDTO> getAllTemplate(){
@@ -27,10 +29,11 @@ public class TemplateQueryService {
     /* 권한 별 템플릿 차수 조회 */
     public List<TemplateTaskRoundDTO> getTemplateTaskRound() {
         Long currentEmployeeSeq = CustomUserUtils.getCurrentEmployeeSeq();
-
+        DepartmentListDTO departmentListDTO = employeeMapper.findEmployeeDepartment(currentEmployeeSeq);
         EmployeeRoleDTO employeeRoleDTO = employeeMapper.findEmployeeRole(currentEmployeeSeq);
+        Long empDepartmentSeq = departmentListDTO.getDepartmentSeq();
 
         String currentEmployeeRole = employeeRoleDTO.getEmployeeRole().name();
-        return templateMapper.findTemplateTaskRound(currentEmployeeRole);
+        return templateMapper.findTemplateTaskRound(currentEmployeeRole, empDepartmentSeq);
     }
 }

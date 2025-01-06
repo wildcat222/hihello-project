@@ -25,7 +25,7 @@ spring:
       uri: mongodb://${MONGO_USER_NAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=admin
     elasticsearch:
       repositories:
-        enabled: false
+        enabled: true
   jpa:
     show-sql: true
     hibernate:

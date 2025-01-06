@@ -3,6 +3,7 @@ package spring.hi_hello_spring.elasticsearch.command.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import spring.hi_hello_spring.elasticsearch.command.service.ElasticsearchService
 @RequiredArgsConstructor
 @Tag(name = "Wiki API", description = "위키 API")
 @ConditionalOnProperty(name = "spring.data.elasticsearch.repositories.enabled", havingValue = "true")
+@Slf4j
 public class ElasticsearchController {
 
     private final ElasticsearchService elasticsearchService;
