@@ -1,12 +1,13 @@
 <script setup>
 import {computed, onMounted, onUnmounted, ref} from 'vue';
-import {useRoute} from 'vue-router';
+import { useRoute } from 'vue-router';
 import AsideComponent from '@/components/AsideComponent.vue';
-import {useUserStore} from '@/stores/UserStore';
-import {springAPI} from '@/services/axios.js';
+import { useUserStore } from '@/stores/UserStore';
+import { springAPI } from '@/services/axios.js';
+import EmployeeProfile from "@/components/EmployeeProfile.vue";
 import ChatModal from '@/components/ChatModal.vue';
 import ChatBotModal from "@/components/ChatBotModal.vue";
-import {getGroupChatRoomSeq, getMentoringChatRoomSeq} from "@/services/ChatApi.js"; // API 추가
+import { getGroupChatRoomSeq, getMentoringChatRoomSeq } from "@/services/ChatApi.js"; // API 추가
 
 // Vue Router 및 전역 스토어 설정
 const route = useRoute();
@@ -15,8 +16,10 @@ const userStore = useUserStore();
 // 상태 정의
 const shouldShowAside = computed(() => !route.meta.hideAside);
 
+const shouldShowProfile = ref(false);
 const isChatModalVisible = ref(false);
 const isChatBotModalVisible = ref(false);
+const activeMenu = ref(null);
 const showAdditionalButtons = ref(false); // 추가 버튼 표시 여부
 
 const chatType = ref(null); // 'mentor' or 'group'
@@ -73,7 +76,7 @@ onMounted(() => {
 
     <!-- Router View -->
     <div class="router-container">
-      <router-view/>
+      <router-view />
     </div>
 
     <!-- 메인 채팅 버튼 -->

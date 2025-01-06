@@ -196,7 +196,7 @@ export function useTask() {
 
     const fetchDepartments = async () => {
         try {
-            const response = await springAPI.get('/hr/department', {
+            const response = await springAPI.get('/hr/task/department', {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
                 },
