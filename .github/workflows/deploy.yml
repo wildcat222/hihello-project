@@ -8,6 +8,13 @@ on:
   push:
     branches:
       - "master"
+  pull_request:
+    branches:
+      - "master"
+    types:
+      - opened
+      - reopened
+      - synchronize
 
 jobs:
   build-and-test:
