@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.mentoring.query.mapper.ReportMapper">
+
+    <!-- 멘토링 보고서 상세 조회 SQL-->
+    <select id="getReportDetail" parameterType="java.lang.Long" resultType="ResMentoringReportDTO">
+        SELECT
+        r.report_seq AS reportSeq,
+        e1.employee_name AS menteeName,
+        e2.employee_name AS mentorName,
+        r.report_week AS reportWeek,
+        r.report_content AS reportContent,
+        r.report_feeling AS reportFeeling,
+        r.report_feedback_content AS reportFeedbackContent
+        FROM
+        report AS r
+        JOIN
+        mentoring AS m ON r.mentoring_seq = m.mentoring_seq
+        JOIN
+        employee AS e1 ON m.mentee_seq = e1.employee_seq
+        JOIN
+        employee AS e2 ON m.mentor_seq = e2.employee_seq
+        WHERE
+        r.report_seq = #{reportSeq}
+    </select>
+
+    <!-- 멘토링 보고서 리스트 조회(담당자) -->
+    <select id="findAllReportListByHR" resultType="ReportListQueryDTO">
+        SELECT
+            r.report_seq AS reportSeq,
+            r.report_week AS reportWeek,
+            e.employee_name AS menteeName,
+            r.reg_date AS regDate
+        FROM
+            report AS r
+        JOIN
+            mentoring AS m ON r.mentoring_seq = m.mentoring_seq
+        JOIN
+            employee AS e ON m.mentee_seq = e.employee_seq
+    </select>
+
+    <!-- 멘토링 보고서 리스트 조회(팀장) -->
+    <select id="findReportListByLeader" parameterType="java.lang.Long" resultType="ReportListQueryDTO">
+        SELECT
+            r.report_seq AS reportSeq,
+            r.report_week AS reportWeek,
+            e.employee_name AS menteeName,
+            r.reg_date AS regDate,
+            e.department_seq
+        FROM
+            report AS r
+        JOIN
+            mentoring AS m ON r.mentoring_seq = m.mentoring_seq
+        JOIN
+            employee AS e ON m.mentee_seq = e.employee_seq
+        WHERE
+            e.department_seq = (
+            SELECT department_seq
+            FROM employee
+            WHERE employee_seq = #{employeeSeq}  -- 현재 조회한 사람의 부서 정보
+            )
+    </select>
+
+    <select id="findReportListByMentor" parameterType="java.lang.Long" resultType="ReportListQueryDTO">
+        SELECT
+            r.report_seq AS reportSeq,
+            r.report_week AS reportWeek,
+            e.employee_name AS menteeName,
+            r.reg_date AS regDate
+        FROM
+            report AS r
+        JOIN
+            mentoring AS m ON r.mentoring_seq = m.mentoring_seq
+        JOIN
+            employee AS e ON m.mentee_seq = e.employee_seq
+        WHERE
+            m.mentor_seq = #{employeeSeq}
+        AND
+            m.mentoring_active_status = true
+    </select>
+
+    <select id="findReportListByMentee" parameterType="java.lang.Long" resultType="MenteeReportListQueryDTO">
+        SELECT
+            r.report_seq AS reportSeq,
+            r.report_week AS reportWeek,
+            r.reg_date AS regDate
+        FROM
+            report AS r
+        JOIN
+            mentoring AS m ON r.mentoring_seq = m.mentoring_seq
+        JOIN
+            employee AS e ON m.mentee_seq = e.employee_seq
+        WHERE
+            m.mentee_seq = #{employeeSeq}
+    </select>
+
+    <select id="getReportSearch" resultType="ReportListQueryDTO">
+        SELECT
+            r.report_seq AS reportSeq,
+            r.report_week AS reportWeek,
+            e.employee_name AS menteeName,
+            r.reg_date AS regDate
+        FROM
+            report AS r
+        JOIN
+            mentoring AS m ON r.mentoring_seq = m.mentoring_seq
+        JOIN
+            employee AS e ON m.mentee_seq = e.employee_seq
+        WHERE 1 = 1
+        <if test="searchType == 'name'">
+            AND e.employee_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="searchType == 'num'">
+            AND e.employee_num LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </select>
+
+    <!-- 팀장 검색 -->
+    <select id="getReportSearchByLeader" resultType="ReportListQueryDTO">
+        SELECT
+        r.report_seq AS reportSeq,
+        r.report_week AS reportWeek,
+        e.employee_name AS menteeName,
+        r.reg_date AS regDate
+        FROM
+        report AS r
+        JOIN
+        mentoring AS m ON r.mentoring_seq = m.mentoring_seq
+        JOIN
+        employee AS e ON m.mentee_seq = e.employee_seq
+        JOIN
+        employee AS login_user ON login_user.employee_seq = #{employeeSeq}
+        WHERE 1 = 1
+        AND e.department_seq = login_user.department_seq
+        <if test="searchType == 'name'">
+            AND e.employee_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="searchType == 'num'">
+            AND e.employee_num LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </select>
+</mapper>

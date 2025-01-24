@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.evaluation.query.mapper.TaskQueryMapper">
+
+    <select id="findHrAllTask" resultType="TaskAllListQueryDTO">
+        SELECT DISTINCT
+        a.task_seq,
+        a.department_seq,
+        d.department_name,
+        a.task_title ,
+        t.template_seq,
+        t.template_task_round
+        FROM task a
+        JOIN department d ON a.department_seq = d.department_seq
+        JOIN template t ON a.template_seq = t.template_seq
+        JOIN employee e ON d.department_seq = e.department_seq
+    </select>
+
+    <select id="findMenteeTaskDetail" parameterType="java.util.Map" resultType="TaskMenteeDetailQueryDTO">
+        SELECT DISTINCT
+        a.task_seq,
+        a.task_title,
+        a.task_type,
+        t.template_seq,
+        a.task_content,
+        t.template_task_round,
+        t.template_end_at,
+        f.file_seq,
+        f.file_name,
+        f.file_url
+        FROM task a
+        LEFT JOIN department d ON d.department_seq = a.department_seq
+        LEFT JOIN employee e ON d.department_seq = e.department_seq
+        LEFT JOIN template t ON t.template_seq = a.template_seq
+        LEFT JOIN onboarding_status os ON os.template_seq = t.template_seq
+        LEFT JOIN file f ON f.task_seq = a.task_seq
+        WHERE os.employee_seq = #{employee_seq}
+        AND a.task_seq = #{task_seq}
+    </select>
+
+    <select id="findGroupTaskTitle" resultType="GroupTaskAllQueryDTO">
+        SELECT
+            task_seq,
+            task_content
+        FROM
+            task
+        WHERE
+            task_type = 'GROUP'
+     </select>
+
+    <resultMap id="TaskResultMap" type="TaskMentorDetailQueryDTO">
+        <result property="taskSeq" column="task_seq"/>
+        <result property="taskType" column="task_type"/>
+        <result property="taskTitle" column="task_title"/>
+        <result property="taskContent" column="task_content"/>
+        <result property="taskUrl" column="task_url"/>
+        <result property="templateSeq" column="template_seq"/>
+        <result property="templateTaskRound" column="template_task_round"/>
+        <result property="templateEndAt" column="template_end_at"/>
+        <result property="fileSeq" column="file_seq"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileUrl" column="file_url"/>
+        <collection property="evalList" ofType="EvalListQueryDTO">
+            <result property="evalListContent" column="eval_list_content"/>
+            <result property="evalListScore" column="eval_list_score"/>
+        </collection>
+    </resultMap>
+    <select id="findMentorTaskDetail" resultMap="TaskResultMap">
+        SELECT DISTINCT
+        a.task_seq,
+        a.task_type,
+        a.task_title,
+        a.task_content,
+        t.template_seq,
+        t.template_end_at,
+        t.template_task_round,
+        tl.eval_list_content,
+        tl.eval_list_score,
+        f.file_seq,
+        f.file_name,
+        f.file_url
+        FROM task a
+        JOIN template t ON t.template_seq = a.template_seq
+        JOIN department d ON a.department_seq = d.department_seq
+        JOIN employee e ON d.department_seq = e.department_seq
+        JOIN file f ON f.task_seq = a.task_seq
+        LEFT JOIN (
+        SELECT
+        m.mentor_seq,
+        m.mentee_seq
+        FROM mentoring m
+        ) mt
+        ON e.employee_seq = mt.mentor_seq
+        LEFT JOIN (
+        SELECT
+        e.employee_seq AS mentee_seq,
+        e.employee_name AS mentee_name
+        FROM employee e
+        ) em
+        ON mt.mentee_seq = em.mentee_seq
+        LEFT JOIN eval_list tl
+        ON a.task_seq = tl.task_seq
+        WHERE e.employee_seq = #{employee_seq}
+        AND e.employee_role = "mentor"
+        AND a.task_seq = #{task_seq}
+    </select>
+
+    <select id="findSearchTask" resultType="TaskSearchQueryDTO">
+        SELECT
+        a.task_seq,
+        d.department_seq,
+        d.department_name,
+        a.template_seq,
+        t.template_task_round,
+        a.task_title,
+        a.task_content
+        FROM task a
+        JOIN department d ON a.department_seq = d.department_seq
+        JOIN template t ON a.template_seq = t.template_seq
+        WHERE a.task_content LIKE CONCAT('%', #{taskContent}, '%')
+        OR a.task_title LIKE CONCAT('%', #{taskContent}, '%')
+    </select>
+
+    <select id="findTaskGroupPartner" resultType="TaskGroupPartnerQueryDTO">
+        SELECT
+        tg.task_group_seq,
+        gm.group_member_seq,
+        gm.employee_seq,
+        e.employee_name
+        FROM group_member gm
+        JOIN task_group tg ON tg.task_group_seq = gm.task_group_seq
+        JOIN employee e ON e.employee_seq = gm.employee_seq
+        WHERE tg.task_group_seq = #{taskGroupSeq}
+    </select>
+
+    <select id="findMentorAllTask" parameterType="java.lang.Long" resultType="TaskAllListQueryDTO">
+        SELECT DISTINCT
+        a.task_seq,
+        a.department_seq,
+        d.department_name,
+        a.task_title ,
+        t.template_seq,
+        t.template_task_round
+        FROM task a
+        JOIN department d ON a.department_seq = d.department_seq
+        JOIN template t ON a.template_seq = t.template_seq
+        JOIN employee e ON d.department_seq = e.department_seq
+        WHERE a.department_seq = (
+        SELECT department_seq
+        FROM employee
+        WHERE employee_seq = #{employee_seq}
+        )
+    </select>
+
+    <resultMap id="TaskDetailMap" type="TaskDetailQueryDTO">
+        <result property="taskSeq" column="task_seq"/>
+        <result property="templateSeq" column="template_seq"/>
+        <result property="departmentSeq" column="department_seq"/>
+        <result property="taskTitle" column="task_title"/>
+        <result property="departmentName" column="department_name"/>
+        <result property="templateType" column="template_type"/>
+        <result property="taskType" column="task_type"/>
+        <result property="taskContent" column="task_content"/>
+        <result property="templateTaskRound" column="template_task_round"/>
+        <result property="templateEndAt" column="template_end_at"/>
+        <result property="templateUrlName" column="template_url_name"/>
+        <result property="fileSeq" column="file_seq"/>
+        <result property="fileName" column="file_name"/>
+        <result property="fileUrl" column="file_url"/>
+        <collection property="evalList" ofType="TaskEvalQueryDTO">
+            <result property="evalListSeq" column="eval_list_seq"/>
+            <result property="evalListContent" column="eval_list_content"/>
+            <result property="evalListScore" column="eval_list_score"/>
+            <result property="evalIndSeq" column="eval_ind_seq"/>
+            <result property="evalIndContent" column="eval_ind_content"/>
+        </collection>
+    </resultMap>
+
+    <select id="findTaskDetail" resultMap="TaskDetailMap">
+        SELECT
+        t.task_seq,
+        tm.template_seq,
+        dm.department_seq,
+        t.task_title,
+        dm.department_name,
+        tm.template_type,
+        t.task_type,
+        t.task_content,
+        tm.template_task_round,
+        tm.template_end_at,
+        tm.template_url_name,
+        el.eval_list_seq,
+        el.eval_list_content,
+        el.eval_list_score,
+        ei.eval_ind_seq,
+        ei.eval_ind_content,
+        f.file_seq,
+        f.file_name,
+        f.file_url
+        FROM task t
+        LEFT JOIN template tm ON tm.template_seq = t.template_seq
+        LEFT JOIN department dm ON dm.department_seq = t.department_seq
+        LEFT JOIN eval_list el ON el.task_seq = t.task_seq
+        LEFT JOIN eval_ind ei ON ei.eval_ind_seq = el.eval_ind_seq
+        LEFT JOIN file f ON f.task_seq = t.task_seq
+        WHERE t.task_seq = #{task_seq};
+    </select>
+</mapper>

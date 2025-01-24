@@ -1,0 +1,116 @@
+# 포트 번호 설정
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+# 서버 포트 설정 (Nginx 포트와 동일하게)
+  port: 5000
+  address: 127.0.0.1
+
+# mariaDb, jpa
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: ${RDS_DOMAIN}://${RDS_URL}:${RDS_PORT}/${RDS_DB_NAME}
+    username: ${RDS_USERNAME}
+    password: ${RDS_PASSWORD}
+    driver-class-name: ${RDS_DRIVER_CLASS_NAME}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+    mongodb:
+      uri: mongodb://${MONGO_USER_NAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=admin
+    elasticsearch:
+      repositories:
+        enabled: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    properties:
+      hibernate:
+        globally_quoted_identifiers: 'true'
+        format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  messages:
+    encoding: UTF-8
+  main:
+    allow-bean-definition-overriding: true
+  kafka:
+    consumer:
+      group-id: chat-group
+      auto-offset-reset: earliest
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}  # localhost를 외부 호스트로 변경해야 할 수 있음
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer  # JSON을 받을 경우
+
+    producer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER}  # 마찬가지로 이 부분도 도커 네트워크에 맞게 설정 필요
+      topic: chat-messages
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer  # JSON 형식으로 직렬화
+
+
+  elasticsearch:
+    uris: ${ELASTIC_URIS}
+    username: ${ELASTIC_USER}
+    password: ${ELASTIC_PASSWORD}
+    wiki:
+      index:
+        name: wiki
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: mapper/**/*.xml
+  type-aliases-package: spring.hi_hello_spring.**
+
+token:
+  secret: ${TOKEN_SECRET}
+
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET_NAME}
+    stack:
+      auto: false
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+
+logging.level:
+  org.hibernate.SQL: debug
+
+springdoc:
+  swagger-ui:
+    path: /
+    tags-sorter: alpha
+    operations-sorter: method
+    doc-expansion: none
+
+#management:
+#  endpoint:
+#    metrics:
+#      enabled: true
+#    prometheus:
+#      enabled: true
+#
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health, info, metrics, prometheus
+#
+#  metrics:
+#    tags:
+#      application: ${SPRING_APPLICATION_NAME}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.onboarding.query.mapper.TemplateMapper">
+
+    <select id="findAllTemplate" resultType="TemplateAllQueryDTO">
+        SELECT
+            template_seq,
+            template_title,
+            template_procedure
+        FROM
+            template
+        ORDER BY
+            template_procedure ASC;
+    </select>
+
+    <select id="findTemplateTaskRound" resultType="TemplateTaskRoundDTO">
+        SELECT
+        tm.template_seq,
+        tm.template_task_round
+        FROM
+        template tm
+        WHERE
+        tm.template_task_round IS NOT NULL
+        AND (
+        (#{currentEmployeeRole} = 'mentor' AND tm.template_training_type = 'JOB' AND tm.template_type = 'TASK')
+        OR (#{currentEmployeeRole} = 'hr' AND tm.template_training_type = 'COMMON' AND tm.template_type = 'TASK')
+        )
+        AND NOT EXISTS (
+        SELECT 1
+        FROM task t
+        WHERE t.department_seq = #{empDepartmentSeq}
+        AND t.template_seq = tm.template_seq
+        );
+    </select>
+
+</mapper>

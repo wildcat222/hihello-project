@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.chatting.query.mapper.ChattingMapper">
+
+    <select id="findMentoringChatRoomByUserSeq" parameterType="Long" resultType="String">
+        SELECT
+            chat_room_seq
+        FROM
+            mentoring
+        WHERE
+            (mentor_seq = #{userSeq} OR mentee_seq = #{userSeq})
+        AND
+        mentoring_active_status = 1
+    </select>
+
+    <select id="findGroupingChatRoomsByUserSeq" parameterType="Long" resultType="String">
+        SELECT
+        t.chat_room_seq
+        FROM
+        group_member AS g
+        JOIN
+        task_group AS t
+        ON g.task_group_seq = t.task_group_seq
+        WHERE
+        g.employee_seq = #{userSeq}
+        AND
+        t.task_group_active_status = 1
+    </select>
+</mapper>

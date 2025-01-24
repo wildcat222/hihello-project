@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="spring.hi_hello_spring.group.query.mapper.PeerReviewResultMapper">
+    <!-- 동료 평과 결과 리스트 조회 -->
+    <select id="getPeerReviewResult" resultType="PeerReviewResultAllQueryDTO">
+        SELECT
+            rr.employee_seq,
+            rr.employee_num,                <!-- reviewee's employee_num -->
+            d.department_name,              <!-- reviewee's department_name -->
+            r.employee_name AS reviewer_name,  <!-- reviewer_name -->
+            rr.employee_name AS reviewee_name,  <!-- reviewee_name -->
+            SUM(pr.peer_review_score) AS peerReviewScoreSum,  <!-- total peer review score -->
+            SUM(pl.peer_review_list_score) AS peerReviewScoreListSum  <!-- total peer review list score -->
+        FROM
+            employee rr                    <!-- reviewee -->
+        JOIN department d ON rr.department_seq = d.department_seq  <!-- reviewee's department -->
+        LEFT JOIN peer_review pr ON rr.employee_seq = pr.reviewee_seq  <!-- peer review for reviewee -->
+        LEFT JOIN employee r ON pr.reviewer_seq = r.employee_seq  <!-- reviewer -->
+        LEFT JOIN peer_review_list pl ON pr.peer_review_list_seq = pl.peer_review_list_seq  <!-- peer review list -->
+        LEFT JOIN employee reviewee ON rr.employee_seq = reviewee.employee_seq  <!-- reviewee's name -->
+        WHERE rr.employee_seq IN (
+        SELECT gm.employee_seq
+        FROM group_member gm
+        WHERE gm.task_group_seq = #{taskGroupSeq}
+        )
+        GROUP BY
+        rr.employee_num, d.department_name, r.employee_name, rr.employee_name
+    </select>
+
+    <!-- 동료 평가 결과 상세 조회 -->
+    <resultMap id="PeerReviewResultDetail" type="PeerReviewResultDetailQueryDTO">
+        <result column="peerReviewScoreSum" property="peerReviewScoreSum" />
+
+        <!-- Map 매핑 -->
+        <collection property="peerReviewDetails" ofType="PeerReviewDetailQueryDTO">
+            <result column="peer_review_list_content" property="peerReviewListContent" />
+            <result column="peer_review_score" property="peerReviewScore" />
+        </collection>
+    </resultMap>
+
+    <select id="getPeerReviewResultDetail" resultType="PeerReviewDetailQueryDTO">
+        SELECT
+        l.peer_review_list_content, -- 항목 내용
+        CAST(r.peer_review_score AS SIGNED) AS peer_review_score -- 점수
+        FROM
+        peer_review r
+        JOIN peer_review_list l ON r.peer_review_list_seq = l.peer_review_list_seq
+        WHERE
+        r.reviewee_seq = #{employeeSeq};
+    </select>
+
+</mapper>
