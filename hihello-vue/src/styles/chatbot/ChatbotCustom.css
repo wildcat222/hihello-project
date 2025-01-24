@@ -1,0 +1,123 @@
+.chatbot-container {
+    width: 80vw;
+}
+
+.chatbot-container h1{
+    margin: 80px 0;
+}
+
+.chatbot-header {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.chatbot-search-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.chatbot-search-bar-wrapper {
+    flex: 0 1 500px;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+.chatbot-register-button {
+    background-color: var(--yellow);
+    color: var(--white);
+    border: none;
+    height: 50px;
+    margin-top: 10px;
+    margin-left: 80px;
+    padding: 0 15px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.chatbot-category-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px auto;
+    width: 90%;
+}
+
+.chatbot-add-button {
+    background-color: var(--yellow);
+    color: var(--black);
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    align-items: center;
+}
+
+.chatbot-list-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.chatbot-list-header {
+    font-weight: bold;
+}
+
+.chatbot-list-header,
+.chatbot-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.chatbot-column {
+    text-align: center;
+    flex: 1;
+}
+
+.chatbot-header-number,
+.chatbot-item-number {
+    flex: 0.5;
+}
+
+.chatbot-header-content,
+.chatbot-item-content {
+    flex: 3;
+    text-align: center;
+}
+
+.chatbot-header-actions,
+.chatbot-actions {
+    flex: 1;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.chatbot-edit-button,
+.chatbot-delete-button {
+    background-color: var(--purple);
+    color: var(--white);
+    border: none;
+    padding: 5px 10px;
+    height: 35px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.chatbot-delete-button {
+    background-color: var(--black);
+    color: var(--white);
+}
+
+.chatbot-no-data {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 1.2em;
+    color: #888;
+}

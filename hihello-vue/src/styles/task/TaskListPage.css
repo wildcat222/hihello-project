@@ -1,0 +1,135 @@
+.task-list-page-container .underline {
+    text-decoration: underline;
+    text-decoration-color: var(--purple); /* 밑줄 색상 */
+    text-decoration-thickness: 2px;
+    font-weight: bold; /* 글씨 두껍게 */
+}
+
+.header-task{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.task-list-page-container .user-roll{
+    margin:0 0 13px 0;
+}
+.task-list-page-container .search-bar-task {
+    width: 900px;
+    display: flex;
+    margin:0 0 21px 0;
+}
+.task-list-page-container .list-item{
+    display: flex;
+    margin: 0 0 0 17px;
+}
+
+.task-list-page-container .task-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px; /* 기본 간격 */
+    width: 100%;
+
+}
+.task-list-page-container .task-header, .list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: 100%;
+}
+.task-list-page-container .list-button-delete{
+    width: 4vw;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid var(--white);
+    background: var(--gray);
+    font-size: 12px;
+    color: var(--white);
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+
+.task-list-page-container .list-button-delete:hover{
+    background: var(--black);
+}
+.task-list-page-container .list-button-revise{
+    width: 4vw;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid var(--white);
+    background: var(--purple);
+    font-size: 12px;
+    color: var(--white);
+    margin: 0 4px 0 0;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+
+.task-list-page-container .list-button-revise:hover{
+    background: var(--dark-purple);
+}
+.task-list-page-container .task-num-title{
+    width: 5.8vw;
+    text-align: center;
+
+}
+.task-list-page-container .list-item-num {
+    width: 2vw;
+    margin-left:0.7vw;
+    text-align: center;
+}
+
+.task-list-page-container .task-depart-title{
+    width: 5.8vw;
+    text-align: center;
+}
+.task-list-page-container .list-item-departmentName {
+    width: 4vw;
+    margin-left: 2.9vw;
+    text-align: center;
+}
+.task-list-page-container .task-round-title{
+    width: 6vw;
+    text-align: center;
+}
+.task-list-page-container .list-item-taskRound {
+    width: 6vw;
+    margin-left: 1vw;
+    text-align: center;
+}
+.task-list-page-container .list-item-title{
+    width: 24vw;
+    text-align: center;
+}
+.task-list-page-container .task-name-title {
+    width: 12vw;
+    text-align: center;
+    padding: 0 90px 0 90px;
+    margin: 0 140px 0 0;
+}
+.task-list-page-container .task-title-box{
+    flex: 0.6;
+
+}
+.task-list-page-container .list-button{
+    display:flex;
+    flex:1;
+}
+.task-list-page-container .TaskListbody{
+    border-radius:10px;
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.25);
+    background: var(--white);
+    padding: 30px 46.17px 12px 43px;
+}
+.task-list-page-container .add-task {
+    text-align: center;
+    margin: 0 0 0 35px;
+    border-radius: 10px;
+    color: var(--white);
+}
+.task-list-page-container .title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+    margin: 105px 0 46px 0;
+}

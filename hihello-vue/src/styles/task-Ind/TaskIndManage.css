@@ -1,0 +1,165 @@
+.header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.taskIndInd-header{
+    display:flex;
+    width: 85%;
+    margin: 20px 0;
+
+}
+
+.taskInd-num-title{
+    margin: 0 0 2vh 14%;
+}
+
+.taskInd-depart-title{
+    margin: 0 0 0 31%;
+}
+
+.taskInd-round-title{
+    margin: 0 0 0 32%;
+}
+
+.router-container{
+    display:flex;
+}
+
+.taskInd-full-container {
+    width: 80vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.taskInd-header {
+    display: flex;
+    margin: 105px 0px 49px 0px;
+    justify-content: space-between;
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+}
+.taskInd-container {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    padding: 40px 20px 20px 20px;
+    background-color: var(--white);
+    border-radius: 10px;
+}
+.taskInd-item-delete{
+    width: 60px;
+    height: 31px;
+    border-radius: 10px;
+    background: var(--yellow);
+    padding: 5px 0 5px 0;
+    border:0;
+    color: white;
+}
+.taskInd-item-delete:hover{
+    cursor: pointer;
+}
+.taskInd-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 요소를 수직으로 가운데 정렬 */
+    padding: 10px 10px; /* 여백 축소 */
+    gap: 10px; /* 요소 간 간격 설정 */
+}
+.taskInd-item-num,
+.taskInd-item-departmentName,
+.taskInd-item-taskIndRound {
+    flex: 1;
+    text-align: center;
+}
+
+.new-item button {
+    flex: 0;
+    padding: 5px 10px;
+}
+.taskInd-item.new-item{
+    width: 100%;
+    padding: 0 20px 0 20px;
+    gap: 20px;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+.new-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 세로 가운데 정렬 */
+    gap: 10px; /* 간격 축소 */
+}
+.taskInd-item-departmentName,
+.taskInd-input-name,
+.taskInd-input-score{
+    border-radius: 10px;
+    border-color: var(--light-gray);
+    width: 30px;
+}
+
+.taskInd-item-departmentName-input input{
+    width: 300px; /* 기존보다 줄인 값 */
+    padding: 5px;
+    box-sizing: border-box;
+    border: 1px solid var(--light-gray)
+}
+.taskInd-item-taskIndRound-input input{
+    width: 40px; /* 기존보다 줄인 값 */
+    padding: 5px;
+    box-sizing: border-box;
+    border: 1px solid var(--light-gray)
+}
+
+.taskIndAddButton {
+    cursor: pointer; /* 추가하기 버튼에 마우스 올리면 포인터 모양 */
+    padding: 5px 10px;
+    width: 100px;
+    height: auto;
+    flex-shrink: 0;
+    border:0px;
+    border-radius: 10px;
+    background-color: var(--purple);
+    box-shadow: none;
+    color: white;
+}
+.taskIndAddButtonContainer{
+    width:auto;
+}
+.taskIndAddButton:hover{
+    cursor:pointer;
+}
+.taskInd-item-container{
+    display:flex;
+    width: 80%;
+    align-items: center;
+    justify-content: center;
+    gap:20px;
+    margin-top: 0.5rem;
+}
+
+.taskInd-add-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.taskInd-add-button {
+    background-color: var(--purple);
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    width: 60%;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+
+.taskInd-add-button:hover {
+    background-color: var(--dark-purple);
+}

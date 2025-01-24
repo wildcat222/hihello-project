@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+KR:wght@100..900&display=swap');
+:root {
+    --gray: #A6A6A6;
+    --light-gray: #D9D9D9;
+    --ivory: #F4F2EE;
+    --purple: #7031FC;
+    --dark-purple: #5324b8;
+    --light-purple: #eae5fa;
+    --yellow: #FFC107;
+    --dark-yellow: #ffa703;
+    --black: #121212;
+    --white: #ffffff;
+    --blue: #007bff;
+    --red: #FA1F17;
+    --green: #52c41a;
+    --border-color: #E7E7E7;
+}
+
+:lang(en) {
+    font-family: 'Inter';
+}
+
+blockquote {
+    border-left: 4px solid var(--yellow);
+    padding-left: 1rem;
+    margin: 1rem 0;
+}
+
+pre {
+    background-color: var(--black);
+    color: var(--white);
+    border-radius: 4px;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+pre > code {
+    background-color: transparent;
+    color: var(--white);
+}
+
+code {
+    background-color: var(--light-purple);
+    color: var(--purple);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+sup {
+    color: var(--purple);
+    font-weight: bold;
+}

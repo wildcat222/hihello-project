@@ -1,0 +1,73 @@
+name: Deploy Vue to AWS
+
+on:
+  push:
+    branches:
+      - "master"
+
+  pull_request:
+    branches:
+      - "master"
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: produce
+
+    steps:
+      # 1. 리포지토리 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Node.js 설정
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Generate Environment Variables File for Production
+        run: |
+          echo "VITE_APP_TITLE=$VITE_APP_TITLE" >> .env.staging
+          echo "VITE_API_BASE_URL=$VITE_API_BASE_URL" >> .env.staging
+          echo "VITE_LAMBDA_API_BASE_URL=$VITE_LAMBDA_API_BASE_URL" >> .env.staging
+          echo "VITE_FAST_API_BASE_URL=$VITE_FAST_API_BASE_URL" >> .env.staging
+          echo "VITE_API_CHAT_URL=$VITE_API_CHAT_URL" >> .env.staging
+        env:
+          VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_LAMBDA_API_BASE_URL: ${{ secrets.VITE_LAMBDA_API_BASE_URL }}
+          VITE_FAST_API_BASE_URL: ${{ secrets.VITE_FAST_API_BASE_URL }}
+          VITE_API_CHAT_URL: ${{ secrets.VITE_API_CHAT_URL }}
+      - name: Debug .env.staging
+        run: cat .env.staging
+
+
+      # 3. 빌드 단계
+      - name: Build Vue application
+        run: |
+          npm install
+          npm run build -- --mode staging
+
+      # 4. AWS S3에 배포
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync ./dist s3://hihello-vue --delete
+
+      # 5. CloudFront 캐시 무효화
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*"
+

@@ -1,0 +1,209 @@
+
+.reserveButton-container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.reserveButton{
+    width: 6vw;
+    height: 5vh;
+    border-radius: 10px;
+    border: 1px solid white;
+    background-color: var(--yellow);
+    color: var(--white);
+    cursor:pointer;
+    margin-right: 3vw;
+}
+
+.reserveButton:hover{
+    background-color: var(--dark-yellow);
+}
+
+.color-box-container{
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    padding-left: 5vw;
+    margin-top: 5vh;
+}
+
+.color-box{
+    display:flex;
+    gap:7px;
+    margin: 10px 0 5px 0;
+}
+
+.color-box-gray{
+    width: 20px;
+    height: 20px;
+    background-color: var(--light-gray);
+    border: 1px solid var(--light-gray);
+}
+
+.color-box-white{
+    width: 20px;
+    height: 20px;
+    background-color: var(--white);
+    border: 1px solid var(--light-gray);
+}
+/* 컨테이너 및 헤더 스타일 */
+.conferenceRoomPageContainer {
+    width: 80vw;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.conferenceRoomPageHeaderTitle {
+    margin: 105px 0 46px 0;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.conferenceRoomPageBody{
+    background-color: var(--white);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding:20px;
+}
+
+/* 날짜 선택 섹션 */
+.conferenceRoomPageBody-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    align-content: center;
+    background-color: var(--white);
+    width: 100%;
+    text-align: center;
+    height: 40px;
+    margin-left:1vw;
+}
+
+.conferenceRoomPageBody-date {
+    margin-right: 0.5vw;
+    margin-left: 0.6vw;
+}
+
+.calendar-input-box {
+    width: 20vh;
+    border: none;
+    margin-bottom: 1px;
+}
+
+/* 테이블 스타일 */
+.conferenceRoomPageBody-select-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.conferenceRoomPageBody-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.conferenceRoomPageBody-table-header    {
+    border: none;
+}
+
+.floor-cell-zero{
+    border:none;
+}
+
+
+.conferenceRoomPageBody-time-header:nth-child(odd) {
+    visibility: hidden; /* 숨기기만 하고 공간은 유지 */
+    height: 0; /* 숨겨진 시간에 높이를 0으로 설정하여 공간만 차지 */
+    padding: 0; /* 패딩을 제거하여 공간을 없애지 않음 */
+}
+
+.conferenceRoomPageBody-room-row {
+    height: 15px;
+}
+.floor-cell{
+    border: 1px solid var(--light-gray);
+    padding: 0 10px;
+}
+.conferenceRoomPageBody-room-cell {
+    border: 1px solid var(--light-gray);
+    text-align: left;
+    width: 150px;
+    height: 10px; /* 기존 15px에서 10px로 줄임 */
+    padding: 5px 0 5px 10px; /* 상하 패딩을 추가로 줄일 수 있음 */
+}
+
+.conferenceRoomPageBody-time-header {
+    text-align: center;
+    border: 1px solid var(--white);
+    /*border-bottom-color: var(--light-gray);*/
+    position: relative;
+    right : 59px;
+    color: var(--gray);
+    width: 13px;
+    padding:13px 0;
+}
+
+.cf_thead{
+    border-bottom-color: white;
+}
+
+.conferenceRoomPageBody-time-header::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px; /* 세로줄의 두께 */
+    height: 10px; /* 세로줄의 길이 */
+    background-color: var(--gray); /* 세로줄의 색상 */
+}
+
+/* 테이블 셀 스타일 */
+.conferenceRoomPageBody-button-cell {
+    border: 1px solid #ccc;
+    border-top:1px;
+    text-align: center;
+    padding: 0; /* 내부 패딩 제거 */
+    margin: 0; /* 여백 제거 */
+    height: 20px; /* 셀 높이 고정 */
+    width: 24px; /* 셀 너비 고정 */
+    box-sizing: border-box; /* 테두리를 포함한 크기 계산 */
+}
+
+/* 버튼 스타일 */
+.conferenceRoomPageBody-button {
+    border: none;
+    width: 100%; /* 셀의 전체 너비를 채우기 */
+    height: 100%; /* 셀의 전체 높이를 채우기 */
+    display: block; /* 블록 레벨로 설정하여 셀 크기와 맞춤 */
+    cursor: pointer;
+    padding: 0; /* 내부 여백 제거 */
+    margin: 0; /* 외부 여백 제거 */
+    border-top: 1px solid var(--light-gray)
+}
+
+.conferenceRoomPageBody-button.available {
+    background-color: var(--white);
+    color: white;
+}
+
+.conferenceRoomPageBody-button.reserved {
+    background-color: var(--purple);
+    color: black;
+}
+
+.conferenceRoomPageBody-button.fixed-disabled {
+    background-color: var(--light-gray); /* 고정 비활성화된 버튼 색상 */
+    cursor: not-allowed;
+}
+
+/* 랜덤 비활성화된 버튼 */
+.conferenceRoomPageBody-button.random-disabled {
+    background-color: var(--yellow); /* 랜덤 비활성화된 버튼 색상 */
+    cursor: not-allowed;
+}

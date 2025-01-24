@@ -1,0 +1,120 @@
+name: vue-proj-service
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    branches:
+      - "develop"
+    types:
+      - opened
+      - reopend
+      - synchronize
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: develop
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Grant execute permission for npm scripts
+        run: chmod +x ./node_modules/.bin/* || true
+
+      - name: Record Start Time
+        id: start_time
+        run: echo "START_TIME=$(date +%s)" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Vue project
+        env:
+          VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_LAMBDA_API_BASE_URL: ${{ secrets.VITE_LAMBDA_API_BASE_URL }}
+        run: npm run build
+
+      - name: Calculate Duration
+        id: calculate_duration
+        run: |
+          END_TIME=$(date +%s)
+          DURATION=$((END_TIME - START_TIME))
+          echo "DURATION=$DURATION" >> $GITHUB_ENV
+
+      - name: Notify Discord
+        if: always()
+        run: |
+          echo "Job Status: ${{ job.status }}"
+          DURATION=${DURATION:-"알 수 없음"}
+
+          if [ -n "${{ github.event.pull_request.title }}" ]; then
+            PR_TITLE="${{ github.event.pull_request.title }}"
+          else
+            PR_TITLE="${{ github.event.head_commit.message }}"
+          fi
+
+          SAFE_PR_TITLE=$(echo "$PR_TITLE" | jq -R .)
+
+          ACTIONS_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+          send_discord_notification() {
+            local status="$1"
+            local title=""
+            local color=""
+            local description=""
+
+            if [ "$status" = "success" ]; then
+              title="✅ 빌드 성공 알림"
+              color=3066993
+              description="빌드에 성공했어핑! 🎉\\n\\n"
+            else
+              title="❌ 빌드 실패 알림"
+              color=15158332
+              description="빌드에 실패했어핑. 😢\\n\\n"
+            fi
+
+            curl -H "Content-Type: application/json" \
+              -d "{
+                    \"embeds\": [
+                      {
+                        \"title\": \"$title\",
+                        \"description\": \"$description\",
+                        \"color\": $color,
+                        \"fields\": [
+                          {
+                            \"name\": \"📝 작업 제목\",
+                            \"value\": $SAFE_PR_TITLE,
+                            \"inline\": false
+                          },
+                          {
+                            \"name\": \"⏱️ 실행 시간\",
+                            \"value\": \"${DURATION}초\\n\\n\",
+                            \"inline\": false
+                          },
+                          {
+                            \"name\": \"🔗 디버그 URL\",
+                            \"value\": \"[Actions 로그 보기](${ACTIONS_URL})\\n\\n\",
+                            \"inline\": false
+                          }
+                        ]
+                      }
+                    ]
+                  }" \
+              ${{ secrets.DISCORD_WEBHOOK_URL }}
+          }
+
+          if [ "${{ job.status }}" = "success" ]; then
+            send_discord_notification "success"
+          else
+            send_discord_notification "failure"
+          fi

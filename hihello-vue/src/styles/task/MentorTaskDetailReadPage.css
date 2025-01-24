@@ -1,0 +1,140 @@
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.page-container {
+    width: 70%;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 600;
+    margin: 6.56rem 0 2.9rem 0;
+}
+
+.left {
+    text-align: left;
+}
+
+.light-gray-hr {
+    border: 1px solid var(--light-gray);
+}
+
+.white-box-component {
+    padding: 2rem 3rem !important;
+    min-width: 720px;
+}
+
+.task-info-container {
+    margin-bottom: 2rem;
+}
+
+.task-info-container > div {
+    margin: 1rem 0;
+}
+
+.mentor-task-page-title {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.task-file-text {
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.task-file-name-container {
+    background-color: var(--light-gray);
+    color: var(--gray);
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    margin-left: 1rem;
+    cursor: pointer;
+}
+
+.mentor-task-detail-task-file-name {
+    margin-left: 0.4rem;
+}
+
+.mentor-task-content, .mentor-task-detail-read-task-submit-content {
+    font-size: 16px;
+    line-height: 1.5rem;
+}
+
+.mentor-task-submit-container, .mentor-eval-container {
+    margin: 2rem 0;
+}
+
+.mentor-task-submit-container > div {
+    margin: 1rem 0;
+}
+
+.mentor-task-eval-table {
+    width: 95%;
+    border: 2px solid var(--light-gray);
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 16px;
+}
+
+.mentor-task-eval-table th, .mentor-task-eval-table td {
+    border: 2px solid var(--light-gray);
+    padding: 0.3rem;
+    text-align: center;
+}
+
+.task-eval-score-input {
+    width: 60%;
+    height: 35px;
+    border: 1px solid var(--gray);
+    border-radius: 10px;
+    align-items: center;
+    margin-right: 0.5rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+.task-eval-score-input::placeholder {
+    color: var(--gray);
+    font-weight: bold;
+    text-align: center;
+}
+
+.mentor-task-detail-button-box {
+    display:flex;
+    justify-content: center;
+    gap:2vw;
+}
+
+.mentor-task-detail-cancel-button {
+    width: 5rem;
+    height: 2.4rem;
+    font-size: 15px;
+    color: var(--white);
+    background-color: var(--gray);
+    border: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+.mentor-task-detail-cancel-button:hover {
+    background-color: var(--black);
+}
+
+.mentor-task-detail-read-purple-button {
+    width: 5rem;
+    height: 2.4rem;
+    font-size: 15px;
+    color: var(--white);
+    background-color: var(--purple);
+    border: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* 배경색 변화 효과 */
+}
+
+.mentor-task-detail-read-purple-button:hover{
+    background-color: var(--dark-purple)
+}
