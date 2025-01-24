@@ -1,1 +1,28 @@
+# 운영체제별 파일 무시
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE 설정 파일
+.idea/
+.vscode/
+.classpath
+.project
+.settings/
+*.iml
+
+# 빌드 산출물
 build/
+dist/
+target/
+
+# 로그 파일
+*.log
+
+# 환경 파일
+.env
+
+# 하위 레포지토리 .git 무시 (Subtree 사용 시)
+sub-repo/.git
+sub-repo/node_modules/
+sub-repo/dist/
