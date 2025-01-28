@@ -1,0 +1,84 @@
+name: Deploy Docker Compose to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup SSH key for Bastion Host
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.BASTION_SSH_KEY }}
+
+      - name: Setup SSH key for Private Instance
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > private-ec2-key.pem
+          chmod 400 private-ec2-key.pem
+
+      - name: Add Bastion Host to known_hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.BASTION_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Add Private EC2 to known_hosts (via Bastion Host)
+        run: |
+          ssh -v -o StrictHostKeyChecking=no ec2-user@${{ secrets.BASTION_HOST }} \
+          ssh-keyscan -H ${{ secrets.PRIVATE_EC2_IP }} >> ~/.ssh/known_hosts
+
+      - name: Create .env file for Docker Compose
+        run: |
+          echo "MONGO_USER_NAME=${{ secrets.MONGO_USER_NAME }}" > .env
+          echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}" >> .env
+          echo "MONGO_DATABASE=${{ secrets.MONGO_DATABASE }}" >> .env
+          echo "CHAT_PRIVATE_IP=${{ secrets.PRIVATE_EC2_IP }}" >> .env
+
+      - name: Transfer files to Private EC2 via Bastion Host
+        run: |
+          scp -v -i private-ec2-key.pem -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${{ secrets.BASTION_HOST }}" \
+          docker-compose.yml ec2-user@${{ secrets.PRIVATE_EC2_IP }}:/home/ec2-user/docker-compose.yml
+          scp -v -i private-ec2-key.pem -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${{ secrets.BASTION_HOST }}" \
+          .env ec2-user@${{ secrets.PRIVATE_EC2_IP }}:/home/ec2-user/.env
+
+      - name: Install Docker on Private EC2
+        run: |
+          ssh -i private-ec2-key.pem -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no ec2-user@${{ secrets.BASTION_HOST }}" \
+          ec2-user@${{ secrets.PRIVATE_EC2_IP }} "
+          sudo yum update -y &&
+          sudo yum install -y docker &&
+          sudo systemctl enable docker &&
+          sudo systemctl start docker
+          "
+
+      - name: Grant Docker permissions to ec2-user
+        run: |
+          ssh -i private-ec2-key.pem -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no ec2-user@${{ secrets.BASTION_HOST }}" \
+          ec2-user@${{ secrets.PRIVATE_EC2_IP }} "
+          sudo usermod -aG docker ec2-user &&
+          sudo systemctl restart docker
+          "
+
+      - name: Run Docker Compose on Private EC2
+        run: |
+          ssh -i private-ec2-key.pem -o ProxyCommand="ssh -W %h:%p -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ec2-user@${{ secrets.BASTION_HOST }}" \
+          ec2-user@${{ secrets.PRIVATE_EC2_IP }} "
+          newgrp docker &&
+          export $(grep -v '^#' /home/ec2-user/.env | xargs) &&
+          docker-compose -f /home/ec2-user/docker-compose.yml --env-file /home/ec2-user/.env pull &&
+          docker-compose -f /home/ec2-user/docker-compose.yml --env-file /home/ec2-user/.env up -d
+          "
+
