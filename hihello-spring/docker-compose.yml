@@ -1,4 +1,4 @@
-version: '3.9'
+#version: '3.9'
 services:
   # Zookeeper 서비스
   zookeeper:
@@ -73,6 +73,8 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD} # 비밀번호를 환경 변수에서 읽음
     volumes:
       - redis_data:/data # 데이터 지속성을 위한 볼륨 설정
+    networks:
+      - redis-network
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
@@ -113,4 +115,6 @@ networks:
   kafka-net:
     driver: bridge
   elk:
+    driver: bridge
+  redis-network:
     driver: bridge
