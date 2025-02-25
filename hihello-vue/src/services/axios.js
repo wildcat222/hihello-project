@@ -47,7 +47,6 @@ springAPI.interceptors.response.use(
               'RefreshToken': `Bearer ${userStore.refreshToken}`
             }
           });
-          console.log(response);
 
           const newAccessToken = response.headers['accesstoken'];
           const newRefreshToken = response.headers['refreshtoken'];
