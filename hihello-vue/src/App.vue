@@ -57,11 +57,8 @@ const toggleButtons = () => {
 // 컴포넌트가 마운트될 때 이벤트 초기화
 onMounted(() => {
   if (userStore.accessToken) {
-    springAPI.defaults.headers.common['Authorization'] = `Bearer ${userStore.accessToken}`;
     userStore.isAuthenticated = true;
   }
-
-  userStore.initializeInterceptors(); // Axios 인터셉터 초기화
 
 });
 </script>

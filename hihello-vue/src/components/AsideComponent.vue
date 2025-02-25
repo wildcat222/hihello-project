@@ -284,18 +284,13 @@ onMounted(async () => {
   if (employeeInfo.value) {
     employeeSeq.value = employeeInfo.value.employeeSeq;
 
-    // 인터셉터 초기화 확인
-    if (!userStore.interceptorsInitialized) {
-      userStore.initializeInterceptors();
-    }
-
-    // 토큰 설정이 확실히 되었는지 확인
-    if (!springAPI.defaults.headers.common['Authorization'] && userStore.accessToken) {
-      springAPI.defaults.headers.common['Authorization'] = `Bearer ${userStore.accessToken}`;
+    // 유저 인증상태가 true 인지 확실히 되었는지 확인
+    if (!userStore.isAuthenticated) {
+      userStore.isAuthenticated = true;
     }
 
     // 약간의 지연 후 데이터 요청
-    if (springAPI.defaults.headers.common['Authorization']) {
+    if (userStore.isAuthenticated) {
       await new Promise(resolve => setTimeout(resolve, 100));
 
       // 데이터 요청

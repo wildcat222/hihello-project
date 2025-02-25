@@ -33,13 +33,13 @@ export const useUserStore = defineStore('user', {
 
                 if (this.accessToken && this.refreshToken) {
                     this.isAuthenticated = true;
-
-                    // 로컬 스토리지에 토큰 저장
+                //
+                //     // 로컬 스토리지에 토큰 저장
                     localStorage.setItem('accessToken', this.accessToken);
                     localStorage.setItem('refreshToken', this.refreshToken);
 
-                    // Axios 기본 헤더 설정
-                    springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
+                    // 초기 Axios 기본 헤더 설정
+                    // springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
                     await sseStore.connectSSE();
 
                 } else {
@@ -92,70 +92,79 @@ export const useUserStore = defineStore('user', {
                 // console.log('User logged out.');
             });
         },
-        initializeInterceptors() {
-            // 한 번만 호출되도록 초기화 보장
-            if (this.interceptorsInitialized) return;
-            this.interceptorsInitialized = true;
-            springAPI.interceptors.response.use(
-                (response) => response,
-                async (error) => {
-                    // console.log(error.response.data.message);
-                    if (error.response?.data.message === '엑세스 토큰이 만료되었습니다.') {
-                        try {
-                            const res = await springAPI.request({
-                                ...error.config,
-                                headers: {
-                                    ...error.config.headers,
-                                    RefreshToken: `Bearer ${this.refreshToken}`,
-                                }
-                            });
-
-                            // 응답 헤더 로깅
-                            // console.log('토큰 재발급 응답 헤더:', res.headers);
-                            // console.log('새로 받은 액세스 토큰:', res.headers['accesstoken']);
-
-                            // 2. 토큰 저장 작업을 순차적으로 처리
-                            // 상태 업데이트
-                            this.accessToken = res.headers['accesstoken'];
-                            this.refreshToken = res.headers['refreshtoken'];
-
-                            // localStorage 업데이트
-                            localStorage.setItem('accessToken', this.accessToken);
-                            localStorage.setItem('refreshToken', this.refreshToken);
-
-                            // axios 기본 헤더 설정
-                            springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
-
-                            // 토큰 설정 검증
-                            // if (!this.accessToken) {
-                            //     console.log('토큰이 제대로 설정되지 않았습니다.');
-                            // }
-
-                            // 약간의 지연시간 추가 (선택적)
-                            await new Promise(resolve => setTimeout(resolve, 200));
-
-                            // console.log('재요청 직전 토큰 확인:', this.accessToken);
-
-                            // 재요청 실행
-                            return await springAPI.request({
-                                    method: error.config.method,
-                                    url: error.config.url,
-                                    data: error.config.data,
-                                    headers: {
-                                        'Authorization': `Bearer ${this.accessToken}`,
-                                        'Content-Type': error.config.headers['Content-Type']
-                                    }
-                                });
-
-                        } catch (err) {
-                            this.logout();
-                            alert('세션이 만료되었습니다. 다시 로그인해주세요.');
-                            return Promise.reject(err);
-                        }
-                    }
-                    return Promise.reject(error);
-                },
-            );
+        // 초기 인터셉터 구현
+        // initializeInterceptors() {
+        //     // 한 번만 호출되도록 초기화 보장
+        //     if (this.interceptorsInitialized) return;
+        //     this.interceptorsInitialized = true;
+        //     springAPI.interceptors.response.use(
+        //         (response) => response,
+        //         async (error) => {
+        //             // console.log(error.response.data.message);
+        //             if (error.response?.data.message === '엑세스 토큰이 만료되었습니다.') {
+        //                 try {
+        //                     const res = await springAPI.request({
+        //                         ...error.config,
+        //                         headers: {
+        //                             ...error.config.headers,
+        //                             RefreshToken: `Bearer ${this.refreshToken}`,
+        //                         }
+        //                     });
+        //
+        //                     // 응답 헤더 로깅
+        //                     // console.log('토큰 재발급 응답 헤더:', res.headers);
+        //                     // console.log('새로 받은 액세스 토큰:', res.headers['accesstoken']);
+        //
+        //                     // 2. 토큰 저장 작업을 순차적으로 처리
+        //                     // 상태 업데이트
+        //                     this.accessToken = res.headers['accesstoken'];
+        //                     this.refreshToken = res.headers['refreshtoken'];
+        //
+        //                     // localStorage 업데이트
+        //                     localStorage.setItem('accessToken', this.accessToken);
+        //                     localStorage.setItem('refreshToken', this.refreshToken);
+        //
+        //                     // axios 기본 헤더 설정
+        //                     springAPI.defaults.headers.common['Authorization'] = `Bearer ${this.accessToken}`;
+        //
+        //                     // 토큰 설정 검증
+        //                     // if (!this.accessToken) {
+        //                     //     console.log('토큰이 제대로 설정되지 않았습니다.');
+        //                     // }
+        //
+        //                     // 약간의 지연시간 추가 (선택적)
+        //                     await new Promise(resolve => setTimeout(resolve, 200));
+        //
+        //                     // console.log('재요청 직전 토큰 확인:', this.accessToken);
+        //
+        //                     // 재요청 실행
+        //                     return await springAPI.request({
+        //                             method: error.config.method,
+        //                             url: error.config.url,
+        //                             data: error.config.data,
+        //                             headers: {
+        //                                 'Authorization': `Bearer ${this.accessToken}`,
+        //                                 'Content-Type': error.config.headers['Content-Type']
+        //                             }
+        //                         });
+        //
+        //                 } catch (err) {
+        //                     this.logout();
+        //                     alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+        //                     return Promise.reject(err);
+        //                 }
+        //             }
+        //             return Promise.reject(error);
+        //         },
+        //     );
+        // },
+        setAccessToken(aToken) {
+            this.accessToken = aToken;
+            localStorage.setItem('accessToken', this.accessToken);
+        },
+        setRefreshToken(rToken) {
+            this.refreshToken = rToken;
+            localStorage.setItem('refreshToken', this.refreshToken);
         },
         getTokenPayload() {
             if (!this.accessToken) {
