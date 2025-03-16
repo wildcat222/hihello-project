@@ -75,11 +75,9 @@ Onboarding System for Intern-to-Full-Time Transition</h3></h1><hr>
 2. Spring Security를 적용하여 사용자 인증 및 권한 관리 
 3. Redis를 활용한 JWT token 관리 및 인증/인가 관리 
 4. SSE를 통한 실시간 알림 기능 
-5. Prometheus와 Grafana를 활용하여 시스템 성능 및 리소스 
-모니터링, 대시보드를 통해 실시간 데이터 시각화 
-6. Vue.js Composition Api 방식을 통해 클라이언트와 서버 API 연동 
+5. Vue.js Composition Api 방식을 통해 클라이언트와 서버 API 연동 
 및 회원 관리, 멘토링 보고서 관리 페이지 구성 
-7. Pinia를 활용하여 데이터 흐름 관리 및 상태 동기화
+6. Pinia를 활용하여 데이터 흐름 관리 및 상태 동기화
 
 <br>
 <details>
