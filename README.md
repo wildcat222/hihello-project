@@ -5,9 +5,9 @@ Onboarding System for Intern-to-Full-Time Transition</h3></h1><hr>
 
 <div align="center">
 
-|<img src="https://avatars.githubusercontent.com/u/136975414?v=4" width="100" height="100"/>|
-:-:|
-|김태영<br>[@wildcat222](https://github.com/wildcat222)|
+| <img src="https://avatars.githubusercontent.com/u/128581270?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/92318119?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/136975414?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/74580387?v=4" width="100" height="100"/> | <img src="https://avatars.githubusercontent.com/u/108400640?v=4" width="100" height="100"/> |
+|:-------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------:|
+|             구대윤<br>[@kookong2](https://github.com/kookong2)                               |                              권형미<br>[@hyomee2](https://github.com/hyomee2)               |                     김민주<br>[@minju0224](https://github.com/minju0224)                      |                       김윤후<br>[@WhooGeek](https://github.com/WhooGeek)                       |                          김태영<br>[@wildcat222](https://github.com/wildcat222)                     |
 </div>
 
 
